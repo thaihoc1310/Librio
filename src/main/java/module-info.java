@@ -7,8 +7,8 @@ module librio {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires java.sql;
 
-    opens librio to javafx.fxml;
     exports librio;
     exports librio.controllers;
     opens librio.controllers to javafx.fxml;
