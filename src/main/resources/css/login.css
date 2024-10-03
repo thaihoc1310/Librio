@@ -29,10 +29,14 @@
 /* Định dạng cho nút đăng nhập */
 .login-button {
     -fx-background-color: #FFC107;
-    -fx-background-radius: 2px;
     -fx-text-fill: SADDLEBROWN;
     -fx-background-radius: 12px;
     -fx-border-radius: 12px;
+}
+
+.login-button:hover {
+    -fx-background-color: #FFD700; /* Đổi màu khi hover (màu vàng nhạt hơn) */
+    -fx-cursor: hand; /* Đảm bảo con trỏ vẫn là hình bàn tay khi hover */
 }
 
 /* Định dạng cho tiêu đề đăng nhập */
