@@ -1,0 +1,50 @@
+/* Định dạng cho phần nền trái */
+.left-pane {
+    -fx-background-color: #F1DEBC;
+    -fx-background-radius: 0px 5px 5px 0px;
+}
+
+/* Định dạng cho text lớn "Librio" */
+.librio-text {
+    -fx-fill: #4C2113;
+    -fx-font-size: 54px;
+    -fx-font-family: 'System Bold';
+    -fx-font-weight: bold; /* Thêm thuộc tính để tăng độ dày chữ */
+    -fx-stroke-type: outside; /* Đặt kiểu viền bên ngoài */
+}
+
+/* Định dạng cho text phụ "Library management application" */
+.sub-title {
+    -fx-fill: #A45C23;
+    -fx-font-size: 18px;
+}
+
+/* Định dạng cho trường nhập (TextField và PasswordField) */
+.input-field {
+    -fx-background-color: transparent;
+    -fx-border-color: #B38B60;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+/* Định dạng cho nút đăng nhập */
+.login-button {
+    -fx-background-color: #DCB485 ;
+    -fx-text-fill: #4C2113;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+}
+
+.login-button:hover {
+    -fx-background-color: #F1DEBC;
+    -fx-cursor: hand; /* Đảm bảo con trỏ vẫn là hình bàn tay khi hover */
+}
+
+/* Định dạng cho tiêu đề đăng nhập */
+.login-title {
+    -fx-fill: #4C2113;
+    -fx-font-size: 27px;
+    -fx-font-family: 'Wingdings 3';
+}
+
+.right-pane {
+}
