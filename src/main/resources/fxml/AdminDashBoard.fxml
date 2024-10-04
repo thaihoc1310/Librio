@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="600.0" prefWidth="1110.0">
+         <children>
+            <BorderPane layoutX="14.0" prefHeight="600.0" prefWidth="1110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <left>
+                  <AnchorPane prefHeight="496.0" prefWidth="174.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox layoutY="65.0" prefHeight="193.0" prefWidth="174.0" AnchorPane.bottomAnchor="229.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
+                           <children>
+                              <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="174.0" text="User" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="178.0" text="Books" VBox.vgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="177.0" text="Borrows" />
+                           </children>
+                        </VBox>
+                        <Button layoutX="31.0" layoutY="397.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="Logout" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="31.0" AnchorPane.rightAnchor="31.399999999999977" />
+                        <Button layoutY="258.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="174.0" text="Settings" />
+                     </children>
+                  </AnchorPane>
+               </left>
+               <top>
+                  <AnchorPane prefHeight="113.0" prefWidth="1110.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="268.0" prefHeight="106.0" prefWidth="178.0" text="Dashboard" textAlignment="CENTER">
+                           <font>
+                              <Font size="28.0" />
+                           </font>
+                        </Label>
+                        <AnchorPane layoutX="991.0" prefHeight="106.0" prefWidth="118.0" AnchorPane.rightAnchor="1.0000000000000853">
+                           <children>
+                              <Label layoutX="42.0" layoutY="44.0" prefHeight="18.0" prefWidth="61.0" text="Admin" AnchorPane.rightAnchor="14.800000000000004" AnchorPane.topAnchor="44.0" />
+                           </children>
+                        </AnchorPane>
+                        <Button layoutX="24.0" layoutY="26.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="115.0" text="Librio" />
+                        <Label layoutX="939.0" layoutY="31.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="120.20000000000005" AnchorPane.topAnchor="31.0" />
+                        <TextField layoutX="584.0" layoutY="80.0" prefHeight="26.0" prefWidth="226.0" />
+                     </children>
+                  </AnchorPane>
+               </top>
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TableView layoutX="47.0" layoutY="70.0" prefHeight="332.0" prefWidth="830.0">
+                           <columns>
+                              <TableColumn prefWidth="75.0" text="C1" />
+                              <TableColumn prefWidth="75.0" text="C2" />
+                              <TableColumn prefWidth="75.0" text="Column X" />
+                              <TableColumn prefWidth="75.0" text="Column X" />
+                              <TableColumn prefWidth="75.0" text="Column X" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </center>
+               <bottom>
+                  <Pagination prefHeight="42.0" prefWidth="1116.0" BorderPane.alignment="CENTER" />
+               </bottom>
+            </BorderPane>
+            <Line endX="1114.4000244140625" endY="143.2928924560547" startX="227.1999969482422" startY="143.2928924560547" stroke="#aeaeae" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
