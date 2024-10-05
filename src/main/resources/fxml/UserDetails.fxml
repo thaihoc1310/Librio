@@ -8,41 +8,52 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" stylesheets="@../css/UserDetails.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.UserDetailsController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" stylesheets="@../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.UserDetailsController">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0" styleClass="background-wrapper">
             <children>
-                <AnchorPane layoutX="12.0" layoutY="12.0" prefHeight="427.0" prefWidth="627.0" styleClass="background" AnchorPane.bottomAnchor="10.666666666666686" AnchorPane.leftAnchor="10.666666666666686" AnchorPane.rightAnchor="10.666666666666629" AnchorPane.topAnchor="10.666666666666686">
+                <AnchorPane layoutX="12.0" layoutY="12.0" prefHeight="427.0" prefWidth="627.0" styleClass="background">
                     <children>
-                        <Label layoutX="14.0" layoutY="14.0" styleClass="title-text" text="User Details">
+                        <Label layoutX="22.0" layoutY="14.0" styleClass="title-text" text="User Details">
                         </Label>
-                        <Label layoutX="37.0" layoutY="78.0" styleClass="label-13" text="User ID :">
+                        <Label layoutX="374.0" layoutY="249.0" styleClass="label-13" text="Gender :">
                         </Label>
-                        <TextField editable="false" layoutX="112.0" layoutY="73.0" styleClass="text-field-custom" text="1" />
-                        <Label layoutX="43.0" layoutY="126.0" styleClass="label-13" text="Email :">
-                        </Label>
-                        <TextField editable="false" layoutX="112.0" layoutY="121.0" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" text="thaihoc131005@gmail.com" />
-                        <Label layoutX="374.0" layoutY="249.0" styleClass="label-13" text="Gender:">
-                        </Label>
-                        <Label layoutX="40.0" layoutY="212.0" styleClass="label-13" text="Phone :">
-                        </Label>
-                        <TextField editable="false" layoutX="112.0" layoutY="207.0" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" text="0344281310" />
-                        <Label layoutX="35.0" layoutY="249.0" styleClass="label-13" text="Address :">
-                        </Label>
-                        <TextArea editable="false" layoutX="112.0" layoutY="246.0" prefHeight="78.0" prefWidth="200.0" styleClass="text-field-custom" text="19707 CENTRAL AVE CARSON CA 90746-3195 USA" wrapText="true" />
                         <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#updateBtn" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
-                        <Label layoutX="41.0" layoutY="172.0" styleClass="label-13" text="Name :">
-                        </Label>
-                        <TextField editable="false" layoutX="112.0" layoutY="167.0" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" text="Học" />
-                        <Label layoutX="382.0" layoutY="290.0" styleClass="label-13" text="Role:">
+                        <Label layoutX="393.0" layoutY="291.0" styleClass="label-13" text="Role :">
                         </Label>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="389.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../Pictures/Screenshots/Screenshot%202024-09-12%20160040.png" />
-                     </image></ImageView>
-                  <TextField editable="false" layoutX="441.0" layoutY="244.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" text="MALE" />
-                  <TextField editable="false" layoutX="441.0" layoutY="285.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" text="ADMIN" />
+                            <image>
+                                <Image url="@../../../../../../../../Pictures/Screenshots/Screenshot%202024-09-12%20160040.png" />
+                            </image></ImageView>
+                        <TextField editable="false" layoutX="441.0" layoutY="244.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" text="MALE" />
+                        <TextField editable="false" layoutX="441.0" layoutY="285.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" text="ADMIN" />
+                        <Line endX="-100.0" endY="-29.00001335144043" layoutX="113.0" layoutY="51.0" startX="-100.0" stroke="#dcb485" />
+                        <VBox alignment="TOP_RIGHT" layoutX="12.0" layoutY="77.0" prefHeight="250.0" prefWidth="100.0" spacing="25.0">
+                           <children>
+                                    <Label styleClass="label-13" text="User ID :">
+                              </Label>
+                                    <Label styleClass="label-13" text="Email :">
+                              </Label>
+                                    <Label styleClass="label-13" text="Name :">
+                              </Label>
+                                    <Label styleClass="label-13" text="Phone :">
+                              </Label>
+                                    <Label styleClass="label-13" text="Address :">
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="131.0" layoutY="72.0" prefHeight="275.0" prefWidth="210.0" spacing="14.0">
+                           <children>
+                                    <TextField editable="false" prefWidth="189.0" styleClass="text-field-custom" text="1" />
+                                    <TextField editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" text="thaihoc131005@gmail.com" />
+                                    <TextField editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" text="Học" />
+                                    <TextField editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" text="0344281310" />
+                                    <TextArea editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" text="19707 CENTRAL AVE CARSON CA 90746-3195 USA" wrapText="true" />
+                           </children>
+                        </VBox>
                     </children>
                 </AnchorPane>
             </children>
