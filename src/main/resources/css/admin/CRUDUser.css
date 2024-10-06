@@ -1,0 +1,52 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 05 28, 23, 11:20:34 AM
+    Author     : WINDOWS 10
+*/
+
+.background-wrapper {
+    -fx-background-color: #F1DEBC;
+}
+
+.background{
+    -fx-background-color: #F8EDD9;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5,0,0,0);
+}
+
+.btn-2{
+    -fx-background-color: #DCB485 ;
+    -fx-text-fill: #4C2113;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-font-size: 15px;
+}
+.btn-2:hover{
+    -fx-background-color: #F1DEBC;
+    -fx-cursor: hand; /* Đảm bảo con trỏ vẫn là hình bàn tay khi hover */
+}
+
+
+.text-field-custom {
+    -fx-control-inner-background: #F8EDD9; /* Màu nền của TextArea */
+    -fx-background-color: transparent;    /* Loại bỏ viền bên ngoài nếu có */
+    -fx-border-color: transparent;        /* Loại bỏ viền khi có focus */
+    -fx-font-size: 15px;
+    -fx-text-fill: #4C2113;
+}
+
+
+.label-13 {
+    -fx-font-size: 15px;
+    -fx-fill: #4C2113;
+}
+
+.title-text {
+    -fx-text-fill: #DCB485;  /* Đổi màu chữ cho Label */
+    -fx-font-size: 30px;
+    -fx-font-weight: semi-bold;   /* Tăng độ dày của chữ */
+}
