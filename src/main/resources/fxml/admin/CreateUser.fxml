@@ -17,7 +17,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" stylesheets="@../css/UserDetails.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <AnchorPane prefHeight="200.0" prefWidth="696.0" styleClass="background-wrapper" stylesheets="@../css/admin/CRUDUser.css">
+        <AnchorPane prefHeight="200.0" prefWidth="696.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css">
             <children>
                 <AnchorPane layoutX="18.0" layoutY="14.0" prefHeight="438.0" prefWidth="663.0" styleClass="background">
                     <children>
@@ -73,7 +73,7 @@
                         <Button layoutX="499.0" layoutY="187.0" mnemonicParsing="false" text="Change avatar" />
                         <ImageView fitHeight="150.0" fitWidth="161.0" layoutX="476.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../images/spidermanUser.jpg" />
+                                <Image url="@../../images/spidermanUser.jpg" />
                             </image>
                         </ImageView>
                         <Button layoutX="246.0" layoutY="380.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="66.0" styleClass="btn-2" text="Create" />

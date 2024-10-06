@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" stylesheets="@../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: e6d4b3;" styleClass="main-pane">
          <children>
@@ -33,7 +33,7 @@
                                  <graphic>
                                     <ImageView fitHeight="21.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../icons/AdminDashBoardIcon/Dashboard.png" />
+                                          <Image url="@../../icons/AdminDashBoardIcon/Dashboard.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -48,7 +48,7 @@
                                  <graphic>
                                     <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../icons/AdminDashBoardIcon/Users.png" />
+                                          <Image url="@../../icons/AdminDashBoardIcon/Users.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -63,7 +63,7 @@
                                  <graphic>
                                     <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../icons/AdminDashBoardIcon/Books.png" />
+                                          <Image url="@../../icons/AdminDashBoardIcon/Books.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -75,7 +75,7 @@
                                  <graphic>
                                     <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../icons/AdminDashBoardIcon/Time to Pay.png" />
+                                          <Image url="@../../icons/AdminDashBoardIcon/Time to Pay.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -91,7 +91,7 @@
                            <graphic>
                               <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icons/AdminDashBoardIcon/Logout Rounded.png" />
+                                    <Image url="@../../icons/AdminDashBoardIcon/Logout Rounded.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -102,7 +102,7 @@
                            <graphic>
                               <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icons/AdminDashBoardIcon/Settings.png" />
+                                    <Image url="@../../icons/AdminDashBoardIcon/Settings.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -143,17 +143,17 @@
                         <TextField layoutX="710.0" layoutY="86.0" prefHeight="26.0" prefWidth="205.0" promptText="Search" style="-fx-background-radius: 5em; -fx-border-color: #4C2113; -fx-border-radius: 2em;" AnchorPane.rightAnchor="194.80000000000007" />
                         <ImageView fitHeight="19.0" fitWidth="20.0" layoutX="888.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="203.4000000000001">
                            <image>
-                              <Image url="@../icons/AdminDashBoardIcon/Search.png" />
+                              <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                            </image>
                         </ImageView>
-                        <Button layoutX="987.0" layoutY="87.0" mnemonicParsing="false" text="Create User" />
+                        <Button layoutX="983.0" layoutY="84.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="93.0" text="Create User" />
                      </children>
                   </AnchorPane>
                </top>
                <center>
                   <AnchorPane prefHeight="450.0" prefWidth="877.0" BorderPane.alignment="CENTER">
                      <children>
-                        <TableView layoutX="28.0" layoutY="14.0" prefHeight="421.0" prefWidth="835.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="14.0">
+                        <TableView layoutX="28.0" layoutY="6.0" prefHeight="421.0" prefWidth="851.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                            <columns>
                               <TableColumn prefWidth="57.600006103515625" text="ID" />
                               <TableColumn prefWidth="203.19998168945312" text="Email" />
@@ -177,14 +177,14 @@
                </bottom>
             </BorderPane>
             <AnchorPane layoutY="590.0" prefHeight="50.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" AnchorPane.bottomAnchor="0.0" />
-            <AnchorPane layoutY="20.0" prefHeight="106.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
+            <AnchorPane layoutY="20.0" prefHeight="117.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
                <children>
-                  <ImageView fitHeight="63.0" fitWidth="74.0" layoutX="70.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="77.0" fitWidth="77.0" layoutX="63.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/AdminDashBoardIcon/Male User.png" />
+                        <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="73.0" layoutY="83.0" text="User name" />
+                  <Label layoutX="73.0" layoutY="94.0" text="User name" />
                </children></AnchorPane>
          </children>
       </AnchorPane>

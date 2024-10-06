@@ -19,9 +19,9 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" stylesheets="@../css/UserDetails.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="696.0" styleClass="background-wrapper" stylesheets="@../css/admin/CRUDUser.css">
+      <AnchorPane prefHeight="200.0" prefWidth="696.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css">
          <children>
-            <AnchorPane layoutX="14.0" layoutY="9.0" prefHeight="438.0" prefWidth="671.0" styleClass="background" stylesheets="@../css/admin/CRUDUser.css">
+            <AnchorPane layoutX="14.0" layoutY="9.0" prefHeight="438.0" prefWidth="671.0" styleClass="background" stylesheets="@../../css/admin/CRUDUser.css">
                <children>
                   <VBox alignment="TOP_RIGHT" layoutX="19.0" layoutY="82.0" prefHeight="256.0" prefWidth="116.0" spacing="25.0">
                      <children>
@@ -90,7 +90,7 @@
                   <Button layoutX="493.0" layoutY="186.0" mnemonicParsing="false" text="Change avatar" />
                   <ImageView fitHeight="150.0" fitWidth="161.0" layoutX="470.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/spidermanUser.jpg" />
+                        <Image url="@../../images/spidermanUser.jpg" />
                      </image>
                   </ImageView>
                   <Button layoutX="238.0" layoutY="381.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="83.0" styleClass="btn-2" text="Update" />

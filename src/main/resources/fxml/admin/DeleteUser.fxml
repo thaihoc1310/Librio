@@ -10,7 +10,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="212.0" prefWidth="422.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane prefHeight="198.0" prefWidth="436.0" styleClass="background" stylesheets="@../css/admin/CRUDUser.css">
+      <AnchorPane prefHeight="198.0" prefWidth="436.0" styleClass="background" stylesheets="@../../css/admin/CRUDUser.css">
          <children>
             <Text layoutX="15.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete user &quot;MyName&quot;. " wrappingWidth="405.73223876953125">
                <font>
@@ -33,7 +33,7 @@
                   </Text>
                   <ImageView fitHeight="39.0" fitWidth="37.0" layoutX="26.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/AdminDashBoardIcon/warning_icon.png" />
+                        <Image url="@../../icons/AdminDashBoardIcon/warning_icon.png" />
                      </image>
                   </ImageView>
                </children>
