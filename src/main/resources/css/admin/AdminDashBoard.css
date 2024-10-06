@@ -1,0 +1,45 @@
+.main-pane {
+    -fx-background-color: #f0f0f4;
+    -fx-background-radius: 0px 5px 5px 0px;
+}
+.button {
+    -fx-background-color:  #DCB485 ;
+    -fx-text-fill: #4C2113;
+
+}
+.button:hover {
+    -fx-background-color:#f1debc; /* Màu nền khi hover */
+    -fx-cursor: hand;              /* Con trỏ chuột chuyển thành tay khi hover */
+
+}
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-cell-size : 20;
+    -fx-background-color: #f0f0f4; /* Màu nền của tiêu đề cột */
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #4C2113;  /* Màu chữ của tiêu đề cột */
+    -fx-font-weight: bold;   /* Tùy chọn: Đậm chữ tiêu đề */
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-view .cell {
+    -fx-cell-size: 30;
+    -fx-alignment: center-left;
+    -fx-text-fill: #000000;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgb(EBE9F6); /* Màu nền khi hàng được chọn */
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: #DCB485; /* Màu chữ khi hàng được chọn */
+}
+
+/* Thay đổi màu chữ của tiêu đề khi hover (tùy chọn) */
+.table-view .column-header:hover .label {
+    -fx-text-fill: #B8860B; /* Màu chữ khi hover tiêu đề cột */
+}
