@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import librio.models.Gender;
+import librio.models.Role;
 import librio.models.User;
 import librio.database.DatabaseConnection;
 
@@ -33,6 +34,9 @@ public class ManageUserController implements Initializable {
     @FXML
     private TableColumn<User, Gender> genderColumn;
     @FXML
+    private TableColumn<User, Gender> roleColumn;
+
+    @FXML
     private TextField searchTextField;
 
     private ObservableList<User> userList;
@@ -43,6 +47,7 @@ public class ManageUserController implements Initializable {
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
         loadUsersFromDatabase();
     }
     private void loadUsersFromDatabase() {
@@ -57,8 +62,9 @@ public class ManageUserController implements Initializable {
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
+                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
 
-                User user = new User(id, name, email, gender);
+                User user = new User(id, name, email, gender,role);
                 userList.add(user);
             }
 
