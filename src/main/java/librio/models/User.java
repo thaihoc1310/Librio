@@ -15,6 +15,7 @@ public class User {
     private StringProperty phoneNumber;
     private StringProperty address;
     private ObjectProperty<Gender> gender;
+    private StringProperty avatar;
     private String created_by;
     private Instant created_at;
     private StringProperty update_by;
@@ -28,6 +29,7 @@ public class User {
         this.phoneNumber = new SimpleStringProperty();
         this.gender = new SimpleObjectProperty<>();
         this.address = new SimpleStringProperty();
+        this.avatar = new SimpleStringProperty();
         this.update_at = new SimpleObjectProperty<>();
         this.update_by = new SimpleStringProperty();
     }
@@ -114,6 +116,18 @@ public class User {
 
     public void setGender(Gender gender) {
         this.gender.set(gender);
+    }
+
+    public String getAvatar() {
+        return avatar.get();
+    }
+
+    public StringProperty avatarProperty() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar.set(avatar);
     }
 
     public String getCreated_by() {
