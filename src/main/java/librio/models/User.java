@@ -15,6 +15,7 @@ public class User {
     private StringProperty phoneNumber;
     private StringProperty address;
     private ObjectProperty<Gender> gender;
+    private ObjectProperty<Role> role;
     private StringProperty avatar;
     private String created_by;
     private Instant created_at;
@@ -34,11 +35,12 @@ public class User {
         this.update_by = new SimpleStringProperty();
     }
 
-    public User(String id, String name, String email, Gender gender) {
+    public User(String id, String name, String email, Gender gender, Role role) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.email = new SimpleStringProperty(email);
         this.gender = new SimpleObjectProperty<>(gender);
+        this.role = new SimpleObjectProperty<>(role);
     }
 
     public String getId() {
@@ -123,6 +125,18 @@ public class User {
 
     public void setGender(Gender gender) {
         this.gender.set(gender);
+    }
+
+    public Role getRole() {
+        return role.get();
+    }
+
+    public ObjectProperty<Role> roleProperty() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role.set(role);
     }
 
     public String getAvatar() {
