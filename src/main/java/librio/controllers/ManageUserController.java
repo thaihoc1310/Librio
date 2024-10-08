@@ -4,10 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
@@ -34,7 +34,11 @@ public class ManageUserController implements Initializable {
     @FXML
     private TableColumn<User, Gender> genderColumn;
     @FXML
-    private TableColumn<User, Gender> roleColumn;
+    private TableColumn<User, Role> roleColumn;
+    @FXML
+    private TableColumn<User, Void> actionColumn;
+    @FXML
+    private TableColumn<User, String> phoneNumberColumn;
 
     @FXML
     private TextField searchTextField;
@@ -46,9 +50,39 @@ public class ManageUserController implements Initializable {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         loadUsersFromDatabase();
+        addButtonToTable();
+    }
+
+    private void addButtonToTable() {
+        Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<User, Void> call(final TableColumn<User, Void> param) {
+                final TableCell<User, Void> cell = new TableCell<>() {
+
+                    private final Button btnDelete = new Button("Delete");
+                    private final Button btnDetail = new Button("Detail");
+                    private final Button btnUpdate = new Button("Update");
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            // Tạo một HBox để chứa các nút
+                            HBox hbox = new HBox(20, btnDetail, btnUpdate, btnDelete);
+                            setGraphic(hbox);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        actionColumn.setCellFactory(cellFactory);
     }
     private void loadUsersFromDatabase() {
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -61,10 +95,11 @@ public class ManageUserController implements Initializable {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
-                Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
-                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
 
-                User user = new User(id, name, email, gender,role);
+                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+                String phoneNumber = resultSet.getString("phoneNumber");
+
+                User user = new User(id, name, email, phoneNumber, role);
                 userList.add(user);
             }
 
@@ -88,6 +123,4 @@ public class ManageUserController implements Initializable {
             userTableView.setItems(filteredList);
         }
     }
-
-
 }

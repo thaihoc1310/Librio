@@ -98,7 +98,7 @@
                                   <Font size="15.0" />
                               </font>
                           </Text>
-                  <TextArea layoutX="499.0" layoutY="287.0" prefHeight="71.0" prefWidth="161.0" wrapText="true" />
+                  <TextArea layoutX="499.0" layoutY="287.0" prefHeight="71.0" prefWidth="138.0" wrapText="true" />
                     </children>
                 </AnchorPane>
             </children>

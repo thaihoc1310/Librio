@@ -19,7 +19,7 @@ public class DatabaseInitializer {
                     "name VARCHAR(255) NOT NULL," +
                     "email VARCHAR(255) UNIQUE," +
                     "password VARCHAR(255) NOT NULL," +
-                    "phone_number VARCHAR(20)," +
+                    "phoneNumber VARCHAR(20)," +
                     "address VARCHAR(255)," +
                     "gender ENUM('MALE', 'FEMALE', 'OTHER') NOT NULL," +
                     "role ENUM('MEMBER', 'LIBRARIAN') NOT NULL," +
@@ -98,7 +98,7 @@ public class DatabaseInitializer {
             statement.execute(createFeedbackTable);
 
             if(isTableEmpty("Users")){
-                String insertUsers = "INSERT INTO Users (name, email, password, phone_number, address, gender, role, created_by, created_at) VALUES " +
+                String insertUsers = "INSERT INTO Users (name, email, password, phoneNumber, address, gender, role, created_by, created_at) VALUES " +
                         "('John Doe', 'john.doe@example.com', 'password123', '1234567890', '123 Main St', 'MALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
                         "('Jane Smith', 'jane.smith@example.com', 'password123', '0987654321', '456 Elm St', 'FEMALE','MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
                         "('Alice Johnson', 'alice.johnson@example.com', 'password123', '1112223333', '789 Maple St', 'FEMALE','MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
