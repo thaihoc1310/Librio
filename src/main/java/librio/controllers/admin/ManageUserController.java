@@ -28,13 +28,17 @@ public class ManageUserController implements Initializable {
     @FXML
     private TableColumn<User, String> idColumn;
     @FXML
+    private TableColumn<User, String> nameColumn;
+    @FXML
     private TableColumn<User, String> emailColumn;
     @FXML
-    private TableColumn<User, String> nameColumn;
+    private TableColumn<User, String> phoneNumberColumn;
     @FXML
     private TableColumn<User, Gender> genderColumn;
     @FXML
     private TableColumn<User, Role> roleColumn;
+
+
 
     @FXML
     private TextField searchTextField;
@@ -46,6 +50,7 @@ public class ManageUserController implements Initializable {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
         loadUsersFromDatabase();
@@ -61,10 +66,11 @@ public class ManageUserController implements Initializable {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
+                String phoneNumber = resultSet.getString("phone_number");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
 
-                User user = new User(id, name, email, gender,role);
+                User user = new User(id, name, email, phoneNumber, gender, role);
                 userList.add(user);
             }
 

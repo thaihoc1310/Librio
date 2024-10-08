@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: e6d4b3;" styleClass="main-pane">
          <children>
@@ -156,8 +156,9 @@
                         <TableView fx:id="userTableView" layoutX="28.0" layoutY="6.0" prefHeight="421.0" prefWidth="851.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                            <columns>
                               <TableColumn fx:id="idColumn" prefWidth="57.600006103515625" text="ID" />
-                              <TableColumn fx:id="emailColumn" prefWidth="203.19998168945312" text="Email" />
                               <TableColumn fx:id="nameColumn" prefWidth="140.00003051757812" text="Name" />
+                              <TableColumn fx:id="emailColumn" prefWidth="89.60003662109375" text="Email" />
+                              <TableColumn fx:id="phoneNumberColumn" prefWidth="172.0" text="Phone Number" />
                               <TableColumn fx:id="genderColumn" prefWidth="87.99993896484375" text="Gender" />
                               <TableColumn fx:id="roleColumn" prefWidth="91.20001220703125" text="Role" />
                               <TableColumn fx:id="actionColumn" prefWidth="252.0" text="Action" />
