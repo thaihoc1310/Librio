@@ -18,13 +18,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: e6d4b3;" styleClass="main-pane">
             <children>
                 <BorderPane layoutX="14.0" prefHeight="600.0" prefWidth="1110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <left>
-                        <AnchorPane prefHeight="450.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
+                        <AnchorPane prefHeight="466.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
                             <children>
                                 <VBox layoutY="65.0" prefHeight="181.0" prefWidth="174.0" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                                     <children>
@@ -142,7 +142,7 @@
                                 </AnchorPane>
                                 <Label layoutX="898.0" layoutY="31.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="161.20000000000005" AnchorPane.topAnchor="31.0" />
                                 <Line endX="1564.48193359375" endY="143.29287719726562" layoutX="-121.0" layoutY="-63.0" startX="739.3798828125" startY="143.29287719726562" stroke="#aeaeae" AnchorPane.rightAnchor="31.100109863281432" />
-                            <AnchorPane prefHeight="95.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
+                            <AnchorPane prefHeight="107.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
                                 <children>
                                     <ImageView fitHeight="63.0" fitWidth="74.0" layoutX="70.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
@@ -182,7 +182,7 @@
                                     </ImageView>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane layoutX="657.0" layoutY="8.0" prefHeight="106.0" prefWidth="200.0" styleClass="button" stylesheets="@../css/AdminDashBoard.css">
+                              <AnchorPane layoutX="644.0" layoutY="8.0" prefHeight="106.0" prefWidth="200.0" styleClass="button" stylesheets="@../css/AdminDashBoard.css">
                                  <children>
                                     <Label layoutX="172.0" layoutY="74.0" text="2000" />
                                     <Text layoutX="141.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Fines" />
@@ -197,7 +197,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="1.0" layoutY="125.0" prefHeight="326.0" prefWidth="906.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.8000000000000682" AnchorPane.rightAnchor="0.6000000000000227" AnchorPane.topAnchor="125.0">
                            <children>
-                              <BarChart layoutX="8.8" layoutY="43.2" prefHeight="270.0" prefWidth="400.0" title="Bar Chart">
+                              <BarChart layoutX="8.8" layoutY="43.2" prefHeight="330.0" prefWidth="450.0" title="Bar Chart">
                                 <xAxis>
                                   <CategoryAxis side="BOTTOM" />
                                 </xAxis>
@@ -205,7 +205,7 @@
                                   <NumberAxis side="LEFT" />
                                 </yAxis>
                               </BarChart>
-                              <PieChart layoutX="458.4" layoutY="38.4" prefHeight="270.0" prefWidth="400.0" title="Pie Chart" />
+                              <PieChart layoutX="552.0" layoutY="43.0" prefHeight="330.0" prefWidth="450.0" title="Pie Chart" />
                            </children>
                         </AnchorPane>
                             </children>

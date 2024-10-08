@@ -3,16 +3,22 @@ package librio.controllers.admin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
 import librio.database.DatabaseConnection;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -39,6 +45,8 @@ public class ManageUserController implements Initializable {
     private TableColumn<User, Role> roleColumn;
     @FXML
     private TableColumn<User, Void> actionColumn;
+    @FXML
+    private Button createUserButton;
 
 
 
@@ -87,7 +95,7 @@ public class ManageUserController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
     }
 
-        private void loadUsersFromDatabase() {
+    private void loadUsersFromDatabase() {
         try (Connection connection = DatabaseConnection.getConnection()) {
             userList = FXCollections.observableArrayList();
             String query = "SELECT * FROM users";
@@ -127,5 +135,24 @@ public class ManageUserController implements Initializable {
         }
     }
 
+    @FXML
+    private void openCreateUserScene() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
+            Parent root = loader.load();
 
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Create New User");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+
+            // Hiển thị scene
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
