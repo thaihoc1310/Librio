@@ -4,10 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 import librio.models.Gender;
 import librio.models.User;
 import librio.database.DatabaseConnection;
@@ -31,7 +31,9 @@ public class ManageUserController implements Initializable {
     @FXML
     private TableColumn<User, String> nameColumn;
     @FXML
-    private TableColumn<User, Gender> genderColumn;
+    private TableColumn<User, String> phoneNumberColumn;
+    @FXML
+    private TableColumn<User, Void> actionColumn;
     @FXML
     private TextField searchTextField;
 
@@ -42,8 +44,39 @@ public class ManageUserController implements Initializable {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         loadUsersFromDatabase();
+        addActionButtonsToTable();
+    }
+    private void addActionButtonsToTable() {
+        Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<User, Void> call(final TableColumn<User, Void> param) {
+                final TableCell<User, Void> cell = new TableCell<>() {
+
+                    private final Button editButton = new Button("Sửa");
+                    private final Button deleteButton = new Button("Xóa");
+                    private final Button addButton = new Button("Thêm");
+                    private final HBox actionButtons = new HBox(addButton,editButton, deleteButton);
+
+                    {
+                        actionButtons.setSpacing(10);
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(actionButtons);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+        actionColumn.setCellFactory(cellFactory);
     }
     private void loadUsersFromDatabase() {
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -56,9 +89,9 @@ public class ManageUserController implements Initializable {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
-                Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
+                String phoneNumber = resultSet.getString("phone_number");
 
-                User user = new User(id, name, email, gender);
+                User user = new User(id, name, email, phoneNumber);
                 userList.add(user);
             }
 

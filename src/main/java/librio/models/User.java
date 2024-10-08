@@ -34,11 +34,11 @@ public class User {
         this.update_by = new SimpleStringProperty();
     }
 
-    public User(String id, String name, String email, Gender gender) {
+    public User(String id, String name, String email, String phoneNumber) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.email = new SimpleStringProperty(email);
-        this.gender = new SimpleObjectProperty<>(gender);
+        this.phoneNumber = new SimpleStringProperty(phoneNumber);
     }
 
     public String getId() {

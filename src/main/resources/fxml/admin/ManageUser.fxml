@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.ManageUserController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.ManageUserController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: e6d4b3;" styleClass="main-pane">
          <children>
@@ -138,7 +138,7 @@
                               <Label layoutX="42.0" layoutY="44.0" prefHeight="18.0" prefWidth="61.0" text="Admin" AnchorPane.rightAnchor="14.800000000000004" AnchorPane.topAnchor="44.0" />
                            </children>
                         </AnchorPane>
-                        <Label layoutX="898.0" layoutY="31.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="161.20000000000005" AnchorPane.topAnchor="31.0" />
+                        <Label layoutX="915.0" layoutY="25.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="144.20000000000005" AnchorPane.topAnchor="25.0" />
                         <Line endX="1564.48193359375" endY="143.29287719726562" layoutX="-121.0" layoutY="-63.0" startX="739.3798828125" startY="143.29287719726562" stroke="#aeaeae" AnchorPane.rightAnchor="31.100109863281432" />
                         <TextField layoutX="710.0" layoutY="86.0" prefHeight="26.0" prefWidth="205.0" promptText="Search" style="-fx-background-radius: 5em; -fx-border-color: #4C2113; -fx-border-radius: 2em;" AnchorPane.rightAnchor="194.80000000000007" />
                         <ImageView fitHeight="19.0" fitWidth="20.0" layoutX="888.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="203.4000000000001">
@@ -158,8 +158,8 @@
                               <TableColumn fx:id="idColumn" prefWidth="57.600006103515625" text="ID" />
                               <TableColumn fx:id="emailColumn" prefWidth="203.19998168945312" text="Email" />
                               <TableColumn fx:id="nameColumn" prefWidth="140.00003051757812" text="Name" />
-                              <TableColumn fx:id="genderColumn" prefWidth="87.99993896484375" text="Gender" />
-                              <TableColumn fx:id="roleColumn" prefWidth="91.20001220703125" text="Role" />
+                              <TableColumn fx:id="phoneNumberColumn" prefWidth="129.5999755859375" text="Phone Number" />
+                              <TableColumn fx:id="roleColumn" prefWidth="55.20001220703125" text="Role" />
                               <TableColumn fx:id="actionColumn" prefWidth="252.0" text="Action" />
                            </columns>
                            <columnResizePolicy>
