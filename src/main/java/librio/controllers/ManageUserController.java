@@ -97,7 +97,7 @@ public class ManageUserController implements Initializable {
                 String email = resultSet.getString("email");
 
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
-                String phoneNumber = resultSet.getString("phoneNumber");
+                String phoneNumber = resultSet.getString("phone_number");
 
                 User user = new User(id, name, email, phoneNumber, role);
                 userList.add(user);
