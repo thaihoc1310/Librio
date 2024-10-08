@@ -1,4 +1,4 @@
-package librio.controllers;
+package librio.controllers.admin;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,7 +34,7 @@ public class ManageUserController implements Initializable {
     @FXML
     private TableColumn<User, Gender> genderColumn;
     @FXML
-    private TableColumn<User, Gender> roleColumn;
+    private TableColumn<User, Role> roleColumn;
 
     @FXML
     private TextField searchTextField;
