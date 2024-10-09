@@ -50,9 +50,6 @@ public class ManageUserController implements Initializable {
     @FXML
     private Button createUserButton;
 
-    @FXML
-    private TextField searchTextField;
-
     private ObservableList<User> userList;
 
     @Override
@@ -154,20 +151,6 @@ public class ManageUserController implements Initializable {
         }
     }
 
-    private void filterUsers(String keyword) {
-        if (keyword == null || keyword.isEmpty()) {
-            userTableView.setItems(userList);
-        } else {
-            ObservableList<User> filteredList = FXCollections.observableArrayList();
-            for (User user : userList) {
-                if (user.getName().toLowerCase().contains(keyword.toLowerCase()) ||
-                        user.getEmail().toLowerCase().contains(keyword.toLowerCase())) {
-                    filteredList.add(user);
-                }
-            }
-            userTableView.setItems(filteredList);
-        }
-    }
 
     @FXML
     private void openCreateUserScene() {
