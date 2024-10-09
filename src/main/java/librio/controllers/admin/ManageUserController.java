@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -25,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ManageUserController implements Initializable {
@@ -85,6 +87,7 @@ public class ManageUserController implements Initializable {
                         } else {
                             // Tạo một HBox để chứa các nút
                             HBox hbox = new HBox(20, btnDetail, btnUpdate, btnDelete);
+                            hbox.setStyle("-fx-padding: 0 0 0 20;");
                             setGraphic(hbox);
                         }
                     }
@@ -148,9 +151,10 @@ public class ManageUserController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);
-
+            stage.initOwner(createUserButton.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
-            stage.show();
+            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
