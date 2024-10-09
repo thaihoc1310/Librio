@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.UserDetailsController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UserDetailsController">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0" styleClass="background-wrapper">
             <children>
@@ -21,7 +21,7 @@
                         </Label>
                         <Label layoutX="374.0" layoutY="249.0" styleClass="label-13" text="Gender :">
                         </Label>
-                        <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#updateBtn" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
+                        <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
                         <Label layoutX="393.0" layoutY="291.0" styleClass="label-13" text="Role :">
                         </Label>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="389.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
@@ -50,8 +50,8 @@
                                     <TextField fx:id="userIDTextField" editable="false" prefWidth="189.0" styleClass="text-field-custom" />
                                     <TextField fx:id="emailTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextField fx:id="nameTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
-                                    <TextField fx:id="phoneTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
-                                    <TextArea fx:id="addressTextField" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
+                                    <TextField fx:id="phoneNumberTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
+                                    <TextArea fx:id="addressTextArea" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
                            </children>
                         </VBox>
                     </children>

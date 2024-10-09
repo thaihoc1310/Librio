@@ -1,23 +1,13 @@
-package librio.controllers;
+package librio.controllers.admin;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import librio.database.DatabaseConnection;
 import librio.models.User;
 
 public class DeleteUserController implements Initializable {
@@ -27,6 +17,12 @@ public class DeleteUserController implements Initializable {
     private Button deleteButton;
     @FXML
     private Button cancelButton;
+
+    private ManageUserController manageUserController;
+
+    public void setManageUserController(ManageUserController manageUserController) {
+        this.manageUserController = manageUserController;
+    }
 
     @FXML
     private void deleteUser(ActionEvent event) {
