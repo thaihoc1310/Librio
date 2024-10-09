@@ -97,10 +97,9 @@ public class CreateUserController implements Initializable {
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println("A new user was inserted successfully!");
-                if (manageUserController != null) {
-                    manageUserController.loadUsersFromDatabase();
-                }
+                String projectDir = System.getProperty("user.dir");
+                String avatarsDir = projectDir + "/src/main/resources/images/user/";
+                Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 //navigate
                 if (manageUserController != null) {
                     manageUserController.loadUsersFromDatabase();
@@ -111,6 +110,8 @@ public class CreateUserController implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -125,31 +126,10 @@ public class CreateUserController implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            try {
-                // Đường dẫn đến thư mục lưu ảnh trong dự án
-                String projectDir = System.getProperty("user.dir");
-                String avatarsDir = projectDir + "/src/main/resources/images/user/";
-                if (avatarFilePath != null) {
-                    File oldAvatarFile = new File(projectDir + avatarFilePath);
-                    if (oldAvatarFile.exists()) {
-                        oldAvatarFile.delete(); // Xóa ảnh cũ
-                        System.out.println("Đã xóa ảnh cũ: " + avatarFilePath);
-                    }
-                }
-                // Tạo tên file mới để tránh trùng lặp, có thể sử dụng tên file hoặc UUID
-                String newFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-
-                // Sao chép ảnh vào thư mục avatars
-                Files.copy(selectedFile.toPath(), Paths.get(avatarsDir + newFileName));
-
-                // Lưu đường dẫn ảnh
-                avatarFilePath = "/images/user/" + newFileName;
-                System.out.println("Ảnh đã được lưu tại: " + avatarFilePath);
-                Image avatarImage = new Image(selectedFile.toURI().toString());
-                avatarImageView.setImage(avatarImage);  // Gán ảnh vào ImageView
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            avatarFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
+            Image avatarImage = new Image(selectedFile.toURI().toString());
+            avatarImageView.setImage(avatarImage);
+            previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
     }
 
