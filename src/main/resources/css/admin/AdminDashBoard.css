@@ -16,12 +16,13 @@
 .table-view .column-header-background .filler {
     -fx-cell-size : 20;
     -fx-background-color: #f0f0f4; /* Màu nền của tiêu đề cột */
+
 }
 
 .table-view .column-header .label {
     -fx-text-fill: #4C2113;  /* Màu chữ của tiêu đề cột */
     -fx-font-weight: bold;   /* Tùy chọn: Đậm chữ tiêu đề */
-    -fx-alignment: CENTER_LEFT;
+     -fx-alignment: center;
 }
 
 .table-view .cell {
