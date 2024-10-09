@@ -50,8 +50,6 @@ public class ManageUserController implements Initializable {
     @FXML
     private Button createUserButton;
 
-
-
     @FXML
     private TextField searchTextField;
 
@@ -79,6 +77,15 @@ public class ManageUserController implements Initializable {
                     private final Button btnDetail = new Button("Detail");
                     private final Button btnUpdate = new Button("Update");
 
+                    {
+                        btnUpdate.setOnAction(event -> {
+                            User user = getTableView().getItems().get(getIndex());
+                            // Fetch updated user data from the database
+                            User updatedUser = getUserById(user.getId());
+                            openUpdateUserScene(updatedUser);
+                        });
+                    }
+
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -98,7 +105,31 @@ public class ManageUserController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
     }
 
-    private void loadUsersFromDatabase() {
+    private User getUserById(String userId) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query = "SELECT * FROM users WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String id = resultSet.getString("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String phoneNumber = resultSet.getString("phone_number");
+                String address = resultSet.getString("address") ;
+                Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
+                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+
+                return new User(id, name, email, phoneNumber, address, gender, role);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void loadUsersFromDatabase() {
         try (Connection connection = DatabaseConnection.getConnection()) {
             userList = FXCollections.observableArrayList();
             String query = "SELECT * FROM users";
@@ -145,6 +176,9 @@ public class ManageUserController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
             Parent root = loader.load();
 
+            CreateUserController createUserController = loader.getController();
+            createUserController.setManageUserController(this);
+
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Create New User");
@@ -152,6 +186,31 @@ public class ManageUserController implements Initializable {
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(createUserButton.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void openUpdateUserScene(User user) {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UpdateUser.fxml"));
+            Parent root = loader.load();
+
+            // Tạo controller và truyền ManageUserController và User vào
+            UpdateUserController updateUserController = loader.getController();
+            updateUserController.setManageUserController(this);
+            updateUserController.setUser(user);
+
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Update User");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(userTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
