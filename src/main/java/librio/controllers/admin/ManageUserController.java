@@ -14,8 +14,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import librio.controllers.DeleteUserController;
-import librio.controllers.UserDetailsController;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
@@ -28,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ManageUserController implements Initializable {
@@ -50,11 +49,6 @@ public class ManageUserController implements Initializable {
     private TableColumn<User, Void> actionColumn;
     @FXML
     private Button createUserButton;
-
-
-
-    @FXML
-    private TextField searchTextField;
 
     private ObservableList<User> userList;
 
@@ -81,16 +75,6 @@ public class ManageUserController implements Initializable {
                     private final Button btnUpdate = new Button("Update");
 
                     {
-                        btnDelete.setOnAction(event -> {
-                            User user = getTableView().getItems().get(getIndex());
-                            openDeleteUserScene(user);
-                        });
-
-                        btnDetail.setOnAction(event -> {
-                            User user = getTableView().getItems().get(getIndex());
-                            openDetailUserScene(user);
-                        });
-
                         btnUpdate.setOnAction(event -> {
                             User user = getTableView().getItems().get(getIndex());
                             // Fetch updated user data from the database
@@ -107,6 +91,7 @@ public class ManageUserController implements Initializable {
                         } else {
                             // Tạo một HBox để chứa các nút
                             HBox hbox = new HBox(20, btnDetail, btnUpdate, btnDelete);
+                            hbox.setStyle("-fx-padding: 0 0 0 20;");
                             setGraphic(hbox);
                         }
                     }
@@ -166,20 +151,6 @@ public class ManageUserController implements Initializable {
         }
     }
 
-    private void filterUsers(String keyword) {
-        if (keyword == null || keyword.isEmpty()) {
-            userTableView.setItems(userList);
-        } else {
-            ObservableList<User> filteredList = FXCollections.observableArrayList();
-            for (User user : userList) {
-                if (user.getName().toLowerCase().contains(keyword.toLowerCase()) ||
-                        user.getEmail().toLowerCase().contains(keyword.toLowerCase())) {
-                    filteredList.add(user);
-                }
-            }
-            userTableView.setItems(filteredList);
-        }
-    }
 
     @FXML
     private void openCreateUserScene() {
@@ -188,22 +159,23 @@ public class ManageUserController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
             Parent root = loader.load();
 
+            CreateUserController createUserController = loader.getController();
+            createUserController.setManageUserController(this);
+
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Create New User");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);
-            stage.initOwner(userTableView.getScene().getWindow());
+            stage.initOwner(createUserButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-
             // Hiển thị scene
-            stage.show();
+            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     private void openUpdateUserScene(User user) {
         try {
             // Tải FXML của scene mới
@@ -229,43 +201,4 @@ public class ManageUserController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    //Mở scene xóa User:
-    private void openDeleteUserScene(User user) {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/DeleteUser.fxml"));
-            Parent root = loader.load();
-            DeleteUserController controller = loader.getController();
-            controller.setUser(user);
-
-            Stage stage = new Stage();
-            stage.setTitle("Delete User");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Mở scene detail User
-    private void openDetailUserScene(User user) {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UserDetails.fxml"));
-            Parent root = loader.load();
-            UserDetailsController controller = loader.getController();
-            controller.setUser(user);
-
-            Stage stage = new Stage();
-            stage.setTitle("Update User");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
