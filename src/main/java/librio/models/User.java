@@ -44,6 +44,16 @@ public class User {
         this.gender = new SimpleObjectProperty<>(gender);
     }
 
+    public User(String id, String name, String email,  String phoneNumber, String address, Gender gender, Role role) {
+        this.id = new SimpleStringProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.email = new SimpleStringProperty(email);
+        this.phoneNumber = new SimpleStringProperty(phoneNumber);
+        this.address = new SimpleStringProperty(address);
+        this.role = new SimpleObjectProperty<>(role);
+        this.gender = new SimpleObjectProperty<>(gender);
+    }
+
     public String getId() {
         return id.get();
     }
