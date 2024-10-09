@@ -13,18 +13,17 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import librio.database.DatabaseConnection;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
-import librio.database.DatabaseConnection;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.sql.PreparedStatement;
 import java.util.ResourceBundle;
 
 public class ManageUserController implements Initializable {
@@ -47,7 +46,6 @@ public class ManageUserController implements Initializable {
     private TableColumn<User, Void> actionColumn;
     @FXML
     private Button createUserButton;
-
 
 
     @FXML
@@ -95,7 +93,7 @@ public class ManageUserController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
     }
 
-    private void loadUsersFromDatabase() {
+    public void loadUsersFromDatabase() {
         try (Connection connection = DatabaseConnection.getConnection()) {
             userList = FXCollections.observableArrayList();
             String query = "SELECT * FROM users";
@@ -141,10 +139,11 @@ public class ManageUserController implements Initializable {
             // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
             Parent root = loader.load();
-
+            CreateUserController createUserController = loader.getController();
+            createUserController.setManageUserController(this);
             // Tạo stage mới cho scene
             Stage stage = new Stage();
-            stage.setTitle("Create New User");
+
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);
