@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import librio.models.Gender;
 import librio.models.Role;
+import librio.models.User;
 import librio.database.DatabaseConnection;
 
 import java.net.URL;
@@ -18,16 +19,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class CreateUserController implements Initializable {
+public class UpdateUserController implements Initializable {
 
-    @FXML
-    private TextField nameTextField;
     @FXML
     private TextField emailTextField;
     @FXML
-    private TextField passwordTextField;
-    @FXML
-    private TextField confirmPasswordTextField;
+    private TextField nameTextField;
     @FXML
     private TextField phoneNumberTextField;
     @FXML
@@ -37,56 +34,65 @@ public class CreateUserController implements Initializable {
     @FXML
     private TextArea addressTextArea;
     @FXML
-    private Button createUserButton;
+    private Button updateUserButton;
     @FXML
     private Button cancelButton;
 
+    private User user;
     private ManageUserController manageUserController;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
         roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
     }
 
+    public void setUser(User user) {
+        this.user = user;
+        populateFields();
+    }
+
     public void setManageUserController(ManageUserController manageUserController) {
         this.manageUserController = manageUserController;
     }
 
+    private void populateFields() {
+        if (user != null) {
+            emailTextField.setText(user.getEmail());
+            nameTextField.setText(user.getName());
+            phoneNumberTextField.setText(user.getPhoneNumber());
+            addressTextArea.setText(user.getAddress());
+            genderComboBox.setValue(user.getGender());
+            roleComboBox.setValue(user.getRole());
+        }
+    }
+
     @FXML
-    private void createUser() {
+    private void updateUser() {
         String name = nameTextField.getText();
         String email = emailTextField.getText();
-        String password = passwordTextField.getText();
-        String confirmPassword = confirmPasswordTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
         Gender gender = Gender.valueOf(String.valueOf(genderComboBox.getValue()));
         Role role = Role.valueOf(String.valueOf(roleComboBox.getValue()));
         String address = addressTextArea.getText();
 
-        if (!password.equals(confirmPassword)) {
-            System.out.println("Passwords do not match!");
-            return;
-        }
-
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, role = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, email);
-            statement.setString(3, password);
-            statement.setString(4, phoneNumber);
-            statement.setString(5, address);
-            statement.setString(6, gender.name());
-            statement.setString(7, role.name());
+            statement.setString(3, phoneNumber);
+            statement.setString(4, address);
+            statement.setString(5, gender.name());
+            statement.setString(6, role.name());
+            statement.setString(7, user.getId());
 
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("A new user was inserted successfully!");
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("User updated successfully!");
                 if (manageUserController != null) {
                     manageUserController.loadUsersFromDatabase();
                 }
-                //navigate
-                clearInputFields();
                 closeStage();
             }
         } catch (SQLException e) {
@@ -95,22 +101,12 @@ public class CreateUserController implements Initializable {
     }
 
     @FXML
-    private void cancelCreateUser() {
-        clearInputFields();
+    private void cancelUpdateUser() {
         closeStage();
     }
+
     private void closeStage() {
-        Stage stage = (Stage) createUserButton.getScene().getWindow();
+        Stage stage = (Stage) updateUserButton.getScene().getWindow();
         stage.close();
-    }
-    private void clearInputFields() {
-        nameTextField.clear();
-        emailTextField.clear();
-        passwordTextField.clear();
-        confirmPasswordTextField.clear();
-        phoneNumberTextField.clear();
-        addressTextArea.clear();
-        genderComboBox.getSelectionModel().clearSelection();
-        roleComboBox.getSelectionModel().clearSelection();
     }
 }
