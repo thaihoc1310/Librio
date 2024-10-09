@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="212.0" prefWidth="422.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="212.0" prefWidth="422.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.DeleteUserController">
    <children>
       <AnchorPane prefHeight="198.0" prefWidth="436.0" styleClass="background" stylesheets="@../../css/admin/CRUDUser.css">
          <children>
@@ -17,13 +17,13 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <Button layoutX="170.0" layoutY="175.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="102.0" styleClass="btn-2" text="Yes, Delete." />
+            <Button fx:id="deleteButton" layoutX="170.0" layoutY="175.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="31.0" prefWidth="102.0" styleClass="btn-2" text="Yes, Delete." />
             <Text layoutX="15.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You cannot undo this action!">
                <font>
                   <Font size="15.0" />
                </font>
             </Text>
-            <Button layoutX="292.0" layoutY="175.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="102.0" styleClass="btn-2" text="No, Cancel." />
+            <Button fx:id="cancelButton" layoutX="292.0" layoutY="175.0" mnemonicParsing="false" onAction="#cancel" prefHeight="31.0" prefWidth="102.0" styleClass="btn-2" text="No, Cancel." />
             <AnchorPane layoutX="-1.0" prefHeight="72.0" prefWidth="425.0" style="-fx-background-color: #FF6347;">
                <children>
                   <Text layoutX="70.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delete this account?">

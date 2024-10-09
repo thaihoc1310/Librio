@@ -19,78 +19,61 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import librio.database.DatabaseConnection;
+import librio.models.User;
 
 /**
  *
  * @author WINDOWS 10
  */
 public class UserDetailsController implements Initializable {
+    private User user;
 
-    @FXML
-    private AnchorPane main_form;
+    public void setUser(User user) {
+        this.user = user;
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            // Tạo câu truy vấn SQL để lấy thông tin user
+            String query = "SELECT * FROM users WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, user.getId()); // Truyền ID user vào câu truy vấn
 
-    @FXML
-    private TextField edit_patientID;
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-    @FXML
-    private TextField edit_name;
-
-    @FXML
-    private ComboBox<String> edit_gender;
-
-    @FXML
-    private TextField edit_contactNumber;
-
-    @FXML
-    private TextArea edit_address;
-
-    @FXML
-    private ComboBox<String> edit_status;
-
-    @FXML
-    private Button edit_updateBtn;
-
-
-    private Connection connect;
-    private PreparedStatement prepare;
-    private ResultSet result;
-
-    public void updateBtn() {
-
-
+            if (resultSet.next()) {
+                // Gán dữ liệu từ database vào các TextField
+                userIDTextField.setText(resultSet.getString("id"));
+                emailTextField.setText(resultSet.getString("email"));
+                nameTextField.setText(resultSet.getString("name"));
+                phoneTextField.setText(resultSet.getString("phone_number"));
+                addressTextField.setText(resultSet.getString("address"));
+                genderTextField.setText(resultSet.getString("gender"));
+                roleTextField.setText(resultSet.getString("role"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    // CLOSE THE EDITPATIENTFORM FXML FILE AND OPEN IT AGAIN
-    public void setField() {
-//        edit_patientID.setText(String.valueOf(User.temp_PatientID));
-//        edit_name.setText(User.temp_name);
-//        edit_gender.getSelectionModel().select(User.temp_gender);
-//        edit_contactNumber.setText(String.valueOf(User.temp_number));
-//        edit_address.setText(User.temp_address);
-//        edit_status.getSelectionModel().select(User.temp_status);
-    }
+    @FXML
+    private TextField userIDTextField;
 
-    public void genderList() {
-//        List<String> genderL = new ArrayList<>();
-//
-//        for (String data : Data.gender) {
-//            genderL.add(data);
-//        }
-//
-//        ObservableList listData = FXCollections.observableList(genderL);
-//        edit_gender.setItems(listData);
-    }
+    @FXML
+    private TextField emailTextField;
 
-    public void statusList() {
-//        List<String> statusL = new ArrayList<>();
-//
-//        for (String data : Data.status) {
-//            statusL.add(data);
-//        }
-//
-//        ObservableList listData = FXCollections.observableList(statusL);
-//        edit_status.setItems(listData);
-    }
+    @FXML
+    private TextField nameTextField;
+
+    @FXML
+    private TextField phoneTextField;
+
+    @FXML
+    private TextField addressTextField;
+
+    @FXML
+    private TextField genderTextField;
+
+    @FXML
+    private TextField roleTextField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

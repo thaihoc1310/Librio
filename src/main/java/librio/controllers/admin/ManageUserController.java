@@ -13,6 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import librio.controllers.DeleteUserController;
+import librio.controllers.UserDetailsController;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
@@ -77,6 +79,18 @@ public class ManageUserController implements Initializable {
                     private final Button btnDetail = new Button("Detail");
                     private final Button btnUpdate = new Button("Update");
 
+                    {
+                        btnDelete.setOnAction(event -> {
+                            User user = getTableView().getItems().get(getIndex());
+                            openDeleteUserScene(user);
+                        });
+
+                        btnDetail.setOnAction(event -> {
+                            User user = getTableView().getItems().get(getIndex());
+                            openDetailUserScene(user);
+                        });
+                    }
+
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -93,6 +107,65 @@ public class ManageUserController implements Initializable {
             }
         };
         actionColumn.setCellFactory(cellFactory);
+    }
+
+    //Mở scene xóa User:
+    private void openDeleteUserScene(User user) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/DeleteUser.fxml"));
+            Parent root = loader.load();
+            DeleteUserController controller = loader.getController();
+            controller.setUser(user);
+
+            Stage stage = new Stage();
+            stage.setTitle("Delete User");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Mở scene detail User
+    private void openDetailUserScene(User user) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UserDetails.fxml"));
+            Parent root = loader.load();
+            UserDetailsController controller = loader.getController();
+            controller.setUser(user);
+
+            Stage stage = new Stage();
+            stage.setTitle("Update User");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openCreateUserScene() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
+            Parent root = loader.load();
+
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Create New User");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+
+            // Hiển thị scene
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadUsersFromDatabase() {
@@ -132,27 +205,6 @@ public class ManageUserController implements Initializable {
                 }
             }
             userTableView.setItems(filteredList);
-        }
-    }
-
-    @FXML
-    private void openCreateUserScene() {
-        try {
-            // Tải FXML của scene mới
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
-            Parent root = loader.load();
-
-            // Tạo stage mới cho scene
-            Stage stage = new Stage();
-            stage.setTitle("Create New User");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
-
-            // Hiển thị scene
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
