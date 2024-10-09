@@ -7,19 +7,26 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import librio.database.DatabaseConnection;
 import javafx.stage.Stage;
 import librio.models.Gender;
 import librio.models.Role;
-import librio.database.DatabaseConnection;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CreateUserController implements Initializable {
-
+    private ManageUserController manageUserController;
     @FXML
     private TextField nameTextField;
     @FXML
@@ -35,13 +42,20 @@ public class CreateUserController implements Initializable {
     @FXML
     private ComboBox<Role> roleComboBox;
     @FXML
+    private TextField avatarTextField;
+    @FXML
     private TextArea addressTextArea;
     @FXML
     private Button createUserButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private Button addAvatarButton;
+    @FXML
+    private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
+    private String avatarFilePath;
+    private String previousAvatarFilePath;
 
-    private ManageUserController manageUserController;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
@@ -69,7 +83,7 @@ public class CreateUserController implements Initializable {
         }
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, email);
@@ -78,6 +92,8 @@ public class CreateUserController implements Initializable {
             statement.setString(5, address);
             statement.setString(6, gender.name());
             statement.setString(7, role.name());
+            statement.setString(8, avatarFilePath);
+
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -86,11 +102,54 @@ public class CreateUserController implements Initializable {
                     manageUserController.loadUsersFromDatabase();
                 }
                 //navigate
+                if (manageUserController != null) {
+                    manageUserController.loadUsersFromDatabase();
+                }
                 clearInputFields();
                 closeStage();
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void addAvatar() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose avatar");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            try {
+                // Đường dẫn đến thư mục lưu ảnh trong dự án
+                String projectDir = System.getProperty("user.dir");
+                String avatarsDir = projectDir + "/src/main/resources/images/user/";
+                if (avatarFilePath != null) {
+                    File oldAvatarFile = new File(projectDir + avatarFilePath);
+                    if (oldAvatarFile.exists()) {
+                        oldAvatarFile.delete(); // Xóa ảnh cũ
+                        System.out.println("Đã xóa ảnh cũ: " + avatarFilePath);
+                    }
+                }
+                // Tạo tên file mới để tránh trùng lặp, có thể sử dụng tên file hoặc UUID
+                String newFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+
+                // Sao chép ảnh vào thư mục avatars
+                Files.copy(selectedFile.toPath(), Paths.get(avatarsDir + newFileName));
+
+                // Lưu đường dẫn ảnh
+                avatarFilePath = "/images/user/" + newFileName;
+                System.out.println("Ảnh đã được lưu tại: " + avatarFilePath);
+                Image avatarImage = new Image(selectedFile.toURI().toString());
+                avatarImageView.setImage(avatarImage);  // Gán ảnh vào ImageView
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -112,5 +171,9 @@ public class CreateUserController implements Initializable {
         addressTextArea.clear();
         genderComboBox.getSelectionModel().clearSelection();
         roleComboBox.getSelectionModel().clearSelection();
+
     }
+
+
 }
+
