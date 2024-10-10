@@ -185,7 +185,5 @@ public class CreateUserController implements Initializable {
         roleComboBox.getSelectionModel().clearSelection();
 
     }
-
-
 }
 
