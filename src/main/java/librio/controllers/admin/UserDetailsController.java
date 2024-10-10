@@ -6,6 +6,7 @@ package librio.controllers.admin;
  * and open the template in the editor.
  */
 
+import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
 import librio.models.Gender;
@@ -45,6 +48,8 @@ public class UserDetailsController implements Initializable {
     private TextField genderTextField;
     @FXML
     private TextField roleTextField;
+    @FXML
+    private ImageView avatarImageView;
 
     @FXML
     private Button backButton;
@@ -69,6 +74,21 @@ public class UserDetailsController implements Initializable {
             addressTextArea.setText(user.getAddress());
             genderTextField.setText(user.getGender().toString());
             roleTextField.setText(user.getRole().toString());
+
+            // Lấy đường dẫn ảnh từ project
+            String projectDir = System.getProperty("user.dir");
+            String avatarsDir = projectDir + "/src/main/resources/images/user/";
+            String path = avatarsDir + user.getAvatar();
+
+            // Chuyển đổi đường dẫn thành URL
+            File file = new File(path);
+            if (file.exists()) {
+                Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+                avatarImageView.setImage(image); // Hiển thị ảnh trong ImageView
+            } else {
+                System.out.println("File ảnh không tồn tại: " + path);
+                // Hiển thị ảnh mặc định nếu file không tồn tại (nếu cần)
+            }
         }
     }
 

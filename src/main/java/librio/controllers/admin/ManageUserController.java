@@ -129,8 +129,9 @@ public class ManageUserController implements Initializable {
                 String address = resultSet.getString("address") ;
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+                String avatar = resultSet.getString("avatar");
 
-                return new User(id, name, email, phoneNumber, address, gender, role);
+                return new User(id, name, email, phoneNumber, address, gender, role, avatar);
             }
         } catch (SQLException e) {
             e.printStackTrace();

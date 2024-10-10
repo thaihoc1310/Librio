@@ -24,7 +24,7 @@
                         <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
                         <Label layoutX="393.0" layoutY="291.0" styleClass="label-13" text="Role :">
                         </Label>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="389.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="avatarImageView" fitHeight="150.0" fitWidth="200.0" layoutX="389.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../../../../../../../../Pictures/Screenshots/Screenshot%202024-09-12%20160040.png" />
                             </image></ImageView>
