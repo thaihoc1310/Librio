@@ -27,6 +27,8 @@ import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
 
+import static librio.controllers.admin.CreateUserController.cropAndClipToCircle;
+
 /**
  *
  * @author WINDOWS 10
@@ -84,10 +86,12 @@ public class UserDetailsController implements Initializable {
             File file = new File(path);
             if (file.exists()) {
                 Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-                avatarImageView.setImage(image); // Hiển thị ảnh trong ImageView
+                cropAndClipToCircle(image, avatarImageView, 70);
             } else {
-                System.out.println("File ảnh không tồn tại: " + path);
-                // Hiển thị ảnh mặc định nếu file không tồn tại (nếu cần)
+                String defaultImage = avatarsDir + "Male User.png";
+                File defaultImageFile = new File(defaultImage);
+                Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+                cropAndClipToCircle(image, avatarImageView, 70);
             }
         }
     }
