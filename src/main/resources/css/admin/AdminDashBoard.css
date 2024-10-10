@@ -37,7 +37,7 @@
 }
 
 .table-row-cell:selected .text {
-    -fx-fill: #DCB485; /* Màu chữ khi hàng được chọn */
+    -fx-fill: #000000; /* Màu chữ khi hàng được chọn */
 }
 
 /* Thay đổi màu chữ của tiêu đề khi hover (tùy chọn) */

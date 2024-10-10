@@ -9,9 +9,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import librio.database.DatabaseConnection;
 import javafx.stage.Stage;
+import librio.database.DatabaseConnection;
 import librio.models.Gender;
 import librio.models.Role;
 
@@ -55,6 +58,31 @@ public class CreateUserController implements Initializable {
     private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
     private String avatarFilePath;
     private String previousAvatarFilePath;
+
+    public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
+        // Lấy chiều rộng và chiều cao của ảnh
+        double width = avatarImage.getWidth();
+        double height = avatarImage.getHeight();
+
+        // Tính toán kích thước để cắt ảnh thành hình vuông
+        double cropSize = Math.min(width, height);  // Chọn kích thước nhỏ hơn giữa width và height
+
+        // Tính toán tọa độ bắt đầu để cắt hình vuông từ trung tâm của ảnh
+        double x = (width - cropSize) / 2;
+        double y = (height - cropSize) / 2;
+
+        // Cắt ảnh thành hình vuông
+        PixelReader reader = avatarImage.getPixelReader();
+        WritableImage squareImage = new WritableImage(reader, (int) x, (int) y, (int) cropSize, (int) cropSize);
+
+        // Hiển thị ảnh đã cắt trong ImageView
+        avatarImageView.setImage(squareImage);
+        avatarImageView.setPreserveRatio(true);
+
+        // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
+        Circle clip = new Circle(radius, radius, radius);
+        avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -128,9 +156,11 @@ public class CreateUserController implements Initializable {
         if (selectedFile != null) {
             avatarFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
             Image avatarImage = new Image(selectedFile.toURI().toString());
-            avatarImageView.setImage(avatarImage);
+            cropAndClipToCircle(avatarImage, avatarImageView, 50);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
+
+
     }
 
     @FXML
@@ -138,10 +168,12 @@ public class CreateUserController implements Initializable {
         clearInputFields();
         closeStage();
     }
+
     private void closeStage() {
         Stage stage = (Stage) createUserButton.getScene().getWindow();
         stage.close();
     }
+
     private void clearInputFields() {
         nameTextField.clear();
         emailTextField.clear();

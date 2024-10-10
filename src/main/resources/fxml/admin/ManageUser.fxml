@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: e6d4b3;" styleClass="main-pane">
          <children>
@@ -139,7 +139,8 @@
                            </children>
                         </AnchorPane>
                         <Label layoutX="898.0" layoutY="31.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="161.20000000000005" AnchorPane.topAnchor="31.0" />
-                        <Line endX="1564.48193359375" endY="143.29287719726562" layoutX="-121.0" layoutY="-63.0" startX="739.3798828125" startY="143.29287719726562" stroke="#aeaeae" AnchorPane.rightAnchor="31.100109863281432" />
+                        <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="-121.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" AnchorPane.rightAnchor="31.100109863281432" />
+                        <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="544.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" AnchorPane.leftAnchor="232.79999999999995" />
                         <TextField layoutX="710.0" layoutY="86.0" prefHeight="26.0" prefWidth="205.0" promptText="Search" style="-fx-background-radius: 5em; -fx-border-color: #4C2113; -fx-border-radius: 2em;" AnchorPane.rightAnchor="194.80000000000007" />
                         <ImageView fitHeight="19.0" fitWidth="20.0" layoutX="888.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="203.4000000000001">
                            <image>
