@@ -45,6 +45,8 @@ public class UpdateUserController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
         roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
+        genderComboBox.setEditable(false);
+        roleComboBox.setEditable(false);
     }
 
     public void setUser(User user) {

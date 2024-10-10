@@ -81,6 +81,18 @@ public class ManageUserController implements Initializable {
                             User updatedUser = getUserById(user.getId());
                             openUpdateUserScene(updatedUser);
                         });
+
+                        btnDetail.setOnAction(event -> {
+                            User user = getTableView().getItems().get(getIndex());
+                            User selectedUser = getUserById(user.getId());
+                            openUserDetailScene(selectedUser);
+                        });
+
+                        btnDelete.setOnAction(event -> {
+                            User user = getTableView().getItems().get(getIndex());
+                            User selectedUser = getUserById(user.getId());
+                            openDeleteUserScene(selectedUser);
+                        });
                     }
 
                     @Override
@@ -117,8 +129,9 @@ public class ManageUserController implements Initializable {
                 String address = resultSet.getString("address") ;
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+                String avatar = resultSet.getString("avatar");
 
-                return new User(id, name, email, phoneNumber, address, gender, role);
+                return new User(id, name, email, phoneNumber, address, gender, role, avatar);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -176,6 +189,7 @@ public class ManageUserController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void openUpdateUserScene(User user) {
         try {
             // Tải FXML của scene mới
@@ -190,6 +204,58 @@ public class ManageUserController implements Initializable {
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Update User");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(userTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openUserDetailScene(User user) {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UserDetails.fxml"));
+            Parent root = loader.load();
+
+            // Tạo controller và truyền ManageUserController và User vào
+            UserDetailsController userDetailsController = loader.getController();
+            userDetailsController.setManageUserController(this);
+            userDetailsController.setUser(user);
+
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("User detail");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(userTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openDeleteUserScene(User user) {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/DeleteUser.fxml"));
+            Parent root = loader.load();
+
+            // Tạo controller và truyền ManageUserController và User vào
+            DeleteUserController deleteUserController = loader.getController();
+            deleteUserController.setManageUserController(this);
+            deleteUserController.setUser(user);
+
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Delete User");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);

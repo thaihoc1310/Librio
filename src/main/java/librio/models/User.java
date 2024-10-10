@@ -44,7 +44,7 @@ public class User {
         this.gender = new SimpleObjectProperty<>(gender);
     }
 
-    public User(String id, String name, String email,  String phoneNumber, String address, Gender gender, Role role) {
+    public User(String id, String name, String email,  String phoneNumber, String address, Gender gender, Role role, String avatar) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.email = new SimpleStringProperty(email);
@@ -52,6 +52,7 @@ public class User {
         this.address = new SimpleStringProperty(address);
         this.role = new SimpleObjectProperty<>(role);
         this.gender = new SimpleObjectProperty<>(gender);
+        this.avatar = new SimpleStringProperty(avatar);
     }
 
     public String getId() {
