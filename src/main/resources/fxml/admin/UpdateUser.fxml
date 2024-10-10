@@ -81,8 +81,8 @@
                      </font>
                   </Text>
                   <ComboBox fx:id="roleComboBox" layoutX="479.0" layoutY="303.0" prefHeight="25.0" prefWidth="145.0" />
-                  <Button layoutX="499.0" layoutY="193.0" mnemonicParsing="false" text="Change avatar" />
-                  <ImageView fx:id="avatarImageView" fitHeight="145.0" fitWidth="150.0" layoutX="470.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+                  <Button layoutX="499.0" layoutY="193.0" mnemonicParsing="false" onAction="#addAvatar" text="Change avatar" />
+                  <ImageView fx:id="avatarImageView" fitHeight="142.0" fitWidth="145.0" layoutX="474.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/user/UserDetailImage.png" />
                      </image>
