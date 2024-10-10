@@ -7,13 +7,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
 import librio.database.DatabaseConnection;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -37,6 +47,10 @@ public class UpdateUserController implements Initializable {
     private Button updateUserButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private ImageView avatarImageView;
+    private String avatarFilePath;
+    private String previousAvatarFilePath;
 
     private User user;
     private ManageUserController manageUserController;
@@ -66,6 +80,18 @@ public class UpdateUserController implements Initializable {
             addressTextArea.setText(user.getAddress());
             genderComboBox.setValue(user.getGender());
             roleComboBox.setValue(user.getRole());
+
+            String projectDir = System.getProperty("user.dir");
+            String avatarsDir = projectDir + "/src/main/resources/images/user/";
+            String path = avatarsDir + user.getAvatar();
+
+            File file = new File(path);
+            if (file.exists()) {
+                Image avatarImage = new Image(file.toURI().toString());
+                cropAndClipToCircle(avatarImage, avatarImageView, 50);
+            } else {
+                System.out.println("File ảnh không tồn tại: " + path);
+            }
         }
     }
 
@@ -79,7 +105,7 @@ public class UpdateUserController implements Initializable {
         String address = addressTextArea.getText();
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, role = ? WHERE id = ?";
+            String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, role = ?, avatar = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, email);
@@ -87,10 +113,23 @@ public class UpdateUserController implements Initializable {
             statement.setString(4, address);
             statement.setString(5, gender.name());
             statement.setString(6, role.name());
-            statement.setString(7, user.getId());
+            statement.setString(7, avatarFilePath);
+            statement.setString(8, user.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
+                String projectDir = System.getProperty("user.dir");
+                String avatarsDir = projectDir + "/src/main/resources/images/user/";
+                if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+                    File oldFile = new File(avatarsDir + user.getAvatar());
+                    if (oldFile.exists()) {
+                        boolean deleted = oldFile.delete();
+                        if (!deleted) {
+                            System.out.println("Không thể xóa tệp ảnh cũ: " + oldFile.getAbsolutePath());
+                        }
+                    }
+                }
+                Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 System.out.println("User updated successfully!");
                 if (manageUserController != null) {
                     manageUserController.loadUsersFromDatabase();
@@ -99,7 +138,29 @@ public class UpdateUserController implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    private void addAvatar() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose avatar");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            avatarFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
+            Image avatarImage = new Image(selectedFile.toURI().toString());
+            cropAndClipToCircle(avatarImage, avatarImageView, 50);
+            previousAvatarFilePath = selectedFile.getAbsolutePath();
+        }
+
+
     }
 
     @FXML
@@ -110,5 +171,30 @@ public class UpdateUserController implements Initializable {
     private void closeStage() {
         Stage stage = (Stage) updateUserButton.getScene().getWindow();
         stage.close();
+    }
+
+    public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
+        // Lấy chiều rộng và chiều cao của ảnh
+        double width = avatarImage.getWidth();
+        double height = avatarImage.getHeight();
+
+        // Tính toán kích thước để cắt ảnh thành hình vuông
+        double cropSize = Math.min(width, height);  // Chọn kích thước nhỏ hơn giữa width và height
+
+        // Tính toán tọa độ bắt đầu để cắt hình vuông từ trung tâm của ảnh
+        double x = (width - cropSize) / 2;
+        double y = (height - cropSize) / 2;
+
+        // Cắt ảnh thành hình vuông
+        PixelReader reader = avatarImage.getPixelReader();
+        WritableImage squareImage = new WritableImage(reader, (int) x, (int) y, (int) cropSize, (int) cropSize);
+
+        // Hiển thị ảnh đã cắt trong ImageView
+        avatarImageView.setImage(squareImage);
+        avatarImageView.setPreserveRatio(true);
+
+        // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
+        Circle clip = new Circle(radius, radius, radius);
+        avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
     }
 }

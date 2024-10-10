@@ -25,7 +25,7 @@
          <children>
             <AnchorPane layoutX="14.0" layoutY="9.0" prefHeight="438.0" prefWidth="671.0" styleClass="background">
                <children>
-                  <VBox alignment="TOP_RIGHT" layoutX="19.0" layoutY="105.0" prefHeight="211.0" prefWidth="116.0" spacing="30.0">
+                  <VBox alignment="TOP_RIGHT" layoutX="45.0" layoutY="106.0" prefHeight="225.0" prefWidth="75.0" spacing="30.0">
                      <children>
                         <Label alignment="CENTER_RIGHT" styleClass="label-13" text="Email :">
                            <font>
@@ -57,7 +57,7 @@
                         <Insets />
                      </opaqueInsets>
                   </VBox>
-                  <ComboBox fx:id="genderComboBox" editable="true" layoutX="500.0" layoutY="250.0" prefWidth="150.0" />
+                  <ComboBox fx:id="genderComboBox" layoutX="479.0" layoutY="250.0" prefHeight="25.0" prefWidth="145.0" />
                   <Line endX="-100.00000762939453" endY="-18.200000762939453" layoutX="114.0" layoutY="37.0" startX="-100.00000762939453" startY="13.800003051757812" stroke="#dcb485">
                      <stroke>
                         <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
@@ -75,26 +75,26 @@
                            </stops>
                         </RadialGradient>
                      </stroke></Line>
-                  <Text layoutX="437.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Role:">
+                  <Text layoutX="421.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Role:">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Text>
-                  <ComboBox fx:id="roleComboBox" editable="true" layoutX="500.0" layoutY="304.0" prefWidth="150.0" />
-                  <Button layoutX="492.0" layoutY="193.0" mnemonicParsing="false" text="Change avatar" />
-                  <ImageView fitHeight="150.0" fitWidth="161.0" layoutX="470.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+                  <ComboBox fx:id="roleComboBox" layoutX="479.0" layoutY="303.0" prefHeight="25.0" prefWidth="145.0" />
+                  <Button layoutX="499.0" layoutY="193.0" mnemonicParsing="false" onAction="#addAvatar" text="Change avatar" />
+                  <ImageView fx:id="avatarImageView" fitHeight="142.0" fitWidth="145.0" layoutX="474.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../images/spidermanUser.jpg" />
+                        <Image url="@../../images/user/UserDetailImage.png" />
                      </image>
                   </ImageView>
                   <Button fx:id="updateUserButton" layoutX="238.0" layoutY="381.0" mnemonicParsing="false" onAction="#updateUser" prefHeight="31.0" prefWidth="83.0" styleClass="btn-2" text="Update" />
                   <Button fx:id="cancelButton" layoutX="354.0" layoutY="381.0" mnemonicParsing="false" onAction="#cancelUpdateUser" prefHeight="31.0" prefWidth="83.0" styleClass="btn-2" text="Cancel" />
-                  <Label alignment="CENTER_RIGHT" layoutX="418.0" layoutY="252.0" text="Gender:">
+                  <Label alignment="CENTER_RIGHT" layoutX="404.0" layoutY="252.0" text="Gender:">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <VBox layoutX="188.0" layoutY="105.0" prefHeight="249.0" prefWidth="183.0" spacing="26.0">
+                  <VBox layoutX="146.0" layoutY="106.0" prefHeight="249.0" prefWidth="183.0" spacing="26.0">
                      <children>
                         <TextField fx:id="emailTextField" prefHeight="25.0" prefWidth="181.0" />
                         <TextField fx:id="nameTextField" />
