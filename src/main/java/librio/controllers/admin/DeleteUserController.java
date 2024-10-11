@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import librio.models.User;
 
@@ -17,6 +18,8 @@ public class DeleteUserController implements Initializable {
     private Button deleteButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private Text confirmationText;
 
     private ManageUserController manageUserController;
 
@@ -42,6 +45,10 @@ public class DeleteUserController implements Initializable {
         // Đóng cửa sổ hiện tại
         Stage stage = (Stage) deleteButton.getScene().getWindow(); // Hoặc có thể sử dụng cancelButton
         stage.close();
+    }
+
+    public void setUserName(String userName){
+        confirmationText.setText("Are you sure you want to delete user \"" + userName + "\"?");
     }
 
     @Override

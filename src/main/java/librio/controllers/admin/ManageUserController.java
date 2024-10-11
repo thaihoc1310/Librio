@@ -252,6 +252,7 @@ public class ManageUserController implements Initializable {
             DeleteUserController deleteUserController = loader.getController();
             deleteUserController.setManageUserController(this);
             deleteUserController.setUser(user);
+            deleteUserController.setUserName(user.getName());
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();

@@ -117,25 +117,29 @@ public class UpdateUserController implements Initializable {
             statement.setString(8, user.getId());
 
             int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated > 0) {
-                String projectDir = System.getProperty("user.dir");
-                String avatarsDir = projectDir + "/src/main/resources/images/user/";
-                if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
-                    File oldFile = new File(avatarsDir + user.getAvatar());
-                    if (oldFile.exists()) {
-                        boolean deleted = oldFile.delete();
-                        if (!deleted) {
-                            System.out.println("Không thể xóa tệp ảnh cũ: " + oldFile.getAbsolutePath());
+            if ( rowsUpdated > 0) {
+                if(previousAvatarFilePath != null && avatarFilePath != null) {
+                    String projectDir = System.getProperty("user.dir");
+                    String avatarsDir = projectDir + "/src/main/resources/images/user/";
+                    if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+                        File oldFile = new File(avatarsDir + user.getAvatar());
+                        if (oldFile.exists()) {
+                            boolean deleted = oldFile.delete();
+                            if (!deleted) {
+                                System.out.println("Không thể xóa tệp ảnh cũ: " + oldFile.getAbsolutePath());
+                            }
                         }
                     }
+                    Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
-                Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
+
                 System.out.println("User updated successfully!");
                 if (manageUserController != null) {
                     manageUserController.loadUsersFromDatabase();
                 }
-                closeStage();
+//                closeStage();
             }
+            closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {

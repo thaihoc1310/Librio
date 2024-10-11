@@ -12,13 +12,13 @@
    <children>
       <AnchorPane prefHeight="198.0" prefWidth="436.0" styleClass="background" stylesheets="@../../css/admin/CRUDUser.css">
          <children>
-            <Text layoutX="15.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete user &quot;MyName&quot;. " wrappingWidth="405.73223876953125">
+            <Text fx:id="confirmationText" layoutX="15.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete user &quot;User Name&quot;. " wrappingWidth="405.73223876953125">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
             <Button fx:id="deleteButton" layoutX="170.0" layoutY="175.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="31.0" prefWidth="102.0" styleClass="btn-2" text="Yes, Delete." />
-            <Text layoutX="15.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You cannot undo this action!">
+            <Text layoutX="15.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You cannot undo this action!">
                <font>
                   <Font size="15.0" />
                </font>
