@@ -5,7 +5,8 @@
 .button {
     -fx-background-color:  #DCB485 ;
     -fx-text-fill: #4C2113;
-
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
 }
 .button:hover {
     -fx-background-color:#f1debc; /* Màu nền khi hover */
@@ -33,7 +34,7 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: rgb(EBE9F6); /* Màu nền khi hàng được chọn */
+    -fx-background-color: #f1debc; /* Màu nền khi hàng được chọn */
 }
 
 .table-row-cell:selected .text {
@@ -43,4 +44,15 @@
 /* Thay đổi màu chữ của tiêu đề khi hover (tùy chọn) */
 .table-view .column-header:hover .label {
     -fx-text-fill: #B8860B; /* Màu chữ khi hover tiêu đề cột */
+    }
+.table-view:focused {
+    -fx-focus-color: #f1debc;  /* Màu của đường highlight khi TableView được chọn */
+}
+.table-row-cell:focused {
+   -fx-focus-color: #f1debc;
+}
+.background{
+    -fx-background-color: #F8EDD9;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5,0,0,0);
 }

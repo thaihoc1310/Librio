@@ -3,10 +3,7 @@ package librio.controllers.admin;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -25,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -45,25 +43,34 @@ public class CreateUserController implements Initializable {
     @FXML
     private ComboBox<Role> roleComboBox;
     @FXML
-    private TextField avatarTextField;
-    @FXML
     private TextArea addressTextArea;
     @FXML
     private Button createUserButton;
     @FXML
-    private Button cancelButton;
+    private Label nameErrorLabel;
     @FXML
-    private Button addAvatarButton;
+    private Label emailErrorLabel;
+    @FXML
+    private Label passwordErrorLabel;
+    @FXML
+    private Label confirmPasswordErrorLabel;
+    @FXML
+    private Label phoneNumberErrorLabel;
+    @FXML
+    private Label roleErrorLabel;
+    @FXML
+    private Label genderErrorLabel;
     @FXML
     private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
     private String avatarFilePath;
     private String previousAvatarFilePath;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
         roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
+        hideErrorLabels();
+        addListeners();
     }
 
     public void setManageUserController(ManageUserController manageUserController) {
@@ -77,15 +84,59 @@ public class CreateUserController implements Initializable {
         String password = passwordTextField.getText();
         String confirmPassword = confirmPasswordTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
-        Gender gender = Gender.valueOf(String.valueOf(genderComboBox.getValue()));
-        Role role = Role.valueOf(String.valueOf(roleComboBox.getValue()));
+        Gender gender = genderComboBox.getValue();
+        Role role = roleComboBox.getValue();
         String address = addressTextArea.getText();
 
-        if (!password.equals(confirmPassword)) {
-            System.out.println("Passwords do not match!");
-            return;
+        boolean validation = false;
+
+        if(name.isEmpty()){
+            nameErrorLabel.setText("Name cannot be empty");
+            validation = true;
         }
 
+        if(password.isEmpty()){
+            passwordErrorLabel.setText("Password cannot be empty");
+            validation = true;
+        }
+
+        if (email.isEmpty()) {
+            emailErrorLabel.setText("Email cannot be empty");
+            validation = true;
+        } else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            emailErrorLabel.setText("Invalid email format");
+            validation = true;
+        } else if (isEmailExists(email)) {
+            emailErrorLabel.setText("Email already exists");
+            validation = true;
+        }
+
+        if (confirmPassword.isEmpty() || !confirmPassword.equals(password)) {
+            confirmPasswordErrorLabel.setText("Passwords do not match");
+            validation = true;
+        }
+
+        if (phoneNumber.isEmpty()) {
+            phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            validation = true;
+        } else if (!phoneNumber.matches("\\d{10}")) {
+            phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+            validation = true;
+        }
+
+        if(role == null){
+            roleErrorLabel.setText("Role must be selected");
+            validation = true;
+        }
+
+        if(gender == null){
+            genderErrorLabel.setText("Gender must be selected");
+            validation = true;
+        }
+
+        if(validation) {
+            return;
+        }
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -97,20 +148,18 @@ public class CreateUserController implements Initializable {
             statement.setString(6, gender.name());
             statement.setString(7, role.name());
             statement.setString(8, avatarFilePath);
-
-
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 String projectDir = System.getProperty("user.dir");
                 String avatarsDir = projectDir + "/src/main/resources/images/user/";
-                Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
-                //navigate
+                if(previousAvatarFilePath != null){
+                    Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
+                }
                 if (manageUserController != null) {
                     manageUserController.loadUsersFromDatabase();
                 }
                 clearInputFields();
                 closeStage();
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,6 +167,84 @@ public class CreateUserController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    private void hideErrorLabels() {
+        nameErrorLabel.setText("");
+        emailErrorLabel.setText("");
+        passwordErrorLabel.setText("");
+        confirmPasswordErrorLabel.setText("");
+        phoneNumberErrorLabel.setText("");
+        roleErrorLabel.setText("");
+    }
+
+    private void addListeners() {
+        // Name validation
+        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                nameErrorLabel.setText("Name cannot be empty");
+            } else {
+                nameErrorLabel.setText("");
+            }
+        });
+
+        // Email validation
+        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                emailErrorLabel.setText("Email cannot be empty");
+            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+                emailErrorLabel.setText("Invalid email format");
+            } else {
+                emailErrorLabel.setText("");
+            }
+        });
+
+        // Password validation
+        passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                passwordErrorLabel.setText("Password cannot be empty");
+            } else {
+                passwordErrorLabel.setText("");
+            }
+        });
+
+        // Confirm password validation
+        confirmPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty() || !newValue.equals(passwordTextField.getText())) {
+                confirmPasswordErrorLabel.setText("Passwords do not match");
+            } else {
+                confirmPasswordErrorLabel.setText("");
+            }
+        });
+
+        // Phone number validation
+        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            } else if (!newValue.matches("\\d{10}")) {
+                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+            } else {
+                phoneNumberErrorLabel.setText("");
+            }
+        });
+
+        // Role validation
+        roleComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                roleErrorLabel.setText("Role must be selected");
+            } else {
+                roleErrorLabel.setText("");
+            }
+        });
+
+        genderComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                genderErrorLabel.setText("Gender must be selected");
+            } else {
+                genderErrorLabel.setText("");
+            }
+        });
+    }
+
 
     @FXML
     private void addAvatar() {
@@ -132,12 +259,29 @@ public class CreateUserController implements Initializable {
         if (selectedFile != null) {
             avatarFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
             Image avatarImage = new Image(selectedFile.toURI().toString());
-            cropAndClipToCircle(avatarImage, avatarImageView, 50);
+            cropAndClipToCircle(avatarImage, avatarImageView, 75);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
 
-
     }
+
+    private boolean isEmailExists(String email) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                exists = resultSet.getInt(1) > 0;
+                //resultSet.getInt => get result of count(*)
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
+
 
     @FXML
     private void cancelCreateUser() {

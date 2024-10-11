@@ -14,7 +14,6 @@ public class HelloApplication extends Application {
         // Khởi tạo cơ sở dữ liệu khi bắt đầu ứng dụng
         DatabaseInitializer.initializeDatabase();
 
-
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/fxml/admin/ManageUser.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Librio");

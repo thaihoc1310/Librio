@@ -3,10 +3,7 @@ package librio.controllers.admin;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -117,8 +114,8 @@ public class UpdateUserController implements Initializable {
             statement.setString(8, user.getId());
 
             int rowsUpdated = statement.executeUpdate();
-            if ( rowsUpdated > 0) {
-                if(previousAvatarFilePath != null && avatarFilePath != null) {
+            if (rowsUpdated > 0) {
+                if (previousAvatarFilePath != null && avatarFilePath != null) {
                     String projectDir = System.getProperty("user.dir");
                     String avatarsDir = projectDir + "/src/main/resources/images/user/";
                     if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
@@ -132,14 +129,11 @@ public class UpdateUserController implements Initializable {
                     }
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
-
-                System.out.println("User updated successfully!");
                 if (manageUserController != null) {
                     manageUserController.loadUsersFromDatabase();
                 }
-//                closeStage();
+                closeStage();
             }
-            closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -163,8 +157,6 @@ public class UpdateUserController implements Initializable {
             cropAndClipToCircle(avatarImage, avatarImageView, 50);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
-
-
     }
 
     @FXML

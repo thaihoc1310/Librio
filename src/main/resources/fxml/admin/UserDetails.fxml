@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
@@ -20,11 +19,17 @@
                     <children>
                         <Label layoutX="22.0" layoutY="14.0" styleClass="title-text" text="User Details">
                         </Label>
-                        <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
+                        <Label layoutX="374.0" layoutY="249.0" styleClass="label-13" text="Gender :">
+                        </Label>
+                        <Button fx:id="backButton" layoutX="57.0" layoutY="354.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
+                        <Label layoutX="393.0" layoutY="291.0" styleClass="label-13" text="Role :">
+                        </Label>
                         <ImageView fx:id="avatarImageView" fitHeight="140.0" fitWidth="140.0" layoutX="389.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../../../../../../../../Pictures/Screenshots/Screenshot%202024-09-12%20160040.png" />
                             </image></ImageView>
+                        <TextField fx:id="genderTextField" editable="false" layoutX="441.0" layoutY="244.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
+                        <TextField fx:id="roleTextField" editable="false" layoutX="441.0" layoutY="285.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
                         <Line endX="-100.0" endY="-29.00001335144043" layoutX="113.0" layoutY="51.0" startX="-100.0" stroke="#dcb485" />
                         <VBox alignment="TOP_RIGHT" layoutX="12.0" layoutY="77.0" prefHeight="250.0" prefWidth="100.0" spacing="25.0">
                            <children>
@@ -45,29 +50,10 @@
                                     <TextField fx:id="userIDTextField" editable="false" prefWidth="189.0" styleClass="text-field-custom" />
                                     <TextField fx:id="emailTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextField fx:id="nameTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
-                                    <TextField fx:id="phoneNumberTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
-                                    <TextArea fx:id="addressTextArea" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
+                                    <TextField fx:id="phoneNumberTextField" blendMode="OVERLAY" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
+                                    <TextArea fx:id="addressTextArea" blendMode="LIGHTEN" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
                            </children>
                         </VBox>
-                  <VBox layoutX="374.0" layoutY="219.0" prefHeight="200.0" prefWidth="126.0" spacing="25.0">
-                     <children>
-                              <Label styleClass="label-13" text="Gender :">
-                        </Label>
-                              <Label styleClass="label-13" text="Role :">
-                        </Label>
-                        <Label styleClass="label-13" text="Fine amount : " />
-                        <Label styleClass="label-13" text="Total Borrowed :" />
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </VBox>
-                  <VBox layoutX="471.0" layoutY="219.0" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                              <TextField fx:id="genderTextField" editable="false" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
-                              <TextField fx:id="roleTextField" editable="false" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
-                     </children>
-                  </VBox>
                     </children>
                 </AnchorPane>
             </children>
