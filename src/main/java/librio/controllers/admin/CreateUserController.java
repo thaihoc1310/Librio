@@ -43,15 +43,9 @@ public class CreateUserController implements Initializable {
     @FXML
     private ComboBox<Role> roleComboBox;
     @FXML
-    private TextField avatarTextField;
-    @FXML
     private TextArea addressTextArea;
     @FXML
     private Button createUserButton;
-    @FXML
-    private Button cancelButton;
-    @FXML
-    private Button addAvatarButton;
     @FXML
     private Label nameErrorLabel;
     @FXML
@@ -70,31 +64,6 @@ public class CreateUserController implements Initializable {
     private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
     private String avatarFilePath;
     private String previousAvatarFilePath;
-
-    public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
-        // Lấy chiều rộng và chiều cao của ảnh
-        double width = avatarImage.getWidth();
-        double height = avatarImage.getHeight();
-
-        // Tính toán kích thước để cắt ảnh thành hình vuông
-        double cropSize = Math.min(width, height);  // Chọn kích thước nhỏ hơn giữa width và height
-
-        // Tính toán tọa độ bắt đầu để cắt hình vuông từ trung tâm của ảnh
-        double x = (width - cropSize) / 2;
-        double y = (height - cropSize) / 2;
-
-        // Cắt ảnh thành hình vuông
-        PixelReader reader = avatarImage.getPixelReader();
-        WritableImage squareImage = new WritableImage(reader, (int) x, (int) y, (int) cropSize, (int) cropSize);
-
-        // Hiển thị ảnh đã cắt trong ImageView
-        avatarImageView.setImage(squareImage);
-        avatarImageView.setPreserveRatio(true);
-
-        // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
-        Circle clip = new Circle(radius, radius, radius);
-        avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -131,23 +100,27 @@ public class CreateUserController implements Initializable {
             validation = true;
         }
 
-        if(isEmailExists(email)) {
+        if (email.isEmpty()) {
+            emailErrorLabel.setText("Email cannot be empty");
+            validation = true;
+        } else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            emailErrorLabel.setText("Invalid email format");
+            validation = true;
+        } else if (isEmailExists(email)) {
             emailErrorLabel.setText("Email already exists");
             validation = true;
         }
 
-        if(email.isEmpty()){
-            emailErrorLabel.setText("Email cannot be empty");
-            validation = true;
-        }
-
-        if(confirmPassword.isEmpty()){
+        if (confirmPassword.isEmpty() || !confirmPassword.equals(password)) {
             confirmPasswordErrorLabel.setText("Passwords do not match");
             validation = true;
         }
 
-        if(phoneNumber.isEmpty()){
+        if (phoneNumber.isEmpty()) {
             phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            validation = true;
+        } else if (!phoneNumber.matches("\\d{10}")) {
+            phoneNumberErrorLabel.setText("Phone number must be 10 digits");
             validation = true;
         }
 
@@ -161,38 +134,38 @@ public class CreateUserController implements Initializable {
             validation = true;
         }
 
-        if(validation) return;
-            try (Connection connection = DatabaseConnection.getConnection()) {
-                String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement statement = connection.prepareStatement(query);
-                statement.setString(1, name);
-                statement.setString(2, email);
-                statement.setString(3, password);
-                statement.setString(4, phoneNumber);
-                statement.setString(5, address);
-                statement.setString(6, gender.name());
-                statement.setString(7, role.name());
-                statement.setString(8, avatarFilePath);
-
-                int rowsInserted = statement.executeUpdate();
-                if (rowsInserted > 0) {
-                    String projectDir = System.getProperty("user.dir");
-                    String avatarsDir = projectDir + "/src/main/resources/images/user/";
-                    if(previousAvatarFilePath != null){
-                        Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
-                    }
-                    if (manageUserController != null) {
-                        manageUserController.loadUsersFromDatabase();
-                    }
-                    clearInputFields();
-                    closeStage();
-
+        if(validation) {
+            return;
+        }
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, name);
+            statement.setString(2, email);
+            statement.setString(3, password);
+            statement.setString(4, phoneNumber);
+            statement.setString(5, address);
+            statement.setString(6, gender.name());
+            statement.setString(7, role.name());
+            statement.setString(8, avatarFilePath);
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                String projectDir = System.getProperty("user.dir");
+                String avatarsDir = projectDir + "/src/main/resources/images/user/";
+                if(previousAvatarFilePath != null){
+                    Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                if (manageUserController != null) {
+                    manageUserController.loadUsersFromDatabase();
+                }
+                clearInputFields();
+                closeStage();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void hideErrorLabels() {
@@ -332,5 +305,31 @@ public class CreateUserController implements Initializable {
         roleComboBox.getSelectionModel().clearSelection();
 
     }
+
+    public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
+        // Lấy chiều rộng và chiều cao của ảnh
+        double width = avatarImage.getWidth();
+        double height = avatarImage.getHeight();
+
+        // Tính toán kích thước để cắt ảnh thành hình vuông
+        double cropSize = Math.min(width, height);  // Chọn kích thước nhỏ hơn giữa width và height
+
+        // Tính toán tọa độ bắt đầu để cắt hình vuông từ trung tâm của ảnh
+        double x = (width - cropSize) / 2;
+        double y = (height - cropSize) / 2;
+
+        // Cắt ảnh thành hình vuông
+        PixelReader reader = avatarImage.getPixelReader();
+        WritableImage squareImage = new WritableImage(reader, (int) x, (int) y, (int) cropSize, (int) cropSize);
+
+        // Hiển thị ảnh đã cắt trong ImageView
+        avatarImageView.setImage(squareImage);
+        avatarImageView.setPreserveRatio(true);
+
+        // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
+        Circle clip = new Circle(radius, radius, radius);
+        avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
+    }
+
 }
 
