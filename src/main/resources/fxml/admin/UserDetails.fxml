@@ -21,7 +21,7 @@
                         </Label>
                         <Label layoutX="374.0" layoutY="249.0" styleClass="label-13" text="Gender :">
                         </Label>
-                        <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
+                        <Button fx:id="backButton" layoutX="57.0" layoutY="354.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
                         <Label layoutX="393.0" layoutY="291.0" styleClass="label-13" text="Role :">
                         </Label>
                         <ImageView fx:id="avatarImageView" fitHeight="140.0" fitWidth="140.0" layoutX="389.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
@@ -50,8 +50,8 @@
                                     <TextField fx:id="userIDTextField" editable="false" prefWidth="189.0" styleClass="text-field-custom" />
                                     <TextField fx:id="emailTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextField fx:id="nameTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
-                                    <TextField fx:id="phoneNumberTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
-                                    <TextArea fx:id="addressTextArea" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
+                                    <TextField fx:id="phoneNumberTextField" blendMode="OVERLAY" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
+                                    <TextArea fx:id="addressTextArea" blendMode="LIGHTEN" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
                            </children>
                         </VBox>
                     </children>
