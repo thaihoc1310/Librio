@@ -3,10 +3,7 @@ package librio.controllers.admin;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -118,19 +115,20 @@ public class UpdateUserController implements Initializable {
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
-                String projectDir = System.getProperty("user.dir");
-                String avatarsDir = projectDir + "/src/main/resources/images/user/";
-                if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
-                    File oldFile = new File(avatarsDir + user.getAvatar());
-                    if (oldFile.exists()) {
-                        boolean deleted = oldFile.delete();
-                        if (!deleted) {
-                            System.out.println("Không thể xóa tệp ảnh cũ: " + oldFile.getAbsolutePath());
+                if (previousAvatarFilePath != null && avatarFilePath != null) {
+                    String projectDir = System.getProperty("user.dir");
+                    String avatarsDir = projectDir + "/src/main/resources/images/user/";
+                    if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+                        File oldFile = new File(avatarsDir + user.getAvatar());
+                        if (oldFile.exists()) {
+                            boolean deleted = oldFile.delete();
+                            if (!deleted) {
+                                System.out.println("Không thể xóa tệp ảnh cũ: " + oldFile.getAbsolutePath());
+                            }
                         }
                     }
+                    Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
-                Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
-                System.out.println("User updated successfully!");
                 if (manageUserController != null) {
                     manageUserController.loadUsersFromDatabase();
                 }
@@ -159,8 +157,6 @@ public class UpdateUserController implements Initializable {
             cropAndClipToCircle(avatarImage, avatarImageView, 50);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
-
-
     }
 
     @FXML
