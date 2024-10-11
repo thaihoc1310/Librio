@@ -84,14 +84,20 @@
                                 <Font size="15.0" />
                             </font>
                         </Label>
-                        <VBox layoutX="165.0" layoutY="84.0" prefHeight="279.0" prefWidth="183.0" spacing="21.0">
+                        <VBox layoutX="165.0" layoutY="84.0" prefHeight="279.0" prefWidth="183.0" spacing="2.0">
                             <children>
                                 <TextField fx:id="nameTextField" />
+                        <Label fx:id="nameErrorLabel" />
                                 <TextField fx:id="emailTextField" promptText="xyz@gmail.com" />
+                        <Label fx:id="emailErrorLabel" />
                         <PasswordField fx:id="passwordTextField" />
+                        <Label fx:id="passwordErrorLabel" />
                         <PasswordField fx:id="confirmPasswordTextField" />
+                        <Label fx:id="confirmPasswordErrorLabel" />
                         <TextField fx:id="phoneNumberTextField" />
+                        <Label fx:id="phoneNumberErrorLabel" />
                               <ComboBox fx:id="roleComboBox" prefWidth="150.0" />
+                        <Label fx:id="roleErrorLabel" />
                             </children>
                         </VBox>
                           <Text layoutX="395.0" layoutY="303.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address :">
@@ -100,6 +106,7 @@
                               </font>
                           </Text>
                   <TextArea fx:id="addressTextArea" layoutX="470.0" layoutY="287.0" prefHeight="71.0" prefWidth="183.0" wrapText="true" />
+                  <Label fx:id="genderErrorLabel" layoutX="470.0" layoutY="267.0" />
                     </children>
                 </AnchorPane>
             </children>
