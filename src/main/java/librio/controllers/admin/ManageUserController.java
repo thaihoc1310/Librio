@@ -5,10 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,8 +52,12 @@ public class ManageUserController implements Initializable {
     private TableColumn<User, Void> actionColumn;
     @FXML
     private Button createUserButton;
+    @FXML
+    private Pagination pagination;
 
     private ObservableList<User> userList;
+
+    private int rowsPerPage = 10;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -60,8 +67,10 @@ public class ManageUserController implements Initializable {
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        loadUsersFromDatabase();
+        pagination.setPageCount((int) Math.ceil((double) getTotalUserCount() / rowsPerPage));
+        pagination.setPageFactory(this::createPage);
         addButtonToTable();
+
     }
 
     private void addButtonToTable() {
@@ -103,7 +112,7 @@ public class ManageUserController implements Initializable {
                         } else {
                             // Tạo một HBox để chứa các nút
                             HBox hbox = new HBox(20, btnDetail, btnUpdate, btnDelete);
-                            hbox.setStyle("-fx-padding: 0 0 0 20;");
+                            hbox.setAlignment(Pos.CENTER);
                             setGraphic(hbox);
                         }
                     }
@@ -139,11 +148,14 @@ public class ManageUserController implements Initializable {
         return null;
     }
 
-    public void loadUsersFromDatabase() {
+    public void loadUsersFromDatabase(int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             userList = FXCollections.observableArrayList();
-            String query = "SELECT * FROM users";
+            int offset = pageIndex * rowsPerPage;
+            String query = "SELECT * FROM users LIMIT ? OFFSET ?";
             PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, rowsPerPage);
+            statement.setInt(2, offset);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -157,13 +169,33 @@ public class ManageUserController implements Initializable {
                 User user = new User(id, name, email, phoneNumber, gender, role);
                 userList.add(user);
             }
-
             userTableView.setItems(userList);
+            userTableView.setFixedCellSize(49);
+            pagination.setPageCount((int) Math.ceil((double) getTotalUserCount() / rowsPerPage));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
+    private Node createPage(int pageIndex) {
+        loadUsersFromDatabase(pageIndex);
+        return new BorderPane();
+    }
+
+    private int getTotalUserCount() {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query = "SELECT COUNT(*) FROM users";
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     @FXML
     private void openCreateUserScene() {
