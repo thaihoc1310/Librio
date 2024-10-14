@@ -10,7 +10,6 @@ public class DatabaseConnection {
     //Huyd2106@
     //thaihoc285
     //Giang2002@
-    // Phương thức kết nối cơ sở dữ liệu
     public static Connection getConnection() throws SQLException {
         Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         return connection;

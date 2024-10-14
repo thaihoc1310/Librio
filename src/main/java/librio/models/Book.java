@@ -8,15 +8,29 @@ public class Book {
     private StringProperty id;
     private StringProperty title;
     private StringProperty author;
-    private StringProperty isbn;
-    private StringProperty publisher;
     private StringProperty category;
+    private StringProperty language;
+    private StringProperty publisher;
+    private StringProperty yearPublished;
+    private StringProperty numberOfPages;
+    private StringProperty description;
+    private String imagePath;
+    private StringProperty isbn;
     private IntegerProperty quantityCopy;
     private DoubleProperty averageOfRating;
     private String created_by;
     private Instant created_at;
     private StringProperty update_by;
     private ObjectProperty<Instant> update_at;
+
+    public Book(String id, String title, String author, String category, String language, String publisher) {
+        this.id = new SimpleStringProperty(id);
+        this.title = new SimpleStringProperty(title);
+        this.author = new SimpleStringProperty(author);
+        this.category = new SimpleStringProperty(category);
+        this.language = new SimpleStringProperty(language);
+        this.publisher = new SimpleStringProperty(publisher);
+    }
 
     public Book() {
         this.id = new SimpleStringProperty();
@@ -29,6 +43,20 @@ public class Book {
         this.averageOfRating = new SimpleDoubleProperty();
         this.update_at = new SimpleObjectProperty<>();
         this.update_by = new SimpleStringProperty();
+    }
+
+
+
+    public Book(String id, String title, String author, String category, String publisher, String yearPublished, String language, String numberOfPages, String description) {
+        this.id = new SimpleStringProperty(id);
+        this.title = new SimpleStringProperty(title);
+        this.author = new SimpleStringProperty(author);
+        this.category = new SimpleStringProperty(category);
+        this.publisher = new SimpleStringProperty(publisher);
+        this.yearPublished = new SimpleStringProperty(yearPublished);
+        this.language = new SimpleStringProperty(language);
+        this.numberOfPages = new SimpleStringProperty(numberOfPages);
+        this.description = new SimpleStringProperty(description);
     }
 
     // Getters và Setters cho các thuộc tính
@@ -66,6 +94,18 @@ public class Book {
 
     public StringProperty authorProperty() {
         return author;
+    }
+
+    public String getLanguage() {
+        return language.get();
+    }
+
+    public void setLanguage(String language) {
+        this.language.set(language);
+    }
+
+    public StringProperty languageProperty() {
+        return language;
     }
 
     public String getIsbn() {
@@ -166,5 +206,49 @@ public class Book {
 
     public void setUpdate_at(Instant update_at) {
         this.update_at.set(update_at);
+    }
+
+    public String getYearPublished() {
+        return yearPublished.get();
+    }
+
+    public StringProperty yearPublishedProperty() {
+        return yearPublished;
+    }
+
+    public void setYearPublished(String yearPublished) {
+        this.yearPublished.set(yearPublished);
+    }
+
+    public String getNumberOfPages() {
+        return numberOfPages.get();
+    }
+
+    public StringProperty numberOfPagesProperty() {
+        return numberOfPages;
+    }
+
+    public void setNumberOfPages(String numberOfPages) {
+        this.numberOfPages.set(numberOfPages);
+    }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description.set(description);
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

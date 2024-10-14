@@ -6,32 +6,33 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
-import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
 import librio.database.DatabaseConnection;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
+
+import static librio.util.DatabaseUtil.isEmailExists;
+import static librio.util.DesignUtil.cropAndClipToCircle;
+
 
 public class UpdateUserController implements Initializable {
 
     @FXML
-    private TextField emailTextField;
+    private Button updateUserButton;
     @FXML
     private TextField nameTextField;
+    @FXML
+    private TextField emailTextField;
     @FXML
     private TextField phoneNumberTextField;
     @FXML
@@ -41,9 +42,19 @@ public class UpdateUserController implements Initializable {
     @FXML
     private TextArea addressTextArea;
     @FXML
-    private Button updateUserButton;
+    private Label nameErrorLabel;
     @FXML
-    private Button cancelButton;
+    private Label emailErrorLabel;
+    @FXML
+    private Label phoneNumberErrorLabel;
+    @FXML
+    private Label roleErrorLabel;
+    @FXML
+    private Label genderErrorLabel;
+    @FXML
+    private DatePicker birthOfDatePicker;
+    @FXML
+    private Label birthOfDateErrorLabel;
     @FXML
     private ImageView avatarImageView;
     private String avatarFilePath;
@@ -51,13 +62,14 @@ public class UpdateUserController implements Initializable {
 
     private User user;
     private ManageUserController manageUserController;
+    private int currentPage = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
         roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
-        genderComboBox.setEditable(false);
-        roleComboBox.setEditable(false);
+        hideErrorLabels();
+        addListeners();
     }
 
     public void setUser(User user) {
@@ -69,6 +81,11 @@ public class UpdateUserController implements Initializable {
         this.manageUserController = manageUserController;
     }
 
+    public void setCurrentPage(int currentPage){
+        this.currentPage = currentPage;
+    }
+
+
     private void populateFields() {
         if (user != null) {
             emailTextField.setText(user.getEmail());
@@ -77,17 +94,23 @@ public class UpdateUserController implements Initializable {
             addressTextArea.setText(user.getAddress());
             genderComboBox.setValue(user.getGender());
             roleComboBox.setValue(user.getRole());
+            birthOfDatePicker.setValue(user.getBirthOfDate());
 
+            // Lấy đường dẫn ảnh từ project
             String projectDir = System.getProperty("user.dir");
             String avatarsDir = projectDir + "/src/main/resources/images/user/";
             String path = avatarsDir + user.getAvatar();
 
+            // Chuyển đổi đường dẫn thành URL
             File file = new File(path);
             if (file.exists()) {
-                Image avatarImage = new Image(file.toURI().toString());
-                cropAndClipToCircle(avatarImage, avatarImageView, 50);
+                Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+                cropAndClipToCircle(image, avatarImageView, 75);
             } else {
-                System.out.println("File ảnh không tồn tại: " + path);
+                String defaultImage = avatarsDir + "Male User.png";
+                File defaultImageFile = new File(defaultImage);
+                Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+                cropAndClipToCircle(image, avatarImageView, 75);
             }
         }
     }
@@ -97,13 +120,57 @@ public class UpdateUserController implements Initializable {
         String name = nameTextField.getText();
         String email = emailTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
-        Gender gender = Gender.valueOf(String.valueOf(genderComboBox.getValue()));
-        Role role = Role.valueOf(String.valueOf(roleComboBox.getValue()));
+        Gender gender = genderComboBox.getValue();
+        Role role = roleComboBox.getValue();
         String address = addressTextArea.getText();
+        LocalDate birthOfDate = birthOfDatePicker.getValue();
+        boolean validation = false;
 
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, role = ?, avatar = ? WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+        if(name.isEmpty()){
+            nameErrorLabel.setText("Name cannot be empty");
+            validation = true;
+        }
+
+        if (email.isEmpty()) {
+            emailErrorLabel.setText("Email cannot be empty");
+            validation = true;
+        } else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            emailErrorLabel.setText("Invalid email format");
+            validation = true;
+        } else if (isEmailExists(email) && !email.equals(user.getEmail())) {
+            emailErrorLabel.setText("Email already exists");
+            validation = true;
+        }
+
+        if (phoneNumber.isEmpty()) {
+            phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            validation = true;
+        } else if (!phoneNumber.matches("\\d{10}")) {
+            phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+            validation = true;
+        }
+
+        if(role == null){
+            roleErrorLabel.setText("Role must be selected");
+            validation = true;
+        }
+
+        if(gender == null){
+            genderErrorLabel.setText("Gender must be selected");
+            validation = true;
+        }
+
+        if(birthOfDate == null){
+            birthOfDateErrorLabel.setText("Birth of Date must be selected");
+        }
+
+        if(validation) {
+            return;
+        }
+        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, role = ?, avatar = ?, birth_of_date = ? WHERE id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             statement.setString(2, email);
             statement.setString(3, phoneNumber);
@@ -111,7 +178,9 @@ public class UpdateUserController implements Initializable {
             statement.setString(5, gender.name());
             statement.setString(6, role.name());
             statement.setString(7, avatarFilePath);
-            statement.setString(8, user.getId());
+            assert birthOfDate != null;
+            statement.setDate(8, Date.valueOf(birthOfDate));
+            statement.setString(9, user.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -130,7 +199,7 @@ public class UpdateUserController implements Initializable {
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
                 if (manageUserController != null) {
-                    manageUserController.loadUsersFromDatabase(0);
+                    manageUserController.loadUsers(null,currentPage);
                 }
                 closeStage();
             }
@@ -140,6 +209,74 @@ public class UpdateUserController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    private void hideErrorLabels() {
+        nameErrorLabel.setText("");
+        emailErrorLabel.setText("");
+        phoneNumberErrorLabel.setText("");
+        roleErrorLabel.setText("");
+        genderErrorLabel.setText("");
+        birthOfDateErrorLabel.setText("");
+    }
+
+    private void addListeners() {
+        // Name validation
+        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                nameErrorLabel.setText("Name cannot be empty");
+            } else {
+                nameErrorLabel.setText("");
+            }
+        });
+
+        // Email validation
+        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                emailErrorLabel.setText("Email cannot be empty");
+            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+                emailErrorLabel.setText("Invalid email format");
+            } else {
+                emailErrorLabel.setText("");
+            }
+        });
+
+        // Phone number validation
+        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            } else if (!newValue.matches("\\d{10}")) {
+                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+            } else {
+                phoneNumberErrorLabel.setText("");
+            }
+        });
+
+        // Role validation
+        roleComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                roleErrorLabel.setText("Role must be selected");
+            } else {
+                roleErrorLabel.setText("");
+            }
+        });
+
+        genderComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                genderErrorLabel.setText("Gender must be selected");
+            } else {
+                genderErrorLabel.setText("");
+            }
+        });
+
+        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                birthOfDateErrorLabel.setText("Birth of Date must be selected");
+            } else {
+                birthOfDateErrorLabel.setText("");
+            }
+        });
+    }
+
 
     @FXML
     private void addAvatar() {
@@ -154,7 +291,7 @@ public class UpdateUserController implements Initializable {
         if (selectedFile != null) {
             avatarFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
             Image avatarImage = new Image(selectedFile.toURI().toString());
-            cropAndClipToCircle(avatarImage, avatarImageView, 50);
+            cropAndClipToCircle(avatarImage, avatarImageView, 75);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
     }
@@ -167,30 +304,5 @@ public class UpdateUserController implements Initializable {
     private void closeStage() {
         Stage stage = (Stage) updateUserButton.getScene().getWindow();
         stage.close();
-    }
-
-    public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
-        // Lấy chiều rộng và chiều cao của ảnh
-        double width = avatarImage.getWidth();
-        double height = avatarImage.getHeight();
-
-        // Tính toán kích thước để cắt ảnh thành hình vuông
-        double cropSize = Math.min(width, height);  // Chọn kích thước nhỏ hơn giữa width và height
-
-        // Tính toán tọa độ bắt đầu để cắt hình vuông từ trung tâm của ảnh
-        double x = (width - cropSize) / 2;
-        double y = (height - cropSize) / 2;
-
-        // Cắt ảnh thành hình vuông
-        PixelReader reader = avatarImage.getPixelReader();
-        WritableImage squareImage = new WritableImage(reader, (int) x, (int) y, (int) cropSize, (int) cropSize);
-
-        // Hiển thị ảnh đã cắt trong ImageView
-        avatarImageView.setImage(squareImage);
-        avatarImageView.setPreserveRatio(true);
-
-        // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
-        Circle clip = new Circle(radius, radius, radius);
-        avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
     }
 }
