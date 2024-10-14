@@ -32,9 +32,9 @@
 }
 
 .table-view .cell {
-    -fx-cell-size: 30;
+    /*-fx-cell-size: 30;*/
     -fx-alignment: center-left;
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: normal;
     -fx-text-fill: #000000;
 

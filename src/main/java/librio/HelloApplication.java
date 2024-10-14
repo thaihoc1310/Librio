@@ -13,8 +13,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         // Khởi tạo cơ sở dữ liệu khi bắt đầu ứng dụng
         DatabaseInitializer.initializeDatabase();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/fxml/admin/ManageBorrow.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/fxml/admin/ManageUser.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Librio");
         stage.setScene(scene);
