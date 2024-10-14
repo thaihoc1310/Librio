@@ -19,18 +19,17 @@ public class Borrow {
     private StringProperty update_by;
     private ObjectProperty<Instant> update_at;
 
-    public Borrow() {
-        this.id = new SimpleStringProperty();
-        this.bookId = new SimpleStringProperty();
-        this.memberId = new SimpleStringProperty();
-        this.borrowDate = new SimpleObjectProperty<>();
-        this.dueDate = new SimpleObjectProperty<>();
-        this.returnDate = new SimpleObjectProperty<>();
-        this.status = new SimpleStringProperty();
-        this.fine = new SimpleDoubleProperty();
-        this.update_at = new SimpleObjectProperty<>();
-        this.update_by = new SimpleStringProperty();
+    public Borrow(String id, String bookId, String memberId, Instant borrowDate, Instant dueDate, Instant returnDate, String status, double fine) {
+        this.id = new SimpleStringProperty(id);
+        this.bookId = new SimpleStringProperty(bookId);
+        this.memberId = new SimpleStringProperty(memberId);
+        this.borrowDate = new SimpleObjectProperty<>(borrowDate);
+        this.dueDate = new SimpleObjectProperty<>(dueDate);
+        this.returnDate = new SimpleObjectProperty<>(returnDate);
+        this.status = new SimpleStringProperty(status);
+        this.fine = new SimpleDoubleProperty(fine);
     }
+
 
     // Getters và Setters
     public String getId() {
