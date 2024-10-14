@@ -140,7 +140,7 @@ public class UpdateUserController implements Initializable {
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
                 if (manageUserController != null) {
-                    manageUserController.loadUsersFromDatabase();
+                    manageUserController.loadUsersFromDatabase(0);
                 }
                 closeStage();
             }

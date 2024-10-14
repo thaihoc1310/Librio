@@ -11,12 +11,13 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
          <children>
@@ -154,7 +155,7 @@
                <center>
                   <AnchorPane prefHeight="450.0" prefWidth="877.0" BorderPane.alignment="CENTER">
                      <children>
-                        <TableView fx:id="userTableView" layoutX="28.0" layoutY="6.0" prefHeight="421.0" prefWidth="851.0" styleClass="background" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
+                        <TableView fx:id="userTableView" layoutX="28.0" layoutY="6.0" prefHeight="518.0" prefWidth="945.0" styleClass="background" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                            <columns>
                               <TableColumn fx:id="idColumn" prefWidth="48.00001525878906" text="ID" />
                               <TableColumn fx:id="nameColumn" prefWidth="124.0" text="Name" />
@@ -172,10 +173,14 @@
                   </AnchorPane>
                </center>
                <bottom>
-                  <Pagination prefHeight="0.0" prefWidth="1111.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                      <padding>
-                        <Insets left="300.0" />
-                     </padding></Pagination>
+                        <Insets left="200.0" />
+                     </padding>
+                     <children>
+                        <Pagination fx:id="pagination" prefHeight="0.0" prefWidth="1111.0" />
+                     </children>
+                  </HBox>
                </bottom>
             </BorderPane>
             <AnchorPane layoutY="590.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.bottomAnchor="0.0" />
