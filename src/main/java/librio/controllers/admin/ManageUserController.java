@@ -26,7 +26,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ManageUserController implements Initializable {
@@ -223,7 +222,7 @@ public class ManageUserController implements Initializable {
             Parent root = loader.load();
 
             // Tạo controller và truyền ManageUserController và User vào
-            UserDetailsController userDetailsController = loader.getController();
+            UserDetailController userDetailsController = loader.getController();
             userDetailsController.setManageUserController(this);
             userDetailsController.setUser(user);
 

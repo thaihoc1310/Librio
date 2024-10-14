@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UserDetailsController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UserDetailController">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0" styleClass="background-wrapper">
             <children>
@@ -26,12 +26,12 @@
                         </Label>
                         <ImageView fx:id="avatarImageView" fitHeight="140.0" fitWidth="140.0" layoutX="389.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../../../../../../../Pictures/Screenshots/Screenshot%202024-09-12%20160040.png" />
+                                <Image url="@../../../../../../../../Downloads/kit.jpg" />
                             </image></ImageView>
                         <TextField fx:id="genderTextField" editable="false" layoutX="441.0" layoutY="244.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
                         <TextField fx:id="roleTextField" editable="false" layoutX="441.0" layoutY="285.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
                         <Line endX="-100.0" endY="-29.00001335144043" layoutX="113.0" layoutY="51.0" startX="-100.0" stroke="#dcb485" />
-                        <VBox alignment="TOP_RIGHT" layoutX="12.0" layoutY="77.0" prefHeight="250.0" prefWidth="100.0" spacing="25.0">
+                        <VBox alignment="TOP_RIGHT" layoutX="12.0" layoutY="77.0" prefHeight="250.0" prefWidth="100.0" spacing="20.0">
                            <children>
                                     <Label styleClass="label-13" text="User ID :">
                               </Label>
@@ -45,10 +45,10 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="131.0" layoutY="72.0" prefHeight="275.0" prefWidth="210.0" spacing="14.0">
+                        <VBox layoutX="131.0" layoutY="76.0" prefHeight="275.0" prefWidth="210.0" spacing="10.0">
                            <children>
-                                    <TextField fx:id="userIDTextField" editable="false" prefWidth="189.0" styleClass="text-field-custom" />
-                                    <TextField fx:id="emailTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
+                                    <TextField fx:id="userIDTextField" editable="false" styleClass="text-field-custom" />
+                                    <TextField fx:id="emailTextField" editable="false" styleClass="text-field-custom" />
                                     <TextField fx:id="nameTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextField fx:id="phoneNumberTextField" blendMode="OVERLAY" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextArea fx:id="addressTextArea" blendMode="LIGHTEN" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />

@@ -8,23 +8,16 @@ package librio.controllers.admin;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import librio.database.DatabaseConnection;
-import librio.models.Gender;
-import librio.models.Role;
 import librio.models.User;
 
 import static librio.controllers.admin.CreateUserController.cropAndClipToCircle;
@@ -33,7 +26,7 @@ import static librio.controllers.admin.CreateUserController.cropAndClipToCircle;
  *
  * @author WINDOWS 10
  */
-public class UserDetailsController implements Initializable {
+public class UserDetailController implements Initializable {
     private User user;
 
     @FXML
@@ -104,12 +97,13 @@ public class UserDetailsController implements Initializable {
 
     private void closeWindow() {
         // Đóng cửa sổ hiện tại
-        Stage stage = (Stage) backButton.getScene().getWindow(); // Hoặc có thể sử dụng cancelButton
+        Stage stage = (Stage) backButton.getScene().getWindow();
         stage.close();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
 //        setField();
 //        genderList();
 //        statusList();

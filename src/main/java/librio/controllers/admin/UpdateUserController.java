@@ -45,6 +45,14 @@ public class UpdateUserController implements Initializable {
     @FXML
     private Button cancelButton;
     @FXML
+    private Label emailErrorLabel;
+    @FXML
+    private Label nameErrorLabel;
+    @FXML
+    private Label phoneNumberErrorLabel;
+    @FXML
+    private Label addressErrorLabel;
+    @FXML
     private ImageView avatarImageView;
     private String avatarFilePath;
     private String previousAvatarFilePath;
@@ -58,6 +66,8 @@ public class UpdateUserController implements Initializable {
         roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
         genderComboBox.setEditable(false);
         roleComboBox.setEditable(false);
+        hideErrorLabels();
+        addListeners();
     }
 
     public void setUser(User user) {
@@ -192,5 +202,55 @@ public class UpdateUserController implements Initializable {
         // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
         Circle clip = new Circle(radius, radius, radius);
         avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
+    }
+
+    private void hideErrorLabels() {
+        nameErrorLabel.setText("");
+        emailErrorLabel.setText("");
+        phoneNumberErrorLabel.setText("");
+        addressErrorLabel.setText("");
+    }
+
+    private void addListeners() {
+        // Name validation
+        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                nameErrorLabel.setText("Name cannot be empty");
+            } else {
+                nameErrorLabel.setText("");
+            }
+        });
+
+        // Email validation
+        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                emailErrorLabel.setText("Email cannot be empty");
+            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+                emailErrorLabel.setText("Invalid email format");
+            } else {
+                emailErrorLabel.setText("");
+            }
+        });
+
+
+        // Phone number validation
+        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            } else if (!newValue.matches("\\d{10}")) {
+                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+            } else {
+                phoneNumberErrorLabel.setText("");
+            }
+        });
+
+        //Address validation
+        addressTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                addressErrorLabel.setText("Address cannot be empty");
+            }else{
+                addressErrorLabel.setText("");
+            }
+        });
     }
 }

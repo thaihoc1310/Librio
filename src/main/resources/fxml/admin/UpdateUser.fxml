@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UpdateUserController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UpdateUserController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="696.0" styleClass="background-wrapper">
          <children>
@@ -94,12 +94,16 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <VBox layoutX="146.0" layoutY="106.0" prefHeight="249.0" prefWidth="183.0" spacing="26.0">
+                  <VBox layoutX="146.0" layoutY="106.0" prefHeight="249.0" prefWidth="183.0" spacing="2.0">
                      <children>
                         <TextField fx:id="emailTextField" prefHeight="25.0" prefWidth="181.0" />
+                        <Label fx:id="emailErrorLabel" />
                         <TextField fx:id="nameTextField" />
+                        <Label fx:id="nameErrorLabel" />
                         <TextField fx:id="phoneNumberTextField" />
-                        <TextArea fx:id="addressTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+                        <Label fx:id="phoneNumberErrorLabel" />
+                        <TextArea fx:id="addressTextArea" prefHeight="74.0" prefWidth="183.0" wrapText="true" />
+                        <Label fx:id="addressErrorLabel" />
                      </children>
                   </VBox>
                   <Label layoutX="19.0" layoutY="12.0" prefHeight="46.0" prefWidth="175.0" styleClass="title-text" text="Update User" />

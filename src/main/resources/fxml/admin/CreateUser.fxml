@@ -22,7 +22,7 @@
             <children>
                 <AnchorPane layoutX="9.0" layoutY="14.0" prefHeight="438.0" prefWidth="682.0" styleClass="background">
                     <children>
-                        <VBox alignment="TOP_RIGHT" layoutX="11.0" layoutY="82.0" prefHeight="298.0" prefWidth="130.0" spacing="25.0">
+                        <VBox alignment="TOP_RIGHT" layoutX="11.0" layoutY="82.0" prefHeight="298.0" prefWidth="130.0" spacing="26.0">
                             <children>
                                 <Label alignment="CENTER_RIGHT" text="Name :">
                                     <font>
