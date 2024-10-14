@@ -15,6 +15,7 @@ public class User {
     private StringProperty phoneNumber;
     private StringProperty address;
     private ObjectProperty<Gender> gender;
+    private ObjectProperty<Role> role;
     private StringProperty avatar;
     private String created_by;
     private Instant created_at;
@@ -32,6 +33,26 @@ public class User {
         this.avatar = new SimpleStringProperty();
         this.update_at = new SimpleObjectProperty<>();
         this.update_by = new SimpleStringProperty();
+    }
+
+    public User(String id, String name, String email,  String phoneNumber, Gender gender, Role role) {
+        this.id = new SimpleStringProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.email = new SimpleStringProperty(email);
+        this.phoneNumber = new SimpleStringProperty(phoneNumber);
+        this.role = new SimpleObjectProperty<>(role);
+        this.gender = new SimpleObjectProperty<>(gender);
+    }
+
+    public User(String id, String name, String email,  String phoneNumber, String address, Gender gender, Role role, String avatar) {
+        this.id = new SimpleStringProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.email = new SimpleStringProperty(email);
+        this.phoneNumber = new SimpleStringProperty(phoneNumber);
+        this.address = new SimpleStringProperty(address);
+        this.role = new SimpleObjectProperty<>(role);
+        this.gender = new SimpleObjectProperty<>(gender);
+        this.avatar = new SimpleStringProperty(avatar);
     }
 
     public String getId() {
@@ -116,6 +137,18 @@ public class User {
 
     public void setGender(Gender gender) {
         this.gender.set(gender);
+    }
+
+    public Role getRole() {
+        return role.get();
+    }
+
+    public ObjectProperty<Role> roleProperty() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role.set(role);
     }
 
     public String getAvatar() {

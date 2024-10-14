@@ -11,18 +11,19 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1110.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
    <children>
-      <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: e6d4b3;" styleClass="main-pane">
+      <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
          <children>
             <BorderPane layoutX="14.0" prefHeight="600.0" prefWidth="1110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <left>
-                  <AnchorPane prefHeight="450.0" prefWidth="204.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="450.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
                      <children>
                         <VBox layoutY="65.0" prefHeight="181.0" prefWidth="174.0" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                            <children>
@@ -126,7 +127,7 @@
                   </AnchorPane>
                </left>
                <top>
-                  <AnchorPane prefHeight="81.0" prefWidth="1111.0" style="-fx-background-color: #e6d4b3;" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="81.0" prefWidth="1111.0" style="-fx-background-color: f8edd9;" BorderPane.alignment="CENTER">
                      <children>
                         <Label layoutX="275.0" layoutY="6.0" prefHeight="94.0" prefWidth="69.0" text="Users" textAlignment="CENTER" textFill="#4c2113">
                            <font>
@@ -139,28 +140,30 @@
                            </children>
                         </AnchorPane>
                         <Label layoutX="898.0" layoutY="31.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="161.20000000000005" AnchorPane.topAnchor="31.0" />
-                        <Line endX="1564.48193359375" endY="143.29287719726562" layoutX="-121.0" layoutY="-63.0" startX="739.3798828125" startY="143.29287719726562" stroke="#aeaeae" AnchorPane.rightAnchor="31.100109863281432" />
+                        <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="-121.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" strokeWidth="0.5" AnchorPane.rightAnchor="31.100109863281432" />
+                        <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="544.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" strokeWidth="0.5" style="-fx-effect: bloom(0.5);" AnchorPane.leftAnchor="232.79999999999995" />
                         <TextField layoutX="710.0" layoutY="86.0" prefHeight="26.0" prefWidth="205.0" promptText="Search" style="-fx-background-radius: 5em; -fx-border-color: #4C2113; -fx-border-radius: 2em;" AnchorPane.rightAnchor="194.80000000000007" />
                         <ImageView fitHeight="19.0" fitWidth="20.0" layoutX="888.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="203.4000000000001">
                            <image>
                               <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                            </image>
                         </ImageView>
-                        <Button layoutX="983.0" layoutY="84.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="93.0" text="Create User" />
+                        <Button fx:id="createUserButton" layoutX="1049.0" layoutY="86.0" mnemonicParsing="false" onAction="#openCreateUserScene" prefHeight="28.0" prefWidth="93.0" text="Create User" AnchorPane.rightAnchor="57.400000000000006" />
                      </children>
                   </AnchorPane>
                </top>
                <center>
                   <AnchorPane prefHeight="450.0" prefWidth="877.0" BorderPane.alignment="CENTER">
                      <children>
-                        <TableView layoutX="28.0" layoutY="6.0" prefHeight="421.0" prefWidth="851.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
+                        <TableView fx:id="userTableView" layoutX="28.0" layoutY="6.0" prefHeight="518.0" prefWidth="945.0" styleClass="background" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                            <columns>
-                              <TableColumn prefWidth="57.600006103515625" text="ID" />
-                              <TableColumn prefWidth="203.19998168945312" text="Email" />
-                              <TableColumn prefWidth="140.00003051757812" text="Name" />
-                              <TableColumn prefWidth="87.99993896484375" text="Gender" />
-                              <TableColumn prefWidth="91.20001220703125" text="Role" />
-                              <TableColumn prefWidth="252.0" text="Action" />
+                              <TableColumn fx:id="idColumn" prefWidth="48.00001525878906" text="ID" />
+                              <TableColumn fx:id="nameColumn" prefWidth="124.0" text="Name" />
+                              <TableColumn fx:id="emailColumn" prefWidth="203.99996948242188" text="Email" />
+                              <TableColumn fx:id="phoneNumberColumn" prefWidth="130.00006103515625" text="Phone Number" />
+                              <TableColumn fx:id="genderColumn" prefWidth="91.3333740234375" text="Gender" />
+                              <TableColumn fx:id="roleColumn" prefWidth="106.0" text="Role" />
+                              <TableColumn fx:id="actionColumn" prefWidth="239.3333740234375" text="Action" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -170,14 +173,18 @@
                   </AnchorPane>
                </center>
                <bottom>
-                  <Pagination prefHeight="0.0" prefWidth="1111.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                      <padding>
-                        <Insets left="300.0" />
-                     </padding></Pagination>
+                        <Insets left="200.0" />
+                     </padding>
+                     <children>
+                        <Pagination fx:id="pagination" prefHeight="0.0" prefWidth="1111.0" />
+                     </children>
+                  </HBox>
                </bottom>
             </BorderPane>
-            <AnchorPane layoutY="590.0" prefHeight="50.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" AnchorPane.bottomAnchor="0.0" />
-            <AnchorPane layoutY="20.0" prefHeight="117.0" prefWidth="203.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
+            <AnchorPane layoutY="590.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.bottomAnchor="0.0" />
+            <AnchorPane layoutY="20.0" prefHeight="117.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
                <children>
                   <ImageView fitHeight="77.0" fitWidth="77.0" layoutX="63.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
