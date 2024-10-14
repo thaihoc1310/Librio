@@ -60,7 +60,7 @@ public class ManageUserController implements Initializable {
     private ObservableList<User> userList;
 
     private int currentPage = 0;
-    private int rowsPerPage = 10;
+    private int rowsPerPage = 11;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -190,7 +190,7 @@ public class ManageUserController implements Initializable {
                 userList.add(user);
             }
             userTableView.setItems(userList);
-            userTableView.setFixedCellSize(49);
+            userTableView.setFixedCellSize(47);
             pagination.setPageCount((int) Math.ceil((double) getTotalUserCount(keyword) / rowsPerPage));
         } catch (SQLException e) {
             e.printStackTrace();
