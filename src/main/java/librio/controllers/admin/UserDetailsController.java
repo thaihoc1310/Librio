@@ -51,8 +51,9 @@ public class UserDetailsController implements Initializable {
     @FXML
     private TextField roleTextField;
     @FXML
+    private TextField bodTextField;
+    @FXML
     private ImageView avatarImageView;
-
     @FXML
     private Button backButton;
     private ManageUserController manageUserController;
@@ -81,7 +82,7 @@ public class UserDetailsController implements Initializable {
             addressTextArea.setText(user.getAddress());
             genderTextField.setText(user.getGender().toString());
             roleTextField.setText(user.getRole().toString());
-
+            bodTextField.setText(user.getBirthOfDate().toString());
             // Lấy đường dẫn ảnh từ project
             String projectDir = System.getProperty("user.dir");
             String avatarsDir = projectDir + "/src/main/resources/images/user/";

@@ -29,6 +29,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
@@ -145,8 +146,8 @@ public class ManageUserController implements Initializable {
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
                 String avatar = resultSet.getString("avatar");
-
-                return new User(id, name, email, phoneNumber, address, gender, role, avatar);
+                LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
+                return new User(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();

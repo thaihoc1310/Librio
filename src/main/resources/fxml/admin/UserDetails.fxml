@@ -11,25 +11,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UserDetailsController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UserDetailsController">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0" styleClass="background-wrapper">
             <children>
-                <AnchorPane layoutX="12.0" layoutY="12.0" prefHeight="427.0" prefWidth="627.0" styleClass="background">
+                <AnchorPane layoutX="12.0" layoutY="12.0" prefHeight="435.0" prefWidth="675.0" styleClass="background">
                     <children>
                         <Label layoutX="22.0" layoutY="14.0" styleClass="title-text" text="User Details">
                         </Label>
-                        <Label layoutX="374.0" layoutY="249.0" styleClass="label-13" text="Gender :">
+                        <Label layoutX="411.0" layoutY="260.0" styleClass="label-13" text="Gender :">
                         </Label>
-                        <Button fx:id="backButton" layoutX="57.0" layoutY="354.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
-                        <Label layoutX="393.0" layoutY="291.0" styleClass="label-13" text="Role :">
+                        <Button fx:id="backButton" layoutX="27.0" layoutY="370.0" mnemonicParsing="false" onAction="#back" prefHeight="40.0" prefWidth="148.0" styleClass="btn-2" text="Back" />
+                        <Label layoutX="430.0" layoutY="302.0" styleClass="label-13" text="Role :">
                         </Label>
-                        <ImageView fx:id="avatarImageView" fitHeight="140.0" fitWidth="140.0" layoutX="389.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="avatarImageView" fitHeight="140.0" fitWidth="140.0" layoutX="439.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../../../../../../../Pictures/Screenshots/Screenshot%202024-09-12%20160040.png" />
+                                <Image url="@../../images/user/UserDetailImage.png" />
                             </image></ImageView>
-                        <TextField fx:id="genderTextField" editable="false" layoutX="441.0" layoutY="244.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
-                        <TextField fx:id="roleTextField" editable="false" layoutX="441.0" layoutY="285.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
+                        <TextField fx:id="genderTextField" editable="false" layoutX="491.0" layoutY="254.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
+                        <TextField fx:id="roleTextField" editable="false" layoutX="491.0" layoutY="296.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
                         <Line endX="-100.0" endY="-29.00001335144043" layoutX="113.0" layoutY="51.0" startX="-100.0" stroke="#dcb485" />
                         <VBox alignment="TOP_RIGHT" layoutX="12.0" layoutY="77.0" prefHeight="250.0" prefWidth="100.0" spacing="25.0">
                            <children>
@@ -54,6 +54,8 @@
                                     <TextArea fx:id="addressTextArea" blendMode="LIGHTEN" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
                            </children>
                         </VBox>
+                  <Label layoutX="377.0" layoutY="218.0" styleClass="label-13" text="Birth of date :" />
+                  <TextField fx:id="bodTextField" editable="false" layoutX="491.0" layoutY="212.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
                     </children>
                 </AnchorPane>
             </children>
