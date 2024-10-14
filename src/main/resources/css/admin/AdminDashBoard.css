@@ -34,10 +34,10 @@
 .table-view .cell {
     -fx-cell-size: 30;
     -fx-alignment: center-left;
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
     -fx-font-weight: normal;
     -fx-text-fill: #000000;
-    -fx-alignment: CENTER_LEFT;
+
 }
 
 .table-row-cell:selected {
