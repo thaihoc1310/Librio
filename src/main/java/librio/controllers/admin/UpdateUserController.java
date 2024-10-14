@@ -26,6 +26,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import static librio.controllers.admin.CreateUserController.cropAndClipToCircle;
+
 public class UpdateUserController implements Initializable {
 
     @FXML
@@ -51,6 +53,7 @@ public class UpdateUserController implements Initializable {
 
     private User user;
     private ManageUserController manageUserController;
+    private int currentPage = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -69,6 +72,11 @@ public class UpdateUserController implements Initializable {
         this.manageUserController = manageUserController;
     }
 
+    public void setCurrentPage(int currentPage){
+        this.currentPage = currentPage;
+    }
+
+
     private void populateFields() {
         if (user != null) {
             emailTextField.setText(user.getEmail());
@@ -78,16 +86,21 @@ public class UpdateUserController implements Initializable {
             genderComboBox.setValue(user.getGender());
             roleComboBox.setValue(user.getRole());
 
+            // Lấy đường dẫn ảnh từ project
             String projectDir = System.getProperty("user.dir");
             String avatarsDir = projectDir + "/src/main/resources/images/user/";
             String path = avatarsDir + user.getAvatar();
 
+            // Chuyển đổi đường dẫn thành URL
             File file = new File(path);
             if (file.exists()) {
-                Image avatarImage = new Image(file.toURI().toString());
-                cropAndClipToCircle(avatarImage, avatarImageView, 50);
+                Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+                cropAndClipToCircle(image, avatarImageView, 70);
             } else {
-                System.out.println("File ảnh không tồn tại: " + path);
+                String defaultImage = avatarsDir + "Male User.png";
+                File defaultImageFile = new File(defaultImage);
+                Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+                cropAndClipToCircle(image, avatarImageView, 70);
             }
         }
     }
@@ -130,7 +143,7 @@ public class UpdateUserController implements Initializable {
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
                 if (manageUserController != null) {
-                    manageUserController.loadUsersFromDatabase(0);
+                    manageUserController.loadUsers(null,currentPage);
                 }
                 closeStage();
             }

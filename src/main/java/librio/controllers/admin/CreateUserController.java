@@ -64,7 +64,7 @@ public class CreateUserController implements Initializable {
     private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
     private String avatarFilePath;
     private String previousAvatarFilePath;
-
+    private int currentPage = 0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
@@ -75,6 +75,10 @@ public class CreateUserController implements Initializable {
 
     public void setManageUserController(ManageUserController manageUserController) {
         this.manageUserController = manageUserController;
+    }
+
+    public void setCurrentPage(int currentPage){
+        this.currentPage = currentPage;
     }
 
     @FXML
@@ -156,7 +160,7 @@ public class CreateUserController implements Initializable {
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
                 if (manageUserController != null) {
-                    manageUserController.loadUsersFromDatabase(0);
+                    manageUserController.loadUsers(null,currentPage);
                 }
                 clearInputFields();
                 closeStage();

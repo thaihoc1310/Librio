@@ -54,9 +54,12 @@ public class ManageUserController implements Initializable {
     private Button createUserButton;
     @FXML
     private Pagination pagination;
+    @FXML
+    private TextField searchTextField;
 
     private ObservableList<User> userList;
 
+    private int currentPage = 0;
     private int rowsPerPage = 10;
 
     @Override
@@ -67,10 +70,13 @@ public class ManageUserController implements Initializable {
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        pagination.setPageCount((int) Math.ceil((double) getTotalUserCount() / rowsPerPage));
         pagination.setPageFactory(this::createPage);
         addButtonToTable();
 
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String trimmedValue = newValue.trim();
+            loadUsers(trimmedValue, pagination.getCurrentPageIndex());
+        });
     }
 
     private void addButtonToTable() {
@@ -148,14 +154,28 @@ public class ManageUserController implements Initializable {
         return null;
     }
 
-    public void loadUsersFromDatabase(int pageIndex) {
+    void loadUsers(String keyword, int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             userList = FXCollections.observableArrayList();
             int offset = pageIndex * rowsPerPage;
-            String query = "SELECT * FROM users LIMIT ? OFFSET ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, rowsPerPage);
-            statement.setInt(2, offset);
+            String query;
+            PreparedStatement statement;
+
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT * FROM users LIMIT ? OFFSET ?";
+                statement = connection.prepareStatement(query);
+                statement.setInt(1, rowsPerPage);
+                statement.setInt(2, offset);
+            } else {
+                query = "SELECT * FROM users WHERE name LIKE ? OR email LIKE ? OR phone_number LIKE ? LIMIT ? OFFSET ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, "%" + keyword + "%");
+                statement.setString(2, "%" + keyword + "%");
+                statement.setString(3, "%" + keyword + "%");
+                statement.setInt(4, rowsPerPage);
+                statement.setInt(5, offset);
+            }
+
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -171,22 +191,28 @@ public class ManageUserController implements Initializable {
             }
             userTableView.setItems(userList);
             userTableView.setFixedCellSize(49);
-            pagination.setPageCount((int) Math.ceil((double) getTotalUserCount() / rowsPerPage));
+            pagination.setPageCount((int) Math.ceil((double) getTotalUserCount(keyword) / rowsPerPage));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-
-    private Node createPage(int pageIndex) {
-        loadUsersFromDatabase(pageIndex);
-        return new BorderPane();
-    }
-
-    private int getTotalUserCount() {
+    private int getTotalUserCount(String keyword) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "SELECT COUNT(*) FROM users";
-            PreparedStatement statement = connection.prepareStatement(query);
+            String query;
+            PreparedStatement statement;
+
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT COUNT(*) FROM users";
+                statement = connection.prepareStatement(query);
+            } else {
+                query = "SELECT COUNT(*) FROM users WHERE name LIKE ? OR email LIKE ? OR phone_number LIKE ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, "%" + keyword + "%");
+                statement.setString(2, "%" + keyword + "%");
+                statement.setString(3, "%" + keyword + "%");
+            }
+
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
@@ -195,6 +221,12 @@ public class ManageUserController implements Initializable {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    private Node createPage(int pageIndex) {
+        currentPage = pageIndex;
+        loadUsers(searchTextField.getText().trim(), pageIndex);
+        return new BorderPane();
     }
 
     @FXML
@@ -206,7 +238,7 @@ public class ManageUserController implements Initializable {
 
             CreateUserController createUserController = loader.getController();
             createUserController.setManageUserController(this);
-
+            createUserController.setCurrentPage(currentPage);
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Create New User");
@@ -232,7 +264,7 @@ public class ManageUserController implements Initializable {
             UpdateUserController updateUserController = loader.getController();
             updateUserController.setManageUserController(this);
             updateUserController.setUser(user);
-
+            updateUserController.setCurrentPage(currentPage);
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Update User");
@@ -258,6 +290,7 @@ public class ManageUserController implements Initializable {
             UserDetailsController userDetailsController = loader.getController();
             userDetailsController.setManageUserController(this);
             userDetailsController.setUser(user);
+            userDetailsController.setCurrentPage(currentPage);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();

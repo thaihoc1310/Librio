@@ -56,6 +56,7 @@ public class UserDetailsController implements Initializable {
     @FXML
     private Button backButton;
     private ManageUserController manageUserController;
+    private int currentPage = 0;
 
 
     public void setUser(User user) {
@@ -65,6 +66,10 @@ public class UserDetailsController implements Initializable {
 
     public void setManageUserController(ManageUserController manageUserController) {
         this.manageUserController = manageUserController;
+    }
+
+    public void setCurrentPage(int currentPage){
+        this.currentPage = currentPage;
     }
 
     private void populateFields() {
@@ -99,20 +104,19 @@ public class UserDetailsController implements Initializable {
     @FXML
     private void back() {
         closeWindow();
+        if (manageUserController != null) {
+            manageUserController.loadUsers(null,currentPage);
+        }
     }
 
 
     private void closeWindow() {
-        // Đóng cửa sổ hiện tại
-        Stage stage = (Stage) backButton.getScene().getWindow(); // Hoặc có thể sử dụng cancelButton
+        Stage stage = (Stage) backButton.getScene().getWindow();
         stage.close();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        setField();
-//        genderList();
-//        statusList();
     }
 
 }
