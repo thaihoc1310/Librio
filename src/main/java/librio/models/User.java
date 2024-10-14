@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public class User {
     private StringProperty id;
@@ -17,6 +18,7 @@ public class User {
     private ObjectProperty<Gender> gender;
     private ObjectProperty<Role> role;
     private StringProperty avatar;
+    private ObjectProperty<LocalDate> birthOfDate;
     private String created_by;
     private Instant created_at;
     private StringProperty update_by;
@@ -31,6 +33,7 @@ public class User {
         this.gender = new SimpleObjectProperty<>();
         this.address = new SimpleStringProperty();
         this.avatar = new SimpleStringProperty();
+        this.birthOfDate = new SimpleObjectProperty<>();
         this.update_at = new SimpleObjectProperty<>();
         this.update_by = new SimpleStringProperty();
     }
@@ -44,7 +47,7 @@ public class User {
         this.gender = new SimpleObjectProperty<>(gender);
     }
 
-    public User(String id, String name, String email,  String phoneNumber, String address, Gender gender, Role role, String avatar) {
+    public User(String id, String name, String email,  String phoneNumber, String address, Gender gender, Role role, String avatar, LocalDate birthOfDate) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.email = new SimpleStringProperty(email);
@@ -53,6 +56,7 @@ public class User {
         this.role = new SimpleObjectProperty<>(role);
         this.gender = new SimpleObjectProperty<>(gender);
         this.avatar = new SimpleStringProperty(avatar);
+        this.birthOfDate = new SimpleObjectProperty<>(birthOfDate);
     }
 
     public String getId() {
@@ -161,6 +165,18 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar.set(avatar);
+    }
+
+    public LocalDate getBirthOfDate() {
+        return birthOfDate.get();
+    }
+
+    public ObjectProperty<LocalDate> birthOfDateProperty() {
+        return birthOfDate;
+    }
+
+    public void setBirthOfDate(LocalDate birthOfDate) {
+        this.birthOfDate.set(birthOfDate);
     }
 
     public String getCreated_by() {

@@ -20,10 +20,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class CreateUserController implements Initializable {
@@ -61,6 +59,10 @@ public class CreateUserController implements Initializable {
     @FXML
     private Label genderErrorLabel;
     @FXML
+    private DatePicker birthOfDatePicker;
+    @FXML
+    private Label birthOfDateErrorLabel;
+    @FXML
     private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
     private String avatarFilePath;
     private String previousAvatarFilePath;
@@ -91,7 +93,7 @@ public class CreateUserController implements Initializable {
         Gender gender = genderComboBox.getValue();
         Role role = roleComboBox.getValue();
         String address = addressTextArea.getText();
-
+        LocalDate birthOfDate = birthOfDatePicker.getValue();
         boolean validation = false;
 
         if(name.isEmpty()){
@@ -138,11 +140,15 @@ public class CreateUserController implements Initializable {
             validation = true;
         }
 
+        if(birthOfDate == null){
+            birthOfDateErrorLabel.setText("Birth of Date must be selected");
+        }
+
         if(validation) {
             return;
         }
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar, birth_of_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, email);
@@ -152,6 +158,7 @@ public class CreateUserController implements Initializable {
             statement.setString(6, gender.name());
             statement.setString(7, role.name());
             statement.setString(8, avatarFilePath);
+            statement.setDate(9, Date.valueOf(birthOfDate));
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 String projectDir = System.getProperty("user.dir");
@@ -179,6 +186,8 @@ public class CreateUserController implements Initializable {
         confirmPasswordErrorLabel.setText("");
         phoneNumberErrorLabel.setText("");
         roleErrorLabel.setText("");
+        genderErrorLabel.setText("");
+        birthOfDateErrorLabel.setText("");
     }
 
     private void addListeners() {
@@ -247,6 +256,14 @@ public class CreateUserController implements Initializable {
                 genderErrorLabel.setText("");
             }
         });
+
+        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                birthOfDateErrorLabel.setText("Birth of Date must be selected");
+            } else {
+                birthOfDateErrorLabel.setText("");
+            }
+        });
     }
 
 
@@ -307,6 +324,7 @@ public class CreateUserController implements Initializable {
         addressTextArea.clear();
         genderComboBox.getSelectionModel().clearSelection();
         roleComboBox.getSelectionModel().clearSelection();
+        birthOfDatePicker.setValue(null);
 
     }
 
