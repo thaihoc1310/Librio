@@ -50,7 +50,7 @@
                                     <TextField fx:id="userIDTextField" editable="false" prefWidth="189.0" styleClass="text-field-custom" />
                                     <TextField fx:id="emailTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextField fx:id="nameTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
-                                    <TextField fx:id="phoneNumberTextField" blendMode="OVERLAY" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
+                                    <TextField fx:id="phoneNumberTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextArea fx:id="addressTextArea" blendMode="LIGHTEN" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
                            </children>
                         </VBox>

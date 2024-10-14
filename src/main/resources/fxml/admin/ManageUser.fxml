@@ -23,16 +23,16 @@
          <children>
             <BorderPane layoutX="14.0" prefHeight="600.0" prefWidth="1110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <left>
-                  <AnchorPane prefHeight="450.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="466.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
                      <children>
                         <VBox layoutY="65.0" prefHeight="181.0" prefWidth="174.0" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                            <children>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="222.0" text="Dashboard" VBox.vgrow="ALWAYS">
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="222.0" text="Dashboard" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
                                  <graphic>
-                                    <ImageView fitHeight="21.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../icons/AdminDashBoardIcon/Dashboard.png" />
                                        </image>
@@ -42,12 +42,12 @@
                                     <Insets left="30.0" />
                                  </padding>
                               </Button>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="225.0" text="Users" VBox.vgrow="ALWAYS">
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" text="Users" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
                                  <graphic>
-                                    <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../icons/AdminDashBoardIcon/Users.png" />
                                        </image>
@@ -57,12 +57,12 @@
                                     <Insets left="30.0" />
                                  </padding>
                               </Button>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="231.0" text="Books">
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" text="Books">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
                                  <graphic>
-                                    <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../icons/AdminDashBoardIcon/Books.png" />
                                        </image>
@@ -72,9 +72,9 @@
                                     <Insets left="30.0" />
                                  </padding>
                               </Button>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="238.0" text="Borrows">
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" text="Borrows">
                                  <graphic>
-                                    <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../icons/AdminDashBoardIcon/Time to Pay.png" />
                                        </image>
@@ -88,9 +88,9 @@
                                  </padding></Button>
                            </children>
                         </VBox>
-                        <Button alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutX="31.0" layoutY="405.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="220.0" text="Log out" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="31.0" layoutY="405.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="220.0" text="Log out" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <graphic>
-                              <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../icons/AdminDashBoardIcon/Logout Rounded.png" />
                                  </image>
@@ -99,9 +99,9 @@
                            <padding>
                               <Insets left="30.0" />
                            </padding></Button>
-                        <Button alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutY="302.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="220.0" text="Profile Settings" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="302.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="220.0" text="Profile Settings" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <graphic>
-                              <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../icons/AdminDashBoardIcon/Settings.png" />
                                  </image>
@@ -139,7 +139,7 @@
                               <Label layoutX="42.0" layoutY="44.0" prefHeight="18.0" prefWidth="61.0" text="Admin" AnchorPane.rightAnchor="14.800000000000004" AnchorPane.topAnchor="44.0" />
                            </children>
                         </AnchorPane>
-                        <Label layoutX="898.0" layoutY="31.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="161.20000000000005" AnchorPane.topAnchor="31.0" />
+                        <Label layoutX="997.0" layoutY="24.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="151.79999999999995" AnchorPane.topAnchor="24.0" />
                         <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="-121.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" strokeWidth="0.5" AnchorPane.rightAnchor="31.100109863281432" />
                         <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="544.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" strokeWidth="0.5" style="-fx-effect: bloom(0.5);" AnchorPane.leftAnchor="232.79999999999995" />
                         <TextField fx:id="searchTextField" layoutX="710.0" layoutY="86.0" prefHeight="26.0" prefWidth="205.0" promptText="Search" style="-fx-background-radius: 5em; -fx-border-color: #4C2113; -fx-border-radius: 2em;" AnchorPane.rightAnchor="194.80000000000007" />
@@ -148,7 +148,7 @@
                               <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                            </image>
                         </ImageView>
-                        <Button fx:id="createUserButton" layoutX="1049.0" layoutY="86.0" mnemonicParsing="false" onAction="#openCreateUserScene" prefHeight="28.0" prefWidth="93.0" text="Create User" AnchorPane.rightAnchor="57.400000000000006" />
+                        <Button fx:id="createUserButton" layoutX="1049.0" layoutY="86.0" mnemonicParsing="false" onAction="#openCreateUserScene" prefHeight="30.0" prefWidth="97.0" text="Create User" AnchorPane.rightAnchor="54.0" />
                      </children>
                   </AnchorPane>
                </top>

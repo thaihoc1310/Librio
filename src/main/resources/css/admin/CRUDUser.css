@@ -36,7 +36,7 @@ and open the template in the editor.
     -fx-background-color: transparent;    /* Loại bỏ viền bên ngoài nếu có */
     -fx-border-color: transparent;        /* Loại bỏ viền khi có focus */
     -fx-font-size: 15px;
-    -fx-text-fill: #f8edd9;
+    -fx-text-fill: #4C2113;
 }
 
 
