@@ -6,9 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
-import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
@@ -23,6 +20,8 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import static librio.util.DatabaseUtil.isEmailExists;
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class CreateUserController implements Initializable {
     private ManageUserController manageUserController;
@@ -147,9 +146,10 @@ public class CreateUserController implements Initializable {
         if(validation) {
             return;
         }
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar, birth_of_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
+        String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar, birth_of_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             statement.setString(2, email);
             statement.setString(3, password);
@@ -158,6 +158,7 @@ public class CreateUserController implements Initializable {
             statement.setString(6, gender.name());
             statement.setString(7, role.name());
             statement.setString(8, avatarFilePath);
+            assert birthOfDate != null;
             statement.setDate(9, Date.valueOf(birthOfDate));
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -286,24 +287,6 @@ public class CreateUserController implements Initializable {
 
     }
 
-    private boolean isEmailExists(String email) {
-        boolean exists = false;
-        String query = "SELECT COUNT(*) FROM users WHERE email = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, email);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                exists = resultSet.getInt(1) > 0;
-                //resultSet.getInt => get result of count(*)
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return exists;
-    }
-
-
     @FXML
     private void cancelCreateUser() {
         clearInputFields();
@@ -326,31 +309,6 @@ public class CreateUserController implements Initializable {
         roleComboBox.getSelectionModel().clearSelection();
         birthOfDatePicker.setValue(null);
 
-    }
-
-    public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
-        // Lấy chiều rộng và chiều cao của ảnh
-        double width = avatarImage.getWidth();
-        double height = avatarImage.getHeight();
-
-        // Tính toán kích thước để cắt ảnh thành hình vuông
-        double cropSize = Math.min(width, height);  // Chọn kích thước nhỏ hơn giữa width và height
-
-        // Tính toán tọa độ bắt đầu để cắt hình vuông từ trung tâm của ảnh
-        double x = (width - cropSize) / 2;
-        double y = (height - cropSize) / 2;
-
-        // Cắt ảnh thành hình vuông
-        PixelReader reader = avatarImage.getPixelReader();
-        WritableImage squareImage = new WritableImage(reader, (int) x, (int) y, (int) cropSize, (int) cropSize);
-
-        // Hiển thị ảnh đã cắt trong ImageView
-        avatarImageView.setImage(squareImage);
-        avatarImageView.setPreserveRatio(true);
-
-        // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
-        Circle clip = new Circle(radius, radius, radius);
-        avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
     }
 
 }

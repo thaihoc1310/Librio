@@ -29,9 +29,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.ResourceBundle;
+
+import static librio.util.DatabaseUtil.getTotalUserCount;
+import static librio.util.DatabaseUtil.getUserById;
 
 public class ManageUserController implements Initializable {
 
@@ -61,7 +62,7 @@ public class ManageUserController implements Initializable {
     private ObservableList<User> userList;
 
     private int currentPage = 0;
-    private int rowsPerPage = 11;
+    private final int rowsPerPage = 11;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -84,7 +85,7 @@ public class ManageUserController implements Initializable {
         Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<User, Void> call(final TableColumn<User, Void> param) {
-                final TableCell<User, Void> cell = new TableCell<>() {
+                return new TableCell<>() {
 
                     private final Button btnDelete = new Button("Delete");
                     private final Button btnDetail = new Button("Detail");
@@ -124,35 +125,9 @@ public class ManageUserController implements Initializable {
                         }
                     }
                 };
-                return cell;
             }
         };
         actionColumn.setCellFactory(cellFactory);
-    }
-
-    private User getUserById(String userId) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "SELECT * FROM users WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                String id = resultSet.getString("id");
-                String name = resultSet.getString("name");
-                String email = resultSet.getString("email");
-                String phoneNumber = resultSet.getString("phone_number");
-                String address = resultSet.getString("address") ;
-                Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
-                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
-                String avatar = resultSet.getString("avatar");
-                LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
-                return new User(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     void loadUsers(String keyword, int pageIndex) {
@@ -198,31 +173,6 @@ public class ManageUserController implements Initializable {
         }
     }
 
-    private int getTotalUserCount(String keyword) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query;
-            PreparedStatement statement;
-
-            if (keyword == null || keyword.isEmpty()) {
-                query = "SELECT COUNT(*) FROM users";
-                statement = connection.prepareStatement(query);
-            } else {
-                query = "SELECT COUNT(*) FROM users WHERE name LIKE ? OR email LIKE ? OR phone_number LIKE ?";
-                statement = connection.prepareStatement(query);
-                statement.setString(1, "%" + keyword + "%");
-                statement.setString(2, "%" + keyword + "%");
-                statement.setString(3, "%" + keyword + "%");
-            }
-
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     private Node createPage(int pageIndex) {
         currentPage = pageIndex;
@@ -318,6 +268,7 @@ public class ManageUserController implements Initializable {
             DeleteUserController deleteUserController = loader.getController();
             deleteUserController.setManageUserController(this);
             deleteUserController.setUser(user);
+            deleteUserController.setCurrentPage(currentPage);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();

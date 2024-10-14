@@ -1,0 +1,181 @@
+package librio.util;
+
+import librio.database.DatabaseConnection;
+import librio.models.Borrow;
+import librio.models.Gender;
+import librio.models.Role;
+import librio.models.User;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+
+public class DatabaseUtil {
+    public static boolean isEmailExists(String email) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                exists = resultSet.getInt(1) > 0;
+                //resultSet.getInt => get result of count(*)
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
+    public static User getUserById(String userId) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")) {
+            statement.setString(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String id = resultSet.getString("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String phoneNumber = resultSet.getString("phone_number");
+                String address = resultSet.getString("address") ;
+                Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
+                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+                String avatar = resultSet.getString("avatar");
+                LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
+                return new User(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void deleteBorrow(Borrow borrow) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement("DELETE FROM borrows WHERE id = ?")) {
+            statement.setString(1, borrow.getId());
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Deleted Borrow with ID: " + borrow.getId());
+            } else {
+                System.out.println("Failed to delete Borrow with ID: " + borrow.getId());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteUser(User user) {
+        Connection connection = null;
+        try {
+            connection = DatabaseConnection.getConnection();
+            connection.setAutoCommit(false); // Start a transaction
+
+            // Check if the user is a member
+            String checkMemberQuery = "SELECT id FROM Members WHERE id = ?";
+            try (PreparedStatement checkMemberStmt = connection.prepareStatement(checkMemberQuery)) {
+                checkMemberStmt.setString(1, user.getId());
+                ResultSet memberResult = checkMemberStmt.executeQuery();
+
+                if (memberResult.next()) {
+                    // Delete borrows associated with the member
+                    String deleteBorrowQuery = "DELETE FROM Borrows WHERE member_id = ?";
+                    try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
+                        deleteBorrowStmt.setString(1, user.getId());
+                        deleteBorrowStmt.executeUpdate();
+                    }
+
+                    // Delete feedbacks associated with the member
+                    String deleteFeedBackQuery = "DELETE FROM Feedbacks WHERE member_id = ?";
+                    try (PreparedStatement deleteFeedBackStmt = connection.prepareStatement(deleteFeedBackQuery)) {
+                        deleteFeedBackStmt.setString(1, user.getId());
+                        deleteFeedBackStmt.executeUpdate();
+                    }
+
+                    // Delete from Members table
+                    String deleteMemberQuery = "DELETE FROM Members WHERE id = ?";
+                    try (PreparedStatement deleteMemberStmt = connection.prepareStatement(deleteMemberQuery)) {
+                        deleteMemberStmt.setString(1, user.getId());
+                        deleteMemberStmt.executeUpdate();
+                    }
+                }
+            }
+
+            // Check if the user is a librarian
+            String checkLibrarianQuery = "SELECT id FROM Librarians WHERE id = ?";
+            try (PreparedStatement checkLibrarianStmt = connection.prepareStatement(checkLibrarianQuery)) {
+                checkLibrarianStmt.setString(1, user.getId());
+                ResultSet librarianResult = checkLibrarianStmt.executeQuery();
+
+                if (librarianResult.next()) {
+                    // Delete from Librarians table
+                    String deleteLibrarianQuery = "DELETE FROM Librarians WHERE id = ?";
+                    try (PreparedStatement deleteLibrarianStmt = connection.prepareStatement(deleteLibrarianQuery)) {
+                        deleteLibrarianStmt.setString(1, user.getId());
+                        deleteLibrarianStmt.executeUpdate();
+                    }
+                }
+            }
+
+            // Finally, delete the user from the Users table
+            String deleteUserQuery = "DELETE FROM Users WHERE id = ?";
+            try (PreparedStatement deleteUserStmt = connection.prepareStatement(deleteUserQuery)) {
+                deleteUserStmt.setString(1, user.getId());
+                int rowsAffected = deleteUserStmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Deleted User with ID: " + user.getId());
+                } else {
+                    System.out.println("Failed to delete User with ID: " + user.getId());
+                }
+            }
+
+            connection.commit(); // Commit the transaction
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                connection.rollback(); // Rollback in case of error
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close(); // Close the connection in the finally block
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    public static int getTotalUserCount(String keyword) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query;
+            PreparedStatement statement;
+
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT COUNT(*) FROM users";
+                statement = connection.prepareStatement(query);
+            } else {
+                query = "SELECT COUNT(*) FROM users WHERE name LIKE ? OR email LIKE ? OR phone_number LIKE ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, "%" + keyword + "%");
+                statement.setString(2, "%" + keyword + "%");
+                statement.setString(3, "%" + keyword + "%");
+            }
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+}
