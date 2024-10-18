@@ -25,9 +25,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CreateBookController implements Initializable {
-    private ManageBookController manageBookController;
-
-
     @FXML
     private Label authorErrorLabel;
 
@@ -54,9 +51,6 @@ public class CreateBookController implements Initializable {
 
     @FXML
     private TextField categoryTextField;
-
-    @FXML
-    private Button createBookButton;
 
     @FXML
     private TextArea descriptionTextArea;
@@ -103,9 +97,6 @@ public class CreateBookController implements Initializable {
         addListeners();
     }
 
-    public void setManageBookController(ManageBookController manageBookController) {
-        this.manageBookController = manageBookController;
-    }
 
     @FXML
     private void createBook() {

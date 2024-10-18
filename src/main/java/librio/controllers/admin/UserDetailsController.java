@@ -44,21 +44,11 @@ public class UserDetailsController implements Initializable {
     private ImageView avatarImageView;
     @FXML
     private Button backButton;
-    private ManageUserController manageUserController;
-    private int currentPage = 0;
 
 
     public void setUser(User user) {
         this.user = user;
         populateFields();
-    }
-
-    public void setManageUserController(ManageUserController manageUserController) {
-        this.manageUserController = manageUserController;
-    }
-
-    public void setCurrentPage(int currentPage){
-        this.currentPage = currentPage;
     }
 
     private void populateFields() {
@@ -93,9 +83,6 @@ public class UserDetailsController implements Initializable {
     @FXML
     private void back() {
         closeWindow();
-        if (manageUserController != null) {
-            manageUserController.loadUsers(null,currentPage);
-        }
     }
 
 

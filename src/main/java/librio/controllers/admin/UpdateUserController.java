@@ -61,8 +61,6 @@ public class UpdateUserController implements Initializable {
     private String previousAvatarFilePath;
 
     private User user;
-    private ManageUserController manageUserController;
-    private int currentPage = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -76,15 +74,6 @@ public class UpdateUserController implements Initializable {
         this.user = user;
         populateFields();
     }
-
-    public void setManageUserController(ManageUserController manageUserController) {
-        this.manageUserController = manageUserController;
-    }
-
-    public void setCurrentPage(int currentPage){
-        this.currentPage = currentPage;
-    }
-
 
     private void populateFields() {
         if (user != null) {
@@ -197,9 +186,6 @@ public class UpdateUserController implements Initializable {
                         }
                     }
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
-                }
-                if (manageUserController != null) {
-                    manageUserController.loadUsers(null,currentPage);
                 }
                 closeStage();
             }

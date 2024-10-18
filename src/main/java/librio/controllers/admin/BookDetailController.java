@@ -55,16 +55,11 @@ public class BookDetailController implements Initializable {
 
     @FXML
     private Button backButton;
-    private ManageBookController manageBookController;
 
 
     public void setBook(Book book) {
         this.book = book;
         populateFields();
-    }
-
-    public void setManageBookController(ManageBookController manageBookController) {
-        this.manageBookController = manageBookController;
     }
 
     private void populateFields() {

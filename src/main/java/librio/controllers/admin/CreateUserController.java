@@ -24,7 +24,6 @@ import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class CreateUserController implements Initializable {
-    private ManageUserController manageUserController;
     @FXML
     private TextField nameTextField;
     @FXML
@@ -65,7 +64,6 @@ public class CreateUserController implements Initializable {
     private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
     private String avatarFilePath;
     private String previousAvatarFilePath;
-    private int currentPage = 0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
@@ -74,13 +72,6 @@ public class CreateUserController implements Initializable {
         addListeners();
     }
 
-    public void setManageUserController(ManageUserController manageUserController) {
-        this.manageUserController = manageUserController;
-    }
-
-    public void setCurrentPage(int currentPage){
-        this.currentPage = currentPage;
-    }
 
     @FXML
     private void createUser() {
@@ -166,9 +157,6 @@ public class CreateUserController implements Initializable {
                 String avatarsDir = projectDir + "/src/main/resources/images/user/";
                 if(previousAvatarFilePath != null){
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
-                }
-                if (manageUserController != null) {
-                    manageUserController.loadUsers(null,currentPage);
                 }
                 clearInputFields();
                 closeStage();

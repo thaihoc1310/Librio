@@ -27,9 +27,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class UpdateBookController implements Initializable {
-    private ManageBookController manageBookController;
     private Book book;
-
 
     @FXML
     private Label authorErrorLabel;
@@ -90,9 +88,6 @@ public class UpdateBookController implements Initializable {
     private TextField quantityOfCopyTextField;
 
     @FXML
-    private Button uploadImageButton;
-
-    @FXML
     private TextField yearPublishedTextField;
 
     @FXML
@@ -108,10 +103,6 @@ public class UpdateBookController implements Initializable {
     public void setBook(Book book) {
         this.book = book;
         populateFields();
-    }
-
-    public void setManageBookController(ManageBookController manageBookController) {
-        this.manageBookController = manageBookController;
     }
 
     @FXML
