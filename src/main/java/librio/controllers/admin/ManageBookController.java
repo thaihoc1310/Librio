@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -52,8 +49,15 @@ public class ManageBookController implements Initializable {
     private TableColumn<Book, Void> actionColumn;
     @FXML
     private Button addBookButton;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private TextField searchTextField;
 
     private ObservableList<Book> bookList;
+
+    private int currentPage = 0;
+    private final int rowsPerPage = 11;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -64,7 +68,7 @@ public class ManageBookController implements Initializable {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
         publisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
-
+//        pagination.setPageFactory(this::createPage);
         // Thêm các nút hành động vào bảng
         addButtonToTable();
         loadBooksFromDatabase();
@@ -187,7 +191,7 @@ public class ManageBookController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);
-            stage.initOwner(bookTableView.getScene().getWindow());
+            stage.initOwner(addBookButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
             // Hiển thị scene
