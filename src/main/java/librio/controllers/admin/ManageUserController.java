@@ -85,19 +85,30 @@ public class ManageUserController implements Initializable {
     }
 
     private void addButtonToTable() {
-        Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<TableColumn<User, Void>, TableCell<User, Void>>() {
             @Override
             public TableCell<User, Void> call(final TableColumn<User, Void> param) {
-                return new TableCell<>() {
+                return new TableCell<User, Void>() {
 
                     private final Button btnDelete = new Button("Delete");
                     private final Button btnDetail = new Button("Detail");
                     private final Button btnUpdate = new Button("Update");
 
+
                     {
+                        btnDetail.setPrefWidth(70);
+                        btnDetail.setPrefHeight(30);
+
+                        btnUpdate.setPrefWidth(70);
+                        btnUpdate.setPrefHeight(30);
+
+                        btnDelete.setPrefWidth(70);
+                        btnDelete.setPrefHeight(30);
+
+
                         btnUpdate.setOnAction(event -> {
                             User user = getTableView().getItems().get(getIndex());
-                            // Fetch updated user data from the database
+                            // Lấy dữ liệu người dùng đã cập nhật từ cơ sở dữ liệu
                             User updatedUser = getUserById(user.getId());
                             openUpdateUserScene(updatedUser);
                         });
@@ -121,7 +132,7 @@ public class ManageUserController implements Initializable {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            // Tạo một HBox để chứa các nút
+
                             HBox hbox = new HBox(20, btnDetail, btnUpdate, btnDelete);
                             hbox.setAlignment(Pos.CENTER);
                             setGraphic(hbox);
@@ -132,6 +143,7 @@ public class ManageUserController implements Initializable {
         };
         actionColumn.setCellFactory(cellFactory);
     }
+
 
     void loadUsers(String keyword, int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {

@@ -24,13 +24,13 @@ public class Book {
     private StringProperty update_by;
     private ObjectProperty<Instant> update_at;
 
-    public Book(String id, String title, String author, String category, String language, String publisher) {
+    public Book(String id, String title, String isbn, String author, String category, Double averageOfRating) {
         this.id = new SimpleStringProperty(id);
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
         this.category = new SimpleStringProperty(category);
-        this.language = new SimpleStringProperty(language);
-        this.publisher = new SimpleStringProperty(publisher);
+        this.isbn = new SimpleStringProperty(isbn);
+        this.averageOfRating = new SimpleDoubleProperty(averageOfRating);
     }
 
     public Book() {
@@ -48,7 +48,7 @@ public class Book {
 
 
 
-    public Book(String id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
+    public Book(String id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, Double averageOfRating, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
         this.id = new SimpleStringProperty(id);
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
@@ -56,6 +56,7 @@ public class Book {
         this.category = new SimpleStringProperty(category);
         this.publisher = new SimpleStringProperty(publisher);
         this.quantityCopy = new SimpleIntegerProperty(quantityCopy);
+        this.averageOfRating = new SimpleDoubleProperty(averageOfRating);
         this.yearPublished = new SimpleStringProperty(yearPublished);
         this.language = new SimpleStringProperty(language);
         this.numberOfPages = new SimpleStringProperty(numberOfPages);
