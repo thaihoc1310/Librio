@@ -1,10 +1,7 @@
 package librio.util;
 
 import librio.database.DatabaseConnection;
-import librio.models.Borrow;
-import librio.models.Gender;
-import librio.models.Role;
-import librio.models.User;
+import librio.models.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -151,6 +148,57 @@ public class DatabaseUtil {
         }
     }
 
+    public static void deleteBook(Book book) {
+        Connection connection = null;
+        try {
+            connection = DatabaseConnection.getConnection();
+            connection.setAutoCommit(false); // Start a transaction
+
+
+            // Delete borrows associated with the book
+            String deleteBorrowQuery = "DELETE FROM Borrows WHERE book_id = ?";
+            try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
+                deleteBorrowStmt.setString(1, book.getId());
+                deleteBorrowStmt.executeUpdate();
+            }
+
+            // Delete feedbacks associated with the book
+            String deleteFeedBackQuery = "DELETE FROM Feedbacks WHERE book_id = ?";
+            try (PreparedStatement deleteFeedBackStmt = connection.prepareStatement(deleteFeedBackQuery)) {
+                deleteFeedBackStmt.setString(1, book.getId());
+                deleteFeedBackStmt.executeUpdate();
+            }
+
+            // Finally, delete the book from the Books table
+            String deleteBookQuery = "DELETE FROM Books WHERE id = ?";
+            try (PreparedStatement deleteBookStmt = connection.prepareStatement(deleteBookQuery)) {
+                deleteBookStmt.setString(1, book.getId());
+                int rowsAffected = deleteBookStmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Deleted Book with ID: " + book.getId());
+                } else {
+                    System.out.println("Failed to delete Book with ID: " + book.getId());
+                }
+            }
+
+            connection.commit(); // Commit the transaction
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                connection.rollback(); // Rollback in case of error
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close(); // Close the connection in the final block
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+        }
+    }
 
     public static int getTotalUserCount(String keyword) {
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -178,4 +226,46 @@ public class DatabaseUtil {
         return 0;
     }
 
+    public static int getTotalBookCount(String keyword) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query;
+            PreparedStatement statement;
+
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT COUNT(*) FROM books";
+                statement = connection.prepareStatement(query);
+            } else {
+                query = "SELECT COUNT(*) FROM books WHERE title LIKE ? OR isbn LIKE ? OR category LIKE ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, "%" + keyword + "%");
+                statement.setString(2, "%" + keyword + "%");
+                statement.setString(3, "%" + keyword + "%");
+            }
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static boolean isBookTitleExists(String bookTitle) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM books WHERE title = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, bookTitle);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                exists = resultSet.getInt(1) > 0;
+                //resultSet.getInt => get result of count(*)
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
 }

@@ -64,6 +64,8 @@ public class ManageUserController implements Initializable {
     private int currentPage = 0;
     private final int rowsPerPage = 11;
 
+    private String keyword;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -77,6 +79,7 @@ public class ManageUserController implements Initializable {
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             String trimmedValue = newValue.trim();
+            keyword = trimmedValue;
             loadUsers(trimmedValue, pagination.getCurrentPageIndex());
         });
     }
@@ -161,7 +164,6 @@ public class ManageUserController implements Initializable {
                 String phoneNumber = resultSet.getString("phone_number");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
-
                 User user = new User(id, name, email, phoneNumber, gender, role);
                 userList.add(user);
             }
@@ -187,10 +189,6 @@ public class ManageUserController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
             Parent root = loader.load();
 
-            CreateUserController createUserController = loader.getController();
-            createUserController.setManageUserController(this);
-            createUserController.setCurrentPage(currentPage);
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Create New User");
             stage.setScene(new Scene(root));
@@ -200,11 +198,13 @@ public class ManageUserController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
+            loadUsers(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @FXML
     private void openUpdateUserScene(User user) {
         try {
             // Tải FXML của scene mới
@@ -213,9 +213,7 @@ public class ManageUserController implements Initializable {
 
             // Tạo controller và truyền ManageUserController và User vào
             UpdateUserController updateUserController = loader.getController();
-            updateUserController.setManageUserController(this);
             updateUserController.setUser(user);
-            updateUserController.setCurrentPage(currentPage);
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Update User");
@@ -226,11 +224,13 @@ public class ManageUserController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
+            loadUsers(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @FXML
     private void openUserDetailScene(User user) {
         try {
             // Tải FXML của scene mới
@@ -239,9 +239,7 @@ public class ManageUserController implements Initializable {
 
             // Tạo controller và truyền ManageUserController và User vào
             UserDetailsController userDetailsController = loader.getController();
-            userDetailsController.setManageUserController(this);
             userDetailsController.setUser(user);
-            userDetailsController.setCurrentPage(currentPage);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();
@@ -253,11 +251,13 @@ public class ManageUserController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
+            loadUsers(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @FXML
     private void openDeleteUserScene(User user) {
         try {
             // Tải FXML của scene mới
@@ -266,9 +266,7 @@ public class ManageUserController implements Initializable {
 
             // Tạo controller và truyền ManageUserController và User vào
             DeleteUserController deleteUserController = loader.getController();
-            deleteUserController.setManageUserController(this);
             deleteUserController.setUser(user);
-            deleteUserController.setCurrentPage(currentPage);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();
@@ -280,6 +278,7 @@ public class ManageUserController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
+            loadUsers(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }

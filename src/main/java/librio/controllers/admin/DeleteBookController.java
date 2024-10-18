@@ -1,23 +1,22 @@
 package librio.controllers.admin;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import librio.models.User;
+import librio.models.Book;
 import librio.util.DatabaseUtil;
-public class DeleteUserController implements Initializable {
+
+
+public class DeleteBookController {
     @FXML
     private Button deleteButton;
 
-    private User user;
+    private Book book;
+
 
     @FXML
     private void deleteUser() {
-        DatabaseUtil.deleteUser(user);
+        DatabaseUtil.deleteBook(book);
         closeWindow();
     }
 
@@ -26,8 +25,8 @@ public class DeleteUserController implements Initializable {
         closeWindow();
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     private void closeWindow() {
@@ -35,8 +34,4 @@ public class DeleteUserController implements Initializable {
         stage.close();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
 }
