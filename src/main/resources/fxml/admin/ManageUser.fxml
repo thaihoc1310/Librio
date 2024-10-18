@@ -57,7 +57,7 @@
                                     <Insets left="30.0" />
                                  </padding>
                               </Button>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" text="Books">
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openManageBookScene" prefHeight="40.0" prefWidth="222.0" text="Books">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>

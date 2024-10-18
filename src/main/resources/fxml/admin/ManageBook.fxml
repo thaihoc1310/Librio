@@ -42,7 +42,7 @@
                                                 <Insets left="30.0" />
                                             </padding>
                                         </Button>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openMangeUserScene" prefHeight="40.0" prefWidth="222.0" text="Users" VBox.vgrow="ALWAYS">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openManageUserScene" prefHeight="40.0" prefWidth="222.0" text="Users" VBox.vgrow="ALWAYS">
                                             <VBox.margin>
                                                 <Insets bottom="10.0" />
                                             </VBox.margin>
@@ -155,7 +155,7 @@
                     <center>
                         <AnchorPane prefHeight="450.0" prefWidth="877.0" BorderPane.alignment="CENTER">
                             <children>
-                                <TableView fx:id="bookTableView" layoutX="28.0" layoutY="6.0" prefHeight="421.0" prefWidth="851.0" styleClass="background" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
+                                <TableView fx:id="bookTableView" layoutX="28.0" layoutY="6.0" prefHeight="518.0" prefWidth="945.0" styleClass="background" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                                     <columns>
                                         <TableColumn fx:id="idColumn" prefWidth="52.80000305175781" text="ID" />
                                         <TableColumn fx:id="titleColumn" prefWidth="119.20001220703125" text="Title" />
