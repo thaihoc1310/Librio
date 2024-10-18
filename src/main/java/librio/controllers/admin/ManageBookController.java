@@ -1,15 +1,18 @@
 package librio.controllers.admin;
 
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,6 +32,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
+import static librio.util.DatabaseUtil.getTotalBookCount;
+import static librio.util.DatabaseUtil.getTotalUserCount;
 
 public class ManageBookController implements Initializable {
     @FXML
@@ -59,6 +65,8 @@ public class ManageBookController implements Initializable {
     private int currentPage = 0;
     private final int rowsPerPage = 11;
 
+    private String keyword = null;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Thiết lập dữ liệu cho các cột
@@ -68,10 +76,15 @@ public class ManageBookController implements Initializable {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
         publisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
-//        pagination.setPageFactory(this::createPage);
-        // Thêm các nút hành động vào bảng
+        pagination.setPageFactory(this::createPage);
         addButtonToTable();
-        loadBooksFromDatabase();
+
+
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String trimmedValue = newValue.trim();
+            keyword = trimmedValue;
+            loadBooks(trimmedValue, pagination.getCurrentPageIndex());
+        });
     }
 
     private void addButtonToTable() {
@@ -150,11 +163,28 @@ public class ManageBookController implements Initializable {
         return null;
     }
 
-    public void loadBooksFromDatabase() {
+    public void loadBooks(String keyword, int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             bookList = FXCollections.observableArrayList();
-            String query = "SELECT * FROM books";
-            PreparedStatement statement = connection.prepareStatement(query);
+            int offset = pageIndex * rowsPerPage;
+            String query;
+            PreparedStatement statement;
+
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT * FROM books LIMIT ? OFFSET ?";
+                statement = connection.prepareStatement(query);
+                statement.setInt(1, rowsPerPage);
+                statement.setInt(2, offset);
+            } else {
+                query = "SELECT * FROM books WHERE title LIKE ? OR isbn LIKE ? OR category LIKE ? LIMIT ? OFFSET ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, "%" + keyword + "%");
+                statement.setString(2, "%" + keyword + "%");
+                statement.setString(3, "%" + keyword + "%");
+                statement.setInt(4, rowsPerPage);
+                statement.setInt(5, offset);
+            }
+
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -169,9 +199,17 @@ public class ManageBookController implements Initializable {
             }
 
             bookTableView.setItems(bookList);
+            bookTableView.setFixedCellSize(47);
+            pagination.setPageCount((int) Math.ceil((double) getTotalBookCount(keyword) / rowsPerPage));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private Node createPage(int pageIndex) {
+        currentPage = pageIndex;
+        loadBooks(searchTextField.getText().trim(), pageIndex);
+        return new BorderPane();
     }
 
     @FXML
@@ -198,7 +236,7 @@ public class ManageBookController implements Initializable {
             stage.showAndWait();
 
             // Sau khi đóng cửa sổ thêm sách, tải lại danh sách sách từ database
-            loadBooksFromDatabase();
+            loadBooks(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -227,6 +265,7 @@ public class ManageBookController implements Initializable {
 
             // Hiển thị scene
             stage.showAndWait();
+            loadBooks(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -255,6 +294,8 @@ public class ManageBookController implements Initializable {
 
             // Hiển thị scene
             stage.showAndWait();
+
+            loadBooks(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }

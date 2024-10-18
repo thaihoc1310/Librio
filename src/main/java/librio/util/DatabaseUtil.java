@@ -178,4 +178,30 @@ public class DatabaseUtil {
         return 0;
     }
 
+    public static int getTotalBookCount(String keyword) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query;
+            PreparedStatement statement;
+
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT COUNT(*) FROM books";
+                statement = connection.prepareStatement(query);
+            } else {
+                query = "SELECT COUNT(*) FROM books WHERE name LIKE ? OR email LIKE ? OR phone_number LIKE ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, "%" + keyword + "%");
+                statement.setString(2, "%" + keyword + "%");
+                statement.setString(3, "%" + keyword + "%");
+            }
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }
