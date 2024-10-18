@@ -283,4 +283,18 @@ public class ManageUserController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void openManageBookScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
+            Parent manageBookRoot = loader.load();
+
+            Stage currentStage = (Stage) createUserButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBookRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
