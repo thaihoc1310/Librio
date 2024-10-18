@@ -2,6 +2,11 @@
     -fx-background-color: #f0f0f4;
     -fx-background-radius: 0px 5px 5px 0px;
 }
+.root {
+    -fx-font-family: "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight:bold;
+}
 .button {
     -fx-background-color:  #DCB485 ;
     -fx-text-fill: #4C2113;
@@ -27,10 +32,12 @@
 }
 
 .table-view .cell {
-    -fx-cell-size: 30;
+    /*-fx-cell-size: 30;*/
     -fx-alignment: center-left;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
     -fx-text-fill: #000000;
-    -fx-alignment: CENTER_LEFT;
+
 }
 
 .table-row-cell:selected {
@@ -51,6 +58,7 @@
 .table-row-cell:focused {
    -fx-focus-color: #f1debc;
 }
+
 .background{
     -fx-background-color: #F8EDD9;
     -fx-background-radius: 5px;

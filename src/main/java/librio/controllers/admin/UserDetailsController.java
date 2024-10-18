@@ -1,0 +1,111 @@
+package librio.controllers.admin;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import librio.models.User;
+import static librio.util.DesignUtil.cropAndClipToCircle;
+
+public class UserDetailsController implements Initializable {
+    private User user;
+
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextField nameTextField;
+    @FXML
+    private TextField phoneNumberTextField;
+    @FXML
+    private TextArea addressTextArea;
+    @FXML
+    private TextField userIDTextField;
+    @FXML
+    private TextField genderTextField;
+    @FXML
+    private TextField roleTextField;
+    @FXML
+    private TextField bodTextField;
+    @FXML
+    private ImageView avatarImageView;
+    @FXML
+    private Button backButton;
+    private ManageUserController manageUserController;
+    private int currentPage = 0;
+
+
+    public void setUser(User user) {
+        this.user = user;
+        populateFields();
+    }
+
+    public void setManageUserController(ManageUserController manageUserController) {
+        this.manageUserController = manageUserController;
+    }
+
+    public void setCurrentPage(int currentPage){
+        this.currentPage = currentPage;
+    }
+
+    private void populateFields() {
+        if (user != null) {
+            userIDTextField.setText(user.getId());
+            emailTextField.setText(user.getEmail());
+            nameTextField.setText(user.getName());
+            phoneNumberTextField.setText(user.getPhoneNumber());
+            addressTextArea.setText(user.getAddress());
+            genderTextField.setText(user.getGender().toString());
+            roleTextField.setText(user.getRole().toString());
+            bodTextField.setText(user.getBirthOfDate().toString());
+            // Lấy đường dẫn ảnh từ project
+            String projectDir = System.getProperty("user.dir");
+            String avatarsDir = projectDir + "/src/main/resources/images/user/";
+            String path = avatarsDir + user.getAvatar();
+
+            // Chuyển đổi đường dẫn thành URL
+            File file = new File(path);
+            if (file.exists()) {
+                Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+                cropAndClipToCircle(image, avatarImageView, 70);
+            } else {
+                String defaultImage = avatarsDir + "Male User.png";
+                File defaultImageFile = new File(defaultImage);
+                Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+                cropAndClipToCircle(image, avatarImageView, 70);
+            }
+        }
+    }
+
+    @FXML
+    private void back() {
+        closeWindow();
+        if (manageUserController != null) {
+            manageUserController.loadUsers(null,currentPage);
+        }
+    }
+
+
+    private void closeWindow() {
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        stage.close();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
+
+}

@@ -21,6 +21,7 @@ public class DatabaseInitializer {
                     "password VARCHAR(255) NOT NULL," +
                     "phone_number VARCHAR(20)," +
                     "address VARCHAR(255)," +
+                    "birth_of_date DATE," +
                     "gender ENUM('MALE', 'FEMALE', 'OTHER') NOT NULL," +
                     "role ENUM('MEMBER', 'LIBRARIAN') NOT NULL," +
                     "avatar VARCHAR(255)," +
@@ -29,7 +30,6 @@ public class DatabaseInitializer {
                     "updated_by VARCHAR(255)," +
                     "updated_at TIMESTAMP" +
                     ");";
-
 
             String createBookTable = "CREATE TABLE IF NOT EXISTS Books (" +
                     "id INT PRIMARY KEY AUTO_INCREMENT," +
@@ -44,13 +44,11 @@ public class DatabaseInitializer {
                     "language VARCHAR(50)," +
                     "number_of_pages INT," +
                     "description TEXT," +
-                    "book_image VARCHAR(255)," +
                     "created_by VARCHAR(255)," +
                     "created_at TIMESTAMP," +
                     "updated_by VARCHAR(255)," +
                     "updated_at TIMESTAMP" +
                     ");";
-
 
             String createMemberTable = "CREATE TABLE IF NOT EXISTS Members (" +
                     "id INT PRIMARY KEY," +
@@ -104,13 +102,13 @@ public class DatabaseInitializer {
             statement.execute(createBorrowTable);
             statement.execute(createFeedbackTable);
 
-            if(isTableEmpty("Users")){
-                String insertUsers = "INSERT INTO Users (name, email, password, phone_number, address, gender, role, created_by, created_at) VALUES " +
-                        "('John Doe', 'john.doe@example.com', 'password123', '1234567890', '123 Main St', 'MALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "('Jane Smith', 'jane.smith@example.com', 'password123', '0987654321', '456 Elm St', 'FEMALE','MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "('Alice Johnson', 'alice.johnson@example.com', 'password123', '1112223333', '789 Maple St', 'FEMALE','MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "('Bob Brown', 'bob.brown@example.com', 'password123', '4445556666', '101 Pine St', 'MALE','MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "('Hoc Admin', 'admin@example.com', '111111', '0344281310', 'HA NOI', 'MALE','LIBRARIAN', 'admin@example.com', CURRENT_TIMESTAMP);" ;
+            if (isTableEmpty("Users")) {
+                String insertUsers = "INSERT INTO Users (name, email, password, phone_number, address, birth_of_date, gender, role, created_by, created_at) VALUES " +
+                        "('John Doe', 'john.doe@example.com', 'password123', '1234567890', '123 Main St', '1999-01-01', 'MALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('Jane Smith', 'jane.smith@example.com', 'password123', '0987654321', '456 Elm St', '2005-08-02', 'FEMALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('Alice Johnson', 'alice.johnson@example.com', 'password123', '1112223333', '789 Maple St', '1980-05-21', 'FEMALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('Bob Brown', 'bob.brown@example.com', 'password123', '4445556666', '101 Pine St', '2000-12-11', 'MALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('Hoc Admin', 'admin@example.com', '111111', '0344281310', 'HA NOI', '2005-10-13', 'MALE', 'LIBRARIAN', 'admin@example.com', CURRENT_TIMESTAMP);";
                 statement.execute(insertUsers);
             }
 
@@ -129,10 +127,8 @@ public class DatabaseInitializer {
                         "('You Dont Know JS', 'Kyle Simpson', '9781491904244', 'O Reilly Media', 'JavaScript', 5, NULL, 'admin@example.com', CURRENT_TIMESTAMP, 2014, 'English', 278, 'A series on JavaScript programming. This book delves into the intricacies of JavaScript. It provides a deep understanding of how the language works, from the basics to advanced topics.')," +
                         "('Domain-Driven Design', 'Eric Evans', '9780321125217', 'Addison-Wesley', 'Software Design', 2, NULL, 'admin@example.com', CURRENT_TIMESTAMP, 2003, 'English', 560, 'Tackling complexity in the heart of software. This book provides insight into designing complex software systems. It focuses on aligning business goals with technical implementation.')," +
                         "('Clean Architecture', 'Robert C. Martin', '9780134494166', 'Prentice Hall', 'Software Architecture', 3, NULL, 'admin@example.com', CURRENT_TIMESTAMP, 2017, 'English', 432, 'A guide to creating sustainable architecture for software systems. This book discusses the principles of building robust software architectures. It covers topics such as modularity, design patterns, and architectural practices.');";
-
                 statement.execute(insertBooks);
             }
-
 
 
             if(isTableEmpty("Members")){

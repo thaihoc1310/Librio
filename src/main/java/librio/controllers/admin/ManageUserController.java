@@ -31,6 +31,9 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.util.ResourceBundle;
 
+import static librio.util.DatabaseUtil.getTotalUserCount;
+import static librio.util.DatabaseUtil.getUserById;
+
 public class ManageUserController implements Initializable {
 
     @FXML
@@ -53,10 +56,13 @@ public class ManageUserController implements Initializable {
     private Button createUserButton;
     @FXML
     private Pagination pagination;
+    @FXML
+    private TextField searchTextField;
 
     private ObservableList<User> userList;
 
-    private int rowsPerPage = 2;
+    private int currentPage = 0;
+    private final int rowsPerPage = 11;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,17 +72,20 @@ public class ManageUserController implements Initializable {
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        pagination.setPageCount((int) Math.ceil((double) getTotalUserCount() / rowsPerPage));
         pagination.setPageFactory(this::createPage);
         addButtonToTable();
 
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String trimmedValue = newValue.trim();
+            loadUsers(trimmedValue, pagination.getCurrentPageIndex());
+        });
     }
 
     private void addButtonToTable() {
         Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<User, Void> call(final TableColumn<User, Void> param) {
-                final TableCell<User, Void> cell = new TableCell<>() {
+                return new TableCell<>() {
 
                     private final Button btnDelete = new Button("Delete");
                     private final Button btnDetail = new Button("Detail");
@@ -116,45 +125,33 @@ public class ManageUserController implements Initializable {
                         }
                     }
                 };
-                return cell;
             }
         };
         actionColumn.setCellFactory(cellFactory);
     }
 
-    private User getUserById(String userId) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "SELECT * FROM users WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                String id = resultSet.getString("id");
-                String name = resultSet.getString("name");
-                String email = resultSet.getString("email");
-                String phoneNumber = resultSet.getString("phone_number");
-                String address = resultSet.getString("address") ;
-                Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
-                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
-                String avatar = resultSet.getString("avatar");
-
-                return new User(id, name, email, phoneNumber, address, gender, role, avatar);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void loadUsersFromDatabase(int pageIndex) {
+    void loadUsers(String keyword, int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             userList = FXCollections.observableArrayList();
             int offset = pageIndex * rowsPerPage;
-            String query = "SELECT * FROM users LIMIT ? OFFSET ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, rowsPerPage);
-            statement.setInt(2, offset);
+            String query;
+            PreparedStatement statement;
+
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT * FROM users LIMIT ? OFFSET ?";
+                statement = connection.prepareStatement(query);
+                statement.setInt(1, rowsPerPage);
+                statement.setInt(2, offset);
+            } else {
+                query = "SELECT * FROM users WHERE name LIKE ? OR email LIKE ? OR phone_number LIKE ? LIMIT ? OFFSET ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, "%" + keyword + "%");
+                statement.setString(2, "%" + keyword + "%");
+                statement.setString(3, "%" + keyword + "%");
+                statement.setInt(4, rowsPerPage);
+                statement.setInt(5, offset);
+            }
+
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -169,8 +166,8 @@ public class ManageUserController implements Initializable {
                 userList.add(user);
             }
             userTableView.setItems(userList);
-            userTableView.setFixedCellSize(49);
-            pagination.setPageCount((int) Math.ceil((double) getTotalUserCount() / rowsPerPage));
+            userTableView.setFixedCellSize(47);
+            pagination.setPageCount((int) Math.ceil((double) getTotalUserCount(keyword) / rowsPerPage));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -178,22 +175,9 @@ public class ManageUserController implements Initializable {
 
 
     private Node createPage(int pageIndex) {
-        loadUsersFromDatabase(pageIndex);
+        currentPage = pageIndex;
+        loadUsers(searchTextField.getText().trim(), pageIndex);
         return new BorderPane();
-    }
-
-    private int getTotalUserCount() {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "SELECT COUNT(*) FROM users";
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     @FXML
@@ -205,7 +189,7 @@ public class ManageUserController implements Initializable {
 
             CreateUserController createUserController = loader.getController();
             createUserController.setManageUserController(this);
-
+            createUserController.setCurrentPage(currentPage);
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Create New User");
@@ -231,7 +215,7 @@ public class ManageUserController implements Initializable {
             UpdateUserController updateUserController = loader.getController();
             updateUserController.setManageUserController(this);
             updateUserController.setUser(user);
-
+            updateUserController.setCurrentPage(currentPage);
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Update User");
@@ -254,9 +238,10 @@ public class ManageUserController implements Initializable {
             Parent root = loader.load();
 
             // Tạo controller và truyền ManageUserController và User vào
-            UserDetailController userDetailsController = loader.getController();
+            UserDetailsController userDetailsController = loader.getController();
             userDetailsController.setManageUserController(this);
             userDetailsController.setUser(user);
+            userDetailsController.setCurrentPage(currentPage);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();
@@ -283,7 +268,7 @@ public class ManageUserController implements Initializable {
             DeleteUserController deleteUserController = loader.getController();
             deleteUserController.setManageUserController(this);
             deleteUserController.setUser(user);
-            deleteUserController.setUserName(user.getName());
+            deleteUserController.setCurrentPage(currentPage);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();

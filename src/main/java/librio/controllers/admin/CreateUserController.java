@@ -6,9 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
-import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
@@ -20,11 +17,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
+import static librio.util.DatabaseUtil.isEmailExists;
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class CreateUserController implements Initializable {
     private ManageUserController manageUserController;
@@ -61,10 +58,14 @@ public class CreateUserController implements Initializable {
     @FXML
     private Label genderErrorLabel;
     @FXML
+    private DatePicker birthOfDatePicker;
+    @FXML
+    private Label birthOfDateErrorLabel;
+    @FXML
     private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
     private String avatarFilePath;
     private String previousAvatarFilePath;
-
+    private int currentPage = 0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
@@ -77,6 +78,10 @@ public class CreateUserController implements Initializable {
         this.manageUserController = manageUserController;
     }
 
+    public void setCurrentPage(int currentPage){
+        this.currentPage = currentPage;
+    }
+
     @FXML
     private void createUser() {
         String name = nameTextField.getText();
@@ -87,7 +92,7 @@ public class CreateUserController implements Initializable {
         Gender gender = genderComboBox.getValue();
         Role role = roleComboBox.getValue();
         String address = addressTextArea.getText();
-
+        LocalDate birthOfDate = birthOfDatePicker.getValue();
         boolean validation = false;
 
         if(name.isEmpty()){
@@ -134,12 +139,17 @@ public class CreateUserController implements Initializable {
             validation = true;
         }
 
+        if(birthOfDate == null){
+            birthOfDateErrorLabel.setText("Birth of Date must be selected");
+        }
+
         if(validation) {
             return;
         }
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
+        String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar, birth_of_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             statement.setString(2, email);
             statement.setString(3, password);
@@ -148,6 +158,8 @@ public class CreateUserController implements Initializable {
             statement.setString(6, gender.name());
             statement.setString(7, role.name());
             statement.setString(8, avatarFilePath);
+            assert birthOfDate != null;
+            statement.setDate(9, Date.valueOf(birthOfDate));
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 String projectDir = System.getProperty("user.dir");
@@ -156,7 +168,7 @@ public class CreateUserController implements Initializable {
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
                 if (manageUserController != null) {
-                    manageUserController.loadUsersFromDatabase(0);
+                    manageUserController.loadUsers(null,currentPage);
                 }
                 clearInputFields();
                 closeStage();
@@ -175,6 +187,8 @@ public class CreateUserController implements Initializable {
         confirmPasswordErrorLabel.setText("");
         phoneNumberErrorLabel.setText("");
         roleErrorLabel.setText("");
+        genderErrorLabel.setText("");
+        birthOfDateErrorLabel.setText("");
     }
 
     private void addListeners() {
@@ -243,6 +257,14 @@ public class CreateUserController implements Initializable {
                 genderErrorLabel.setText("");
             }
         });
+
+        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                birthOfDateErrorLabel.setText("Birth of Date must be selected");
+            } else {
+                birthOfDateErrorLabel.setText("");
+            }
+        });
     }
 
 
@@ -262,25 +284,8 @@ public class CreateUserController implements Initializable {
             cropAndClipToCircle(avatarImage, avatarImageView, 75);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
-    }
 
-    private boolean isEmailExists(String email) {
-        boolean exists = false;
-        String query = "SELECT COUNT(*) FROM users WHERE email = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, email);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                exists = resultSet.getInt(1) > 0;
-                //resultSet.getInt => get result of count(*)
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return exists;
     }
-
 
     @FXML
     private void cancelCreateUser() {
@@ -302,31 +307,9 @@ public class CreateUserController implements Initializable {
         addressTextArea.clear();
         genderComboBox.getSelectionModel().clearSelection();
         roleComboBox.getSelectionModel().clearSelection();
+        birthOfDatePicker.setValue(null);
+
     }
 
-    public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
-        // Lấy chiều rộng và chiều cao của ảnh
-        double width = avatarImage.getWidth();
-        double height = avatarImage.getHeight();
-
-        // Tính toán kích thước để cắt ảnh thành hình vuông
-        double cropSize = Math.min(width, height);  // Chọn kích thước nhỏ hơn giữa width và height
-
-        // Tính toán tọa độ bắt đầu để cắt hình vuông từ trung tâm của ảnh
-        double x = (width - cropSize) / 2;
-        double y = (height - cropSize) / 2;
-
-        // Cắt ảnh thành hình vuông
-        PixelReader reader = avatarImage.getPixelReader();
-        WritableImage squareImage = new WritableImage(reader, (int) x, (int) y, (int) cropSize, (int) cropSize);
-
-        // Hiển thị ảnh đã cắt trong ImageView
-        avatarImageView.setImage(squareImage);
-        avatarImageView.setPreserveRatio(true);
-
-        // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
-        Circle clip = new Circle(radius, radius, radius);
-        avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
-    }
 }
 
