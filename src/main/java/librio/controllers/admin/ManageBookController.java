@@ -112,7 +112,9 @@ public class ManageBookController implements Initializable {
                         });
 
                         btnDelete.setOnAction(event -> {
-                            // Xử lý logic xóa sách
+                            Book book = getTableView().getItems().get(getIndex());
+                            Book selectedBook = getBookById(book.getId());
+                            openDeleteBookScene(selectedBook);
                         });
                     }
 
@@ -219,10 +221,6 @@ public class ManageBookController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateBook.fxml"));
             Parent root = loader.load();
 
-            // Lấy controller của AddBookController để sử dụng nếu cần
-            CreateBookController createBookController = loader.getController();
-            createBookController.setManageBookController(this);
-
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Add New Book");
@@ -251,8 +249,7 @@ public class ManageBookController implements Initializable {
 
             // Lấy controller của BookDetailController và truyền dữ liệu
             BookDetailController bookDetailController = loader.getController();
-            bookDetailController.setManageBookController(this);
-            bookDetailController.setBook(book);  // Truyền dữ liệu sách vào màn hình chi tiết
+            bookDetailController.setBook(book);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();
@@ -280,8 +277,7 @@ public class ManageBookController implements Initializable {
 
             // Lấy controller của BookDetailController và truyền dữ liệu
             UpdateBookController updateBookController = loader.getController();
-            updateBookController.setManageBookController(this);
-            updateBookController.setBook(book);  // Truyền dữ liệu sách vào màn hình chi tiết
+            updateBookController.setBook(book);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();
@@ -295,6 +291,33 @@ public class ManageBookController implements Initializable {
             // Hiển thị scene
             stage.showAndWait();
 
+            loadBooks(keyword,currentPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openDeleteBookScene(Book book) {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/DeleteBook.fxml"));
+            Parent root = loader.load();
+
+            // Tạo controller và truyền ManageUserController và User vào
+            DeleteBookController deleteBookController = loader.getController();
+            deleteBookController.setBook(book);
+
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Delete User");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(bookTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
             loadBooks(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();

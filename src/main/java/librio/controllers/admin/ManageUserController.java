@@ -189,10 +189,6 @@ public class ManageUserController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
             Parent root = loader.load();
 
-            CreateUserController createUserController = loader.getController();
-            createUserController.setManageUserController(this);
-            createUserController.setCurrentPage(currentPage);
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Create New User");
             stage.setScene(new Scene(root));
@@ -208,6 +204,7 @@ public class ManageUserController implements Initializable {
         }
     }
 
+    @FXML
     private void openUpdateUserScene(User user) {
         try {
             // Tải FXML của scene mới
@@ -216,9 +213,7 @@ public class ManageUserController implements Initializable {
 
             // Tạo controller và truyền ManageUserController và User vào
             UpdateUserController updateUserController = loader.getController();
-            updateUserController.setManageUserController(this);
             updateUserController.setUser(user);
-            updateUserController.setCurrentPage(currentPage);
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Update User");
@@ -235,6 +230,7 @@ public class ManageUserController implements Initializable {
         }
     }
 
+    @FXML
     private void openUserDetailScene(User user) {
         try {
             // Tải FXML của scene mới
@@ -243,9 +239,7 @@ public class ManageUserController implements Initializable {
 
             // Tạo controller và truyền ManageUserController và User vào
             UserDetailsController userDetailsController = loader.getController();
-            userDetailsController.setManageUserController(this);
             userDetailsController.setUser(user);
-            userDetailsController.setCurrentPage(currentPage);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();
@@ -263,6 +257,7 @@ public class ManageUserController implements Initializable {
         }
     }
 
+    @FXML
     private void openDeleteUserScene(User user) {
         try {
             // Tải FXML của scene mới
@@ -271,9 +266,7 @@ public class ManageUserController implements Initializable {
 
             // Tạo controller và truyền ManageUserController và User vào
             DeleteUserController deleteUserController = loader.getController();
-            deleteUserController.setManageUserController(this);
             deleteUserController.setUser(user);
-            deleteUserController.setCurrentPage(currentPage);
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();

@@ -187,7 +187,7 @@ public class DatabaseUtil {
                 query = "SELECT COUNT(*) FROM books";
                 statement = connection.prepareStatement(query);
             } else {
-                query = "SELECT COUNT(*) FROM books WHERE name LIKE ? OR email LIKE ? OR phone_number LIKE ?";
+                query = "SELECT COUNT(*) FROM books WHERE title LIKE ? OR isbn LIKE ? OR category LIKE ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, "%" + keyword + "%");
                 statement.setString(2, "%" + keyword + "%");
