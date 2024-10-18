@@ -16,7 +16,7 @@ public class DeleteBookController {
 
     @FXML
     private void deleteUser() {
-//        DatabaseUtil.deleteBook(book);
+        DatabaseUtil.deleteBook(book);
         closeWindow();
     }
 
