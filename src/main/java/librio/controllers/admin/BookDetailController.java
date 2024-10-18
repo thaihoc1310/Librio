@@ -22,8 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.models.Book;
 
-import static librio.controllers.admin.CreateUserController.cropAndClipToCircle;
-
 /**
  * @author WINDOWS 10
  */

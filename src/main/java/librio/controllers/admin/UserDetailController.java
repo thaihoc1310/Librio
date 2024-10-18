@@ -20,7 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.models.User;
 
-import static librio.controllers.admin.CreateUserController.cropAndClipToCircle;
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 /**
  *
