@@ -173,6 +173,40 @@ public class UpdateUserController implements Initializable {
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
+                // Xử lý thay đổi vai trò
+                if (!role.equals(user.getRole())) {
+                    if (user.getRole().equals(Role.MEMBER)) {
+                        // Nếu user trước đây là MEMBER và bây giờ là LIBRARIAN
+                        String deleteMemberQuery = "DELETE FROM Members WHERE id = ?";
+                        try (PreparedStatement deleteMemberStatement = connection.prepareStatement(deleteMemberQuery)) {
+                            deleteMemberStatement.setString(1, user.getId());
+                            deleteMemberStatement.executeUpdate();
+                        }
+
+                        String insertLibrarianQuery = "INSERT INTO Librarians (id) VALUES (?)";
+                        try (PreparedStatement insertLibrarianStatement = connection.prepareStatement(insertLibrarianQuery)) {
+                            insertLibrarianStatement.setString(1, user.getId());
+                            insertLibrarianStatement.executeUpdate();
+                        }
+
+                    } else if (user.getRole().equals(Role.LIBRARIAN)) {
+                        // Nếu user trước đây là LIBRARIAN và bây giờ là MEMBER
+                        String deleteLibrarianQuery = "DELETE FROM Librarians WHERE id = ?";
+                        try (PreparedStatement deleteLibrarianStatement = connection.prepareStatement(deleteLibrarianQuery)) {
+                            deleteLibrarianStatement.setString(1, user.getId());
+                            deleteLibrarianStatement.executeUpdate();
+                        }
+
+                        String insertMemberQuery = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES (?, ?, ?)";
+                        try (PreparedStatement insertMemberStatement = connection.prepareStatement(insertMemberQuery)) {
+                            insertMemberStatement.setString(1, user.getId());
+                            insertMemberStatement.setLong(2, 0); // Fine amount bắt đầu từ 0
+                            insertMemberStatement.setLong(3, 0); // Total books borrowed bắt đầu từ 0
+                            insertMemberStatement.executeUpdate();
+                        }
+                    }
+                }
+
                 if (previousAvatarFilePath != null && avatarFilePath != null) {
                     String projectDir = System.getProperty("user.dir");
                     String avatarsDir = projectDir + "/src/main/resources/images/user/";

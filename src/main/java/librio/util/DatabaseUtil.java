@@ -140,7 +140,7 @@ public class DatabaseUtil {
         } finally {
             if (connection != null) {
                 try {
-                    connection.close(); // Close the connection in the finally block
+                    connection.close(); // Close the connection in the final block
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();
                 }

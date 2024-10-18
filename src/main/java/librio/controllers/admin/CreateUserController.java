@@ -140,7 +140,7 @@ public class CreateUserController implements Initializable {
         String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar, birth_of_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, name);
             statement.setString(2, email);
             statement.setString(3, password);
@@ -151,8 +151,27 @@ public class CreateUserController implements Initializable {
             statement.setString(8, avatarFilePath);
             assert birthOfDate != null;
             statement.setDate(9, Date.valueOf(birthOfDate));
+
             int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int userId = generatedKeys.getInt(1);
+                if(role.equals(Role.MEMBER)){
+                    String insertMemberQuery = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES (?, ?, ?)";
+                    try (PreparedStatement memberStatement = connection.prepareStatement(insertMemberQuery)) {
+                        memberStatement.setInt(1, userId); // userId là id của user vừa tạo
+                        memberStatement.setLong(2, 0); // Fine amount bắt đầu từ 0
+                        memberStatement.setLong(3, 0); // Total books borrowed bắt đầu từ 0
+                        memberStatement.executeUpdate();
+                    }
+                }
+                else if(role.equals(Role.LIBRARIAN)){
+                    String insertLibrarianQuery = "INSERT INTO Librarians (id) VALUES (?)";
+                    try (PreparedStatement librarianStatement = connection.prepareStatement(insertLibrarianQuery)) {
+                        librarianStatement.setInt(1, userId); // userId là id của user vừa tạo
+                        librarianStatement.executeUpdate();
+                    }
+                }
                 String projectDir = System.getProperty("user.dir");
                 String avatarsDir = projectDir + "/src/main/resources/images/user/";
                 if(previousAvatarFilePath != null){

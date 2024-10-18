@@ -103,7 +103,9 @@ public class DatabaseInitializer {
             statement.execute(createBorrowTable);
             statement.execute(createFeedbackTable);
 
-            if (isTableEmpty("Users")) {
+            if (isTableEmpty("Users") && isTableEmpty("Books")) {
+                String resetAutoIncrementUser = "ALTER TABLE Users AUTO_INCREMENT = 1";
+                statement.execute(resetAutoIncrementUser);
                 String insertUsers = "INSERT INTO Users (name, email, password, phone_number, address, birth_of_date, gender, role, created_by, created_at) VALUES " +
                         "('John Doe', 'john.doe@example.com', 'password123', '1234567890', '123 Main St', '1999-01-01', 'MALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
                         "('Jane Smith', 'jane.smith@example.com', 'password123', '0987654321', '456 Elm St', '2005-08-02', 'FEMALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
@@ -111,10 +113,9 @@ public class DatabaseInitializer {
                         "('Bob Brown', 'bob.brown@example.com', 'password123', '4445556666', '101 Pine St', '2000-12-11', 'MALE', 'MEMBER', 'admin@example.com', CURRENT_TIMESTAMP)," +
                         "('Hoc Admin', 'admin@example.com', '111111', '0344281310', 'HA NOI', '2005-10-13', 'MALE', 'LIBRARIAN', 'admin@example.com', CURRENT_TIMESTAMP);";
                 statement.execute(insertUsers);
-            }
 
-
-            if(isTableEmpty("Books")){
+                String resetAutoIncrementBook = "ALTER TABLE Books AUTO_INCREMENT = 1";
+                statement.execute(resetAutoIncrementBook);
                 String insertBooks = "INSERT INTO Books (title, author, isbn, publisher, category, quantity_copy, average_of_rating, created_by, created_at, year_published, language, number_of_pages, book_image, description) VALUES " +
                         "('Effective Java', 'Joshua Bloch', '9780134685991', 'Addison-Wesley', 'Programming', 5, 5, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 416, NULL, 'A comprehensive guide to best practices in Java programming. This book covers in-depth principles for writing effective Java code. It includes multiple chapters on best practices for designing robust and maintainable systems.')," +
                         "('Clean Code', 'Robert C. Martin', '9780132350884', 'Prentice Hall', 'Programming', 3, 4, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 464, NULL, 'A handbook of agile software craftsmanship. The book emphasizes the importance of writing clean, readable code. Through practical examples, readers learn how to refactor messy code into clean and understandable designs.')," +
@@ -129,25 +130,17 @@ public class DatabaseInitializer {
                         "('Domain-Driven Design', 'Eric Evans', '9780321125217', 'Addison-Wesley', 'Software Design', 2, NULL, 'admin@example.com', CURRENT_TIMESTAMP, 2003, 'English', 560, NULL, 'Tackling complexity in the heart of software. This book provides insight into designing complex software systems. It focuses on aligning business goals with technical implementation.')," +
                         "('Clean Architecture', 'Robert C. Martin', '9780134494166', 'Prentice Hall', 'Software Architecture', 3, NULL, 'admin@example.com', CURRENT_TIMESTAMP, 2017, 'English', 432, NULL, 'A guide to creating sustainable architecture for software systems. This book discusses the principles of building robust software architectures. It covers topics such as modularity, design patterns, and architectural practices.');";
                 statement.execute(insertBooks);
-            }
 
-
-            if(isTableEmpty("Members")){
                 String insertMembers = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES " +
                         "(1, 0, 4)," +
                         "(2, 0, 3)," +
                         "(3, 50000, 2)," +
                         "(4, 0, 1);";
-            statement.execute(insertMembers);
-            }
+                statement.execute(insertMembers);
 
+                String insertLibrarians = "INSERT INTO Librarians (id) VALUES (5);";
+                statement.execute(insertLibrarians);
 
-            if(isTableEmpty("Librarians")){
-            String insertLibrarians = "INSERT INTO Librarians (id) VALUES (5);";
-            statement.execute(insertLibrarians);
-            }
-
-            if(isTableEmpty("Borrows")){
                 String insertBorrows = "INSERT INTO Borrows (member_id, book_id, borrow_date, due_date, return_date, status, fine, created_by, created_at) VALUES " +
                         "(1, 1, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
                         "(2, 2, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
@@ -159,17 +152,14 @@ public class DatabaseInitializer {
                         "(4, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
                         "(2, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
                         "(1, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP);";
-            statement.execute(insertBorrows);
-            }
+                statement.execute(insertBorrows);
 
-            if(isTableEmpty("Feedbacks")){
                 String insertFeedbacks = "INSERT INTO Feedbacks (book_id, member_id, rating, about, created_by, created_at) VALUES " +
-                    "(1, 1, 5, 'Great book for learning Java!', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                    "(2, 2, 4, 'Very helpful for clean coding practices.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                    "(3, 3, 5, 'Excellent resource for programmers.', 'alice.johnson@example.com', CURRENT_TIMESTAMP);";
-            statement.execute(insertFeedbacks);
+                        "(1, 1, 5, 'Great book for learning Java!', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 2, 4, 'Very helpful for clean coding practices.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 3, 5, 'Excellent resource for programmers.', 'alice.johnson@example.com', CURRENT_TIMESTAMP);";
+                statement.execute(insertFeedbacks);
             }
-
 
         } catch (SQLException e) {
             e.printStackTrace();
