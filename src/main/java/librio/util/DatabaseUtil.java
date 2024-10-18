@@ -252,4 +252,20 @@ public class DatabaseUtil {
         return 0;
     }
 
+    public static boolean isBookTitleExists(String bookTitle) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM users WHERE title = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, bookTitle);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                exists = resultSet.getInt(1) > 0;
+                //resultSet.getInt => get result of count(*)
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
 }
