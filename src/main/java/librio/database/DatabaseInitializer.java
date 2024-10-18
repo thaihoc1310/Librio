@@ -44,6 +44,7 @@ public class DatabaseInitializer {
                     "language VARCHAR(50)," +
                     "number_of_pages INT," +
                     "description TEXT," +
+                    "book_image VARCHAR(255)," +
                     "created_by VARCHAR(255)," +
                     "created_at TIMESTAMP," +
                     "updated_by VARCHAR(255)," +

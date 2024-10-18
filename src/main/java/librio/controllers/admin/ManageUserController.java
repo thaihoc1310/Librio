@@ -56,7 +56,7 @@ public class ManageUserController implements Initializable {
 
     private ObservableList<User> userList;
 
-    private int rowsPerPage = 10;
+    private int rowsPerPage = 2;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

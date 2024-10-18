@@ -34,24 +34,30 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Book Title:" wrappingWidth="61.336727142333984" GridPane.rowIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Author:" wrappingWidth="70.13677597045898" GridPane.rowIndex="2" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Category:" wrappingWidth="53.336727142333984" GridPane.rowIndex="3" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Publisher:" wrappingWidth="82.13671493530273" GridPane.rowIndex="4" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Year Published:" wrappingWidth="82.93676376342773" GridPane.rowIndex="5" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Language:" wrappingWidth="65.33672714233398" GridPane.rowIndex="6" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of pages:" wrappingWidth="96.53674697875977" GridPane.rowIndex="7" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Category:" wrappingWidth="53.336727142333984" GridPane.rowIndex="4" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Publisher:" wrappingWidth="82.13671493530273" GridPane.rowIndex="6" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Year Published:" wrappingWidth="82.93676376342773" GridPane.rowIndex="7" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Language:" wrappingWidth="65.33672714233398" GridPane.rowIndex="8" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of pages:" wrappingWidth="96.53674697875977" GridPane.rowIndex="9" />
                   <Label fx:id="bookTitleLabel" text="Harry Potter and the Socerer Stone" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label fx:id="authorLabel" text="J.K. Rowling" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label fx:id="categoryLabel" text="Fantasy" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label fx:id="publisherLabel" text="Nhi đồng" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label fx:id="yearPublishedLabel" text="2003" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Label fx:id="languageLabel" text="English" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <Label fx:id="numberOfPagesLabel" text="20" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label fx:id="categoryLabel" text="Fantasy" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label fx:id="publisherLabel" text="Nhi đồng" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Label fx:id="yearPublishedLabel" text="2003" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label fx:id="languageLabel" text="English" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <Label fx:id="numberOfPagesLabel" text="20" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" wrappingWidth="61.336727142333984" />
                   <Label fx:id="bookIdLabel" text="1" GridPane.columnIndex="1" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="isbn" wrappingWidth="96.53674697875977" GridPane.rowIndex="3" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity of copy" GridPane.rowIndex="5" />
+                  <Label fx:id="isbnLabel" text="06598874566" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label fx:id="quantityOfCopyLabel" text="25" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                </children>
             </GridPane>
             <Text layoutX="24.0" layoutY="348.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
@@ -60,9 +66,9 @@
                </font>
             </Text>
             <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="24.0" layoutY="353.0" prefHeight="122.0" prefWidth="480.0" text="&quot;Harry Potter and the Socerer Stone&quot; is the perfect introduction to the Harry Potter Colouring Book series! This special Celebratory Edition features a selection of artwork from the Harry Potter Colouring Book, Harry Potter Magical Creatures Colouring Book, and Harry Potter Magical Places &amp; Characters Colouring Book, along with several exclusive never-before-seen images. For best results, we recommend the use of colouring pencils to colour and create your stunning pictures!" textAlignment="JUSTIFY" wrapText="true" />
-            <ImageView fitHeight="192.0" fitWidth="138.0" layoutX="375.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="bookImageView" fitHeight="192.0" fitWidth="138.0" layoutX="375.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/book/harryPottersample.jpeg" />
+                  <Image url="@../../images/book/harryPottersample.jpg" />
                </image>
             </ImageView>
             <Button fx:id="backButton" layoutX="434.0" layoutY="480.0" mnemonicParsing="false" onAction="#back" prefHeight="32.0" prefWidth="70.0" text="Back" />

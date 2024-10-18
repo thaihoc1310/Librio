@@ -15,7 +15,7 @@ public class Book {
     private StringProperty yearPublished;
     private StringProperty numberOfPages;
     private StringProperty description;
-    private String imagePath;
+    private StringProperty imagePath;
     private StringProperty isbn;
     private IntegerProperty quantityCopy;
     private DoubleProperty averageOfRating;
@@ -48,16 +48,19 @@ public class Book {
 
 
 
-    public Book(String id, String title, String author, String category, String publisher, String yearPublished, String language, String numberOfPages, String description) {
+    public Book(String id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
         this.id = new SimpleStringProperty(id);
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
+        this.isbn = new SimpleStringProperty(isbn);
         this.category = new SimpleStringProperty(category);
         this.publisher = new SimpleStringProperty(publisher);
+        this.quantityCopy = new SimpleIntegerProperty(quantityCopy);
         this.yearPublished = new SimpleStringProperty(yearPublished);
         this.language = new SimpleStringProperty(language);
         this.numberOfPages = new SimpleStringProperty(numberOfPages);
         this.description = new SimpleStringProperty(description);
+        this.imagePath = new SimpleStringProperty(imagePath);
     }
 
     // Getters và Setters cho các thuộc tính
@@ -246,10 +249,14 @@ public class Book {
     }
 
     public String getImagePath() {
+        return imagePath.get();
+    }
+
+    public StringProperty imagePathProperty() {
         return imagePath;
     }
 
     public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+        this.imagePath.set(imagePath);
     }
 }

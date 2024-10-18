@@ -262,7 +262,6 @@ public class CreateUserController implements Initializable {
             cropAndClipToCircle(avatarImage, avatarImageView, 75);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
-
     }
 
     private boolean isEmailExists(String email) {
@@ -303,7 +302,6 @@ public class CreateUserController implements Initializable {
         addressTextArea.clear();
         genderComboBox.getSelectionModel().clearSelection();
         roleComboBox.getSelectionModel().clearSelection();
-
     }
 
     public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
@@ -330,6 +328,5 @@ public class CreateUserController implements Initializable {
         Circle clip = new Circle(radius, radius, radius);
         avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
     }
-
 }
 

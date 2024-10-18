@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -87,6 +88,9 @@ public class ManageBookController implements Initializable {
                         });
 
                         btnUpdate.setOnAction(event -> {
+                            Book book = getTableView().getItems().get(getIndex());
+                            Book selectedBook = getBookById(book.getId());
+                            openUpdateBookScene(selectedBook);
                             // Xử lý logic cập nhật sách
                         });
 
@@ -103,7 +107,7 @@ public class ManageBookController implements Initializable {
                         } else {
                             // Tạo HBox để chứa các nút
                             HBox hbox = new HBox(20, btnDetail, btnUpdate, btnDelete);
-                            hbox.setStyle("-fx-padding: 0 0 0 20;");
+                            hbox.setAlignment(Pos.CENTER);
                             setGraphic(hbox);
                         }
                     }
@@ -125,13 +129,16 @@ public class ManageBookController implements Initializable {
                 String id = resultSet.getString("id");
                 String title = resultSet.getString("title");
                 String author = resultSet.getString("author");
+                String isbn = resultSet.getString("isbn");
                 String publisher = resultSet.getString("publisher");
                 String category = resultSet.getString("category");
+                Integer quantityCopy = resultSet.getInt("quantity_copy");
                 String yearPublished = resultSet.getString("year_published");
                 String language = resultSet.getString("language");
                 String numberOfPages = resultSet.getString("number_of_pages");
                 String description = resultSet.getString("description");
-                return new Book(id, title, author, category, publisher, yearPublished, language, numberOfPages, description);
+                String bookImage = resultSet.getString("book_image");
+                return new Book(id, title, author, isbn, category, publisher, quantityCopy ,yearPublished, language, numberOfPages, description, bookImage);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -165,7 +172,32 @@ public class ManageBookController implements Initializable {
 
     @FXML
     private void openAddBookScene() {
-        // Mở màn hình thêm sách mới
+        try {
+            // Tải FXML của scene thêm sách mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateBook.fxml"));
+            Parent root = loader.load();
+
+            // Lấy controller của AddBookController để sử dụng nếu cần
+            CreateBookController createBookController = loader.getController();
+            createBookController.setManageBookController(this);
+
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Add New Book");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(bookTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            // Hiển thị scene
+            stage.showAndWait();
+
+            // Sau khi đóng cửa sổ thêm sách, tải lại danh sách sách từ database
+            loadBooksFromDatabase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -195,4 +227,33 @@ public class ManageBookController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void openUpdateBookScene(Book book) {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UpdateBook.fxml"));
+            Parent root = loader.load();
+
+            // Lấy controller của BookDetailController và truyền dữ liệu
+            UpdateBookController updateBookController = loader.getController();
+            updateBookController.setManageBookController(this);
+            updateBookController.setBook(book);  // Truyền dữ liệu sách vào màn hình chi tiết
+
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Update Book");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(bookTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            // Hiển thị scene
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+

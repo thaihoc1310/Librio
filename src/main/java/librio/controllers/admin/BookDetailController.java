@@ -37,7 +37,11 @@ public class BookDetailController implements Initializable {
     @FXML
     private Label authorLabel;
     @FXML
+    private Label isbnLabel;
+    @FXML
     private Label categoryLabel;
+    @FXML
+    private Label quantityOfCopyLabel;
     @FXML
     private Label publisherLabel;
     @FXML
@@ -49,7 +53,7 @@ public class BookDetailController implements Initializable {
     @FXML
     private Label descriptionLabel;
     @FXML
-    private ImageView bookImageImageView;
+    private ImageView bookImageView;
 
     @FXML
     private Button backButton;
@@ -70,27 +74,42 @@ public class BookDetailController implements Initializable {
             bookIdLabel.setText(book.getId());
             bookTitleLabel.setText(book.getTitle());
             authorLabel.setText(book.getAuthor());
+            isbnLabel.setText(book.getIsbn());
             categoryLabel.setText(book.getCategory());
+            quantityOfCopyLabel.setText(String.valueOf(book.getQuantityCopy()));
             publisherLabel.setText(book.getPublisher());
             yearPublishedLabel.setText(book.getYearPublished());
             languageLabel.setText(book.getLanguage());
             numberOfPagesLabel.setText(book.getNumberOfPages());
             descriptionLabel.setText(book.getDescription());
 
-//            String imagePath = "/images/book_covers/" + book.getImagePath(); // Đường dẫn ảnh sách (giả định)
-//            loadImage(imagePath, bookImageImageView);  // Gọi phương thức loadImage để gán ảnh
+            if (book.getImagePath() != null && !book.getImagePath().isEmpty()) {
+                String projectDir = System.getProperty("user.dir");
+                String booksDir = projectDir + "/src/main/resources/images/book/";
+                String path = booksDir + book.getImagePath();
+                File file = new File(path);
+                if (file.exists()) {
+                    Image image = new Image(file.toURI().toString());
+                    bookImageView.setImage(image);
+                } else {
+                    // Sử dụng ảnh mặc định nếu không tìm thấy file ảnh sách
+                    loadDefaultBookImage();
+                }
+            } else {
+                // Sử dụng ảnh mặc định nếu imagePath là null hoặc rỗng
+                loadDefaultBookImage();
+            }
         }
     }
 
-    private void loadImage(String imagePath, ImageView imageView) {
-        File file = new File(imagePath);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            imageView.setImage(image);
-        } else {
-            // Load ảnh mặc định
-            Image defaultImage = new Image(getClass().getResourceAsStream("/images/book/harryPottersample.png"));
-            imageView.setImage(defaultImage);
+    private void loadDefaultBookImage() {
+        String projectDir = System.getProperty("user.dir");
+        String booksDir = projectDir + "/src/main/resources/images/book/";
+        String defaultImage = booksDir + "defaultBook.jpg";
+        File defaultImageFile = new File(defaultImage);
+        if (defaultImageFile.exists()) {
+            Image image = new Image(defaultImageFile.toURI().toString());
+            bookImageView.setImage(image);
         }
     }
 
