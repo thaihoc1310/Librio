@@ -262,7 +262,7 @@ public class UpdateBookController implements Initializable {
 
         bookTitleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                bookTitleErrorLabel.setText("Name cannot be empty");
+                bookTitleErrorLabel.setText("Book title cannot be empty");
             } else {
                 bookTitleErrorLabel.setText("");
             }
@@ -270,15 +270,18 @@ public class UpdateBookController implements Initializable {
 
         isbnTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                isbnErrorLabel.setText("Name cannot be empty");
-            } else {
+                isbnErrorLabel.setText("isbn cannot be empty");
+            } else if(!newValue.matches("\\d{10}|\\d{13}")){
+                isbnErrorLabel.setText("isbn must be 10 or 13 digits");
+            }
+            else {
                 isbnErrorLabel.setText("");
             }
         });
 
         authorTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                authorErrorLabel.setText("Name cannot be empty");
+                authorErrorLabel.setText("Author cannot be empty");
             } else {
                 authorErrorLabel.setText("");
             }
@@ -286,7 +289,7 @@ public class UpdateBookController implements Initializable {
 
         publisherTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                publisherErrorLabel.setText("Name cannot be empty");
+                publisherErrorLabel.setText("Publisher cannot be empty");
             } else {
                 publisherErrorLabel.setText("");
             }
@@ -294,7 +297,7 @@ public class UpdateBookController implements Initializable {
 
         categoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                categoryErrorLabel.setText("Name cannot be empty");
+                categoryErrorLabel.setText("Category cannot be empty");
             } else {
                 categoryErrorLabel.setText("");
             }
@@ -302,15 +305,19 @@ public class UpdateBookController implements Initializable {
 
         numberOfPagesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                numberOfPagesErrorLabel.setText("Name cannot be empty");
-            } else {
+                numberOfPagesErrorLabel.setText("Number of pages cannot be empty");
+            } else if(!newValue.matches("\\d+")) {
+                numberOfPagesErrorLabel.setText("Number of pages must be a number");
+            }else {
                 numberOfPagesErrorLabel.setText("");
             }
         });
 
         quantityOfCopyTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                quantityOfCopyErrorLabel.setText("Name cannot be empty");
+                quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty");
+            } else if(!newValue.matches("\\d+")) {
+                quantityOfCopyErrorLabel.setText("Quantity of copy must be a number");
             } else {
                 quantityOfCopyErrorLabel.setText("");
             }
@@ -318,7 +325,7 @@ public class UpdateBookController implements Initializable {
 
         languageTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                languageErrorLabel.setText("Name cannot be empty");
+                languageErrorLabel.setText("Language cannot be empty");
             } else {
                 languageErrorLabel.setText("");
             }

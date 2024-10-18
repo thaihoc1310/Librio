@@ -57,7 +57,7 @@
                                 <Insets />
                             </opaqueInsets>
                         </VBox>
-                        <Text layoutX="19.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Book">
+                        <Text layoutX="19.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Book">
                             <font>
                                 <Font size="30.0" />
                             </font>

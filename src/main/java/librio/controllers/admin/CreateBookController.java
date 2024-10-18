@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import static librio.util.DatabaseUtil.isBookTitleExists;
 
 public class CreateBookController implements Initializable {
     private ManageBookController manageBookController;
@@ -123,42 +124,53 @@ public class CreateBookController implements Initializable {
         boolean validation = false;
 
         if(bookTitle.isEmpty()){
-            bookTitleErrorLabel.setText("Name cannot be empty");
+            bookTitleErrorLabel.setText("Title cannot be empty");
             validation = true;
+        } else if(isBookTitleExists(bookTitle)){
+            bookTitleErrorLabel.setText("Title already exists");
         }
 
         if(isbn.isEmpty()){
-            isbnErrorLabel.setText("Password cannot be empty");
+            isbnErrorLabel.setText("isbn cannot be empty");
+            validation = true;
+        }else if (!isbn.matches("\\d{10}|\\d{13}")) {
+            isbnErrorLabel.setText("isbn must be 10 or 13 digits");
             validation = true;
         }
 
         if(author.isEmpty()){
-            authorErrorLabel.setText("Password cannot be empty");
+            authorErrorLabel.setText("Author must not be empty");
             validation = true;
         }
 
         if(publisher.isEmpty()){
-            publisherErrorLabel.setText("Password cannot be empty");
+            publisherErrorLabel.setText("Publisher must not be empty");
             validation = true;
         }
 
         if(category.isEmpty()){
-            categoryErrorLabel.setText("Password cannot be empty");
+            categoryErrorLabel.setText("Category cannot be empty");
             validation = true;
         }
 
-        if(numberOfPages.isEmpty()){
-            numberOfPagesErrorLabel.setText("Password cannot be empty");
+        if (numberOfPages.isEmpty()) {
+            numberOfPagesErrorLabel.setText("Number of pages cannot be empty");
+            validation = true;
+        } else if (!numberOfPages.matches("\\d+")) {
+            numberOfPagesErrorLabel.setText("Number of pages must be a number");
             validation = true;
         }
 
         if(quantityOfCopy.isEmpty()){
-            quantityOfCopyErrorLabel.setText("Password cannot be empty");
+            quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty");
+            validation = true;
+        } else if (!quantityOfCopy.matches("\\d+")) {
+            quantityOfCopyErrorLabel.setText("Quantity of copy must be a number");
             validation = true;
         }
 
         if(language.isEmpty()){
-            languageErrorLabel.setText("Password cannot be empty");
+            languageErrorLabel.setText("Language cannot be empty");
             validation = true;
         }
 
@@ -212,7 +224,7 @@ public class CreateBookController implements Initializable {
 
         bookTitleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                bookTitleErrorLabel.setText("Name cannot be empty");
+                bookTitleErrorLabel.setText("Book title cannot be empty");
             } else {
                 bookTitleErrorLabel.setText("");
             }
@@ -220,15 +232,18 @@ public class CreateBookController implements Initializable {
 
         isbnTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                isbnErrorLabel.setText("Name cannot be empty");
-            } else {
+                isbnErrorLabel.setText("isbn cannot be empty");
+            } else if(!newValue.matches("\\d{10}|\\d{13}")){
+                isbnErrorLabel.setText("isbn must be 10 or 13 digits");
+            }
+            else {
                 isbnErrorLabel.setText("");
             }
         });
 
         authorTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                authorErrorLabel.setText("Name cannot be empty");
+                authorErrorLabel.setText("Author cannot be empty");
             } else {
                 authorErrorLabel.setText("");
             }
@@ -236,7 +251,7 @@ public class CreateBookController implements Initializable {
 
         publisherTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                publisherErrorLabel.setText("Name cannot be empty");
+                publisherErrorLabel.setText("Publisher cannot be empty");
             } else {
                 publisherErrorLabel.setText("");
             }
@@ -244,7 +259,7 @@ public class CreateBookController implements Initializable {
 
         categoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                categoryErrorLabel.setText("Name cannot be empty");
+                categoryErrorLabel.setText("Category cannot be empty");
             } else {
                 categoryErrorLabel.setText("");
             }
@@ -252,15 +267,19 @@ public class CreateBookController implements Initializable {
 
         numberOfPagesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                numberOfPagesErrorLabel.setText("Name cannot be empty");
-            } else {
+                numberOfPagesErrorLabel.setText("Number of pages cannot be empty");
+            } else if(!newValue.matches("\\d+")) {
+                numberOfPagesErrorLabel.setText("Number of pages must be a number");
+            }else {
                 numberOfPagesErrorLabel.setText("");
             }
         });
 
         quantityOfCopyTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                quantityOfCopyErrorLabel.setText("Name cannot be empty");
+                quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty");
+            } else if(!newValue.matches("\\d+")) {
+                quantityOfCopyErrorLabel.setText("Quantity of copy must be a number");
             } else {
                 quantityOfCopyErrorLabel.setText("");
             }
@@ -268,7 +287,7 @@ public class CreateBookController implements Initializable {
 
         languageTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                languageErrorLabel.setText("Name cannot be empty");
+                languageErrorLabel.setText("Language cannot be empty");
             } else {
                 languageErrorLabel.setText("");
             }
