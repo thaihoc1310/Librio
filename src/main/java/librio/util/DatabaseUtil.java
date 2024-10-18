@@ -254,7 +254,7 @@ public class DatabaseUtil {
 
     public static boolean isBookTitleExists(String bookTitle) {
         boolean exists = false;
-        String query = "SELECT COUNT(*) FROM users WHERE title = ?";
+        String query = "SELECT COUNT(*) FROM books WHERE title = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, bookTitle);
