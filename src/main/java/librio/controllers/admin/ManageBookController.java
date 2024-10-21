@@ -48,9 +48,9 @@ public class ManageBookController implements Initializable {
     @FXML
     private TableColumn<Book, String> categoryColumn;
     @FXML
-    private TableColumn<Book, String> languageColumn;
+    private TableColumn<Book, String> isbnColumn;
     @FXML
-    private TableColumn<Book, String> publisherColumn;
+    private TableColumn<Book, String> averageRatingColumn;
     @FXML
     private TableColumn<Book, Void> actionColumn;
     @FXML
@@ -72,10 +72,10 @@ public class ManageBookController implements Initializable {
         // Thiết lập dữ liệu cho các cột
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
-        languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
-        publisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        averageRatingColumn.setCellValueFactory(new PropertyValueFactory<>("averageOfRating"));
         pagination.setPageFactory(this::createPage);
         addButtonToTable();
 
@@ -88,16 +88,25 @@ public class ManageBookController implements Initializable {
     }
 
     private void addButtonToTable() {
-        Callback<TableColumn<Book, Void>, TableCell<Book, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<Book, Void>, TableCell<Book, Void>> cellFactory = new Callback<TableColumn<Book, Void>, TableCell<Book, Void>>() {
             @Override
             public TableCell<Book, Void> call(final TableColumn<Book, Void> param) {
-                final TableCell<Book, Void> cell = new TableCell<>() {
+                final TableCell<Book, Void> cell = new TableCell<Book, Void>() {
 
                     private final Button btnDelete = new Button("Remove");
                     private final Button btnDetail = new Button("Detail");
                     private final Button btnUpdate = new Button("Edit");
 
                     {
+                        btnDetail.setPrefWidth(70);
+                        btnDetail.setPrefHeight(30);
+
+                        btnUpdate.setPrefWidth(70);
+                        btnUpdate.setPrefHeight(30);
+
+                        btnDelete.setPrefWidth(70);
+                        btnDelete.setPrefHeight(30);
+
                         btnDetail.setOnAction(event -> {
                             Book book = getTableView().getItems().get(getIndex());
                             Book selectedBook = getBookById(book.getId());
@@ -108,7 +117,6 @@ public class ManageBookController implements Initializable {
                             Book book = getTableView().getItems().get(getIndex());
                             Book selectedBook = getBookById(book.getId());
                             openUpdateBookScene(selectedBook);
-                            // Xử lý logic cập nhật sách
                         });
 
                         btnDelete.setOnAction(event -> {
@@ -124,7 +132,6 @@ public class ManageBookController implements Initializable {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            // Tạo HBox để chứa các nút
                             HBox hbox = new HBox(20, btnDetail, btnUpdate, btnDelete);
                             hbox.setAlignment(Pos.CENTER);
                             setGraphic(hbox);
@@ -136,6 +143,7 @@ public class ManageBookController implements Initializable {
         };
         actionColumn.setCellFactory(cellFactory);
     }
+
 
     private Book getBookById(String bookId) {
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -152,12 +160,13 @@ public class ManageBookController implements Initializable {
                 String publisher = resultSet.getString("publisher");
                 String category = resultSet.getString("category");
                 Integer quantityCopy = resultSet.getInt("quantity_copy");
+                Double averageOfRating = resultSet.getDouble("average_of_rating");
                 String yearPublished = resultSet.getString("year_published");
                 String language = resultSet.getString("language");
                 String numberOfPages = resultSet.getString("number_of_pages");
                 String description = resultSet.getString("description");
                 String bookImage = resultSet.getString("book_image");
-                return new Book(id, title, author, isbn, category, publisher, quantityCopy ,yearPublished, language, numberOfPages, description, bookImage);
+                return new Book(id, title, author, isbn, category, publisher, quantityCopy,averageOfRating, yearPublished, language, numberOfPages, description, bookImage);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -193,10 +202,16 @@ public class ManageBookController implements Initializable {
                 String id = resultSet.getString("id");
                 String title = resultSet.getString("title");
                 String author = resultSet.getString("author");
-                String publisher = resultSet.getString("publisher");
+                String isbn = resultSet.getString("isbn");
                 String category = resultSet.getString("category");
-                String language = resultSet.getString("language");
-                Book book = new Book(id, title, author, category, language, publisher);
+                String averageOfRating = resultSet.getString("average_of_rating");
+                Book book;
+                if (averageOfRating != null) {
+                   book = new Book(id, title, isbn, author, category, Double.parseDouble(averageOfRating));
+                }else {
+                    book = new Book(id, title, isbn, author, category, 0.0);
+                }
+
                 bookList.add(book);
             }
 
@@ -310,7 +325,7 @@ public class ManageBookController implements Initializable {
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();
-            stage.setTitle("Delete User");
+            stage.setTitle("Delete Book");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);
@@ -334,6 +349,20 @@ public class ManageBookController implements Initializable {
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(manageUserRoot);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openAdDashboardScene() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
+            Parent adminDashBoardRoot  = loader.load();
+
+            Stage currentStage = (Stage) addBookButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(adminDashBoardRoot);
+        }catch(IOException e){
             e.printStackTrace();
         }
     }

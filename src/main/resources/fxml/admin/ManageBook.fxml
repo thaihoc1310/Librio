@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageBookController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageBookController">
     <children>
         <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
             <children>
@@ -27,7 +27,7 @@
                             <children>
                                 <VBox layoutY="65.0" prefHeight="181.0" prefWidth="174.0" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                                     <children>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="222.0" text="Dashboard" VBox.vgrow="ALWAYS">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openAdDashboardScene" prefHeight="38.0" prefWidth="222.0" text="Dashboard" VBox.vgrow="ALWAYS">
                                             <VBox.margin>
                                                 <Insets bottom="10.0" />
                                             </VBox.margin>
@@ -148,7 +148,7 @@
                                         <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                                     </image>
                                 </ImageView>
-                                <Button fx:id="addBookButton" layoutX="1049.0" layoutY="86.0" mnemonicParsing="false" onAction="#openAddBookScene" prefHeight="30.0" prefWidth="109.0" text="Create Book" AnchorPane.rightAnchor="43.0" />
+                                <Button fx:id="addBookButton" layoutX="1248.0" layoutY="85.0" mnemonicParsing="false" onAction="#openAddBookScene" prefHeight="30.0" prefWidth="110.0" text="Create" AnchorPane.rightAnchor="41.59999999999991" />
                             </children>
                         </AnchorPane>
                     </top>
@@ -157,13 +157,13 @@
                             <children>
                                 <TableView fx:id="bookTableView" layoutX="28.0" layoutY="6.0" prefHeight="518.0" prefWidth="945.0" styleClass="background" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                                     <columns>
-                                        <TableColumn fx:id="idColumn" prefWidth="52.80000305175781" text="ID" />
-                                        <TableColumn fx:id="titleColumn" prefWidth="119.20001220703125" text="Title" />
-                                        <TableColumn fx:id="authorColumn" prefWidth="166.39999389648438" text="Author" />
+                                        <TableColumn fx:id="idColumn" prefWidth="30.0" text="ID" />
+                                        <TableColumn fx:id="titleColumn" prefWidth="176.79998779296875" text="Title" />
+                                        <TableColumn fx:id="isbnColumn" prefWidth="107.99993896484375" text="ISBN" />
+                                        <TableColumn fx:id="authorColumn" prefWidth="171.99996948242188" text="Author" />
                                         <TableColumn fx:id="categoryColumn" prefWidth="165.5999755859375" text="Category" />
-                                        <TableColumn fx:id="languageColumn" prefWidth="107.99993896484375" text="Language" />
-                                        <TableColumn fx:id="publisherColumn" prefWidth="116.79998779296875" text="Publisher" />
-                                        <TableColumn fx:id="actionColumn" prefWidth="215.199951171875" text="Action" />
+                                        <TableColumn fx:id="averageRatingColumn" prefWidth="40.0" text="Rating" />
+                                        <TableColumn fx:id="actionColumn" prefWidth="230.0" text="Action" />
                                     </columns>
                                     <columnResizePolicy>
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -24,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import static librio.util.DatabaseUtil.isBookTitleExists;
+import static librio.util.DatabaseUtil.isIsbnExists;
 
 public class CreateBookController implements Initializable {
     @FXML
@@ -90,6 +91,9 @@ public class CreateBookController implements Initializable {
     private TextField yearPublishedTextField;
 
     @FXML
+    private Label yearPublishedErrorLabel;
+
+    @FXML
     private Label quantityOfCopyErrorLabel;
 
     @Override
@@ -111,14 +115,12 @@ public class CreateBookController implements Initializable {
         String language = languageTextField.getText();
         String yearPublished = yearPublishedTextField.getText();
         String description = descriptionTextArea.getText();
+        String averageOfRating = "0.0";
 
         boolean validation = false;
 
         if(bookTitle.isEmpty()){
             bookTitleErrorLabel.setText("Title cannot be empty");
-            validation = true;
-        } else if(isBookTitleExists(bookTitle)){
-            bookTitleErrorLabel.setText("Title already exists");
             validation = true;
         }
 
@@ -128,6 +130,8 @@ public class CreateBookController implements Initializable {
         }else if (!isbn.matches("\\d{10}|\\d{13}")) {
             isbnErrorLabel.setText("isbn must be 10 or 13 digits");
             validation = true;
+        } else if (isIsbnExists(isbn)) {
+            isbnErrorLabel.setText("isbn already exists");
         }
 
         if(author.isEmpty()){
@@ -166,11 +170,19 @@ public class CreateBookController implements Initializable {
             validation = true;
         }
 
+        if (!yearPublished.isEmpty() ){
+            if(!yearPublished.matches("\\d++")){
+                yearPublishedErrorLabel.setText("Year published must be a number");
+                validation = true;
+            }
+
+        }
+
         if(validation) {
             return;
         }
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO books (title, author, isbn, publisher, category, quantity_copy, year_published, language, number_of_pages, description, book_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO books (title, author, isbn, publisher, category, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, bookTitle);
             statement.setString(2, author);
@@ -178,11 +190,21 @@ public class CreateBookController implements Initializable {
             statement.setString(4, publisher);
             statement.setString(5, category);
             statement.setString(6, quantityOfCopy);
-            statement.setString(7, yearPublished);
-            statement.setString(8, language);
-            statement.setString(9, numberOfPages);
-            statement.setString(10, description);
-            statement.setString(11, bookImageFilePath);
+            statement.setString(7, averageOfRating);
+            if(yearPublishedTextField.getText().isEmpty()){
+                statement.setNull(8, java.sql.Types.INTEGER);
+            }else {
+                statement.setString(8, yearPublished);
+            }
+            statement.setString(9, language);
+            statement.setString(10, numberOfPages);
+            if (descriptionTextArea.getText().isEmpty()) {
+                statement.setString(11, "No description provided!");
+            }else {
+                statement.setString(11, description);
+            }
+
+            statement.setString(12, bookImageFilePath);
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 String projectDir = System.getProperty("user.dir");
@@ -208,6 +230,7 @@ public class CreateBookController implements Initializable {
         numberOfPagesErrorLabel.setText("");
         quantityOfCopyErrorLabel.setText("");
         languageErrorLabel.setText("");
+        yearPublishedErrorLabel.setText("");
     }
 
 
@@ -282,6 +305,17 @@ public class CreateBookController implements Initializable {
                 languageErrorLabel.setText("Language cannot be empty");
             } else {
                 languageErrorLabel.setText("");
+            }
+        });
+
+        yearPublishedTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.trim().isEmpty()){
+                if (!newValue.matches("\\d+")){
+                    yearPublishedErrorLabel.setText("Year published must be a number");
+                }
+            }
+            else {
+                yearPublishedErrorLabel.setText("");
             }
         });
     }
