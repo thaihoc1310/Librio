@@ -323,15 +323,15 @@ public class DatabaseUtil {
 
             if (resultSet.next()) {
                 String id = resultSet.getString("id");
-                String memberId = resultSet.getString("member_id");
                 String bookIsbn = resultSet.getString("book_isbn");
+                String memberId = resultSet.getString("member_id");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
                 LocalDate returnDate = resultSet.getDate("return_date") != null ? resultSet.getDate("return_date").toLocalDate() : null;
                 Status status = Status.valueOf(resultSet.getString("status"));
                 Double fine = resultSet.getDouble("fine");
 
-                return new Borrow(id, memberId, bookIsbn, borrowDate, dueDate, returnDate, status, fine);
+                return new Borrow(id, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
             }
         } catch (SQLException e) {
             e.printStackTrace();
