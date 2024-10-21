@@ -6,6 +6,8 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.shape.Circle;
 
+import java.io.File;
+
 public class DesignUtil {
     public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
         // Lấy chiều rộng và chiều cao của ảnh
@@ -30,5 +32,16 @@ public class DesignUtil {
         // Tạo clip hình tròn với bán kính được cung cấp và tâm tại (radius, radius)
         Circle clip = new Circle(radius, radius, radius);
         avatarImageView.setClip(clip);  // Thiết lập clip hình tròn cho ImageView
+    }
+
+    public static void loadDefaultBookImage(ImageView bookImageView) {
+        String projectDir = System.getProperty("user.dir");
+        String booksDir = projectDir + "/src/main/resources/images/book/";
+        String defaultImage = booksDir + "defaultBook.jpg";
+        File defaultImageFile = new File(defaultImage);
+        if (defaultImageFile.exists()) {
+            Image image = new Image(defaultImageFile.toURI().toString());
+            bookImageView.setImage(image);
+        }
     }
 }

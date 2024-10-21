@@ -22,6 +22,8 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.models.Book;
 
+import static librio.util.DesignUtil.loadDefaultBookImage;
+
 /**
  * @author WINDOWS 10
  */
@@ -89,25 +91,15 @@ public class BookDetailController implements Initializable {
                     bookImageView.setImage(image);
                 } else {
                     // Sử dụng ảnh mặc định nếu không tìm thấy file ảnh sách
-                    loadDefaultBookImage();
+                    loadDefaultBookImage(bookImageView);
                 }
             } else {
                 // Sử dụng ảnh mặc định nếu imagePath là null hoặc rỗng
-                loadDefaultBookImage();
+                loadDefaultBookImage(bookImageView);
             }
         }
     }
 
-    private void loadDefaultBookImage() {
-        String projectDir = System.getProperty("user.dir");
-        String booksDir = projectDir + "/src/main/resources/images/book/";
-        String defaultImage = booksDir + "defaultBook.jpg";
-        File defaultImageFile = new File(defaultImage);
-        if (defaultImageFile.exists()) {
-            Image image = new Image(defaultImageFile.toURI().toString());
-            bookImageView.setImage(image);
-        }
-    }
 
     @FXML
     private void back() {

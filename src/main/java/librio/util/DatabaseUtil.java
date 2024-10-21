@@ -50,6 +50,10 @@ public class DatabaseUtil {
         return null;
     }
 
+    public static Book getBookById(String bookId) {
+
+    }
+
     public static void deleteBorrow(Borrow borrow) {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement("DELETE FROM borrows WHERE id = ?")) {
