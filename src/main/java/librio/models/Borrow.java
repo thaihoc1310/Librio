@@ -13,21 +13,21 @@ public class Borrow {
     private ObjectProperty<LocalDate> borrowDate;
     private ObjectProperty<LocalDate> dueDate;
     private ObjectProperty<LocalDate> returnDate;
-    private StringProperty status;
+    private ObjectProperty<Status> status;
     private DoubleProperty fine;
     private String created_by;
     private Instant created_at;
     private StringProperty update_by;
     private ObjectProperty<Instant> update_at;
 
-    public Borrow(String id, String bookIsbn, String memberId, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, String status, double fine) {
+    public Borrow(String id, String bookIsbn, String memberId, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, Status status, double fine) {
         this.id = new SimpleStringProperty(id);
         this.bookIsbn = new SimpleStringProperty(bookIsbn);
         this.memberId = new SimpleStringProperty(memberId);
         this.borrowDate = new SimpleObjectProperty<>(borrowDate);
         this.dueDate = new SimpleObjectProperty<>(dueDate);
         this.returnDate = new SimpleObjectProperty<>(returnDate);
-        this.status = new SimpleStringProperty(status);
+        this.status = new SimpleObjectProperty<>(status);
         this.fine = new SimpleDoubleProperty(fine);
     }
 
@@ -105,15 +105,15 @@ public class Borrow {
         return returnDate;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status.get();
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status.set(status);
     }
 
-    public StringProperty statusProperty() {
+    public ObjectProperty<Status> statusProperty() {
         return status;
     }
 
