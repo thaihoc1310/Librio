@@ -88,7 +88,7 @@ public class ManageUserController implements Initializable {
         Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<TableColumn<User, Void>, TableCell<User, Void>>() {
             @Override
             public TableCell<User, Void> call(final TableColumn<User, Void> param) {
-                return new TableCell<User, Void>() {
+                return new TableCell<>() {
 
                     private final Button btnDelete = new Button("Delete");
                     private final Button btnDetail = new Button("Detail");

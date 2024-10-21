@@ -4,14 +4,15 @@ package librio.models;
 import javafx.beans.property.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public class Borrow {
     private StringProperty id;
-    private StringProperty bookId;
+    private StringProperty bookIsbn;
     private StringProperty memberId;
-    private ObjectProperty<Instant> borrowDate;
-    private ObjectProperty<Instant> dueDate;
-    private ObjectProperty<Instant> returnDate;
+    private ObjectProperty<LocalDate> borrowDate;
+    private ObjectProperty<LocalDate> dueDate;
+    private ObjectProperty<LocalDate> returnDate;
     private StringProperty status;
     private DoubleProperty fine;
     private String created_by;
@@ -19,9 +20,9 @@ public class Borrow {
     private StringProperty update_by;
     private ObjectProperty<Instant> update_at;
 
-    public Borrow(String id, String bookId, String memberId, Instant borrowDate, Instant dueDate, Instant returnDate, String status, double fine) {
+    public Borrow(String id, String bookIsbn, String memberId, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, String status, double fine) {
         this.id = new SimpleStringProperty(id);
-        this.bookId = new SimpleStringProperty(bookId);
+        this.bookIsbn = new SimpleStringProperty(bookIsbn);
         this.memberId = new SimpleStringProperty(memberId);
         this.borrowDate = new SimpleObjectProperty<>(borrowDate);
         this.dueDate = new SimpleObjectProperty<>(dueDate);
@@ -44,16 +45,16 @@ public class Borrow {
         return id;
     }
 
-    public String getBookId() {
-        return bookId.get();
+    public String getBookIsbn() {
+        return bookIsbn.get();
     }
 
-    public void setBookId(String bookId) {
-        this.bookId.set(bookId);
+    public void setBookIsbn(String bookIsbn) {
+        this.bookIsbn.set(bookIsbn);
     }
 
     public StringProperty bookIdProperty() {
-        return bookId;
+        return bookIsbn;
     }
 
     public String getMemberId() {
@@ -68,39 +69,39 @@ public class Borrow {
         return memberId;
     }
 
-    public Instant getBorrowDate() {
+    public LocalDate getBorrowDate() {
         return borrowDate.get();
     }
 
-    public void setBorrowDate(Instant borrowDate) {
+    public void setBorrowDate(LocalDate borrowDate) {
         this.borrowDate.set(borrowDate);
     }
 
-    public ObjectProperty<Instant> borrowDateProperty() {
+    public ObjectProperty<LocalDate> borrowDateProperty() {
         return borrowDate;
     }
 
-    public Instant getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate.get();
     }
 
-    public void setDueDate(Instant dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate.set(dueDate);
     }
 
-    public ObjectProperty<Instant> dueDateProperty() {
+    public ObjectProperty<LocalDate> dueDateProperty() {
         return dueDate;
     }
 
-    public Instant getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate.get();
     }
 
-    public void setReturnDate(Instant returnDate) {
+    public void setReturnDate(LocalDate returnDate) {
         this.returnDate.set(returnDate);
     }
 
-    public ObjectProperty<Instant> returnDateProperty() {
+    public ObjectProperty<LocalDate> returnDateProperty() {
         return returnDate;
     }
 

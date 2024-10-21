@@ -132,14 +132,14 @@
                                 <TableView fx:id="borrowTableView" layoutX="28.0" layoutY="6.0" prefHeight="518.0" prefWidth="945.0" styleClass="background" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                                     <columns>
                                         <TableColumn fx:id="borrowIdColumn" prefWidth="45.0" resizable="false" text="ID" />
-                                        <TableColumn fx:id="memberIdColumn" prefWidth="95.0" resizable="false" text="Member ID" />
-                                        <TableColumn fx:id="bookIdColumn" prefWidth="95.0" text="Book ID" />
-                                        <TableColumn fx:id="borrowDateColumn" prefWidth="170.4000244140625" text="Borrow Date " />
-                                        <TableColumn fx:id="dueDateColumn" prefWidth="172.79998779296875" text="Due Date" />
-                                        <TableColumn fx:id="returnDateColumn" prefWidth="168.7999267578125" text="Return Date" />
-                                        <TableColumn fx:id="statusColumn" prefWidth="86.4000244140625" text="Status" />
-                                        <TableColumn fx:id="fineColumn" prefWidth="104.7999267578125" text="Fine" />
-                                        <TableColumn fx:id="actionColumn" prefWidth="200.0" resizable="false" text="Action" />
+                                        <TableColumn fx:id="memberIdColumn" prefWidth="80.66668701171875" text="Member ID" />
+                                        <TableColumn fx:id="bookIsbnColumn" prefWidth="134.66668701171875" text="ISBN" />
+                                        <TableColumn fx:id="borrowDateColumn" prefWidth="120.0" resizable="false" text="Borrow Date " />
+                                        <TableColumn fx:id="dueDateColumn" prefWidth="120.0" resizable="false" text="Due Date" />
+                                        <TableColumn fx:id="returnDateColumn" prefWidth="120.0" resizable="false" text="Return Date" />
+                                        <TableColumn fx:id="statusColumn" prefWidth="110.0" text="Status" />
+                                        <TableColumn fx:id="fineColumn" prefWidth="126.66656494140625" text="Fine" />
+                                        <TableColumn fx:id="actionColumn" prefWidth="280.0" resizable="false" text="Action" />
                                     </columns>
                                     <columnResizePolicy>
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -25,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class ManageBorrowController implements Initializable {
@@ -36,7 +37,7 @@ public class ManageBorrowController implements Initializable {
     @FXML
     private TableColumn<Borrow, String> memberIdColumn;
     @FXML
-    private TableColumn<Borrow, String> bookIdColumn;
+    private TableColumn<Borrow, String> bookIsbnColumn;
     @FXML
     private TableColumn<Borrow, Instant> borrowDateColumn;
     @FXML
@@ -66,7 +67,7 @@ public class ManageBorrowController implements Initializable {
 
         borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         memberIdColumn.setCellValueFactory(new PropertyValueFactory<>("memberId"));
-        bookIdColumn.setCellValueFactory(new PropertyValueFactory<>("bookId"));
+        bookIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("bookIsbn"));
         borrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
         returnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
@@ -88,23 +89,35 @@ public class ManageBorrowController implements Initializable {
         Callback<TableColumn<Borrow, Void>, TableCell<Borrow, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<Borrow, Void> call(final TableColumn<Borrow, Void> param) {
-                final TableCell<Borrow, Void> cell = new TableCell<>() {
+                return new TableCell<>() {
 
+                    private final Button btnDetail = new Button("Detail");
                     private final Button btnUpdate = new Button("Update");
                     private final Button btnDelete = new Button("Delete");
 
                     {
+
+                        btnDetail.setPrefWidth(70);
+                        btnDetail.setPrefHeight(30);
+
+                        btnUpdate.setPrefWidth(70);
+                        btnUpdate.setPrefHeight(30);
+
+                        btnDelete.setPrefWidth(70);
+                        btnDelete.setPrefHeight(30);
+
+                        btnDetail.setOnAction(event -> {
+                            Borrow borrow = getTableView().getItems().get(getIndex());
+                        });
+
                         btnUpdate.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
-                            // Gọi phương thức để mở form cập nhật thông tin
-                            openUpdateBorrowScene(borrow);
                         });
 
                         btnDelete.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
-                            // Gọi phương thức để xóa thông tin
-                            deleteBorrow(borrow);
                         });
+
                     }
 
                     @Override
@@ -113,41 +126,16 @@ public class ManageBorrowController implements Initializable {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            HBox managebtn = new HBox(btnUpdate, btnDelete);
-                            managebtn.setSpacing(10);
-                            managebtn.setAlignment(Pos.CENTER);
-                            setGraphic(managebtn);
+                            HBox hbox = new HBox(20,btnDetail,btnUpdate, btnDelete);
+                            hbox.setAlignment(Pos.CENTER);
+                            setGraphic(hbox);
                         }
                     }
                 };
-                return cell;
             }
         };
 
         actionColumn.setCellFactory(cellFactory);
-    }
-
-
-    private void openUpdateBorrowScene(Borrow borrow) {
-        System.out.println("Update Borrow: " + borrow.getId());
-        // Logic để mở giao diện cập nhật Borrow
-    }
-
-    private void deleteBorrow(Borrow borrow) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "DELETE FROM borrows WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, borrow.getId());
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Deleted Borrow with ID: " + borrow.getId());
-                borrowTableView.getItems().remove(borrow);
-            } else {
-                System.out.println("Failed to delete Borrow with ID: " + borrow.getId());
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     void loadBorrows(String keyword, int pageIndex) {
@@ -163,7 +151,7 @@ public class ManageBorrowController implements Initializable {
                 statement.setInt(1, rowsPerPage);
                 statement.setInt(2, offset);
             } else {
-                query = "SELECT * FROM borrows WHERE member_id LIKE ? OR book_id LIKE ? LIMIT ? OFFSET ?";
+                query = "SELECT * FROM borrows WHERE member_id LIKE ? OR book_isbn LIKE ? LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, "%" + keyword + "%");
                 statement.setString(2, "%" + keyword + "%");
@@ -176,14 +164,14 @@ public class ManageBorrowController implements Initializable {
             while (resultSet.next()) {
                 String borrowId = resultSet.getString("id");
                 String memberId = resultSet.getString("member_id");
-                String bookId = resultSet.getString("book_id");
-                Instant borrowDate = resultSet.getTimestamp("borrow_date").toInstant();
-                Instant dueDate = resultSet.getTimestamp("due_date").toInstant();
-                Instant returnDate = resultSet.getTimestamp("return_date") != null ? resultSet.getTimestamp("return_date").toInstant() : null;
+                String bookIsbn = resultSet.getString("book_isbn");
+                LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
+                LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
+                LocalDate returnDate = resultSet.getDate("return_date") != null ? resultSet.getDate("return_date").toLocalDate() : null;
                 double fine = resultSet.getDouble("fine");
                 String status = resultSet.getString("status");
 
-                Borrow borrow = new Borrow(borrowId, bookId, memberId, borrowDate, dueDate, returnDate, status, fine);
+                Borrow borrow = new Borrow(borrowId, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
                 borrowList.add(borrow);
 
             }
@@ -204,7 +192,7 @@ public class ManageBorrowController implements Initializable {
                 query = "SELECT COUNT(*) FROM borrows";
                 statement = connection.prepareStatement(query);
             } else {
-                query = "SELECT COUNT(*) FROM borrows WHERE member_id LIKE ? OR book_id LIKE ?";
+                query = "SELECT COUNT(*) FROM borrows WHERE member_id LIKE ? OR book_isbn LIKE ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, "%" + keyword + "%");
                 statement.setString(2, "%" + keyword + "%");

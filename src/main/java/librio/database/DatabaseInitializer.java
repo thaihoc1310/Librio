@@ -35,7 +35,7 @@ public class DatabaseInitializer {
                     "id INT PRIMARY KEY AUTO_INCREMENT," +
                     "title VARCHAR(255) NOT NULL," +
                     "author VARCHAR(255)," +
-                    "isbn VARCHAR(255)," +
+                    "isbn VARCHAR(255) UNIQUE NOT NULL," +
                     "publisher VARCHAR(255)," +
                     "category VARCHAR(255)," +
                     "quantity_copy INT," +
@@ -66,17 +66,17 @@ public class DatabaseInitializer {
             String createBorrowTable = "CREATE TABLE IF NOT EXISTS Borrows (" +
                     "id INT PRIMARY KEY AUTO_INCREMENT," +
                     "member_id INT," +
-                    "book_id INT," +
-                    "borrow_date TIMESTAMP," +
-                    "due_date TIMESTAMP," +
-                    "return_date TIMESTAMP," +
+                    "book_isbn VARCHAR(255)," +
+                    "borrow_date DATE," +
+                    "due_date DATE," +
+                    "return_date DATE," +
                     "status VARCHAR(255)," +
                     "fine DOUBLE," +
                     "created_by VARCHAR(255)," +
                     "created_at TIMESTAMP," +
                     "updated_by VARCHAR(255)," +
                     "updated_at TIMESTAMP," +
-                    "FOREIGN KEY (book_id) REFERENCES Books(id)," +
+                    "FOREIGN KEY (book_isbn) REFERENCES Books(isbn)," +
                     "FOREIGN KEY (member_id) REFERENCES Members(id)" +
                     ");";
 
@@ -141,17 +141,17 @@ public class DatabaseInitializer {
                 String insertLibrarians = "INSERT INTO Librarians (id) VALUES (5);";
                 statement.execute(insertLibrarians);
 
-                String insertBorrows = "INSERT INTO Borrows (member_id, book_id, borrow_date, due_date, return_date, status, fine, created_by, created_at) VALUES " +
-                        "(1, 1, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 2, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 3, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED', 50000, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(4, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP);";
+                String insertBorrows = "INSERT INTO Borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_by, created_at) VALUES " +
+                        "(1, 9780134685991, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 9780132350884, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 9780201616224, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED', 50000, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 9780201633610, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 9780201485677, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 9780735619678, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 9780262033848, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(4, 9780321349606, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 9780201835953, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 9781491904244, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWED', NULL, 'admin@example.com', CURRENT_TIMESTAMP);";
                 statement.execute(insertBorrows);
 
                 String insertFeedbacks = "INSERT INTO Feedbacks (book_id, member_id, rating, about, created_by, created_at) VALUES " +
