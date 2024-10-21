@@ -93,9 +93,9 @@ public class ManageBookController implements Initializable {
             public TableCell<Book, Void> call(final TableColumn<Book, Void> param) {
                 final TableCell<Book, Void> cell = new TableCell<Book, Void>() {
 
-                    private final Button btnDelete = new Button("Remove");
+                    private final Button btnDelete = new Button("Delete");
                     private final Button btnDetail = new Button("Detail");
-                    private final Button btnUpdate = new Button("Edit");
+                    private final Button btnUpdate = new Button("Update");
 
                     {
                         btnDetail.setPrefWidth(70);
@@ -348,6 +348,20 @@ public class ManageBookController implements Initializable {
             Stage currentStage = (Stage) addBookButton.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(manageUserRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openManageBorrowScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBorrow.fxml"));
+            Parent manageBorrowRoot  = loader.load();
+
+            Stage currentStage = (Stage) addBookButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBorrowRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }

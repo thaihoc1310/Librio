@@ -42,4 +42,18 @@ public class AdDashboardController {
         }
     }
 
+    @FXML
+    private void openManageBorrowScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBorrow.fxml"));
+            Parent manageBorrowRoot = loader.load();
+
+            Stage currentStage = (Stage) openManageBookButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBorrowRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -3,17 +3,22 @@ package librio.controllers.admin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -52,7 +57,9 @@ public class ManageBorrowController implements Initializable {
     private ObservableList<Borrow> borrowList;
 
     private int currentPage = 0;
-    private int rowsPerPage = 10;
+    private final int rowsPerPage = 11;
+
+    private String keyword = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -77,7 +84,6 @@ public class ManageBorrowController implements Initializable {
         });
     }
 
-    // Phương thức thêm nút "Update" và "Delete" vào cột action
     private void addButtonToTable() {
         Callback<TableColumn<Borrow, Void>, TableCell<Borrow, Void>> cellFactory = new Callback<>() {
             @Override
@@ -182,7 +188,7 @@ public class ManageBorrowController implements Initializable {
 
             }
             borrowTableView.setItems(borrowList);
-            borrowTableView.setFixedCellSize(49);
+            borrowTableView.setFixedCellSize(47);
             pagination.setPageCount((int) Math.ceil((double) getTotalBorrowCount(keyword) / rowsPerPage));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -218,5 +224,47 @@ public class ManageBorrowController implements Initializable {
         currentPage = pageIndex;
         loadBorrows(searchTextField.getText().trim(), pageIndex);
         return new BorderPane();
+    }
+
+    @FXML
+    private void openManageBookScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
+            Parent manageBookRoot = loader.load();
+
+            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBookRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openManageUserScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageUser.fxml"));
+            Parent manageUserRoot = loader.load();
+
+            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageUserRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openAdDashboardScene() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
+            Parent adminDashboardRoot  = loader.load();
+
+            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(adminDashboardRoot);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }

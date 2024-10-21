@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageUserController">
    <children>
       <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
          <children>
@@ -72,7 +72,7 @@
                                     <Insets left="30.0" />
                                  </padding>
                               </Button>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" text="Borrows">
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openManageBorrowScene" prefHeight="40.0" prefWidth="222.0" text="Borrows">
                                  <graphic>
                                     <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -131,13 +131,13 @@
                      <children>
                         <TableView fx:id="userTableView" layoutX="28.0" layoutY="6.0" prefHeight="518.0" prefWidth="945.0" styleClass="background" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                            <columns>
-                              <TableColumn fx:id="idColumn" prefWidth="30.0" text="ID" />
+                              <TableColumn fx:id="idColumn" prefWidth="45.0" resizable="false" text="ID" />
                               <TableColumn fx:id="nameColumn" prefWidth="124.0" text="Name" />
                               <TableColumn fx:id="emailColumn" prefWidth="203.99996948242188" text="Email" />
                               <TableColumn fx:id="phoneNumberColumn" prefWidth="130.00006103515625" text="Phone Number" />
                               <TableColumn fx:id="genderColumn" prefWidth="91.3333740234375" text="Gender" />
                               <TableColumn fx:id="roleColumn" prefWidth="106.0" text="Role" />
-                              <TableColumn fx:id="actionColumn" prefWidth="230.0" text="Action" />
+                              <TableColumn fx:id="actionColumn" prefWidth="280.0" resizable="false" text="Action" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -159,7 +159,7 @@
                <top>
                   <AnchorPane prefHeight="81.0" prefWidth="1111.0" style="-fx-background-color: f8edd9;" BorderPane.alignment="CENTER">
                      <children>
-                        <Label layoutX="275.0" layoutY="6.0" prefHeight="94.0" prefWidth="77.0" text="Books" textAlignment="CENTER" textFill="#4c2113">
+                        <Label layoutX="275.0" layoutY="6.0" prefHeight="94.0" prefWidth="77.0" text="Users" textAlignment="CENTER" textFill="#4c2113">
                            <font>
                               <Font size="28.0" />
                            </font>

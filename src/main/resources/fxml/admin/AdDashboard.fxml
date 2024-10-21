@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.AdDashboardController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.AdDashboardController">
     <children>
         <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
             <children>
@@ -75,7 +75,7 @@
                                                 <Insets left="30.0" />
                                             </padding>
                                         </Button>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" text="Borrows">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openManageBorrowScene" prefHeight="40.0" prefWidth="222.0" text="Borrows">
                                             <graphic>
                                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
@@ -132,7 +132,7 @@
                     <top>
                         <AnchorPane prefHeight="81.0" prefWidth="1400.0" style="-fx-background-color: f8edd9;" BorderPane.alignment="CENTER">
                             <children>
-                                <Label layoutX="233.0" layoutY="11.0" prefHeight="94.0" prefWidth="232.0" text="Admin Dashboard" textAlignment="CENTER" textFill="#4c2113">
+                                <Label layoutX="275.0" layoutY="6.0" prefHeight="93.0" prefWidth="142.0" text="Dashboard" textAlignment="CENTER" textFill="#4c2113">
                                     <font>
                                         <Font size="28.0" />
                                     </font>
@@ -160,55 +160,59 @@
                             <children>
                                 <AnchorPane layoutX="1.0" layoutY="14.0" prefHeight="146.0" prefWidth="1198.0">
                                     <children>
-                                        <AnchorPane layoutX="35.0" layoutY="8.0" prefHeight="106.0" prefWidth="200.0" styleClass="button" stylesheets="@../css/AdminDashBoard.css" AnchorPane.bottomAnchor="25.599999999999994" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="8.0">
-                                            <children>
-                                                <Label layoutX="172.0" layoutY="74.0" text="2000" />
-                                                <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../../icons/AdminDashBoardIcon/Books.png" />
-                                                    </image>
-                                                </ImageView>
-                                    <Text layoutX="127.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Books" />
-                                            </children>
-                                        </AnchorPane>
-                                        <AnchorPane layoutX="326.0" layoutY="6.0" prefHeight="115.0" prefWidth="234.0" styleClass="button" stylesheets="@../css/AdminDashBoard.css" AnchorPane.topAnchor="6.0">
-                                            <children>
-                                                <Label layoutX="172.0" layoutY="74.0" text="2000" />
-                                                <Text layoutX="141.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Users" />
-                                                <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../../icons/AdminDashBoardIcon/Users.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </children>
-                                        </AnchorPane>
-                                        <AnchorPane layoutX="634.0" layoutY="8.0" prefHeight="106.0" prefWidth="200.0" styleClass="button" stylesheets="@../css/AdminDashBoard.css">
-                                            <children>
-                                                <Label layoutX="172.0" layoutY="74.0" text="2000" />
-                                                <Text layoutX="141.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Fines" />
-                                                <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../../icons/AdminDashBoardIcon/Time to Pay.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </children>
-                                        </AnchorPane>
-                                        <AnchorPane layoutX="933.0" layoutY="8.0" prefHeight="106.0" prefWidth="200.0" styleClass="button" stylesheets="@../css/AdminDashBoard.css">
-                                            <children>
-                                                <Label layoutX="172.0" layoutY="74.0" text="2000" />
-                                                <Text layoutX="141.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Books" />
-                                                <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../../icons/AdminDashBoardIcon/Books.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </children>
-                                        </AnchorPane>
+                              <HBox layoutX="35.0" layoutY="21.0" prefHeight="100.0" prefWidth="200.0" spacing="64.0">
+                                 <children>
+                                    <AnchorPane prefHeight="106.0" prefWidth="200.0" styleClass="button">
+                                       <children>
+                                          <Label layoutX="172.0" layoutY="74.0" text="2000" />
+                                          <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/AdminDashBoardIcon/Books.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text layoutX="127.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Books" />
+                                       </children>
+                                    </AnchorPane>
+                                              <AnchorPane prefHeight="106.0" prefWidth="200.0" styleClass="button">
+                                                  <children>
+                                                      <Label layoutX="172.0" layoutY="74.0" text="2000" />
+                                                      <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                                                          <image>
+                                                              <Image url="@../../icons/AdminDashBoardIcon/Users.png" />
+                                                          </image>
+                                                      </ImageView>
+                                          <Text layoutX="127.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Users" />
+                                                  </children>
+                                              </AnchorPane>
+                                    <AnchorPane prefHeight="106.0" prefWidth="200.0" styleClass="button">
+                                       <children>
+                                          <Label layoutX="172.0" layoutY="74.0" text="2000" />
+                                          <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/AdminDashBoardIcon/Time%20to%20Pay.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text layoutX="127.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Borrows" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="106.0" prefWidth="200.0" styleClass="button">
+                                       <children>
+                                          <Label layoutX="172.0" layoutY="74.0" text="Librarian" />
+                                          <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/AdminDashBoardIcon/Male%20User.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text layoutX="127.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </HBox>
                                     </children>
                                 </AnchorPane>
-                                <AnchorPane layoutX="1.0" layoutY="125.0" prefHeight="326.0" prefWidth="906.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.8000000000000682" AnchorPane.rightAnchor="0.6000000000000227" AnchorPane.topAnchor="125.0">
+                                <AnchorPane layoutY="167.33333333333334" prefHeight="405.0" prefWidth="1199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="167.0">
                                     <children>
-                                        <BarChart layoutX="9.0" layoutY="43.0" prefHeight="360.0" prefWidth="530.0" title="Bar Chart">
+                                        <BarChart layoutX="632.0" layoutY="22.0" prefHeight="360.0" prefWidth="530.0" title="Bar Chart">
                                             <xAxis>
                                                 <CategoryAxis side="BOTTOM" />
                                             </xAxis>
@@ -216,7 +220,7 @@
                                                 <NumberAxis side="LEFT" />
                                             </yAxis>
                                         </BarChart>
-                                        <PieChart layoutX="577.0" layoutY="44.0" prefHeight="360.0" prefWidth="530.0" title="Pie Chart" />
+                                        <PieChart layoutX="35.0" layoutY="22.0" prefHeight="360.0" prefWidth="530.0" title="Pie Chart" />
                                     </children>
                                 </AnchorPane>
                             </children>
