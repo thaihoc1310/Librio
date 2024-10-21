@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
+import librio.models.Status;
 
 import java.io.IOException;
 import java.net.URL;
@@ -64,7 +65,6 @@ public class ManageBorrowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         memberIdColumn.setCellValueFactory(new PropertyValueFactory<>("memberId"));
         bookIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("bookIsbn"));
@@ -78,9 +78,9 @@ public class ManageBorrowController implements Initializable {
 
         pagination.setPageFactory(this::createPage);
 
-        // Listener cho TextField tìm kiếm
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             String trimmedValue = newValue.trim();
+            keyword = trimmedValue;
             loadBorrows(trimmedValue, pagination.getCurrentPageIndex());
         });
     }
@@ -151,7 +151,7 @@ public class ManageBorrowController implements Initializable {
                 statement.setInt(1, rowsPerPage);
                 statement.setInt(2, offset);
             } else {
-                query = "SELECT * FROM borrows WHERE member_id LIKE ? OR book_isbn LIKE ? LIMIT ? OFFSET ?";
+                query = "SELECT * FROM borrows WHERE status LIKE ? OR book_isbn LIKE ? LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, "%" + keyword + "%");
                 statement.setString(2, "%" + keyword + "%");
@@ -169,7 +169,7 @@ public class ManageBorrowController implements Initializable {
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
                 LocalDate returnDate = resultSet.getDate("return_date") != null ? resultSet.getDate("return_date").toLocalDate() : null;
                 double fine = resultSet.getDouble("fine");
-                String status = resultSet.getString("status");
+                Status status = Status.valueOf(resultSet.getString("status"));
 
                 Borrow borrow = new Borrow(borrowId, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
                 borrowList.add(borrow);
@@ -192,7 +192,7 @@ public class ManageBorrowController implements Initializable {
                 query = "SELECT COUNT(*) FROM borrows";
                 statement = connection.prepareStatement(query);
             } else {
-                query = "SELECT COUNT(*) FROM borrows WHERE member_id LIKE ? OR book_isbn LIKE ?";
+                query = "SELECT COUNT(*) FROM borrows WHERE status LIKE ? OR book_isbn LIKE ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, "%" + keyword + "%");
                 statement.setString(2, "%" + keyword + "%");
