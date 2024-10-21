@@ -27,7 +27,7 @@
                             <children>
                                 <VBox layoutY="65.0" prefHeight="181.0" prefWidth="174.0" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                                     <children>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openAdDashBoardScene" prefHeight="38.0" prefWidth="222.0" text="Dashboard" VBox.vgrow="ALWAYS">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openAdDashboardScene" prefHeight="38.0" prefWidth="222.0" text="Dashboard" VBox.vgrow="ALWAYS">
                                             <VBox.margin>
                                                 <Insets bottom="10.0" />
                                             </VBox.margin>

@@ -268,4 +268,21 @@ public class DatabaseUtil {
         }
         return exists;
     }
+
+    public static boolean isIsbnExists(String isbn) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM books WHERE isbn = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, isbn);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                exists = resultSet.getInt(1) > 0;
+                //resultSet.getInt => get result of count(*)
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
 }

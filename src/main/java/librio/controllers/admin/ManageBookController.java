@@ -205,7 +205,13 @@ public class ManageBookController implements Initializable {
                 String isbn = resultSet.getString("isbn");
                 String category = resultSet.getString("category");
                 String averageOfRating = resultSet.getString("average_of_rating");
-                Book book = new Book(id, title, isbn, author, category, Double.parseDouble(averageOfRating));
+                Book book;
+                if (averageOfRating != null) {
+                   book = new Book(id, title, isbn, author, category, Double.parseDouble(averageOfRating));
+                }else {
+                    book = new Book(id, title, isbn, author, category, 0.0);
+                }
+
                 bookList.add(book);
             }
 
@@ -319,7 +325,7 @@ public class ManageBookController implements Initializable {
 
             // Tạo stage mới cho scene
             Stage stage = new Stage();
-            stage.setTitle("Delete User");
+            stage.setTitle("Delete Book");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);
@@ -348,9 +354,9 @@ public class ManageBookController implements Initializable {
     }
 
     @FXML
-    private void openAdDashBoardScene() {
+    private void openAdDashboardScene() {
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashBoard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
             Parent adminDashBoardRoot  = loader.load();
 
             Stage currentStage = (Stage) addBookButton.getScene().getWindow();

@@ -16,9 +16,9 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UpdateBookController">
     <children>
-        <AnchorPane prefHeight="565.0" prefWidth="700.0" styleClass="background-wrapper">
+        <AnchorPane prefHeight="650.0" prefWidth="700.0" styleClass="background-wrapper">
             <children>
-                <AnchorPane layoutX="9.0" layoutY="14.0" prefHeight="625.0" prefWidth="682.0" styleClass="background">
+                <AnchorPane layoutX="9.0" layoutY="14.0" prefHeight="625.0" prefWidth="680.0" styleClass="background">
                     <children>
                         <VBox alignment="TOP_RIGHT" layoutX="19.0" layoutY="131.0" prefHeight="266.0" prefWidth="130.0" spacing="26.0">
                             <children>
@@ -85,8 +85,8 @@
                             </font>
                         </Label>
                         <TextArea fx:id="descriptionTextArea" layoutX="164.0" layoutY="426.0" prefHeight="114.0" prefWidth="415.0" wrapText="true" />
-                        <Button fx:id="uploadImageButton" layoutX="487.0" layoutY="254.0" mnemonicParsing="false" onAction="#uploadImage" text="Upload Image" />
-                        <ImageView fx:id="bookImageView" fitHeight="186.0" fitWidth="150.0" layoutX="471.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+                        <Button fx:id="uploadImageButton" layoutX="487.0" layoutY="280.0" mnemonicParsing="false" onAction="#uploadImage" text="Upload Image" />
+                        <ImageView fx:id="bookImageView" fitHeight="195.0" fitWidth="135.0" layoutX="465.0" layoutY="70.0" pickOnBounds="true">
                             <image>
                                 <Image url="@../../images/book/harryPottersample.jpg" />
                             </image>
@@ -99,17 +99,17 @@
                         <TextArea fx:id="bookTitleTextField" layoutX="165.0" layoutY="72.0" prefHeight="40.0" prefWidth="207.0" wrapText="true" />
                         <Button fx:id="updateBookButton" layoutX="187.0" layoutY="568.0" mnemonicParsing="false" onAction="#updateBook" prefHeight="32.0" prefWidth="114.0" styleClass="btn-2" text="Update Book" />
                         <Button fx:id="cancelButton" layoutX="393.0" layoutY="568.0" mnemonicParsing="false" onAction="#cancel" prefHeight="32.0" prefWidth="79.0" styleClass="btn-2" text="Cancel" />
-                        <Label alignment="CENTER_RIGHT" layoutX="433.0" layoutY="319.0" prefHeight="22.0" prefWidth="73.0" text="Language :">
+                        <Label alignment="CENTER_RIGHT" layoutX="428.0" layoutY="330.0" prefHeight="22.0" prefWidth="73.0" text="Language :">
                             <font>
                                 <Font size="15.0" />
                             </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" layoutX="407.0" layoutY="373.0" text="Year Published :">
+                        <Label alignment="CENTER_RIGHT" layoutX="396.0" layoutY="372.0" text="Year Published :">
                             <font>
                                 <Font size="15.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="languageTextField" layoutX="518.0" layoutY="317.0" prefHeight="26.0" prefWidth="121.0"/>
+                        <TextField fx:id="languageTextField" layoutX="518.0" layoutY="329.0" prefHeight="26.0" prefWidth="121.0" />
                         <TextField fx:id="yearPublishedTextField" layoutX="518.0" layoutY="370.0" prefHeight="26.0" prefWidth="122.0" />
                         <Label fx:id="bookTitleErrorLabel" layoutX="164.0" layoutY="112.0" textFill="#ff0f0f" />
                         <Label fx:id="languageErrorLabel" layoutX="519.0" layoutY="343.0" textFill="#ff0f0f" />

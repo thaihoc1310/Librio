@@ -309,4 +309,18 @@ public class ManageUserController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void openAdDashboardScene() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
+            Parent adminDashBoardRoot  = loader.load();
+
+            Stage currentStage = (Stage) createUserButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(adminDashBoardRoot);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 }

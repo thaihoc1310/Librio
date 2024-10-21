@@ -39,6 +39,8 @@ public class BookDetailController implements Initializable {
     @FXML
     private Label categoryLabel;
     @FXML
+    private Label averageOfRatingLabel;
+    @FXML
     private Label quantityOfCopyLabel;
     @FXML
     private Label publisherLabel;
@@ -70,6 +72,7 @@ public class BookDetailController implements Initializable {
             isbnLabel.setText(book.getIsbn());
             categoryLabel.setText(book.getCategory());
             quantityOfCopyLabel.setText(String.valueOf(book.getQuantityCopy()));
+            averageOfRatingLabel.setText(String.valueOf(book.getAverageOfRating()));
             publisherLabel.setText(book.getPublisher());
             yearPublishedLabel.setText(book.getYearPublished());
             languageLabel.setText(book.getLanguage());
