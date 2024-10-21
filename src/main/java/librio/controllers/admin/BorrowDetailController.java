@@ -7,12 +7,17 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import librio.models.Book;
 import librio.models.Borrow;
+import librio.models.User;
+import librio.util.DatabaseUtil;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static librio.util.DatabaseUtil.getBookByIsbn;
+import static librio.util.DatabaseUtil.getUserById;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
 public class BorrowDetailController implements Initializable {
@@ -51,25 +56,34 @@ public class BorrowDetailController implements Initializable {
         @FXML
         private Label statusLabel;
 
+        @FXML
+        private Label memberNameLabel;
+
         public void setBorrow(Borrow borrow) {
             this.borrow = borrow;
+            populateFields();
         }
 
     private void populateFields() {
         if (borrow != null) {
+            Book borrowedBook = getBookByIsbn(borrow.getBookIsbn());
+            User user = getUserById(borrow.getMemberId());
             borrowIdLabel.setText(borrow.getId());
             memberIdLabel.setText(borrow.getMemberId());
+            memberNameLabel.setText(user.getName());
             bookIsbnLabel.setText(borrow.getBookIsbn());
-
+            bookTitleLabel.setText(borrowedBook.getTitle());
             borrowDateLabel.setText(borrow.getBorrowDate().toString());
             dueDateLabel.setText(borrow.getDueDate().toString());
-            bookTitleLabel.setText();
+            returnDateLabel.setText(borrow.getReturnDate().toString());
+            statusLabel.setText(borrow.getStatus().toString());
+            fineLabel.setText(String.valueOf(borrow.getFine()));
 
 
-            if (borrow.getImagePath() != null && !borrow.getImagePath().isEmpty()) {
+            if (borrowedBook.getImagePath() != null && !borrowedBook.getImagePath().isEmpty()) {
                 String projectDir = System.getProperty("user.dir");
                 String booksDir = projectDir + "/src/main/resources/images/book/";
-                String path = booksDir + borrow.getImagePath();
+                String path = booksDir + borrowedBook.getImagePath();
                 File file = new File(path);
                 if (file.exists()) {
                     Image image = new Image(file.toURI().toString());

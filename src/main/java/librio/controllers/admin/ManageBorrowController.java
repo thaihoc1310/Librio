@@ -13,7 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
@@ -28,6 +30,8 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+
+import static librio.util.DatabaseUtil.getBorrowById;
 
 public class ManageBorrowController implements Initializable {
 
@@ -108,6 +112,8 @@ public class ManageBorrowController implements Initializable {
 
                         btnDetail.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
+                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            openBorrowDetailScene(dbBorrow);
                         });
 
                         btnUpdate.setOnAction(event -> {
@@ -251,6 +257,29 @@ public class ManageBorrowController implements Initializable {
             Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(adminDashboardRoot);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openBorrowDetailScene(Borrow borrow) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/BorrowDetail.fxml"));
+            Parent root  = loader.load();
+            BorrowDetailController borrowDetailController = loader.getController();
+            borrowDetailController.setBorrow(borrow);
+
+            Stage stage = new Stage();
+            stage.setTitle("Open Borrow Detail");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(borrowTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            loadBorrows(keyword,currentPage);
         }catch(IOException e){
             e.printStackTrace();
         }

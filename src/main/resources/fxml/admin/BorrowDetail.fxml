@@ -23,7 +23,7 @@
                                 <Font name="System Bold" size="30.0" />
                             </font>
                         </Text>
-                        <GridPane layoutX="44.0" layoutY="58.0" prefHeight="326.0" prefWidth="368.0">
+                        <GridPane layoutX="42.0" layoutY="47.0" prefHeight="497.0" prefWidth="368.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.20001220703125" minWidth="10.0" prefWidth="118.4" />
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="259.9999877929688" minWidth="10.0" prefWidth="211.20000000000002" />
@@ -35,8 +35,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
@@ -45,17 +44,12 @@
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="bookIsbnLabel" text="0123456789" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label fx:id="bookIsbnLabel" text="0123456789" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="borrowDateLabel" text="20-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="statusLabel" text="BORROWING" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                <Label fx:id="borrowDateLabel" text="20-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
@@ -65,12 +59,12 @@
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="bookTitleLabel" text="Harry Potter" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <Label fx:id="bookTitleLabel" text="Harry Potter" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="dueDateLabel" text="30-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                <Label fx:id="dueDateLabel" text="30-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
@@ -85,69 +79,74 @@
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Book ISBN :" GridPane.rowIndex="2">
+                                <Label text="Book ISBN :" GridPane.rowIndex="3">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Borrow Date :" GridPane.rowIndex="4">
+                                <Label text="Borrow Date :" GridPane.rowIndex="5">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Due Date :" GridPane.rowIndex="5">
+                                <Label text="Due Date :" GridPane.rowIndex="6">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Return Date :" GridPane.rowIndex="6">
+                                <Label text="Return Date :" GridPane.rowIndex="7">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Fine :" GridPane.rowIndex="8">
+                                <Label fx:id="returnDateLabel" text="29-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Status :" GridPane.rowIndex="7">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="returnDateLabel" text="29-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                        <Label text="Book Title :" GridPane.rowIndex="3">
+                        <Label text="Book Title :" GridPane.rowIndex="4">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="fineLabel" text="5000" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                        <Label text="Member Name :" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="memberNameLabel" text="Giang" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
                             </children>
                         </GridPane>
-                        <Text layoutX="24.0" layoutY="424.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
-                            <font>
-                                <Font name="System Bold" size="15.0" />
-                            </font>
-                        </Text>
-                        <Label alignment="TOP_LEFT" layoutX="24.0" layoutY="438.0" prefHeight="128.0" prefWidth="604.0" text="&quot;Harry Potter and the Socerer Stone&quot; is the perfect introduction to the Harry Potter Colouring Book series! This special Celebratory Edition features a selection of artwork from the Harry Potter Colouring Book, Harry Potter Magical Creatures Colouring Book, and Harry Potter Magical Places &amp; Characters Colouring Book, along with several exclusive never-before-seen images. For best results, we recommend the use of colouring pencils to colour and create your stunning pictures!" textAlignment="JUSTIFY" wrapText="true">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </Label>
                         <ImageView fx:id="bookImageView" fitHeight="290.0" fitWidth="200.0" layoutX="428.0" layoutY="67.0" pickOnBounds="true">
                             <image>
                                 <Image url="@../../images/book/harryPottersample.jpg" />
                             </image>
                         </ImageView>
                         <Button fx:id="backButton" layoutX="542.0" layoutY="577.0" mnemonicParsing="false" onAction="#back" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Back" />
+                          <Label layoutX="435.0" layoutY="411.0" text="Status :">
+                              <font>
+                                  <Font size="15.0" />
+                              </font>
+                          </Label>
+                          <Label fx:id="statusLabel" layoutX="526.0" layoutY="411.0" text="BORROWING">
+                              <font>
+                                  <Font size="15.0" />
+                              </font>
+                          </Label>
+                          <Label layoutX="448.0" layoutY="464.0" text="Fine :">
+                              <font>
+                                  <Font size="15.0" />
+                              </font>
+                          </Label>
+                  <Label fx:id="fineLabel" layoutX="526.0" layoutY="464.0" text="5000">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
                     </children>
                 </AnchorPane>
             </children>

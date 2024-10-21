@@ -50,8 +50,33 @@ public class DatabaseUtil {
         return null;
     }
 
-    public static Book getBookById(String bookId) {
+    public static Book getBookByIsbn(String bookIsbn) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query = "SELECT * FROM books WHERE isbn = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, bookIsbn);
+            ResultSet resultSet = statement.executeQuery();
 
+            if (resultSet.next()) {
+                String id = resultSet.getString("id");
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author");
+                String isbn = resultSet.getString("isbn");
+                String publisher = resultSet.getString("publisher");
+                String category = resultSet.getString("category");
+                Integer quantityCopy = resultSet.getInt("quantity_copy");
+                Double averageOfRating = resultSet.getDouble("average_of_rating");
+                String yearPublished = resultSet.getString("year_published");
+                String language = resultSet.getString("language");
+                String numberOfPages = resultSet.getString("number_of_pages");
+                String description = resultSet.getString("description");
+                String bookImage = resultSet.getString("book_image");
+                return new Book(id, title, author, isbn, category, publisher, quantityCopy,averageOfRating, yearPublished, language, numberOfPages, description, bookImage);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void deleteBorrow(Borrow borrow) {
@@ -288,5 +313,29 @@ public class DatabaseUtil {
             e.printStackTrace();
         }
         return exists;
+    }
+
+    public static Borrow getBorrowById(String borrowId) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM borrows WHERE id = ?")) {
+            statement.setString(1, borrowId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String id = resultSet.getString("id");
+                String memberId = resultSet.getString("member_id");
+                String bookIsbn = resultSet.getString("book_isbn");
+                LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
+                LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
+                LocalDate returnDate = resultSet.getDate("return_date") != null ? resultSet.getDate("return_date").toLocalDate() : null;
+                Status status = Status.valueOf(resultSet.getString("status"));
+                Double fine = resultSet.getDouble("fine");
+
+                return new Borrow(id, memberId, bookIsbn, borrowDate, dueDate, returnDate, status, fine);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

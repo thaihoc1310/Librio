@@ -33,8 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import static librio.util.DatabaseUtil.getTotalBookCount;
-import static librio.util.DatabaseUtil.getTotalUserCount;
+import static librio.util.DatabaseUtil.*;
 
 public class ManageBookController implements Initializable {
     @FXML
@@ -109,19 +108,19 @@ public class ManageBookController implements Initializable {
 
                         btnDetail.setOnAction(event -> {
                             Book book = getTableView().getItems().get(getIndex());
-                            Book selectedBook = getBookById(book.getId());
+                            Book selectedBook = getBookByIsbn(book.getIsbn());
                             openBookDetailScene(selectedBook);
                         });
 
                         btnUpdate.setOnAction(event -> {
                             Book book = getTableView().getItems().get(getIndex());
-                            Book selectedBook = getBookById(book.getId());
+                            Book selectedBook = getBookByIsbn(book.getIsbn());
                             openUpdateBookScene(selectedBook);
                         });
 
                         btnDelete.setOnAction(event -> {
                             Book book = getTableView().getItems().get(getIndex());
-                            Book selectedBook = getBookById(book.getId());
+                            Book selectedBook = getBookByIsbn(book.getIsbn());
                             openDeleteBookScene(selectedBook);
                         });
                     }
@@ -144,35 +143,6 @@ public class ManageBookController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
     }
 
-
-    private Book getBookById(String bookId) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "SELECT * FROM books WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, bookId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                String id = resultSet.getString("id");
-                String title = resultSet.getString("title");
-                String author = resultSet.getString("author");
-                String isbn = resultSet.getString("isbn");
-                String publisher = resultSet.getString("publisher");
-                String category = resultSet.getString("category");
-                Integer quantityCopy = resultSet.getInt("quantity_copy");
-                Double averageOfRating = resultSet.getDouble("average_of_rating");
-                String yearPublished = resultSet.getString("year_published");
-                String language = resultSet.getString("language");
-                String numberOfPages = resultSet.getString("number_of_pages");
-                String description = resultSet.getString("description");
-                String bookImage = resultSet.getString("book_image");
-                return new Book(id, title, author, isbn, category, publisher, quantityCopy,averageOfRating, yearPublished, language, numberOfPages, description, bookImage);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public void loadBooks(String keyword, int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {
