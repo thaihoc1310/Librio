@@ -76,7 +76,11 @@ public class BorrowDetailController implements Initializable {
             bookTitleLabel.setText(borrowedBook.getTitle());
             borrowDateLabel.setText(borrow.getBorrowDate().toString());
             dueDateLabel.setText(borrow.getDueDate().toString());
-            returnDateLabel.setText(borrow.getReturnDate().toString());
+            if(borrow.getReturnDate() != null) {
+                returnDateLabel.setText(borrow.getReturnDate().toString());
+            }else {
+                returnDateLabel.setText("Not returned yet!");
+            }
             statusLabel.setText(borrow.getStatus().toString());
             fineLabel.setText(String.valueOf(borrow.getFine()));
 

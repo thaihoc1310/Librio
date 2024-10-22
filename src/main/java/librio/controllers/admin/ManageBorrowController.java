@@ -118,10 +118,14 @@ public class ManageBorrowController implements Initializable {
 
                         btnUpdate.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
+                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            openUpdateBorrowScene(dbBorrow);
                         });
 
                         btnDelete.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
+                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            openDeleteBorrowScene(dbBorrow);
                         });
 
                     }
@@ -271,7 +275,53 @@ public class ManageBorrowController implements Initializable {
             borrowDetailController.setBorrow(borrow);
 
             Stage stage = new Stage();
+            stage.setTitle("Open Borrow Delete Scene");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(borrowTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            loadBorrows(keyword,currentPage);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openDeleteBorrowScene(Borrow borrow) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/DeleteBorrow.fxml"));
+            Parent root  = loader.load();
+            DeleteBorrowController deleteBorrowController = loader.getController();
+            deleteBorrowController.setBorrow(borrow);
+
+            Stage stage = new Stage();
             stage.setTitle("Open Borrow Detail");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(borrowTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            loadBorrows(keyword,currentPage);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openUpdateBorrowScene(Borrow borrow) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UpdateBorrow.fxml"));
+            Parent root  = loader.load();
+            UpdateBorrowController updateBorrowController = loader.getController();
+            updateBorrowController.setBorrow(borrow);
+
+            Stage stage = new Stage();
+            stage.setTitle("Update Borrow");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);

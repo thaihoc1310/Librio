@@ -8,6 +8,7 @@ module librio {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires java.desktop;
 
     exports librio;
     exports librio.controllers;

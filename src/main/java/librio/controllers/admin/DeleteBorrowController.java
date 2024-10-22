@@ -38,4 +38,8 @@ public class DeleteBorrowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
+    public void setBorrow(Borrow borrow) {
+        this.borrow = borrow;
+    }
 }
