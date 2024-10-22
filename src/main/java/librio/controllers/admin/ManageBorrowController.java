@@ -174,7 +174,7 @@ public class ManageBorrowController implements Initializable {
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
                 LocalDate returnDate = resultSet.getDate("return_date") != null ? resultSet.getDate("return_date").toLocalDate() : null;
-                double fine = resultSet.getDouble("fine");
+                Double fine = resultSet.getDouble("fine");
                 Status status = Status.valueOf(resultSet.getString("status"));
 
                 Borrow borrow = new Borrow(borrowId, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
