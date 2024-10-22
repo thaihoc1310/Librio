@@ -39,7 +39,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label fx:id="memberIdLabel" text="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label fx:id="memberEmailLabel" text="giangne@gmail.com" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
@@ -74,7 +74,7 @@
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Member ID :" GridPane.rowIndex="1">
+                                <Label text="Member Email :" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
