@@ -73,9 +73,8 @@ public class UpdateBorrowController implements Initializable {
             } else {
                 returnDatePicker.setValue(null);
             }
-
             statusLabel.setText(borrow.getStatus().toString());
-            fineLabel.setText(String.valueOf(borrow.getFine()) + " VNĐ");
+            fineLabel.setText(borrow.getFine() + " VNĐ");
         }
     }
 
@@ -84,6 +83,8 @@ public class UpdateBorrowController implements Initializable {
         LocalDate borrowDate = borrowDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue();
         LocalDate returnDate = returnDatePicker.getValue();
+        Status status = Status.valueOf(statusLabel.getText());
+        double fine = Double.parseDouble(fineLabel.getText());
         boolean validation = false;
 
         if (borrowDate.isAfter(LocalDate.now())){
@@ -115,50 +116,23 @@ public class UpdateBorrowController implements Initializable {
         if (validation) {
             return;
         }
-        String query = "UPDATE borrows SET borrow_date = ?, due_date = ?, return_date = ? WHERE id = ?";
+        String query = "UPDATE borrows SET borrow_date = ?, due_date = ?, return_date = ?, status = ?, fine = ? WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDate(1, Date.valueOf(borrowDate));
             statement.setDate(2, Date.valueOf(dueDate));
             statement.setDate(3, returnDate != null ? Date.valueOf(returnDate) : null);
-            statement.setString(4, borrow.getId());
+            statement.setString(4,status.name());
+            statement.setString(5,String.valueOf(fine));
+            statement.setString(6, borrow.getId());
+
 
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
-                Status newStatus = borrow.getStatus();
-                if (returnDate == null) {
-                    //Overdue but not returned
-                    if (LocalDate.now().isAfter(dueDate)) {
-                        newStatus = Status.OVERDUE;
-                        long overdueDays = java.time.temporal.ChronoUnit.DAYS.between(dueDate, LocalDate.now());
-                        double fine = overdueDays * 5000.0;
-                        updateFine(connection, borrow.getId(), fine);
-                    } else {
-                        newStatus = Status.BORROWING;
-                        updateFine(connection, borrow.getId(), 0);
-                    }
-                } else {
-                    // Trường hợp đã trả sách
-                    if (returnDate.isAfter(dueDate)) {
-                        newStatus = Status.RETURNED_LATE;
-                        long overdueDays = java.time.temporal.ChronoUnit.DAYS.between(dueDate, returnDate);
-                        double fine = overdueDays * 5000.0;
-                        updateFine(connection, borrow.getId(), fine);
-                    } else {
-                        newStatus = Status.RETURNED;
-                        updateFine(connection, borrow.getId(), 0);
-                    }
-                }
-                //Update new Status:
-                String updateStatusQuery = "UPDATE borrows SET status = ? WHERE id = ?";
-                try (PreparedStatement updateStatusStatement = connection.prepareStatement(updateStatusQuery)) {
-                    updateStatusStatement.setString(1, newStatus.toString());
-                    updateStatusStatement.setString(2, borrow.getId());
-                    updateStatusStatement.executeUpdate();
-                }
+//                clearInputFields();
+                closeStage();
             }
-            closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -166,15 +140,6 @@ public class UpdateBorrowController implements Initializable {
         }
     }
 
-    //Update fine
-    private void updateFine(Connection connection, String borrowId, double fine) throws SQLException {
-        String updateFineQuery = "UPDATE borrows SET fine = ? WHERE id = ?";
-        try (PreparedStatement updateFineStatement = connection.prepareStatement(updateFineQuery)) {
-            updateFineStatement.setDouble(1, fine);
-            updateFineStatement.setString(2, borrowId);
-            updateFineStatement.executeUpdate();
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -186,8 +151,8 @@ public class UpdateBorrowController implements Initializable {
 
 
     private void updateStatus() {
-        LocalDate borrowDate = borrowDatePicker.getValue();
-        LocalDate dueDate = dueDatePicker.getValue();
+        LocalDate borrowDate = borrowDatePicker.getValue() == null ? borrow.getBorrowDate() : borrowDatePicker.getValue();
+        LocalDate dueDate = dueDatePicker.getValue() == null ? borrow.getDueDate() : dueDatePicker.getValue();
         LocalDate returnDate = returnDatePicker.getValue();
         boolean validation = false;
 
@@ -222,7 +187,7 @@ public class UpdateBorrowController implements Initializable {
         }
 
         double fine = 0;
-        Status newStatus = Status.BORROWING;
+        Status newStatus;
 
         if (returnDate == null) {
             if (LocalDate.now().isAfter(dueDate)) {
@@ -254,4 +219,5 @@ public class UpdateBorrowController implements Initializable {
         dueDateErrorLabel.setText("");
         returnDateErrorLabel.setText("");
     }
+
 }

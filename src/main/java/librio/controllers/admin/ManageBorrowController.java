@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.getBorrowById;
+import static librio.util.DatabaseUtil.getTotalBorrowCount;
 
 public class ManageBorrowController implements Initializable {
 
@@ -193,30 +194,6 @@ public class ManageBorrowController implements Initializable {
         }
     }
 
-    private int getTotalBorrowCount(String keyword) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query;
-            PreparedStatement statement;
-
-            if (keyword == null || keyword.isEmpty()) {
-                query = "SELECT COUNT(*) FROM borrows";
-                statement = connection.prepareStatement(query);
-            } else {
-                query = "SELECT COUNT(*) FROM borrows WHERE status LIKE ? OR book_isbn LIKE ?";
-                statement = connection.prepareStatement(query);
-                statement.setString(1, "%" + keyword + "%");
-                statement.setString(2, "%" + keyword + "%");
-            }
-
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     private Node createPage(int pageIndex) {
         currentPage = pageIndex;
