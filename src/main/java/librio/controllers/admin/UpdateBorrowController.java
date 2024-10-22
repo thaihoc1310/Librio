@@ -38,6 +38,15 @@ public class UpdateBorrowController implements Initializable {
     @FXML
     private Label statusLabel;
 
+    @FXML
+    private Label borrowDateErrorLabel;
+
+    @FXML
+    private Label dueDateErrorLabel;
+
+    @FXML
+    private Label returnDateErrorLabel;
+
     private Borrow borrow;
 
     @FXML
@@ -55,27 +64,41 @@ public class UpdateBorrowController implements Initializable {
         populateFields();
     }
 
-    private void populateFields(){
-        if(borrow != null){
+    private void populateFields() {
+        if (borrow != null) {
             borrowDatePicker.setValue(borrow.getBorrowDate());
             dueDatePicker.setValue(borrow.getDueDate());
-            if(borrow.getReturnDate() != null){
+            if (borrow.getReturnDate() != null) {
                 returnDatePicker.setValue(borrow.getReturnDate());
-            }else{
+            } else {
                 returnDatePicker.setValue(null);
             }
 
             statusLabel.setText(borrow.getStatus().toString());
-            fineLabel.setText(String.valueOf(borrow.getFine()));
+            fineLabel.setText(String.valueOf(borrow.getFine()) + " VNĐ");
         }
     }
 
     @FXML
-    private void updateBorrow(){
+    private void updateBorrow() {
         LocalDate borrowDate = borrowDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue();
         LocalDate returnDate = returnDatePicker.getValue();
+        boolean validation = false;
 
+        if (borrowDate.isAfter(dueDate)) {
+            dueDateErrorLabel.setVisible(true);
+            validation = true;
+        }
+
+        if (returnDate != null && borrowDate.isAfter(returnDate)) {
+            returnDateErrorLabel.setVisible(true);
+            validation = true;
+        }
+
+        if (validation) {
+            return;
+        }
         String query = "UPDATE borrows SET borrow_date = ?, due_date = ?, return_date = ? WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -86,21 +109,25 @@ public class UpdateBorrowController implements Initializable {
 
             int rowsAffected = statement.executeUpdate();
 
-            if(rowsAffected > 0){
+            if (rowsAffected > 0) {
                 Status newStatus = borrow.getStatus();
                 if (returnDate == null) {
                     //Overdue but not returned
                     if (LocalDate.now().isAfter(dueDate)) {
                         newStatus = Status.OVERDUE;
-                    }else {
+                        long overdueDays = java.time.temporal.ChronoUnit.DAYS.between(dueDate, LocalDate.now());
+                        double fine = overdueDays * 5000.0;
+                        updateFine(connection, borrow.getId(), fine);
+                    } else {
                         newStatus = Status.BORROWING;
+                        updateFine(connection, borrow.getId(), 0);
                     }
                 } else {
                     // Trường hợp đã trả sách
                     if (returnDate.isAfter(dueDate)) {
                         newStatus = Status.RETURNED_LATE;
                         long overdueDays = java.time.temporal.ChronoUnit.DAYS.between(dueDate, returnDate);
-                        double fine = overdueDays * 5000;
+                        double fine = overdueDays * 5000.0;
                         updateFine(connection, borrow.getId(), fine);
                     } else {
                         newStatus = Status.RETURNED;
@@ -116,9 +143,9 @@ public class UpdateBorrowController implements Initializable {
                 }
             }
             closeStage();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -135,6 +162,7 @@ public class UpdateBorrowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        hideErrorLabels();
         borrowDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
         dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
         returnDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
@@ -144,16 +172,39 @@ public class UpdateBorrowController implements Initializable {
         LocalDate borrowDate = borrowDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue();
         LocalDate returnDate = returnDatePicker.getValue();
+        boolean validation = false;
+
+        if (borrowDate.isAfter(dueDate)) {
+            dueDateErrorLabel.setVisible(true);
+            validation = true;
+        } else {
+            dueDateErrorLabel.setVisible(false);
+        }
+
+        if (returnDate != null && borrowDate.isAfter(returnDate)) {
+            returnDateErrorLabel.setVisible(true);
+            validation = true;
+        } else {
+            returnDateErrorLabel.setVisible(false);
+        }
+
+        if(validation){
+            return;
+        }
 
         double fine = 0;
-        Status newStatus = Status.BORROWING; 
+        Status newStatus = Status.BORROWING;
 
         if (returnDate == null) {
-            if (dueDate != null && LocalDate.now().isAfter(dueDate)) {
+            if (LocalDate.now().isAfter(dueDate)) {
                 newStatus = Status.OVERDUE;
+                long overdueDays = java.time.temporal.ChronoUnit.DAYS.between(dueDate, LocalDate.now());
+                fine = overdueDays * 5000;
+            } else {
+                newStatus = Status.BORROWING;
             }
         } else {
-            if (dueDate != null && returnDate.isAfter(dueDate)) {
+            if (returnDate.isAfter(dueDate)) {
                 newStatus = Status.RETURNED_LATE;
                 long overdueDays = java.time.temporal.ChronoUnit.DAYS.between(dueDate, returnDate);
                 fine = overdueDays * 5000;
@@ -166,5 +217,11 @@ public class UpdateBorrowController implements Initializable {
         // Cập nhật status và fine lên giao diện
         statusLabel.setText(newStatus.toString());
         fineLabel.setText(String.valueOf(fine));
+    }
+
+    private void hideErrorLabels() {
+        borrowDateErrorLabel.setVisible(false);
+        dueDateErrorLabel.setVisible(false);
+        returnDateErrorLabel.setVisible(false);
     }
 }
