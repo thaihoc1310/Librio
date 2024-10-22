@@ -15,5 +15,7 @@ module librio {
     exports librio.models;
     opens librio.controllers to javafx.fxml;
     exports librio.controllers.admin;
+    exports librio.controllers.member;
     opens librio.controllers.admin to javafx.fxml;
+    opens librio.controllers.member to javafx.fxml;
 }

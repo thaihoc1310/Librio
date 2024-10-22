@@ -113,5 +113,5 @@
 .tilePane-book:hover {
     -fx-cursor: hand; /* Chuyển con trỏ chuột thành hình bàn tay */
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 0); /* Hiệu ứng đổ bóng phát sáng */
-    -fx-background-color: #f0f0f0; /* Thay đổi màu nền khi di chuột (tùy chọn) */
+
 }

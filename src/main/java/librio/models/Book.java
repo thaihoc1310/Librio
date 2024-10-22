@@ -64,6 +64,8 @@ public class Book {
         this.imagePath = new SimpleStringProperty(imagePath);
     }
 
+
+
     // Getters và Setters cho các thuộc tính
     public String getId() {
         return id.get();

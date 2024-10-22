@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -140,7 +139,7 @@
                                       </ImageView>
                            </children>
                         </Group>
-                        <ComboBox layoutX="992.0" layoutY="38.0" prefHeight="30.0" prefWidth="35.0" />
+                        <ComboBox layoutX="992.0" layoutY="38.0" prefHeight="30.0" prefWidth="70.0" />
                             </children>
                         </AnchorPane>
                     </top>
@@ -149,21 +148,21 @@
                      <children>
                         <ScrollPane hbarPolicy="NEVER" prefHeight="582.0" prefWidth="1202.0" AnchorPane.bottomAnchor="7.2000000000000455" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <content>
-                              <TilePane hgap="15.0" prefColumns="4" prefHeight="586.0" prefRows="2" prefTileHeight="400.0" prefTileWidth="270.0" prefWidth="1201.0" vgap="25.0">
+                              <TilePane fx:id="tilePane" hgap="15.0" prefColumns="4" prefHeight="586.0" prefRows="2" prefTileHeight="400.0" prefTileWidth="270.0" prefWidth="1201.0" vgap="25.0">
                                  <children>
                                     <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
                                        <children>
-                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                                <Image url="@../../images/book/defaultBook.jpg" />
                                              </image>
                                           </ImageView>
-                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                          <TextFlow layoutX="21.0" layoutY="313.0" prefHeight="94.0" prefWidth="229.0" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
                                        <children>
-                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
                                              </image>
@@ -265,13 +264,10 @@
                         </AnchorPane>
                     </center>
                     <bottom>
-                        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+                        <HBox alignment="CENTER" prefHeight="55.0" prefWidth="1400.0" BorderPane.alignment="CENTER">
                             <padding>
                                 <Insets left="200.0" />
                             </padding>
-                            <children>
-                                <Pagination fx:id="pagination" prefHeight="0.0" prefWidth="1111.0" />
-                            </children>
                         </HBox>
                     </bottom>
                 </BorderPane>

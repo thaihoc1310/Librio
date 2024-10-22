@@ -232,7 +232,7 @@ public class ManageBookController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/BookDetail.fxml"));
             Parent root = loader.load();
 
-            // Lấy controller của BookDetailController và truyền dữ liệu
+            // Lấy controller của BookForMemberDetailController và truyền dữ liệu
             BookDetailController bookDetailController = loader.getController();
             bookDetailController.setBook(book);
 
