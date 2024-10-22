@@ -13,7 +13,7 @@ import librio.models.Book;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class BookForMemberDetailController implements Initializable {
+public class BookDetailController implements Initializable {
 
     @FXML
     private Text title;

@@ -3,11 +3,8 @@ package librio.controllers.member;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -16,13 +13,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import librio.controllers.admin.BookDetailController;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import librio.models.Role;
 
 import java.io.IOException;
 import java.net.URL;
@@ -177,43 +172,16 @@ public class BookController implements Initializable {
 
     private void showBookDetails(Book book) {
         try {
-            // Tải file FXML của Book Detail
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
-            Parent root = loader.load();
+            Parent bookDetailRoot = loader.load();
 
-            // Lấy controller từ FXML loader và thiết lập thông tin sách
-            BookForMemberDetailController controller = loader.getController();
-            controller.setBookDetails(book);
-
-            Stage detailStage = new Stage();
-            detailStage.setTitle("Thông tin chi tiết sách");
-
-            Scene scene = new Scene(root);
-            detailStage.setScene(scene);
-            detailStage.show();
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(bookDetailRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-
-    /**
-     * Tìm kiếm sách dựa trên từ khóa nhập vào
-     */
-    @FXML
-    private void searchBooks() {
-        String keyword = searchTextField.getText().trim().toLowerCase();
-        List<Book> filteredBooks = new ArrayList<>();
-
-        // Lọc sách dựa trên từ khóa tìm kiếm
-        for (Book book : bookList) {
-            if (book.getTitle().toLowerCase().contains(keyword)) {
-                filteredBooks.add(book);
-            }
-        }
-
-        // Hiển thị sách đã lọc
-        displayBooks(filteredBooks);
-    }
 }

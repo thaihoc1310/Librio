@@ -393,6 +393,8 @@ public class DatabaseUtil {
         String querry = "SELECT * FROM users WHERE email = ? AND password = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(querry)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -408,9 +410,15 @@ public class DatabaseUtil {
                 if(role.equals(Role.LIBRARIAN)){
                     return new Librarian(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
                 }else if(role.equals(Role.MEMBER)){
-                    long fineAmount = resultSet.getLong("fine_amount");
-                    long totalBookBorrowed = resultSet.getLong("total_book_borrowed");
-                    return new Member(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate,fineAmount,totalBookBorrowed);
+                    try(PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM members WHERE id = ? ")){
+                        memberStatement.setString(1, id);
+                        ResultSet memberResultSet = memberStatement.executeQuery();
+                        if (memberResultSet.next()) {
+                            long fineAmount = memberResultSet.getLong("fine_amount");
+                            long totalBookBorrowed = memberResultSet.getLong("total_books_borrowed");
+                            return new Member(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate, fineAmount, totalBookBorrowed);
+                        }
+                    }
                 }
             }
 
