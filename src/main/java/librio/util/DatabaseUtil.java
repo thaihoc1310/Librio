@@ -51,6 +51,30 @@ public class DatabaseUtil {
         return null;
     }
 
+    public static User getUserByEmail(String userEmail) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE email = ?")) {
+            statement.setString(1, userEmail);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String id = resultSet.getString("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String phoneNumber = resultSet.getString("phone_number");
+                String address = resultSet.getString("address") ;
+                Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
+                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+                String avatar = resultSet.getString("avatar");
+                LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
+                return new User(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static Book getBookByIsbn(String bookIsbn) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query = "SELECT * FROM books WHERE isbn = ?";
@@ -349,15 +373,15 @@ public class DatabaseUtil {
 
             if (resultSet.next()) {
                 String id = resultSet.getString("id");
+                String memberEmail = resultSet.getString("email");
                 String bookIsbn = resultSet.getString("book_isbn");
-                String memberId = resultSet.getString("member_id");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
                 LocalDate returnDate = resultSet.getDate("return_date") != null ? resultSet.getDate("return_date").toLocalDate() : null;
                 Status status = Status.valueOf(resultSet.getString("status"));
                 Double fine = resultSet.getDouble("fine");
 
-                return new Borrow(id, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
+                return new Borrow(id, bookIsbn, memberEmail, borrowDate, dueDate, returnDate, status, fine);
             }
         } catch (SQLException e) {
             e.printStackTrace();

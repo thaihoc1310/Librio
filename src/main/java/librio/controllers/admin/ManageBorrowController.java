@@ -41,15 +41,15 @@ public class ManageBorrowController implements Initializable {
     @FXML
     private TableColumn<Borrow, String> borrowIdColumn;
     @FXML
-    private TableColumn<Borrow, String> memberIdColumn;
+    private TableColumn<Borrow, String> emailColumn;
     @FXML
     private TableColumn<Borrow, String> bookIsbnColumn;
     @FXML
-    private TableColumn<Borrow, Instant> borrowDateColumn;
+    private TableColumn<Borrow, LocalDate> borrowDateColumn;
     @FXML
-    private TableColumn<Borrow, Instant> dueDateColumn;
+    private TableColumn<Borrow, LocalDate> dueDateColumn;
     @FXML
-    private TableColumn<Borrow, Instant> returnDateColumn;
+    private TableColumn<Borrow, LocalDate> returnDateColumn;
     @FXML
     private TableColumn<Borrow, String> statusColumn;
     @FXML
@@ -71,7 +71,7 @@ public class ManageBorrowController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        memberIdColumn.setCellValueFactory(new PropertyValueFactory<>("memberId"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         bookIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("bookIsbn"));
         borrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
@@ -174,7 +174,7 @@ public class ManageBorrowController implements Initializable {
 
             while (resultSet.next()) {
                 String borrowId = resultSet.getString("id");
-                String memberId = resultSet.getString("member_id");
+                String email = resultSet.getString("email");
                 String bookIsbn = resultSet.getString("book_isbn");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
@@ -182,7 +182,7 @@ public class ManageBorrowController implements Initializable {
                 Double fine = resultSet.getDouble("fine");
                 Status status = Status.valueOf(resultSet.getString("status"));
 
-                Borrow borrow = new Borrow(borrowId, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
+                Borrow borrow = new Borrow(borrowId, bookIsbn, email, borrowDate, dueDate, returnDate, status, fine);
                 borrowList.add(borrow);
 
             }

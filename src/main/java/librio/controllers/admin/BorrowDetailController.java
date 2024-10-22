@@ -16,8 +16,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static librio.util.DatabaseUtil.getBookByIsbn;
-import static librio.util.DatabaseUtil.getUserById;
+import static librio.util.DatabaseUtil.*;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
 public class BorrowDetailController implements Initializable {
@@ -48,7 +47,7 @@ public class BorrowDetailController implements Initializable {
         private Label fineLabel;
 
         @FXML
-        private Label memberIdLabel;
+        private Label memberEmailLabel;
 
         @FXML
         private Label returnDateLabel;
@@ -67,10 +66,10 @@ public class BorrowDetailController implements Initializable {
     private void populateFields() {
         if (borrow != null) {
             Book borrowedBook = getBookByIsbn(borrow.getBookIsbn());
-            User user = getUserById(borrow.getMemberId());
+            User user = getUserByEmail(borrow.getEmail());
 
             borrowIdLabel.setText(borrow.getId());
-            memberIdLabel.setText(borrow.getMemberId());
+            memberEmailLabel.setText(borrow.getEmail());
             memberNameLabel.setText(user.getName());
             bookIsbnLabel.setText(borrow.getBookIsbn());
             bookTitleLabel.setText(borrowedBook.getTitle());
