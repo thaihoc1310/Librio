@@ -26,6 +26,7 @@ public class DatabaseUtil {
         }
         return exists;
     }
+
     public static User getUserById(String userId) {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")) {
@@ -37,7 +38,7 @@ public class DatabaseUtil {
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 String phoneNumber = resultSet.getString("phone_number");
-                String address = resultSet.getString("address") ;
+                String address = resultSet.getString("address");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
                 String avatar = resultSet.getString("avatar");
@@ -71,7 +72,7 @@ public class DatabaseUtil {
                 String numberOfPages = resultSet.getString("number_of_pages");
                 String description = resultSet.getString("description");
                 String bookImage = resultSet.getString("book_image");
-                return new Book(id, title, author, isbn, category, publisher, quantityCopy,averageOfRating, yearPublished, language, numberOfPages, description, bookImage);
+                return new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, bookImage);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -358,6 +359,37 @@ public class DatabaseUtil {
 
                 return new Borrow(id, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static User authenticate(String username, String password) {
+        String querry = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(querry)) {
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+                String id = resultSet.getString("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String phoneNumber = resultSet.getString("phone_number");
+                String address = resultSet.getString("address");
+                Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
+                String avatar = resultSet.getString("avatar");
+                LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
+                if(role.equals(Role.LIBRARIAN)){
+                    return new Librarian(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+                }else if(role.equals(Role.MEMBER)){
+                    long fineAmount = resultSet.getLong("fine_amount");
+                    long totalBookBorrowed = resultSet.getLong("total_book_borrowed");
+                    return new Member(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate,fineAmount,totalBookBorrowed);
+                }
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
