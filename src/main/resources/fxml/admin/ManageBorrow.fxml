@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageBorrowController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageBorrowController">
     <children>
         <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
             <children>
@@ -72,11 +72,11 @@
                                                 <Insets left="30.0" />
                                             </padding>
                                         </Button>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" text="Borrows">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" style="-fx-background-color: f1debc;" text="Borrows">
                                             <graphic>
                                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../../icons/AdminDashBoardIcon/Time to Pay.png" />
+                                                        <Image url="@../../icons/AdminDashBoardIcon/Time%20to%20Pay_selected.png" />
                                                     </image>
                                                 </ImageView>
                                             </graphic>

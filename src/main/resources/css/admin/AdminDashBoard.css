@@ -68,3 +68,50 @@
 .pagination .label {
     -fx-opacity: 0;
 }
+/* Tùy chỉnh nền của ScrollPane */
+.scroll-pane {
+    -fx-background-color: #F8EDD9; /* Màu nền chính của ScrollPane */
+}
+
+/* Tùy chỉnh nền của nội dung bên trong ScrollPane */
+.scroll-pane .viewport {
+    -fx-background-color: #f8edd9; /* Màu nền cho khu vực hiển thị nội dung */
+}
+
+/* Tùy chỉnh thanh cuộn dọc */
+.scroll-bar:vertical {
+    -fx-background-color: #DCB485; /* Màu nền cho thanh cuộn dọc */
+}
+
+/* Tùy chỉnh thanh cuộn ngang */
+.scroll-bar:horizontal {
+    -fx-background-color: #DCB485; /* Màu nền cho thanh cuộn ngang */
+}
+
+/* Tùy chỉnh thumb của thanh cuộn (phần có thể kéo) */
+.scroll-bar .thumb {
+    -fx-background-color: #B08968; /* Màu thumb (phần kéo) của thanh cuộn */
+    -fx-background-radius: 5px;    /* Bo tròn góc cho thumb */
+}
+.tilePane-book {
+    -fx-background-color: #ffffff; /* Màu nền */
+    -fx-background-radius: 5px;   /* Bo tròn góc */
+    -fx-border-color: #B08968;     /* Màu viền */
+    -fx-border-radius: 5px;       /* Bo góc cho viền */
+    -fx-border-width: 1px;         /* Độ dày viền */
+}
+/* Kiểu mặc định cho .tilePane-book */
+.tilePane-book {
+    -fx-background-color: #f8f2e8; /* Màu nền */
+    -fx-background-radius: 5px;    /* Bo tròn góc */
+    -fx-border-color: #B08968;     /* Màu viền */
+    -fx-border-radius: 5px;        /* Bo góc cho viền */
+    -fx-border-width: 1px;         /* Độ dày viền */
+}
+
+/* Hiệu ứng khi di chuột vào */
+.tilePane-book:hover {
+    -fx-cursor: hand; /* Chuyển con trỏ chuột thành hình bàn tay */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 0); /* Hiệu ứng đổ bóng phát sáng */
+    -fx-background-color: #f0f0f0; /* Thay đổi màu nền khi di chuột (tùy chọn) */
+}

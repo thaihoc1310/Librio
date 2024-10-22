@@ -32,11 +32,11 @@ and open the template in the editor.
 
 
 .text-field-custom {
-    -fx-control-inner-background: #F8EDD9; /* Màu nền của TextArea */
+    -fx-control-inner-background: #f8edd9; /* Màu nền của TextArea */
     -fx-background-color: transparent;    /* Loại bỏ viền bên ngoài nếu có */
-    -fx-border-color: transparent;        /* Loại bỏ viền khi có focus */
+    -fx-border-color: transparent;   /* Loại bỏ viền khi có focus */
     -fx-font-size: 15px;
-    -fx-text-fill: #4C2113;
+    -fx-text-fill: #000000;
 }
 
 
@@ -50,3 +50,5 @@ and open the template in the editor.
     -fx-font-size: 30px;
     -fx-font-weight: semi-bold;   /* Tăng độ dày của chữ */
 }
+
+

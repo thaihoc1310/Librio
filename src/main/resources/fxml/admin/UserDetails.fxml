@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UserDetailsController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UserDetailsController">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0" styleClass="background-wrapper">
             <children>
@@ -45,13 +45,13 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="131.0" layoutY="72.0" prefHeight="275.0" prefWidth="210.0" spacing="14.0">
+                        <VBox layoutX="131.0" layoutY="72.0" prefHeight="275.0" prefWidth="210.0" spacing="12.0">
                            <children>
                                     <TextField fx:id="userIDTextField" editable="false" prefWidth="189.0" styleClass="text-field-custom" />
                                     <TextField fx:id="emailTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextField fx:id="nameTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
                                     <TextField fx:id="phoneNumberTextField" editable="false" prefHeight="25.0" prefWidth="179.0" styleClass="text-field-custom" />
-                                    <TextArea fx:id="addressTextArea" blendMode="LIGHTEN" editable="false" prefHeight="78.0" prefWidth="100.0" styleClass="text-field-custom" wrapText="true" />
+                                    <TextArea fx:id="addressTextArea" editable="false" prefHeight="100.0" prefWidth="210.0" styleClass="text-field-custom" wrapText="true" />
                            </children>
                         </VBox>
                   <Label layoutX="377.0" layoutY="218.0" styleClass="label-13" text="Birth of date :" />
