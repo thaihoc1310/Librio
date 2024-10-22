@@ -53,20 +53,24 @@ public class DatabaseInitializer {
 
             String createMemberTable = "CREATE TABLE IF NOT EXISTS Members (" +
                     "id INT PRIMARY KEY," +
+                    "email VARCHAR(255) UNIQUE NOT NULL," +
                     "fine_amount BIGINT," +
                     "total_books_borrowed BIGINT," +
-                    "FOREIGN KEY (id) REFERENCES Users(id)" +
+                    "FOREIGN KEY (id) REFERENCES Users(id)," +
+                    "FOREIGN KEY (email) REFERENCES Users(email)" +
                     ");";
 
             String createLibrarianTable = "CREATE TABLE IF NOT EXISTS Librarians (" +
                     "id INT PRIMARY KEY," +
-                    "FOREIGN KEY (id) REFERENCES Users(id)" +
+                    "email VARCHAR(255) UNIQUE NOT NULL," +
+                    "FOREIGN KEY (id) REFERENCES Users(id)," +
+                    "FOREIGN KEY (email) REFERENCES Users(email)" +
                     ");";
 
             String createBorrowTable = "CREATE TABLE IF NOT EXISTS Borrows (" +
                     "id INT PRIMARY KEY AUTO_INCREMENT," +
-                    "email INT," +
-                    "book_isbn VARCHAR(255)," +
+                    "email VARCHAR(255) NOT NULL," +
+                    "book_isbn VARCHAR(255) NOT NULL," +
                     "borrow_date DATE," +
                     "due_date DATE," +
                     "return_date DATE," +
@@ -131,27 +135,27 @@ public class DatabaseInitializer {
                         "('Clean Architecture', 'Robert C. Martin', '9780134494166', 'Prentice Hall', 'Software Architecture', 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2017, 'English', 432, NULL, 'A guide to creating sustainable architecture for software systems. This book discusses the principles of building robust software architectures. It covers topics such as modularity, design patterns, and architectural practices.');";
                 statement.execute(insertBooks);
 
-                String insertMembers = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES " +
-                        "(1, 0, 4)," +
-                        "(2, 0, 3)," +
-                        "(3, 50000, 2)," +
-                        "(4, 0, 1);";
+                String insertMembers = "INSERT INTO Members (id, email, fine_amount, total_books_borrowed) VALUES " +
+                        "(1, 'john.doe@example.com', 0, 4)," +
+                        "(2, 'jane.smith@example.com', 0, 3)," +
+                        "(3, 'alice.johnson@example.com', 50000, 2)," +
+                        "(4, 'bob.brown@example.com', 0, 1);";
                 statement.execute(insertMembers);
 
-                String insertLibrarians = "INSERT INTO Librarians (id) VALUES (5);";
+                String insertLibrarians = "INSERT INTO Librarians (id, email) VALUES (5, 'admin@example.com');";
                 statement.execute(insertLibrarians);
 
                 String insertBorrows = "INSERT INTO Borrows (email, book_isbn, borrow_date, due_date, return_date, status, fine, created_by, created_at) VALUES " +
-                        "(john.doe@example.com, 9780134685991, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(jane.smith@example.com, 9780132350884, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(alice.johnson@example.com, 9780201616224, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED_LATE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(john.doe@example.com, 9780201633610, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(jane.smith@example.com, 9780201485677, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(alice.johnson@example.com, 9780735619678, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY , NULL, 'OVERDUE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(john.doe@example.com, 9780262033848, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(bob.brown@example.com, 9780321349606, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(jane.smith@example.com, 9780201835953, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY , NULL, 'OVERDUE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(john.doe@example.com, 9781491904244, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED_LATE', 5000, 'admin@example.com', CURRENT_TIMESTAMP);";
+                        "('john.doe@example.com', 9780134685991, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('jane.smith@example.com', 9780132350884, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('alice.johnson@example.com', 9780201616224, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED_LATE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('john.doe@example.com', 9780201633610, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('jane.smith@example.com', 9780201485677, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('alice.johnson@example.com', 9780735619678, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY , NULL, 'OVERDUE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('john.doe@example.com', 9780262033848, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('bob.brown@example.com', 9780321349606, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('jane.smith@example.com', 9780201835953, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY , NULL, 'OVERDUE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
+                        "('john.doe@example.com', 9781491904244, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED_LATE', 5000, 'admin@example.com', CURRENT_TIMESTAMP);";
                 statement.execute(insertBorrows);
 
                 String insertFeedbacks = "INSERT INTO Feedbacks (book_id, member_id, rating, about, created_by, created_at) VALUES " +
