@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookController">
+    <children>
+        <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
+            <children>
+                <BorderPane layoutX="14.0" prefHeight="600.0" prefWidth="1110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <left>
+                        <AnchorPane prefHeight="466.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
+                            <children>
+                                <VBox layoutY="65.0" prefHeight="181.0" prefWidth="174.0" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
+                                    <children>
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Dashboard" VBox.vgrow="ALWAYS">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                            </VBox.margin>
+                                            <graphic>
+                                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../../icons/AdminDashBoardIcon/Dashboard.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                            <padding>
+                                                <Insets left="30.0" />
+                                            </padding>
+                                        </Button>
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: f1debc;" text="Books">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                            </VBox.margin>
+                                            <graphic>
+                                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../../icons/AdminDashBoardIcon/Books_selected.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                            <padding>
+                                                <Insets left="30.0" />
+                                            </padding>
+                                        </Button>
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Borrows">
+                                            <graphic>
+                                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../../icons/AdminDashBoardIcon/Time to Pay.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                            <padding>
+                                                <Insets left="30.0" />
+                                            </padding></Button>
+                                    </children>
+                                </VBox>
+                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="31.0" layoutY="405.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Log out" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                    <graphic>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../icons/AdminDashBoardIcon/Logout Rounded.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <padding>
+                                        <Insets left="30.0" />
+                                    </padding></Button>
+                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="302.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Profile Settings" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                    <graphic>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../icons/AdminDashBoardIcon/Settings.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <padding>
+                                        <Insets left="30.0" />
+                                    </padding></Button>
+                                <Label layoutX="14.0" layoutY="40.0" text="Feature">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="11.0" layoutY="275.0" text="Profile" AnchorPane.bottomAnchor="154.60000000000002">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                            <BorderPane.margin>
+                                <Insets />
+                            </BorderPane.margin>
+                        </AnchorPane>
+                    </left>
+                    <top>
+                        <AnchorPane prefHeight="81.0" prefWidth="1111.0" style="-fx-background-color: f8edd9;" BorderPane.alignment="CENTER">
+                            <children>
+                                <Label layoutX="275.0" layoutY="6.0" prefHeight="94.0" prefWidth="135.0" text="Books" textAlignment="CENTER" textFill="#4c2113">
+                                    <font>
+                                        <Font size="28.0" />
+                                    </font>
+                                </Label>
+                                <AnchorPane layoutX="967.0" layoutY="-6.0" prefHeight="86.0" prefWidth="118.0" AnchorPane.rightAnchor="25.0">
+                                    <children>
+                                        <Label layoutX="42.0" layoutY="44.0" prefHeight="18.0" prefWidth="61.0" text="Admin" AnchorPane.rightAnchor="14.800000000000004" AnchorPane.topAnchor="44.0" />
+                                    </children>
+                                </AnchorPane>
+                                <Label layoutX="997.0" layoutY="24.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="151.79999999999995" AnchorPane.topAnchor="24.0" />
+                                <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="-121.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" strokeWidth="0.5" AnchorPane.rightAnchor="31.100109863281432" />
+                                <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="544.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" strokeWidth="0.5" style="-fx-effect: bloom(0.5);" AnchorPane.leftAnchor="232.79999999999995" />
+                        <Group layoutX="632.0" layoutY="39.0">
+                           <children>
+                                      <TextField fx:id="searchTextField" layoutX="14.0" layoutY="-2.0" prefHeight="31.0" prefWidth="318.0" promptText="Search" style="-fx-background-radius: 5em; -fx-border-color: #4C2113; -fx-border-radius: 2em;" />
+                                      <ImageView fitHeight="19.0" fitWidth="20.0" layoutX="299.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                              <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
+                                          </image>
+                                      </ImageView>
+                           </children>
+                        </Group>
+                        <ComboBox layoutX="992.0" layoutY="38.0" prefHeight="30.0" prefWidth="35.0" />
+                            </children>
+                        </AnchorPane>
+                    </top>
+                    <center>
+                        <AnchorPane prefHeight="450.0" prefWidth="877.0" style="-fx-background-color: f8edd9;" BorderPane.alignment="CENTER">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="582.0" prefWidth="1202.0" AnchorPane.bottomAnchor="7.2000000000000455" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <content>
+                              <TilePane hgap="15.0" prefColumns="4" prefHeight="586.0" prefRows="2" prefTileHeight="400.0" prefTileWidth="270.0" prefWidth="1201.0" vgap="25.0">
+                                 <children>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="386.0" prefWidth="299.0" styleClass="tilePane-book">
+                                       <children>
+                                          <ImageView fitHeight="314.0" fitWidth="215.0" layoutX="29.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../../../../image/copy_19_nxbtre_full_20342017_033410.jpg" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow layoutX="1.0" layoutY="313.0" prefHeight="94.0" prefWidth="270.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="40.0" top="40.0" />
+                                 </padding>
+                              </TilePane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                        </AnchorPane>
+                    </center>
+                    <bottom>
+                        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+                            <padding>
+                                <Insets left="200.0" />
+                            </padding>
+                            <children>
+                                <Pagination fx:id="pagination" prefHeight="0.0" prefWidth="1111.0" />
+                            </children>
+                        </HBox>
+                    </bottom>
+                </BorderPane>
+                <AnchorPane layoutY="590.0" prefHeight="55.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.bottomAnchor="0.0" />
+                <AnchorPane layoutY="20.0" prefHeight="123.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <ImageView fitHeight="77.0" fitWidth="77.0" layoutX="63.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
+                            </image>
+                        </ImageView>
+                        <Label layoutX="65.0" layoutY="99.0" text="User name" />
+                    </children></AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>
