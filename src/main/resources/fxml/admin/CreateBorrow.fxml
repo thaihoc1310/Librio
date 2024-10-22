@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.CreateBookController">
+    <children>
+        <AnchorPane prefHeight="565.0" prefWidth="700.0" styleClass="background-wrapper">
+            <children>
+                <AnchorPane layoutX="9.0" layoutY="14.0" prefHeight="625.0" prefWidth="682.0" styleClass="background">
+                    <children>
+                        <VBox alignment="TOP_RIGHT" layoutX="19.0" layoutY="131.0" prefHeight="266.0" prefWidth="130.0" spacing="26.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" text="isbn :">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                                <Label alignment="CENTER_RIGHT" text="Author :">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                                <Label alignment="CENTER_RIGHT" text="Publisher :">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                                <Label alignment="CENTER_RIGHT" text="Category :">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                                <Label alignment="CENTER_RIGHT" text="Number of pages :">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                                <Label alignment="CENTER_RIGHT" text="Quantity of Copy: ">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                        </VBox>
+                        <Text layoutX="19.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Book">
+                            <font>
+                                <Font size="30.0" />
+                            </font>
+                        </Text>
+                        <Line endX="-100.0" endY="-29.00001335144043" layoutX="114.0" layoutY="42.0" startX="-100.0" />
+                        <VBox layoutX="165.0" layoutY="134.0" prefHeight="291.0" prefWidth="207.0" spacing="2.0">
+                            <children>
+                                <TextField fx:id="isbnTextField" />
+                                <Label fx:id="isbnErrorLabel" textFill="#ff0f0f" />
+                                <TextField fx:id="authorTextField" />
+                                <Label fx:id="authorErrorLabel" textFill="#ff0f0f" />
+                                <TextField fx:id="publisherTextField" />
+                                <Label fx:id="publisherErrorLabel" textFill="#ff0f0f" />
+                                <TextField fx:id="categoryTextField" />
+                                <Label fx:id="categoryErrorLabel" textFill="#ff0f0f" />
+                                <TextField fx:id="numberOfPagesTextField" />
+                                <Label fx:id="numberOfPagesErrorLabel" textFill="#ff0f0f" />
+                                <TextField fx:id="quantityOfCopyTextField" />
+                                <Label fx:id="quantityOfCopyErrorLabel" textFill="#ff0f0f" />
+                            </children>
+                        </VBox>
+                        <Label alignment="CENTER_RIGHT" layoutX="65.0" layoutY="426.0" text="Description :">
+                            <font>
+                                <Font size="15.0" />
+                            </font>
+                        </Label>
+                        <TextArea fx:id="descriptionTextArea" layoutX="164.0" layoutY="426.0" prefHeight="114.0" prefWidth="415.0" wrapText="true" />
+                        <Button fx:id="uploadImageButton" layoutX="485.0" layoutY="267.0" mnemonicParsing="false" onAction="#uploadImage" text="Upload Image" />
+                        <ImageView fx:id="bookImageView" fitHeight="182.0" fitWidth="125.0" layoutX="468.0" layoutY="72.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@../../images/book/harryPottersample.jpg" />
+                            </image>
+                        </ImageView>
+                        <Label alignment="CENTER_RIGHT" layoutX="75.0" layoutY="70.0" text="Book Title :">
+                            <font>
+                                <Font size="15.0" />
+                            </font>
+                        </Label>
+                        <TextArea fx:id="bookTitleTextField" layoutX="165.0" layoutY="72.0" prefHeight="40.0" prefWidth="207.0" wrapText="true" />
+                        <Button fx:id="createBookButton" layoutX="187.0" layoutY="568.0" mnemonicParsing="false" onAction="#createBook" prefHeight="32.0" prefWidth="106.0" styleClass="btn-2" text="Create Book" />
+                        <Button fx:id="cancelButton" layoutX="393.0" layoutY="568.0" mnemonicParsing="false" onAction="#cancel" prefHeight="32.0" prefWidth="79.0" styleClass="btn-2" text="Cancel" />
+                        <Label alignment="CENTER_RIGHT" layoutX="433.0" layoutY="319.0" prefHeight="22.0" prefWidth="73.0" text="Language :">
+                            <font>
+                                <Font size="15.0" />
+                            </font>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" layoutX="407.0" layoutY="373.0" text="Year Published :">
+                            <font>
+                                <Font size="15.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="languageTextField" layoutX="518.0" layoutY="317.0" prefHeight="26.0" prefWidth="121.0" />
+                        <TextField fx:id="yearPublishedTextField" layoutX="518.0" layoutY="370.0" prefHeight="26.0" prefWidth="122.0" />
+                        <Label fx:id="yearPublishedErrorLabel" layoutX="518.0" layoutY="397.0" textFill="#ff0f0f" />
+                        <Label fx:id="languageErrorLabel" layoutX="519.0" layoutY="343.0" textFill="#ff0f0f" />
+                        <Label fx:id="bookTitleErrorLabel" layoutX="164.0" layoutY="112.0" textFill="#ff0f0f" />
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>
