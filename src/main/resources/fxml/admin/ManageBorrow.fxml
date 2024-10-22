@@ -132,13 +132,13 @@
                                 <TableView fx:id="borrowTableView" layoutX="28.0" layoutY="6.0" prefHeight="518.0" prefWidth="945.0" styleClass="background" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="6.0">
                                     <columns>
                                         <TableColumn fx:id="borrowIdColumn" prefWidth="45.0" resizable="false" text="ID" />
-                                        <TableColumn fx:id="emailColumn" prefWidth="80.66668701171875" text="Email" />
-                                        <TableColumn fx:id="bookIsbnColumn" prefWidth="134.66668701171875" text="ISBN" />
+                                        <TableColumn fx:id="emailColumn" prefWidth="171.20001220703125" text="Email" />
+                                        <TableColumn fx:id="bookIsbnColumn" prefWidth="108.0" text="ISBN" />
                                         <TableColumn fx:id="borrowDateColumn" prefWidth="120.0" resizable="false" text="Borrow Date " />
                                         <TableColumn fx:id="dueDateColumn" prefWidth="120.0" resizable="false" text="Due Date" />
                                         <TableColumn fx:id="returnDateColumn" prefWidth="120.0" resizable="false" text="Return Date" />
-                                        <TableColumn fx:id="statusColumn" prefWidth="110.0" text="Status" />
-                                        <TableColumn fx:id="fineColumn" prefWidth="126.66656494140625" text="Fine" />
+                                        <TableColumn fx:id="statusColumn" prefWidth="98.0" text="Status" />
+                                        <TableColumn fx:id="fineColumn" prefWidth="65.0" text="Fine" />
                                         <TableColumn fx:id="actionColumn" prefWidth="280.0" resizable="false" text="Action" />
                                     </columns>
                                     <columnResizePolicy>
