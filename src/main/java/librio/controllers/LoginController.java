@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import librio.controllers.auth.Session;
 import librio.models.Role;
 import librio.models.User;
 
@@ -31,6 +32,8 @@ public class LoginController {
         String password = passwordField.getText();
         User loginUser = authenticate(email,password);
         if(loginUser!= null){
+            Session session = Session.getInstance();
+            session.setLoggedInUser(loginUser);
             checkAuthorization(loginUser);
         }else {
             //validator
