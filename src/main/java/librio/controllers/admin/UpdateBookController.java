@@ -190,13 +190,22 @@ public class UpdateBookController implements Initializable {
             statement.setString(8, language);
             statement.setString(9, numberOfPages);
             statement.setString(10, description);
-            statement.setString(11, bookImageFilePath);
+            statement.setString(11, bookImageFilePath != null ? bookImageFilePath : book.getImagePath());
             statement.setString(12, book.getId());
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                String projectDir = System.getProperty("user.dir");
-                String booksDir = projectDir + "/src/main/resources/images/book/";
-                if(previousBookFilePath != null){
+                if (previousBookFilePath != null && bookImageFilePath != null) {
+                    String projectDir = System.getProperty("user.dir");
+                    String booksDir = projectDir + "/src/main/resources/images/book/";
+                    if (book.getImagePath() != null && !book.getImagePath().isEmpty()) {
+                        File oldFile = new File(booksDir + book.getImagePath());
+                        if (oldFile.exists()) {
+                            boolean deleted = oldFile.delete();
+                            if (!deleted) {
+                                System.out.println("Không thể xóa tệp ảnh cũ: " + oldFile.getAbsolutePath());
+                            }
+                        }
+                    }
                     Files.copy(Paths.get(previousBookFilePath), Paths.get(booksDir + bookImageFilePath));
                 }
                 clearInputFields();

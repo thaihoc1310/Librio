@@ -166,7 +166,7 @@ public class UpdateUserController implements Initializable {
             statement.setString(4, address);
             statement.setString(5, gender.name());
             statement.setString(6, role.name());
-            statement.setString(7, avatarFilePath);
+            statement.setString(7, avatarFilePath != null ? avatarFilePath : user.getAvatar());
             assert birthOfDate != null;
             statement.setDate(8, Date.valueOf(birthOfDate));
             statement.setString(9, user.getId());
