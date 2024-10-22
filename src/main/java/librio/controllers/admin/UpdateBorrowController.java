@@ -86,14 +86,30 @@ public class UpdateBorrowController implements Initializable {
         LocalDate returnDate = returnDatePicker.getValue();
         boolean validation = false;
 
-        if (borrowDate.isAfter(dueDate)) {
-            dueDateErrorLabel.setVisible(true);
+        if (borrowDate.isAfter(LocalDate.now())){
+            borrowDateErrorLabel.setText("Borrow Date must not be after current Date!");
             validation = true;
+        }else{
+            borrowDateErrorLabel.setText("");
         }
 
-        if (returnDate != null && borrowDate.isAfter(returnDate)) {
-            returnDateErrorLabel.setVisible(true);
+        if (borrowDate.isAfter(dueDate)) {
+            dueDateErrorLabel.setText("Due Date must be after Borrow Date!");
             validation = true;
+        }else {
+            dueDateErrorLabel.setText("");
+        }
+
+        if (returnDate != null) {
+            if(borrowDate.isAfter(returnDate)){
+                returnDateErrorLabel.setText("Return Date must be after Borrow Date!");
+                validation = true;
+            } else if (returnDate.isAfter(LocalDate.now())) {
+                returnDateErrorLabel.setText("Return Date must not be after current Date!");
+                validation = true;
+            }else {
+                returnDateErrorLabel.setText("");
+            }
         }
 
         if (validation) {
@@ -168,27 +184,40 @@ public class UpdateBorrowController implements Initializable {
         returnDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
     }
 
+
     private void updateStatus() {
         LocalDate borrowDate = borrowDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue();
         LocalDate returnDate = returnDatePicker.getValue();
         boolean validation = false;
 
+        if (borrowDate.isAfter(LocalDate.now())){
+            borrowDateErrorLabel.setText("Borrow Date must not be after current Date!");
+            validation = true;
+        } else {
+            borrowDateErrorLabel.setText("");
+        }
+
         if (borrowDate.isAfter(dueDate)) {
-            dueDateErrorLabel.setVisible(true);
+            dueDateErrorLabel.setText("Due Date must be after Borrow Date!");
             validation = true;
         } else {
-            dueDateErrorLabel.setVisible(false);
+            dueDateErrorLabel.setText("");
         }
 
-        if (returnDate != null && borrowDate.isAfter(returnDate)) {
-            returnDateErrorLabel.setVisible(true);
-            validation = true;
-        } else {
-            returnDateErrorLabel.setVisible(false);
+        if (returnDate != null) {
+            if (borrowDate.isAfter(returnDate)) {
+                returnDateErrorLabel.setText("Return Date must be after Borrow Date!");
+                validation = true;
+            } else if (returnDate.isAfter(LocalDate.now())) {
+                returnDateErrorLabel.setText("Return Date must not be beyond current Date!");
+                validation = true;
+            } else {
+                returnDateErrorLabel.setText("");
+            }
         }
 
-        if(validation){
+        if (validation) {
             return;
         }
 
@@ -219,9 +248,10 @@ public class UpdateBorrowController implements Initializable {
         fineLabel.setText(String.valueOf(fine));
     }
 
+
     private void hideErrorLabels() {
-        borrowDateErrorLabel.setVisible(false);
-        dueDateErrorLabel.setVisible(false);
-        returnDateErrorLabel.setVisible(false);
+        borrowDateErrorLabel.setText("");
+        dueDateErrorLabel.setText("");
+        returnDateErrorLabel.setText("");
     }
 }
