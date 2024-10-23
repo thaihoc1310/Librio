@@ -34,15 +34,15 @@
                                 <RowConstraints maxHeight="48.599996948242186" minHeight="2.1999992370605455" prefHeight="45.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="74.20000076293945" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="74.20000076293945" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="124.79999999999998" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="233.60001220703128" minHeight="8.000021362304707" prefHeight="20.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="45.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="20.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="292.3999847412109" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="270.59999694824216" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="292.3999847412109" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="270.59999694824216" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <Label fx:id="borrowDateLabel" text="20-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="8">
@@ -80,22 +80,22 @@
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                        <Label fx:id="emailErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="emailTextField" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" />
-                        <DatePicker fx:id="dueDatePicker" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                        <Label fx:id="bookIsbnErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <TextField fx:id="bookIsbnTextField" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Label text="Name :" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="nameLabel" text="Giang" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="dueDateErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                                <Label fx:id="emailErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField fx:id="emailTextField" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" />
+                                <DatePicker fx:id="dueDatePicker" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                                <Label fx:id="bookIsbnErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                <TextField fx:id="bookIsbnTextField" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <Label text="Name :" GridPane.rowIndex="2">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="nameLabel" text="Giang" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="dueDateErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                             </children>
                         </GridPane>
                         <ImageView fx:id="bookImageView" fitHeight="290.0" fitWidth="200.0" layoutX="428.0" layoutY="67.0" pickOnBounds="true">
@@ -104,7 +104,7 @@
                             </image>
                         </ImageView>
                         <Button fx:id="backButton" layoutX="379.0" layoutY="577.0" mnemonicParsing="false" onAction="#back" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Back" />
-                  <Button layoutX="213.0" layoutY="577.0" mnemonicParsing="false" onAction="#createBorrow" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Create" />
+                        <Button layoutX="213.0" layoutY="577.0" mnemonicParsing="false" onAction="#createBorrow" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Create" />
                     </children>
                 </AnchorPane>
             </children>

@@ -157,20 +157,18 @@ public class CreateUserController implements Initializable {
             if (generatedKeys.next()) {
                 int userId = generatedKeys.getInt(1);
                 if(role.equals(Role.MEMBER)){
-                    String insertMemberQuery = "INSERT INTO Members (id, email, fine_amount, total_books_borrowed) VALUES (?, ?, ?, ?)";
+                    String insertMemberQuery = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES (?, ?, ?)";
                     try (PreparedStatement memberStatement = connection.prepareStatement(insertMemberQuery)) {
-                        memberStatement.setInt(1, userId);
-                        memberStatement.setString(2, email);
-                        memberStatement.setLong(3, 0);
-                        memberStatement.setLong(4, 0);
+                        memberStatement.setInt(1, userId); // userId là id của user vừa tạo
+                        memberStatement.setLong(2, 0); // Fine amount bắt đầu từ 0
+                        memberStatement.setLong(3, 0); // Total books borrowed bắt đầu từ 0
                         memberStatement.executeUpdate();
                     }
                 }
                 else if(role.equals(Role.LIBRARIAN)){
-                    String insertLibrarianQuery = "INSERT INTO Librarians (id, email) VALUES (?, ?)";
+                    String insertLibrarianQuery = "INSERT INTO Librarians (id) VALUES (?)";
                     try (PreparedStatement librarianStatement = connection.prepareStatement(insertLibrarianQuery)) {
                         librarianStatement.setInt(1, userId); // userId là id của user vừa tạo
-                        librarianStatement.setString(2, email);
                         librarianStatement.executeUpdate();
                     }
                 }
@@ -320,4 +318,3 @@ public class CreateUserController implements Initializable {
 
     }
 }
-
