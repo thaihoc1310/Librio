@@ -319,6 +319,5 @@ public class CreateUserController implements Initializable {
         birthOfDatePicker.setValue(null);
 
     }
-
 }
 
