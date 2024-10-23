@@ -69,7 +69,6 @@ public class ManageBorrowController implements Initializable {
     private ImageView avatarUser;
     @FXML
     private Label userNameUser;
-
     private ObservableList<Borrow> borrowList;
 
     private int currentPage = 0;
