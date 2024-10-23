@@ -60,11 +60,8 @@ public class ManageBorrowController implements Initializable {
     private Pagination pagination;
     @FXML
     private TextField searchTextField;
-    @FXML
-    private Button createBorrowButton;
 
     private ObservableList<Borrow> borrowList;
-
 
     private int currentPage = 0;
     private final int rowsPerPage = 11;
@@ -311,28 +308,6 @@ public class ManageBorrowController implements Initializable {
             stage.showAndWait();
             loadBorrows(keyword,currentPage);
         }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openCreateBorrowScene() {
-        try {
-            // Tải FXML của scene mới
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateBorrow.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Create New User");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
-            stage.initOwner(createBorrowButton.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
-            stage.showAndWait();
-            loadBorrows(keyword,currentPage);
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }

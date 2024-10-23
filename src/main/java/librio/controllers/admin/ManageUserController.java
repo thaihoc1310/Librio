@@ -11,17 +11,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import librio.controllers.LogoutController;
+import librio.controllers.auth.Session;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
 import librio.database.DatabaseConnection;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -33,6 +38,7 @@ import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.getTotalUserCount;
 import static librio.util.DatabaseUtil.getUserById;
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class ManageUserController implements Initializable {
 
@@ -58,6 +64,11 @@ public class ManageUserController implements Initializable {
     private Pagination pagination;
     @FXML
     private TextField searchTextField;
+    @FXML
+    private ImageView avatarUser;
+    @FXML
+    private Label userNameUser;
+
 
     private ObservableList<User> userList;
 
@@ -68,6 +79,7 @@ public class ManageUserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setAvatarAndUserName();
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -194,6 +206,24 @@ public class ManageUserController implements Initializable {
         return new BorderPane();
     }
 
+    public void setAvatarAndUserName(){
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+
+        File file = new File(path);
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 38.5);
+        } else {
+            String defaultImage = avatarsDir + "Male User.png";
+            File defaultImageFile = new File(defaultImage);
+            Image image = new Image(defaultImageFile.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 38.5);
+        }
+        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
+    }
+
     @FXML
     private void openCreateUserScene() {
         try {
@@ -287,6 +317,33 @@ public class ManageUserController implements Initializable {
             stage.setResizable(false);
             stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(userTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            loadUsers(keyword,currentPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openLogOutScene() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage)userTableView.getScene().getWindow();
+
+            LogoutController logoutController = loader.getController();
+            logoutController.setOwnerStage(currentStage);
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Logout");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();

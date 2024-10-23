@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -19,12 +21,14 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import librio.controllers.admin.BookDetailController;
+import librio.controllers.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -34,6 +38,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.*;
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class ManageBookController implements Initializable {
     @FXML
@@ -58,6 +63,10 @@ public class ManageBookController implements Initializable {
     private Pagination pagination;
     @FXML
     private TextField searchTextField;
+    @FXML
+    private ImageView avatarUser;
+    @FXML
+    private Label userNameUser;
 
     private ObservableList<Book> bookList;
 
@@ -68,7 +77,7 @@ public class ManageBookController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Thiết lập dữ liệu cho các cột
+        setAvatarAndUserName();
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
@@ -197,6 +206,24 @@ public class ManageBookController implements Initializable {
         currentPage = pageIndex;
         loadBooks(searchTextField.getText().trim(), pageIndex);
         return new BorderPane();
+    }
+
+    public void setAvatarAndUserName(){
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+
+        File file = new File(path);
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 38.5);
+        } else {
+            String defaultImage = avatarsDir + "Male User.png";
+            File defaultImageFile = new File(defaultImage);
+            Image image = new Image(defaultImageFile.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 38.5);
+        }
+        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
     @FXML
