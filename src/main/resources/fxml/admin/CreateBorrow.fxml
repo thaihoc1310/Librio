@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.BorrowDetailController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.CreateBorrowController">
     <children>
         <AnchorPane prefHeight="650.0" prefWidth="700.0">
             <children>
@@ -25,67 +25,77 @@
                                 <Font name="System Bold" size="30.0" />
                             </font>
                         </Text>
-                        <GridPane layoutX="42.0" layoutY="47.0" prefHeight="513.0" prefWidth="368.0">
+                        <GridPane layoutX="40.0" layoutY="90.0" prefHeight="429.0" prefWidth="299.0">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.20001220703125" minWidth="10.0" prefWidth="118.4" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="259.9999877929688" minWidth="10.0" prefWidth="211.20000000000002" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.79996337890626" minWidth="10.0" prefWidth="106.40003662109376" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="259.9999877929688" minWidth="10.0" prefWidth="192.79996337890628" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints maxHeight="48.599996948242186" minHeight="2.1999992370605455" prefHeight="30.6" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="27.19999694824219" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="124.79999999999998" minHeight="10.0" prefHeight="36.000003051757815" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="233.60001220703128" minHeight="8.000021362304707" prefHeight="33.600006103515625" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="69.60001220703127" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="51.20002136230468" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="292.3999847412109" minHeight="10.0" prefHeight="120.80001220703127" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="270.59999694824216" minHeight="10.0" prefHeight="111.80001525878907" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="341.79998168945315" minHeight="10.0" prefHeight="31.79998779296875" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="48.599996948242186" minHeight="2.1999992370605455" prefHeight="45.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="74.20000076293945" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="124.79999999999998" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="233.60001220703128" minHeight="8.000021362304707" prefHeight="20.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="45.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="20.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="292.3999847412109" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="270.59999694824216" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label fx:id="borrowDateLabel" text="20-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                <Label fx:id="borrowDateLabel" text="20-12-2003" GridPane.columnIndex="1" GridPane.rowIndex="8">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="bookTitleLabel" text="Harry Potter" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                <Label fx:id="bookTitleLabel" text="Harry Potter" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Member Email :">
+                                <Label text="Email :">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Borrow Date :" GridPane.rowIndex="5">
+                                <Label text="Borrow Date :" GridPane.rowIndex="8">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Due Date :" GridPane.rowIndex="6">
+                                <Label text="Due Date :" GridPane.rowIndex="10">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Book Title :" GridPane.rowIndex="4">
+                                <Label text="Book Title :" GridPane.rowIndex="6">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label text="Book ISBN :" GridPane.rowIndex="2">
+                                <Label text="Book ISBN :" GridPane.rowIndex="4">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="bookIsbnLabel" text="1234567890" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                        <Label fx:id="emailErrorLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" />
-                        <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Label fx:id="emailErrorLabel1" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="emailErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="emailTextField" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="dueDatePicker" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Label fx:id="bookIsbnErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="bookIsbnTextField" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label text="Name :" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="nameLabel" text="Giang" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="dueDateErrorLabel" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                             </children>
                         </GridPane>
                         <ImageView fx:id="bookImageView" fitHeight="290.0" fitWidth="200.0" layoutX="428.0" layoutY="67.0" pickOnBounds="true">
@@ -93,27 +103,8 @@
                                 <Image url="@../../images/book/harryPottersample.jpg" />
                             </image>
                         </ImageView>
-                        <Button fx:id="backButton" layoutX="542.0" layoutY="577.0" mnemonicParsing="false" onAction="#back" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Back" />
-                        <Label layoutX="435.0" layoutY="411.0" text="Status :">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </Label>
-                        <Label fx:id="statusLabel" layoutX="526.0" layoutY="411.0" text="BORROWING">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </Label>
-                        <Label layoutX="448.0" layoutY="464.0" text="Fine :">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </Label>
-                        <Label fx:id="fineLabel" layoutX="526.0" layoutY="464.0" text="5000">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </Label>
+                        <Button fx:id="backButton" layoutX="379.0" layoutY="577.0" mnemonicParsing="false" onAction="#back" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Back" />
+                  <Button layoutX="213.0" layoutY="577.0" mnemonicParsing="false" onAction="#createBorrow" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Create" />
                     </children>
                 </AnchorPane>
             </children>

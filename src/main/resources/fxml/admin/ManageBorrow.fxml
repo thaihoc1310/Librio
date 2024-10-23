@@ -180,7 +180,7 @@
                                         <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                                     </image>
                                 </ImageView>
-                                <Button fx:id="createUserButton" layoutX="1248.0" layoutY="85.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" text="Create" AnchorPane.rightAnchor="41.59999999999991" />
+                                <Button fx:id="createBorrowButton" layoutX="1248.0" layoutY="85.0" mnemonicParsing="false" onAction="#openCreateBorrowScene" prefHeight="30.0" prefWidth="110.0" text="Create" AnchorPane.rightAnchor="41.59999999999991" />
                             </children>
                         </AnchorPane>
                     </top>
