@@ -11,20 +11,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import librio.controllers.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
 import librio.models.Status;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -37,7 +33,6 @@ import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.getBorrowById;
 import static librio.util.DatabaseUtil.getTotalBorrowCount;
-import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class ManageBorrowController implements Initializable {
 
@@ -66,10 +61,10 @@ public class ManageBorrowController implements Initializable {
     @FXML
     private TextField searchTextField;
     @FXML
-    private ImageView avatarUser;
-    @FXML
-    private Label userNameUser;
+    private Button createBorrowButton;
+
     private ObservableList<Borrow> borrowList;
+
 
     private int currentPage = 0;
     private final int rowsPerPage = 11;
@@ -78,7 +73,6 @@ public class ManageBorrowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setAvatarAndUserName();
         borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         bookIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("bookIsbn"));
@@ -210,24 +204,6 @@ public class ManageBorrowController implements Initializable {
         return new BorderPane();
     }
 
-    public void setAvatarAndUserName(){
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
-
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        }
-        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
-    }
-
     @FXML
     private void openManageBookScene() {
         try {
@@ -335,6 +311,28 @@ public class ManageBorrowController implements Initializable {
             stage.showAndWait();
             loadBorrows(keyword,currentPage);
         }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openCreateBorrowScene() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateBorrow.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Create New User");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(createBorrowButton.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            loadBorrows(keyword,currentPage);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
