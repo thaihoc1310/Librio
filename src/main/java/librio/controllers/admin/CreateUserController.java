@@ -178,6 +178,7 @@ public class CreateUserController implements Initializable {
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
                 clearInputFields();
+                System.out.println("Huy");
                 closeStage();
             }
         } catch (SQLException e) {
