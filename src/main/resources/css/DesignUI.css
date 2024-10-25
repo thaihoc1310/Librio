@@ -4,19 +4,7 @@
     -fx-background-size: cover;
      -fx-background-size: contain;
 }
-.button {
-    -fx-background-color:  #481f10 ;
-    -fx-text-fill: #4C2113;
-    -fx-background-radius: 6px;
 
-    -fx-border-radius: 6px;
-}
-.button:hover {
-    -fx-background-color:#481f10; /* Màu nền khi hover */
-     -fx-border-radius: 2px;
-      -fx-border-color: #ffffff;
-    -fx-cursor: hand;
-    }
 .combo-box {
     -fx-background-color: #ffffff; /* Màu nền của ComboBox */
 }
@@ -42,3 +30,39 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 0); /* Hiệu ứng đổ bóng phát sáng */
 
 }
+.button-settings {
+    -fx-background-color:  #e4e6eb ;
+    -fx-text-fill: #000000;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+
+    -fx-border-radius: 6px;
+}
+.button-settings:hover {
+    -fx-background-color:#d8dadf; /* Màu nền khi hover */
+    -fx-cursor: hand;
+    }
+    .Pane-avatar {
+        -fx-background-color: #ffffff; /* Màu nền */
+         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 20, 0.3, 0, 0);
+          -fx-background-radius: 6px;
+    }
+    .button-ctrl {
+        -fx-background-color:  #ffffff ;
+        -fx-text-fill: #000000;
+        -fx-font-size: 15;
+        -fx-font-weight: 700;
+        -fx-background-radius: 6px;
+    }
+    .button-ctrl:hover {
+        -fx-background-color:#f2f2f2;
+         -fx-text-fill: #000000;
+         -fx-font-size: 15;
+         -fx-font-weight: 700;
+        -fx-background-radius: 7px;
+        -fx-cursor: hand;
+        }
+        .image-avatar: hover {
+         -fx-cursor: hand;
+        }
