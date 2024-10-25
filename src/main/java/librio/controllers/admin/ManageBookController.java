@@ -1,6 +1,5 @@
 package librio.controllers.admin;
 
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,13 +19,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import librio.controllers.admin.BookDetailController;
+import librio.controllers.LogoutController;
 import librio.controllers.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
-import librio.models.Gender;
-import librio.models.Role;
-import librio.models.User;
 
 import java.io.File;
 import java.io.IOException;
@@ -374,6 +370,47 @@ public class ManageBookController implements Initializable {
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(adminDashBoardRoot);
         }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openProfileSettingsScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
+            Parent manageBorrowRoot = loader.load();
+
+            Stage currentStage = (Stage) addBookButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBorrowRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openLogOutScene() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage) bookTableView.getScene().getWindow();
+
+            LogoutController logoutController = loader.getController();
+            logoutController.setOwnerStage(currentStage);
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Logout");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(currentStage);
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            loadBooks(keyword, currentPage);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

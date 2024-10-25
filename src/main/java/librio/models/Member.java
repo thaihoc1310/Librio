@@ -14,9 +14,9 @@ public class Member extends User {
         this.totalBookBorrowed = new SimpleLongProperty();
     }
 
-    public Member(String id, String name, String email, String phoneNumber, String address, Gender gender, Role role,
+    public Member(String id, String name, String email, String password, String phoneNumber, String address, Gender gender, Role role,
                   String avatar, LocalDate birthOfDate, long fineAmount, long totalBookBorrowed) {
-        super(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+        super(id, name, email, password ,phoneNumber, address, gender, role, avatar, birthOfDate);
         this.fineAmount = new SimpleLongProperty(fineAmount);
         this.totalBookBorrowed = new SimpleLongProperty(totalBookBorrowed);
     }

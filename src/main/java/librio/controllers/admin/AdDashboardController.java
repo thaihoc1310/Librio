@@ -8,7 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import librio.controllers.LogoutController;
 import librio.controllers.auth.Session;
 import javafx.fxml.Initializable;
 
@@ -95,4 +98,43 @@ public class AdDashboardController implements Initializable {
         }
     }
 
+    @FXML
+    private void openProfileSettingsScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
+            Parent manageBorrowRoot = loader.load();
+
+            Stage currentStage = (Stage) openManageBookButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBorrowRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openLogOutScene() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage) openManageBookButton.getScene().getWindow();
+
+            LogoutController logoutController = loader.getController();
+            logoutController.setOwnerStage(currentStage);
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Logout");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(currentStage);
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
