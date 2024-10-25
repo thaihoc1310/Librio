@@ -1,11 +1,8 @@
 package librio.controllers.member;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.ScrollPane;
@@ -16,12 +13,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,9 +28,12 @@ public class BookController implements Initializable {
 
     @FXML
     private TilePane tilePane;
-
+    @FXML
+    private ImageView ClickAvatar;
     @FXML
     private TextField searchTextField;
+    @FXML
+    private AnchorPane menuPane;
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -100,26 +97,26 @@ public class BookController implements Initializable {
     private void displayBooks(List<Book> booksToDisplay) {
         tilePane.getChildren().clear();
         for (Book book : booksToDisplay) {
-            AnchorPane bookPane = createBookPane(book); // Tạo AnchorPane cho từng cuốn sách
-            tilePane.getChildren().add(bookPane);      // Thêm vào tilePane
+            AnchorPane bookPane = createBookPane(book);
+            tilePane.getChildren().add(bookPane);
         }
         tilePane.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-            double paneWidth = newWidth.doubleValue(); // Chiều rộng của TilePane
-            adjustBookPaneLayout(paneWidth);           // Gọi hàm điều chỉnh bố cục
+            double paneWidth = newWidth.doubleValue();
+            adjustBookPaneLayout(paneWidth);
         });
 
-        // Thực hiện lần đầu để đảm bảo căn chỉnh đúng khi khởi tạo
         adjustBookPaneLayout(tilePane.getWidth());
     }
+
     private void adjustBookPaneLayout(double tilePaneWidth) {
-        if (tilePaneWidth <= 0) return;  // Không làm gì nếu chiều rộng không hợp lệ
+        if (tilePaneWidth <= 0) return;
         System.out.println(tilePaneWidth);
 
-        double horizontalPadding = (tilePaneWidth - 1125) / 2;  // Căn lề trái và phải
+        double horizontalPadding = (tilePaneWidth - 1270) / 2;
 
-        // Áp dụng padding cho TilePane để các ô sách được căn giữa
-        tilePane.setPadding(new Insets(10, 0, 10, horizontalPadding));  // Trên 10, phải, dưới 10, trái
+        tilePane.setPadding(new Insets(230, 0, 10, horizontalPadding));
     }
+
     /**
      * Tạo một AnchorPane cho mỗi cuốn sách
      */
@@ -169,48 +166,66 @@ public class BookController implements Initializable {
                 star.setImage(new Image(getClass().getResource("/images/book/ratings/Star.png").toExternalForm())); // Hình ảnh ngôi sao đầy
             }
 
-            star.setFitHeight(15); // Kích thước chiều cao của ngôi sao
-            star.setFitWidth(15);  // Kích thước chiều rộng của ngôi sao
+            star.setFitHeight(15);
+            star.setFitWidth(15);
             starBox.getChildren().add(star);
         }
 
-        // Đặt vị trí cho HBox (starBox) trong AnchorPane
-        AnchorPane.setTopAnchor(starBox, 370.0); // Đặt dưới tiêu đề sách
+
+        AnchorPane.setTopAnchor(starBox, 370.0);
         AnchorPane.setLeftAnchor(starBox, 29.0);
         AnchorPane.setRightAnchor(starBox, 29.0);
         bookPane.getChildren().add(starBox);
 
-        bookPane.setOnMouseClicked(event -> showBookDetails(book));
+//        bookPane.setOnMouseClicked(event -> showBookDetails(book));
         return bookPane;
     }
+    private boolean isAnchorPaneVisible = false;
 
-    private void showBookDetails(Book book) {
-        try {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
-            Parent bookDetailRoot = loader.load();
-
-            BookDetailController controller = loader.getController();
-            controller.setBookDetails(book);
-
-            double scrollPosition = scrollPane.getVvalue();
-            String currentSearch = searchTextField.getText();
-
-            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();  // Lưu Scene hiện tại
-
-            Scene bookDetailScene = new Scene(bookDetailRoot);
-            currentStage.setScene(bookDetailScene);
-
-            controller.setOnBackAction(() -> {
-                currentStage.setScene(currentScene); // Chuyển lại Scene cũ
-                scrollPane.setVvalue(scrollPosition); // Khôi phục vị trí cuộn
-                searchTextField.setText(currentSearch); // Khôi phục giá trị tìm kiếm
-            });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+@FXML
+private void handleAvatarClick() {
+    if (!isAnchorPaneVisible) {
+        menuPane.toFront();
+        isAnchorPaneVisible = true;
+    } else {
+        menuPane.toBack();
+        isAnchorPaneVisible = false;
     }
+}
+@FXML
+    private void cancelMenuButton(){
+    if(isAnchorPaneVisible){
+        menuPane.toBack();
+        isAnchorPaneVisible = false;
+    }
+}
+//    private void showBookDetails(Book book) {
+//        try {
+//
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
+//            Parent bookDetailRoot = loader.load();
+//
+//            BookDetailController controller = loader.getController();
+//            controller.setBookDetails(book);
+//
+//            double scrollPosition = scrollPane.getVvalue();
+//            String currentSearch = searchTextField.getText();
+//
+//            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
+//            Scene currentScene = currentStage.getScene();
+//
+//            Scene bookDetailScene = new Scene(bookDetailRoot);
+//            currentStage.setScene(bookDetailScene);
+//
+//            controller.setOnBackAction(() -> {
+//                currentStage.setScene(currentScene);
+//                scrollPane.setVvalue(scrollPosition);
+//                searchTextField.setText(currentSearch);
+//            });
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }
