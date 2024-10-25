@@ -3,10 +3,7 @@ package librio.controllers.member;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -34,28 +31,70 @@ public class BookController implements Initializable {
     @FXML
     private TextField searchTextField;
     @FXML
+    private ComboBox<String> filterBox;
+    @FXML
     private AnchorPane menuPane;
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private Pagination pagination;
-
+    private ImageView searchButton;
     private List<Book> bookList = new ArrayList<>();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Load books from database
-        loadBooksFromDatabase();
-        displayBooks(bookList);
+        filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN", "Rating");
+        filterBox.getSelectionModel().selectFirst();
+
+        loadBooksFromDatabase("");
+
     }
 
     /**
      * Tải danh sách sách từ cơ sở dữ liệu
      */
-    private void loadBooksFromDatabase() {
+    private void loadBooksFromDatabase(String keyword) {
+        bookList.clear();
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            String selectedFilter = filterBox.getValue();
+            String query;
+            PreparedStatement preparedStatement;
+
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books";
+                preparedStatement = connection.prepareStatement(query);
+            } else {
+                switch (selectedFilter) {
+                    case "Author":
+                        query = "SELECT * FROM books WHERE author LIKE ?";
+                        break;
+                    case "ISBN":
+                        query = "SELECT * FROM books WHERE isbn LIKE ?";
+                        break;
+                    case "Category":
+                        query = "SELECT * FROM books WHERE category LIKE ?";
+                        break;
+                    case "Language":
+                        query = "SELECT * FROM books WHERE language LIKE ?";
+                        break;
+                    case "Publisher":
+                        query = "SELECT * FROM books WHERE publisher LIKE ?";
+                        break;
+                    case "Year published":
+                        query = "SELECT * FROM books WHERE year_published LIKE ?";
+                        break;
+                    case "Rating":
+                        query = "SELECT * FROM books WHERE average_of_rating LIKE ?";
+                        break;
+                    case "Title":
+                    default:
+                        query = "SELECT * FROM books WHERE title LIKE ?";
+                        break;
+                }
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, "%" + keyword + "%");
+            }
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -73,7 +112,7 @@ public class BookController implements Initializable {
                 String description = resultSet.getString("description");
                 String imageBook = resultSet.getString("book_image");
 
-                if (imageBook == null ) {
+                if (imageBook == null) {
                     imageBook = "defaultBook.jpg";
                 }
 
@@ -87,6 +126,14 @@ public class BookController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        displayBooks(bookList);
+    }
+
+    @FXML
+    private void handleSearch() {
+        String keyword = searchTextField.getText().trim();
+        loadBooksFromDatabase(keyword);
     }
 
     /**
@@ -106,9 +153,10 @@ public class BookController implements Initializable {
         adjustBookPaneLayout(tilePane.getWidth());
     }
 
+
+
     private void adjustBookPaneLayout(double tilePaneWidth) {
         if (tilePaneWidth <= 0) return;
-        System.out.println(tilePaneWidth);
 
         double horizontalPadding = (tilePaneWidth - 1270) / 2;
 
