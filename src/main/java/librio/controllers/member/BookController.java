@@ -16,6 +16,7 @@ import javafx.scene.text.TextFlow;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -72,11 +73,8 @@ public class BookController implements Initializable {
                 String description = resultSet.getString("description");
                 String imageBook = resultSet.getString("book_image");
 
-                // Kiểm tra nếu book_image là null hoặc rỗng, sử dụng ảnh mặc định
-                if (imageBook == null || imageBook.isEmpty()) {
-                    imageBook = getClass().getResource("/images/book/defaultBook.jpg").toExternalForm(); // Đường dẫn đến ảnh mặc định
-                } else {
-                    imageBook = getClass().getResource("/images/book/" + imageBook).toExternalForm();
+                if (imageBook == null ) {
+                    imageBook = "defaultBook.jpg";
                 }
 
                 // Tạo đối tượng Book với tất cả các thuộc tính
@@ -131,7 +129,14 @@ public class BookController implements Initializable {
         bookCover.setFitWidth(215);
         bookCover.setX(29);  // Đảm bảo hình ảnh nằm giữa AnchorPane
         bookCover.setY(1);
-        bookCover.setImage(new Image(book.getImagePath()));
+
+        // set image
+        String projectDir = System.getProperty("user.dir");
+        String booksDir = projectDir + "/src/main/resources/images/book/";
+        String path = booksDir + book.getImagePath();
+        File file = new File(path);
+        bookCover.setImage(new Image(file.toURI().toString()));
+
         bookCover.setPickOnBounds(true);
         bookCover.setPreserveRatio(true);
         bookPane.getChildren().add(bookCover);
