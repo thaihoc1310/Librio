@@ -12,8 +12,13 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.text.TextFlow;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,6 +52,7 @@ public class BookController implements Initializable {
         filterBox.getSelectionModel().selectFirst();
 
         loadBooksFromDatabase("");
+//        loadBooksFromGoogleAPI("");
 
     }
 
@@ -130,10 +136,63 @@ public class BookController implements Initializable {
         displayBooks(bookList);
     }
 
+    private void loadBooksFromGoogleAPI(String keyword) {
+        bookList.clear();
+        try {
+            String apiKey = "AIzaSyBRX3PmHB6TlSwDsU5KmcbexZxISjyd9hI";
+            String apiUrl;
+            if (keyword == null || keyword.isEmpty()) {
+                apiUrl = "https://www.googleapis.com/books/v1/volumes?q=a&maxResults=40&key=" + apiKey;
+            } else {
+                apiUrl = "https://www.googleapis.com/books/v1/volumes?q=" + keyword + "&key=" + apiKey;
+            }
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+
+            JSONObject jsonResponse = new JSONObject(content.toString());
+            JSONArray items = jsonResponse.getJSONArray("items");
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject volumeInfo = items.getJSONObject(i).getJSONObject("volumeInfo");
+
+                String id = items.getJSONObject(i).getString("id");
+                String title = volumeInfo.has("title") ? volumeInfo.getString("title") : "Unknown Title";
+                String author = volumeInfo.has("authors") ? volumeInfo.getJSONArray("authors").getString(0) : "Unknown Author";
+                String isbn = volumeInfo.has("industryIdentifiers") ? volumeInfo.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier") : "Unknown ISBN";
+                String category = volumeInfo.has("categories") ? volumeInfo.getJSONArray("categories").getString(0) : "Unknown Category";
+                String publisher = volumeInfo.has("publisher") ? volumeInfo.getString("publisher") : "Unknown Publisher";
+                String yearPublished = volumeInfo.has("publishedDate") ? volumeInfo.getString("publishedDate") : "Unknown Year";
+                String language = volumeInfo.has("language") ? volumeInfo.getString("language") : "Unknown Language";
+                String description = volumeInfo.has("description") ? volumeInfo.getString("description") : "No Description";
+                String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("thumbnail") : "defaultBook.jpg";
+
+                // Tạo đối tượng Book với tất cả các thuộc tính
+                Book book = new Book(id, title, author, isbn, category, publisher, 2, 5.0, yearPublished, language, "100", description, imageBook);
+
+                // Thêm vào danh sách
+                bookList.add(book);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        displayBooks(bookList);
+    }
+
     @FXML
     private void handleSearch() {
         String keyword = searchTextField.getText().trim();
         loadBooksFromDatabase(keyword);
+//        loadBooksFromGoogleAPI(keyword);
     }
 
     /**
