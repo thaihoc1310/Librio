@@ -68,7 +68,7 @@ public class BorrowDetailController implements Initializable {
             Book borrowedBook = getBookByIsbn(borrow.getBookIsbn());
             User user = getUserById(borrow.getMemberId());
 
-            borrowIdLabel.setText(borrow.getId());
+            borrowIdLabel.setText(String.valueOf(borrow.getId()));
             memberEmailLabel.setText(user.getEmail());
             memberNameLabel.setText(user.getName());
             bookIsbnLabel.setText(borrow.getBookIsbn());

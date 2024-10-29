@@ -127,19 +127,19 @@ public class ManageBorrowController implements Initializable {
 
                         btnDetail.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
-                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            Borrow dbBorrow = getBorrowById(String.valueOf(borrow.getId()));
                             openBorrowDetailScene(dbBorrow);
                         });
 
                         btnUpdate.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
-                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            Borrow dbBorrow = getBorrowById(String.valueOf(borrow.getId()));
                             openUpdateBorrowScene(dbBorrow);
                         });
 
                         btnDelete.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
-                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            Borrow dbBorrow = getBorrowById(String.valueOf(borrow.getId()));
                             openDeleteBorrowScene(dbBorrow);
                         });
 
@@ -188,7 +188,7 @@ public class ManageBorrowController implements Initializable {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String borrowId = resultSet.getString("id");
+                Integer borrowId = resultSet.getInt("id");
                 String email = resultSet.getString("email");
                 String bookIsbn = resultSet.getString("book_isbn");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();

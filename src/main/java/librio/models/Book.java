@@ -6,7 +6,7 @@ import java.time.Instant;
 
 public class Book {
     //Copy lại phần này rồi paste lại nếu bị conflict
-    private StringProperty id;
+    private IntegerProperty id;
     private StringProperty title;
     private StringProperty author;
     private StringProperty category;
@@ -24,8 +24,8 @@ public class Book {
     private StringProperty update_by;
     private ObjectProperty<Instant> update_at;
 
-    public Book(String id, String title, String isbn, String author, String category, Double averageOfRating) {
-        this.id = new SimpleStringProperty(id);
+    public Book(Integer id, String title, String isbn, String author, String category, Double averageOfRating) {
+        this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
         this.category = new SimpleStringProperty(category);
@@ -34,7 +34,7 @@ public class Book {
     }
 
     public Book() {
-        this.id = new SimpleStringProperty();
+        this.id = new SimpleIntegerProperty();
         this.title = new SimpleStringProperty();
         this.author = new SimpleStringProperty();
         this.isbn = new SimpleStringProperty();
@@ -48,8 +48,8 @@ public class Book {
 
 
 
-    public Book(String id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, Double averageOfRating, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
-        this.id = new SimpleStringProperty(id);
+    public Book(Integer id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, Double averageOfRating, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
+        this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
         this.isbn = new SimpleStringProperty(isbn);
@@ -67,16 +67,17 @@ public class Book {
 
 
     // Getters và Setters cho các thuộc tính
-    public String getId() {
+
+    public int getId() {
         return id.get();
     }
 
-    public void setId(String id) {
-        this.id.set(id);
+    public IntegerProperty idProperty() {
+        return id;
     }
 
-    public StringProperty idProperty() {
-        return id;
+    public void setId(int id) {
+        this.id.set(id);
     }
 
     public String getTitle() {

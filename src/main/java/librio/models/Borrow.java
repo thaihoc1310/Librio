@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 public class Borrow {
-    private StringProperty id;
+    private IntegerProperty id;
     private StringProperty bookIsbn;
     private StringProperty memberId;
     private StringProperty email;
@@ -21,8 +21,8 @@ public class Borrow {
     private StringProperty update_by;
     private ObjectProperty<Instant> update_at;
 
-    public Borrow(String id, String bookIsbn, String email, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, Status status, double fine) {
-        this.id = new SimpleStringProperty(id);
+    public Borrow(Integer id, String bookIsbn, String email, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, Status status, double fine) {
+        this.id = new SimpleIntegerProperty(id);
         this.bookIsbn = new SimpleStringProperty(bookIsbn);
         this.email = new SimpleStringProperty(email);
         this.borrowDate = new SimpleObjectProperty<>(borrowDate);
@@ -34,16 +34,18 @@ public class Borrow {
 
 
     // Getters và Setters
-    public String getId() {
+
+
+    public int getId() {
         return id.get();
     }
 
-    public void setId(String id) {
-        this.id.set(id);
+    public IntegerProperty idProperty() {
+        return id;
     }
 
-    public StringProperty idProperty() {
-        return id;
+    public void setId(int id) {
+        this.id.set(id);
     }
 
     public String getBookIsbn() {

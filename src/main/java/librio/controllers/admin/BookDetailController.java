@@ -68,7 +68,7 @@ public class BookDetailController implements Initializable {
 
     private void populateFields() {
         if (book != null) {
-            bookIdLabel.setText(book.getId());
+            bookIdLabel.setText(String.valueOf(book.getId()));
             bookTitleLabel.setText(book.getTitle());
             authorLabel.setText(book.getAuthor());
             isbnLabel.setText(book.getIsbn());
