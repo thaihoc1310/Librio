@@ -171,7 +171,8 @@ public class ManageBorrowController implements Initializable {
             PreparedStatement statement;
 
             if (keyword == null || keyword.isEmpty()) {
-                query = "SELECT * FROM borrows LIMIT ? OFFSET ?";
+                query = "SELECT * FROM borrows b JOIN users u ON b.member_id = u.id " +
+                        "LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setInt(1, rowsPerPage);
                 statement.setInt(2, offset);

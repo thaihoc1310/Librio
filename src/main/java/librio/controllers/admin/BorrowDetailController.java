@@ -66,10 +66,10 @@ public class BorrowDetailController implements Initializable {
     private void populateFields() {
         if (borrow != null) {
             Book borrowedBook = getBookByIsbn(borrow.getBookIsbn());
-            User user = getUserByEmail(borrow.getEmail());
+            User user = getUserById(borrow.getMemberId());
 
             borrowIdLabel.setText(borrow.getId());
-            memberEmailLabel.setText(borrow.getEmail());
+            memberEmailLabel.setText(user.getEmail());
             memberNameLabel.setText(user.getName());
             bookIsbnLabel.setText(borrow.getBookIsbn());
             bookTitleLabel.setText(borrowedBook.getTitle());

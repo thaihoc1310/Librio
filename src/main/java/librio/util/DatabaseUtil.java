@@ -375,7 +375,7 @@ public class DatabaseUtil {
 
             if (resultSet.next()) {
                 String id = resultSet.getString("id");
-                String memberEmail = resultSet.getString("email");
+                String memberId = resultSet.getString("member_id");
                 String bookIsbn = resultSet.getString("book_isbn");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
@@ -383,7 +383,7 @@ public class DatabaseUtil {
                 Status status = Status.valueOf(resultSet.getString("status"));
                 Double fine = resultSet.getDouble("fine");
 
-                return new Borrow(id, bookIsbn, memberEmail, borrowDate, dueDate, returnDate, status, fine);
+                return new Borrow(id, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -37,10 +37,9 @@ import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class ChangePasswordController implements Initializable {
 
-    private User loggedInUser =  Session.getInstance().getLoggedInUser();
+    private boolean ignoreListener = false;
 
-    @FXML
-    private ImageView avatar;
+    private User loggedInUser =  Session.getInstance().getLoggedInUser();
 
     @FXML
     private ImageView avatarUser;
@@ -49,19 +48,19 @@ public class ChangePasswordController implements Initializable {
     private Label confirmPasswordErrorLabel;
 
     @FXML
-    private TextField confirmPasswordTextField;
+    private PasswordField confirmPasswordTextField;
 
     @FXML
     private Label currentPasswordErrorLabel;
 
     @FXML
-    private TextField currentPastwordTextField;
+    private PasswordField currentPasswordTextField;
 
     @FXML
     private Label newPasswordErrorLabel;
 
     @FXML
-    private TextField newPasswordTextField;
+    private PasswordField newPasswordTextField;
 
     @FXML
     private Label notification;
@@ -80,7 +79,7 @@ public class ChangePasswordController implements Initializable {
         if(loggedInUser == null) {
             return;
         }
-        currentPastwordTextField.setText("");
+        currentPasswordTextField.setText("");
         newPasswordTextField.setText("");
         confirmPasswordTextField.setText("");
         hideErrorLabels();
@@ -90,10 +89,11 @@ public class ChangePasswordController implements Initializable {
 
     @FXML
     private void save(){
+        hideErrorLabels();
         if (loggedInUser == null) {
             return;
         }
-        String currentPassword = currentPastwordTextField != null ? currentPastwordTextField.getText() : "";
+        String currentPassword = currentPasswordTextField != null ? currentPasswordTextField.getText() : "";
         String newPassword = newPasswordTextField != null ? newPasswordTextField.getText() : "";
         String confirmPassword = confirmPasswordTextField != null ? confirmPasswordTextField.getText() : "";
         boolean validation = false;
@@ -150,6 +150,7 @@ public class ChangePasswordController implements Initializable {
             int rowsUpdated = statement.executeUpdate();
             if(rowsUpdated > 0){
                 notification.setText("Password updated successfully!");
+                clearPasswordFieldAndHideErrorLabels();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -157,27 +158,38 @@ public class ChangePasswordController implements Initializable {
     }
 
     private void addListeners() {
-        currentPastwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.trim().isEmpty()){
-                currentPasswordErrorLabel.setText("Password must not be empty!");
-            }else{
-                currentPasswordErrorLabel.setText("");
+        hideErrorLabels();
+        currentPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!ignoreListener) {
+                if(newValue.trim().isEmpty()){
+                    currentPasswordErrorLabel.setText("Password must not be empty!");
+                }else{
+                    currentPasswordErrorLabel.setText("");
+                }
+                notification.setText("");
             }
+
         });
 
         newPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.trim().isEmpty()){
-                newPasswordErrorLabel.setText("Password must not be empty!");
-            }else{
-                newPasswordErrorLabel.setText("");
+            if (!ignoreListener) {
+                if(newValue.trim().isEmpty()){
+                    newPasswordErrorLabel.setText("Password must not be empty!");
+                }else{
+                    newPasswordErrorLabel.setText("");
+                }
+                notification.setText("");
             }
         });
 
         confirmPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.trim().isEmpty()){
-                confirmPasswordErrorLabel.setText("Password must not be empty!");
-            }else{
-                confirmPasswordErrorLabel.setText("");
+            if(!ignoreListener){
+                if(newValue.trim().isEmpty()){
+                    confirmPasswordErrorLabel.setText("Password must not be empty!");
+                }else{
+                    confirmPasswordErrorLabel.setText("");
+                }
+                notification.setText("");
             }
         });
     }
@@ -267,6 +279,7 @@ public class ChangePasswordController implements Initializable {
 
 
     private void hideErrorLabels() {
+
         newPasswordErrorLabel.setText("");
         confirmPasswordErrorLabel.setText("");
         currentPasswordErrorLabel.setText("");
@@ -281,13 +294,11 @@ public class ChangePasswordController implements Initializable {
         if (file.exists()) {
             Image image = new Image(file.toURI().toString());
             cropAndClipToCircle(image, avatarUser, 38.5);
-            cropAndClipToCircle(image, avatar, 100);
         } else {
             String defaultImage = avatarsDir + "Male User.png";
             File defaultImageFile = new File(defaultImage);
             Image image = new Image(defaultImageFile.toURI().toString());
             cropAndClipToCircle(image, avatarUser, 38.5);
-            cropAndClipToCircle(image, avatar, 100);
         }
         userNameLabel.setText(loggedInUser.getName());
     }
@@ -304,5 +315,17 @@ public class ChangePasswordController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void clearPasswordFieldAndHideErrorLabels() {
+        hideErrorLabels();
+        ignoreListener = true;
+
+        currentPasswordTextField.clear();
+        newPasswordTextField.clear();
+        confirmPasswordTextField.clear();
+
+        // Bật lại các listener sau khi đã xóa
+        ignoreListener = false;
     }
 }
