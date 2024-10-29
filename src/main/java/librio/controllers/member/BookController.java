@@ -1,19 +1,24 @@
 package librio.controllers.member;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
+import librio.controllers.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,6 +34,26 @@ public class BookController implements Initializable {
     @FXML
     private ImageView ClickAvatar;
     @FXML
+    private Pane overlayPane;
+    @FXML
+    private Text title;
+    @FXML
+    private Label author;
+    @FXML
+    private Label isbn;
+    @FXML
+    private Label year;
+    @FXML
+    private Label publisher;
+    @FXML
+    private Text description;
+    @FXML
+    private ImageView bookCoverImage;
+    @FXML
+    private AnchorPane bookDetailsPane;
+    @FXML
+    private AnchorPane mainAnchorPane;
+    @FXML
     private TextField searchTextField;
     @FXML
     private ComboBox<String> filterBox;
@@ -40,12 +65,16 @@ public class BookController implements Initializable {
     private ImageView searchButton;
     private List<Book> bookList = new ArrayList<>();
 
-
+    private Stage ownerStage;
+    public void setOwnerStage(Stage ownerStage) {
+        this.ownerStage = ownerStage;
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN", "Rating");
         filterBox.getSelectionModel().selectFirst();
-
+        overlayPane.setVisible(false); // Ẩn overlay khi khởi động
+        overlayPane.setOnMouseClicked(event -> cancelBookDetail());
         loadBooksFromDatabase("");
 
     }
@@ -154,7 +183,6 @@ public class BookController implements Initializable {
     }
 
 
-
     private void adjustBookPaneLayout(double tilePaneWidth) {
         if (tilePaneWidth <= 0) return;
 
@@ -166,6 +194,7 @@ public class BookController implements Initializable {
     /**
      * Tạo một AnchorPane cho mỗi cuốn sách
      */
+    private boolean isBookDetailVisible = false;
     private AnchorPane createBookPane(Book book) {
         AnchorPane bookPane = new AnchorPane();
         bookPane.setPrefSize(270, 400);
@@ -229,56 +258,84 @@ public class BookController implements Initializable {
         AnchorPane.setLeftAnchor(starBox, 29.0);
         AnchorPane.setRightAnchor(starBox, 29.0);
         bookPane.getChildren().add(starBox);
+        bookPane.setOnMouseClicked(event -> showBookDetails(book));
 
-//        bookPane.setOnMouseClicked(event -> showBookDetails(book));
         return bookPane;
     }
+
     private boolean isAnchorPaneVisible = false;
 
-@FXML
-private void handleAvatarClick() {
-    if (!isAnchorPaneVisible) {
-        menuPane.toFront();
-        isAnchorPaneVisible = true;
-    } else {
-        menuPane.toBack();
-        isAnchorPaneVisible = false;
+    @FXML
+    private void handleAvatarClick() {
+        if (!isAnchorPaneVisible) {
+            menuPane.toFront();
+            isAnchorPaneVisible = true;
+        } else {
+            menuPane.toBack();
+            isAnchorPaneVisible = false;
+        }
     }
-}
-@FXML
-    private void cancelMenuButton(){
-    if(isAnchorPaneVisible){
-        menuPane.toBack();
-        isAnchorPaneVisible = false;
+
+    @FXML
+    private void cancelMenuButton() {
+        if (isAnchorPaneVisible) {
+            menuPane.toBack();
+            System.out.println("hello");
+            isAnchorPaneVisible = false;
+        }
     }
-}
-//    private void showBookDetails(Book book) {
-//        try {
-//
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
-//            Parent bookDetailRoot = loader.load();
-//
-//            BookDetailController controller = loader.getController();
-//            controller.setBookDetails(book);
-//
-//            double scrollPosition = scrollPane.getVvalue();
-//            String currentSearch = searchTextField.getText();
-//
-//            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
-//            Scene currentScene = currentStage.getScene();
-//
-//            Scene bookDetailScene = new Scene(bookDetailRoot);
-//            currentStage.setScene(bookDetailScene);
-//
-//            controller.setOnBackAction(() -> {
-//                currentStage.setScene(currentScene);
-//                scrollPane.setVvalue(scrollPosition);
-//                searchTextField.setText(currentSearch);
-//            });
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    public void setBookDetails(Book book) {
+
+        title.setText(book.getTitle());
+        author.setText(book.getAuthor());
+        year.setText("Published:    "+book.getYearPublished());
+        isbn.setText("ISBN:   " + book.getIsbn());
+        publisher.setText("Publisher:   " + book.getPublisher());
+        description.setText(book.getDescription());
+        try {
+            bookCoverImage.setImage(new Image(book.getImagePath()));
+        } catch (Exception e) {
+            System.out.println("Không thể tải ảnh, sử dụng ảnh mặc định.");
+            bookCoverImage.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
+        }
+
+
+    }
+
+    private void showBookDetails(Book book) {
+            setBookDetails(book);
+            mainAnchorPane.setOpacity(0.4);
+            bookDetailsPane.toFront();
+            overlayPane.setVisible(true);
+            isBookDetailVisible = true;
+
+    }
+    @FXML
+    private void cancelBookDetail(){
+        if (isBookDetailVisible) {
+            bookDetailsPane.toBack();
+            mainAnchorPane.setOpacity(1);
+            overlayPane.setVisible(false);
+            isBookDetailVisible = false;
+        }
+    }
+    @FXML
+    void logOut() throws IOException {
+        Stage currenStage = (Stage) searchTextField.getScene().getWindow();
+        Stage stage = new Stage();
+        stage.setTitle("Librio");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
+        Parent loginRoot  = loader.load();
+        stage.setScene(new Scene(loginRoot));
+        stage.show();
+        Session.getInstance().logout();
+
+        if (ownerStage != null) {
+            ownerStage.close();
+        }
+
+        currenStage.close();
+    }
 
 }

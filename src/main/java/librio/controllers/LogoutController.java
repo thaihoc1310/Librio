@@ -5,7 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import librio.controllers.auth.Session;
 
 import java.io.IOException;
@@ -15,13 +17,16 @@ public class LogoutController {
     private Button cancelButton;
 
     private Stage ownerStage;
-
+private StackPane stackPaneRoot;
     public void setOwnerStage(Stage ownerStage) {
         this.ownerStage = ownerStage;
     }
-
+    public void setStackPaneRoot(StackPane stackPaneRoot) {
+        this.stackPaneRoot = stackPaneRoot;
+    }
     @FXML
     void cancel() throws IOException {
+        stackPaneRoot.setOpacity(1.0);
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

@@ -1,30 +1,48 @@
 .tile-pane {
     -fx-background-image: url("background_tile_pane.png");
     -fx-background-repeat: no-repeat;
-    -fx-background-size: cover;
-     -fx-background-size: contain;
+     -fx-background-size: 100% auto;
 }
 
 .combo-box {
-    -fx-background-color: #ffffff; /* Màu nền của ComboBox */
+    -fx-background-color: #ffffff;
 }
 .tilePane-book {
-    -fx-background-color: #ffffff; /* Màu nền */
-    -fx-background-radius: 5px;   /* Bo tròn góc */
-    -fx-border-color: #B08968;     /* Màu viền */
-    -fx-border-radius: 5px;       /* Bo góc cho viền */
-    -fx-border-width: 1px;         /* Độ dày viền */
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #B08968;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
 }
-/* Kiểu mặc định cho .tilePane-book */
+
 .tilePane-book {
-    -fx-background-color: #ffffff; /* Màu nền */
-
-    -fx-border-color: #4c2113;     /* Màu viền */
-    -fx-border-radius: 5px;        /* Bo góc cho viền */
-    -fx-border-width: 0.5px;         /* Độ dày viền */
+    -fx-background-color: #ffffff;
+     -fx-border-color: #4c2113;
+    -fx-border-radius: 8px;
+    -fx-border-width: 0.5px;
 }
 
-/* Hiệu ứng khi di chuột vào */
+.grayPane {
+    -fx-background-radius: 10px;
+    -fx-background-color: #ffffff;
+
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 14, 0.2, 0, 0);
+}
+/* file: style.css */
+
+.avatar-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 14, 0.5, 3.0, 3.0); /* Hiệu ứng đổ bóng */
+    -fx-border-radius: 10px; /* Bo góc viền */
+    -fx-background-radius: 10px; /* Bo góc nền */
+    -fx-padding: 5px; /* Khoảng cách bên trong */
+}
+
+.whitePane {
+    -fx-background-radius: 8px;
+    -fx-background-color: #f0f2f5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0.1, 1, 2);
+}
+
 .tilePane-book:hover {
     -fx-cursor: hand; /* Chuyển con trỏ chuột thành hình bàn tay */
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 0); /* Hiệu ứng đổ bóng phát sáng */
@@ -63,6 +81,22 @@
         -fx-background-radius: 7px;
         -fx-cursor: hand;
         }
+        .button-borrow {
+                -fx-background-color:  #6e2f18;
+                -fx-text-fill: #ffffff;
+                -fx-font-size: 18;
+                -fx-font-weight: 700;
+                -fx-background-radius: 4px;
+            }
+            .button-borrow:hover {
+                -fx-background-color:#943f20;
+                 -fx-text-fill: #ffffff;
+                 -fx-font-size: 18;
+                 -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 0);
+                 -fx-font-weight: 700;
+                -fx-background-radius: 4px;
+                -fx-cursor: hand;
+                }
         .image-avatar: hover {
          -fx-cursor: hand;
         }
