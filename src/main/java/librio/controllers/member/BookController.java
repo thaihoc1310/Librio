@@ -176,7 +176,7 @@ public class BookController implements Initializable {
                 String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("thumbnail") : "defaultBook.jpg";
 
                 // Tạo đối tượng Book với tất cả các thuộc tính
-                Book book = new Book(id, title, author, isbn, category, publisher, 2, 5.0, yearPublished, language, "100", description, imageBook);
+                Book book = new Book(Integer.parseInt(id), title, author, isbn, category, publisher, 2, 5.0, yearPublished, language, "100", description, imageBook);
 
                 // Thêm vào danh sách
                 bookList.add(book);
