@@ -47,10 +47,11 @@ public class User {
         this.gender = new SimpleObjectProperty<>(gender);
     }
 
-    public User(String id, String name, String email,  String phoneNumber, String address, Gender gender, Role role, String avatar, LocalDate birthOfDate) {
+    public User(String id, String name, String email, String password, String phoneNumber, String address, Gender gender, Role role, String avatar, LocalDate birthOfDate) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.email = new SimpleStringProperty(email);
+        this.password = new SimpleStringProperty(password);
         this.phoneNumber = new SimpleStringProperty(phoneNumber);
         this.address = new SimpleStringProperty(address);
         this.role = new SimpleObjectProperty<>(role);

@@ -37,13 +37,14 @@ public class DatabaseUtil {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phone_number");
                 String address = resultSet.getString("address");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
                 String avatar = resultSet.getString("avatar");
                 LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
-                return new User(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+                return new User(id, name, email, password, phoneNumber, address, gender, role, avatar, birthOfDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,13 +62,14 @@ public class DatabaseUtil {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phone_number");
                 String address = resultSet.getString("address") ;
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
                 String avatar = resultSet.getString("avatar");
                 LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
-                return new User(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+                return new User(id, name, email, password, phoneNumber, address, gender, role, avatar, birthOfDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -402,13 +404,14 @@ public class DatabaseUtil {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
+                String pass = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phone_number");
                 String address = resultSet.getString("address");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 String avatar = resultSet.getString("avatar");
                 LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
                 if(role.equals(Role.LIBRARIAN)){
-                    return new Librarian(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+                    return new Librarian(id, name, email, pass, phoneNumber, address, gender, role, avatar, birthOfDate);
                 }else if(role.equals(Role.MEMBER)){
                     try(PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM members WHERE id = ? ")){
                         memberStatement.setString(1, id);
@@ -416,7 +419,7 @@ public class DatabaseUtil {
                         if (memberResultSet.next()) {
                             long fineAmount = memberResultSet.getLong("fine_amount");
                             long totalBookBorrowed = memberResultSet.getLong("total_books_borrowed");
-                            return new Member(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate, fineAmount, totalBookBorrowed);
+                            return new Member(id, name, email, pass, phoneNumber, address, gender, role, avatar, birthOfDate, fineAmount, totalBookBorrowed);
                         }
                     }
                 }

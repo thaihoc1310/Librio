@@ -57,7 +57,6 @@ public class LoginController {
         stage.show();
         currentStage.close();
     }
-
 }
 
 

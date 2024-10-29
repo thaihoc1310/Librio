@@ -7,8 +7,8 @@ public class Librarian extends User {
         super();
     }
 
-    public Librarian(String id, String name, String email, String phoneNumber, String address,
+    public Librarian(String id, String name, String email, String password, String phoneNumber, String address,
                      Gender gender, Role role, String avatar, LocalDate birthOfDate) {
-        super(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+        super(id, name, email, password, phoneNumber, address, gender, role, avatar, birthOfDate);
     }
 }
