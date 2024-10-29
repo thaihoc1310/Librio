@@ -12,20 +12,32 @@ and open the template in the editor.
     -fx-background-color: #F1DEBC;
 }
 
-.background{
-    -fx-background-color: #F8EDD9;
-    -fx-background-radius: 5px;
+.background_pane{
+    -fx-background-color: #f8edd9;
+    -fx-background-radius: 10px;
+    -fx-border-radius:10px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5,0,0,0);
 }
 
 .btn-2{
-    -fx-background-color: #DCB485 ;
-    -fx-text-fill: #4C2113;
-    -fx-background-radius: 12px;
-    -fx-border-radius: 12px;
+    -fx-background-color: #72311c ;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 700;
+    -fx-background-radius: 5px;
     -fx-font-size: 15px;
 }
 .btn-2:hover{
+    -fx-background-color: #4c2113;
+    -fx-cursor: hand; /* Đảm bảo con trỏ vẫn là hình bàn tay khi hover */
+}
+.btn-3{
+    -fx-background-color: #f8edd9 ;
+    -fx-text-fill: #4c2113;
+    -fx-font-weight: 700;
+    -fx-background-radius: 5px;
+    -fx-font-size: 15px;
+}
+.btn-3:hover{
     -fx-background-color: #F1DEBC;
     -fx-cursor: hand; /* Đảm bảo con trỏ vẫn là hình bàn tay khi hover */
 }

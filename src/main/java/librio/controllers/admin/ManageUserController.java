@@ -15,25 +15,26 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import librio.controllers.LogoutController;
 import librio.controllers.auth.Session;
+import librio.database.DatabaseConnection;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
-import librio.database.DatabaseConnection;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.sql.PreparedStatement;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.getTotalUserCount;
@@ -42,6 +43,7 @@ import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class ManageUserController implements Initializable {
 
+    private final int rowsPerPage = 11;
     @FXML
     private TableView<User> userTableView;
     @FXML
@@ -68,13 +70,10 @@ public class ManageUserController implements Initializable {
     private ImageView avatarUser;
     @FXML
     private Label userNameUser;
-
-
+    @FXML
+    private StackPane stackPaneRoot;
     private ObservableList<User> userList;
-
     private int currentPage = 0;
-    private final int rowsPerPage = 11;
-
     private String keyword;
 
     @Override
@@ -206,7 +205,7 @@ public class ManageUserController implements Initializable {
         return new BorderPane();
     }
 
-    public void setAvatarAndUserName(){
+    public void setAvatarAndUserName() {
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
@@ -240,7 +239,7 @@ public class ManageUserController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
-            loadUsers(keyword,currentPage);
+            loadUsers(keyword, currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -266,7 +265,7 @@ public class ManageUserController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
-            loadUsers(keyword,currentPage);
+            loadUsers(keyword, currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -293,7 +292,7 @@ public class ManageUserController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
-            loadUsers(keyword,currentPage);
+            loadUsers(keyword, currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -320,7 +319,7 @@ public class ManageUserController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
-            loadUsers(keyword,currentPage);
+            loadUsers(keyword, currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -329,29 +328,45 @@ public class ManageUserController implements Initializable {
     @FXML
     private void openLogOutScene() {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
             Parent root = loader.load();
+            stackPaneRoot.setOpacity(0.45);
 
-            Stage currentStage = (Stage)userTableView.getScene().getWindow();
-
+            Stage currentStage = (Stage) userTableView.getScene().getWindow();
             LogoutController logoutController = loader.getController();
             logoutController.setOwnerStage(currentStage);
-            // Tạo stage mới cho scene
+            logoutController.setStackPaneRoot(stackPaneRoot);
+
             Stage stage = new Stage();
             stage.setTitle("Logout");
-            stage.setScene(new Scene(root));
+
+            // Loại bỏ thanh tiêu đề
+            stage.initStyle(StageStyle.UNDECORATED);
+
+            // Tạo cảnh mới và áp dụng hình cắt bo cong
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            Rectangle clip = new Rectangle();
+            clip.setWidth(424);
+            clip.setHeight(204);
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            root.setClip(clip);
+
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
             stage.showAndWait();
-            loadUsers(keyword,currentPage);
+            loadUsers(keyword, currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void openManageBookScene() {
@@ -383,14 +398,14 @@ public class ManageUserController implements Initializable {
 
     @FXML
     private void openAdDashboardScene() {
-        try{
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot  = loader.load();
+            Parent adminDashboardRoot = loader.load();
 
             Stage currentStage = (Stage) createUserButton.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(adminDashboardRoot);
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
