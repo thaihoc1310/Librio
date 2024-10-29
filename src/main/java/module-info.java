@@ -9,6 +9,9 @@ module librio {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires java.desktop;
+    requires java.net.http;
+    requires org.json;
+    requires mysql.connector.j;
 
     exports librio;
     exports librio.controllers;

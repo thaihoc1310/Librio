@@ -1,24 +1,24 @@
 package librio.controllers.member;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
-import librio.controllers.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,26 +34,6 @@ public class BookController implements Initializable {
     @FXML
     private ImageView ClickAvatar;
     @FXML
-    private Pane overlayPane;
-    @FXML
-    private Text title;
-    @FXML
-    private Label author;
-    @FXML
-    private Label isbn;
-    @FXML
-    private Label year;
-    @FXML
-    private Label publisher;
-    @FXML
-    private Text description;
-    @FXML
-    private ImageView bookCoverImage;
-    @FXML
-    private AnchorPane bookDetailsPane;
-    @FXML
-    private AnchorPane mainAnchorPane;
-    @FXML
     private TextField searchTextField;
     @FXML
     private ComboBox<String> filterBox;
@@ -65,17 +45,14 @@ public class BookController implements Initializable {
     private ImageView searchButton;
     private List<Book> bookList = new ArrayList<>();
 
-    private Stage ownerStage;
-    public void setOwnerStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
-    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN", "Rating");
         filterBox.getSelectionModel().selectFirst();
-        overlayPane.setVisible(false); // Ẩn overlay khi khởi động
-        overlayPane.setOnMouseClicked(event -> cancelBookDetail());
+
         loadBooksFromDatabase("");
+//        loadBooksFromGoogleAPI("");
 
     }
 
@@ -159,10 +136,63 @@ public class BookController implements Initializable {
         displayBooks(bookList);
     }
 
+    private void loadBooksFromGoogleAPI(String keyword) {
+        bookList.clear();
+        try {
+            String apiKey = "AIzaSyBRX3PmHB6TlSwDsU5KmcbexZxISjyd9hI";
+            String apiUrl;
+            if (keyword == null || keyword.isEmpty()) {
+                apiUrl = "https://www.googleapis.com/books/v1/volumes?q=a&maxResults=40&key=" + apiKey;
+            } else {
+                apiUrl = "https://www.googleapis.com/books/v1/volumes?q=" + keyword + "&key=" + apiKey;
+            }
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+
+            JSONObject jsonResponse = new JSONObject(content.toString());
+            JSONArray items = jsonResponse.getJSONArray("items");
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject volumeInfo = items.getJSONObject(i).getJSONObject("volumeInfo");
+
+                String id = items.getJSONObject(i).getString("id");
+                String title = volumeInfo.has("title") ? volumeInfo.getString("title") : "Unknown Title";
+                String author = volumeInfo.has("authors") ? volumeInfo.getJSONArray("authors").getString(0) : "Unknown Author";
+                String isbn = volumeInfo.has("industryIdentifiers") ? volumeInfo.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier") : "Unknown ISBN";
+                String category = volumeInfo.has("categories") ? volumeInfo.getJSONArray("categories").getString(0) : "Unknown Category";
+                String publisher = volumeInfo.has("publisher") ? volumeInfo.getString("publisher") : "Unknown Publisher";
+                String yearPublished = volumeInfo.has("publishedDate") ? volumeInfo.getString("publishedDate") : "Unknown Year";
+                String language = volumeInfo.has("language") ? volumeInfo.getString("language") : "Unknown Language";
+                String description = volumeInfo.has("description") ? volumeInfo.getString("description") : "No Description";
+                String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("thumbnail") : "defaultBook.jpg";
+
+                // Tạo đối tượng Book với tất cả các thuộc tính
+                Book book = new Book(Integer.parseInt(id), title, author, isbn, category, publisher, 2, 5.0, yearPublished, language, "100", description, imageBook);
+
+                // Thêm vào danh sách
+                bookList.add(book);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        displayBooks(bookList);
+    }
+
     @FXML
     private void handleSearch() {
         String keyword = searchTextField.getText().trim();
         loadBooksFromDatabase(keyword);
+//        loadBooksFromGoogleAPI(keyword);
     }
 
     /**
@@ -183,6 +213,7 @@ public class BookController implements Initializable {
     }
 
 
+
     private void adjustBookPaneLayout(double tilePaneWidth) {
         if (tilePaneWidth <= 0) return;
 
@@ -194,7 +225,6 @@ public class BookController implements Initializable {
     /**
      * Tạo một AnchorPane cho mỗi cuốn sách
      */
-    private boolean isBookDetailVisible = false;
     private AnchorPane createBookPane(Book book) {
         AnchorPane bookPane = new AnchorPane();
         bookPane.setPrefSize(270, 400);
@@ -258,84 +288,56 @@ public class BookController implements Initializable {
         AnchorPane.setLeftAnchor(starBox, 29.0);
         AnchorPane.setRightAnchor(starBox, 29.0);
         bookPane.getChildren().add(starBox);
-        bookPane.setOnMouseClicked(event -> showBookDetails(book));
 
+//        bookPane.setOnMouseClicked(event -> showBookDetails(book));
         return bookPane;
     }
-
     private boolean isAnchorPaneVisible = false;
 
-    @FXML
-    private void handleAvatarClick() {
-        if (!isAnchorPaneVisible) {
-            menuPane.toFront();
-            isAnchorPaneVisible = true;
-        } else {
-            menuPane.toBack();
-            isAnchorPaneVisible = false;
-        }
+@FXML
+private void handleAvatarClick() {
+    if (!isAnchorPaneVisible) {
+        menuPane.toFront();
+        isAnchorPaneVisible = true;
+    } else {
+        menuPane.toBack();
+        isAnchorPaneVisible = false;
     }
-
-    @FXML
-    private void cancelMenuButton() {
-        if (isAnchorPaneVisible) {
-            menuPane.toBack();
-            System.out.println("hello");
-            isAnchorPaneVisible = false;
-        }
+}
+@FXML
+    private void cancelMenuButton(){
+    if(isAnchorPaneVisible){
+        menuPane.toBack();
+        isAnchorPaneVisible = false;
     }
-
-    public void setBookDetails(Book book) {
-
-        title.setText(book.getTitle());
-        author.setText(book.getAuthor());
-        year.setText("Published:    "+book.getYearPublished());
-        isbn.setText("ISBN:   " + book.getIsbn());
-        publisher.setText("Publisher:   " + book.getPublisher());
-        description.setText(book.getDescription());
-        try {
-            bookCoverImage.setImage(new Image(book.getImagePath()));
-        } catch (Exception e) {
-            System.out.println("Không thể tải ảnh, sử dụng ảnh mặc định.");
-            bookCoverImage.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
-        }
-
-
-    }
-
-    private void showBookDetails(Book book) {
-            setBookDetails(book);
-            mainAnchorPane.setOpacity(0.4);
-            bookDetailsPane.toFront();
-            overlayPane.setVisible(true);
-            isBookDetailVisible = true;
-
-    }
-    @FXML
-    private void cancelBookDetail(){
-        if (isBookDetailVisible) {
-            bookDetailsPane.toBack();
-            mainAnchorPane.setOpacity(1);
-            overlayPane.setVisible(false);
-            isBookDetailVisible = false;
-        }
-    }
-    @FXML
-    void logOut() throws IOException {
-        Stage currenStage = (Stage) searchTextField.getScene().getWindow();
-        Stage stage = new Stage();
-        stage.setTitle("Librio");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-        Parent loginRoot  = loader.load();
-        stage.setScene(new Scene(loginRoot));
-        stage.show();
-        Session.getInstance().logout();
-
-        if (ownerStage != null) {
-            ownerStage.close();
-        }
-
-        currenStage.close();
-    }
+}
+//    private void showBookDetails(Book book) {
+//        try {
+//
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
+//            Parent bookDetailRoot = loader.load();
+//
+//            BookDetailController controller = loader.getController();
+//            controller.setBookDetails(book);
+//
+//            double scrollPosition = scrollPane.getVvalue();
+//            String currentSearch = searchTextField.getText();
+//
+//            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
+//            Scene currentScene = currentStage.getScene();
+//
+//            Scene bookDetailScene = new Scene(bookDetailRoot);
+//            currentStage.setScene(bookDetailScene);
+//
+//            controller.setOnBackAction(() -> {
+//                currentStage.setScene(currentScene);
+//                scrollPane.setVvalue(scrollPosition);
+//                searchTextField.setText(currentSearch);
+//            });
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

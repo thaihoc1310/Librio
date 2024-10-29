@@ -177,12 +177,15 @@ public class ManageBorrowController implements Initializable {
                 statement.setInt(1, rowsPerPage);
                 statement.setInt(2, offset);
             } else {
-                query = "SELECT * FROM borrows WHERE status LIKE ? OR book_isbn LIKE ? LIMIT ? OFFSET ?";
+                query = "SELECT * FROM borrows b JOIN users u ON b.member_id = u.id " +
+                        "WHERE b.status LIKE ? OR b.book_isbn LIKE ? OR u.email LIKE ?" +
+                        "LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, "%" + keyword + "%");
                 statement.setString(2, "%" + keyword + "%");
-                statement.setInt(3, rowsPerPage);
-                statement.setInt(4, offset);
+                statement.setString(3, "%" + keyword + "%");
+                statement.setInt(4, rowsPerPage);
+                statement.setInt(5, offset);
             }
 
             ResultSet resultSet = statement.executeQuery();
@@ -194,7 +197,7 @@ public class ManageBorrowController implements Initializable {
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
                 LocalDate returnDate = resultSet.getDate("return_date") != null ? resultSet.getDate("return_date").toLocalDate() : null;
-                Double fine = resultSet.getDouble("fine");
+                double fine = resultSet.getDouble("fine");
                 Status status = Status.valueOf(resultSet.getString("status"));
 
                 Borrow borrow = new Borrow(borrowId, bookIsbn, email, borrowDate, dueDate, returnDate, status, fine);
