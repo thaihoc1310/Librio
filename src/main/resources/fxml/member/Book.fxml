@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/DesignUI.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/DesignUI.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -96,12 +96,12 @@
                      <children>
                         <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="128.0" prefWidth="342.0" styleClass="Pane-avatar">
                            <children>
-                              <ImageView fitHeight="38.0" fitWidth="46.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="avatarUser" fitHeight="46.0" fitWidth="46.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
                                  </image>
                               </ImageView>
-                              <Label layoutX="60.0" layoutY="14.0" prefHeight="29.0" prefWidth="105.0" text="Đinh Viết Huy">
+                              <Label fx:id="userNameUser" layoutX="78.0" layoutY="14.0" prefHeight="38.0" prefWidth="217.0" text="User">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
@@ -242,7 +242,7 @@
                         </BorderPane>
                      </children>
                   </AnchorPane>
-                  <ImageView fx:id="ClickAvatar" fitHeight="49.0" fitWidth="42.0" onMouseClicked="#handleAvatarClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="15.0">
+                  <ImageView fx:id="ClickAvatar" fitHeight="46.0" fitWidth="46.0" onMouseClicked="#handleAvatarClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="15.0">
                      <image>
                         <Image url="@../../icons/MemberIcon/MaleUser.png" />
                      </image>

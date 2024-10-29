@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static librio.util.DesignUtil.cropAndClipToCircle;
+
 public class BookController implements Initializable {
 
     @FXML
@@ -60,6 +62,10 @@ public class BookController implements Initializable {
     @FXML
     private AnchorPane menuPane;
     @FXML
+    private ImageView avatarUser;
+    @FXML
+    private Label userNameUser;
+    @FXML
     private ScrollPane scrollPane;
     @FXML
     private ImageView searchButton;
@@ -67,6 +73,7 @@ public class BookController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setAvatarAndUserName();
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN", "Rating");
         filterBox.getSelectionModel().selectFirst();
         overlayPane.setVisible(false); // Ẩn overlay khi khởi động
@@ -258,6 +265,27 @@ public class BookController implements Initializable {
 
         return bookPane;
     }
+
+    public void setAvatarAndUserName() {
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+
+        File file = new File(path);
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 23);
+            cropAndClipToCircle(image, ClickAvatar, 23);
+        } else {
+            String defaultImage = avatarsDir + "Male User.png";
+            File defaultImageFile = new File(defaultImage);
+            Image image = new Image(defaultImageFile.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 23);
+            cropAndClipToCircle(image, ClickAvatar, 23);
+        }
+        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
+    }
+
 
     private boolean isAnchorPaneVisible = false;
 
