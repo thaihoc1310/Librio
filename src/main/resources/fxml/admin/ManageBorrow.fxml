@@ -88,7 +88,7 @@
                                             </padding></Button>
                                     </children>
                                 </VBox>
-                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="31.0" layoutY="405.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="220.0" text="Log out" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="31.0" layoutY="405.0" mnemonicParsing="false" onAction="#openLogOutScene" prefHeight="38.0" prefWidth="220.0" text="Log out" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                     <graphic>
                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -99,7 +99,7 @@
                                     <padding>
                                         <Insets left="30.0" />
                                     </padding></Button>
-                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="302.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="220.0" text="Profile Settings" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="302.0" mnemonicParsing="false" onAction="#openProfileSettingsScene" prefHeight="43.0" prefWidth="220.0" text="Profile Settings" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                     <graphic>
                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -188,12 +188,12 @@
                 <AnchorPane layoutY="590.0" prefHeight="55.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.bottomAnchor="0.0" />
                 <AnchorPane layoutY="20.0" prefHeight="123.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
                     <children>
-                        <ImageView fitHeight="77.0" fitWidth="77.0" layoutX="63.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="avatarUser" fitHeight="77.0" fitWidth="77.0" layoutX="63.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
                             </image>
                         </ImageView>
-                        <Label layoutX="65.0" layoutY="99.0" text="User name" />
+                        <Label fx:id="userNameUser" layoutX="65.0" layoutY="99.0" text="User name" />
                     </children></AnchorPane>
             </children>
         </AnchorPane>

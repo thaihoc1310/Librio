@@ -37,13 +37,14 @@ public class DatabaseUtil {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phone_number");
                 String address = resultSet.getString("address");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
                 String avatar = resultSet.getString("avatar");
                 LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
-                return new User(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+                return new User(id, name, email, password, phoneNumber, address, gender, role, avatar, birthOfDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,13 +62,14 @@ public class DatabaseUtil {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phone_number");
                 String address = resultSet.getString("address") ;
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
                 String avatar = resultSet.getString("avatar");
                 LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
-                return new User(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+                return new User(id, name, email, password, phoneNumber, address, gender, role, avatar, birthOfDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,7 +85,7 @@ public class DatabaseUtil {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                String id = resultSet.getString("id");
+                Integer id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String author = resultSet.getString("author");
                 String isbn = resultSet.getString("isbn");
@@ -107,7 +109,7 @@ public class DatabaseUtil {
     public static void deleteBorrow(Borrow borrow) {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement("DELETE FROM borrows WHERE id = ?")) {
-            statement.setString(1, borrow.getId());
+            statement.setInt(1, borrow.getId());
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Deleted Borrow with ID: " + borrow.getId());
@@ -212,21 +214,21 @@ public class DatabaseUtil {
             // Delete borrows associated with the book
             String deleteBorrowQuery = "DELETE FROM Borrows WHERE book_id = ?";
             try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
-                deleteBorrowStmt.setString(1, book.getId());
+                deleteBorrowStmt.setInt(1, book.getId());
                 deleteBorrowStmt.executeUpdate();
             }
 
             // Delete feedbacks associated with the book
             String deleteFeedBackQuery = "DELETE FROM Feedbacks WHERE book_id = ?";
             try (PreparedStatement deleteFeedBackStmt = connection.prepareStatement(deleteFeedBackQuery)) {
-                deleteFeedBackStmt.setString(1, book.getId());
+                deleteFeedBackStmt.setInt(1, book.getId());
                 deleteFeedBackStmt.executeUpdate();
             }
 
             // Finally, delete the book from the Books table
             String deleteBookQuery = "DELETE FROM Books WHERE id = ?";
             try (PreparedStatement deleteBookStmt = connection.prepareStatement(deleteBookQuery)) {
-                deleteBookStmt.setString(1, book.getId());
+                deleteBookStmt.setInt(1, book.getId());
                 int rowsAffected = deleteBookStmt.executeUpdate();
                 if (rowsAffected > 0) {
                     System.out.println("Deleted Book with ID: " + book.getId());
@@ -372,8 +374,8 @@ public class DatabaseUtil {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                String id = resultSet.getString("id");
-                String memberEmail = resultSet.getString("email");
+                Integer id = resultSet.getInt("id");
+                String memberId = resultSet.getString("member_id");
                 String bookIsbn = resultSet.getString("book_isbn");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
@@ -381,7 +383,7 @@ public class DatabaseUtil {
                 Status status = Status.valueOf(resultSet.getString("status"));
                 Double fine = resultSet.getDouble("fine");
 
-                return new Borrow(id, bookIsbn, memberEmail, borrowDate, dueDate, returnDate, status, fine);
+                return new Borrow(id, bookIsbn, memberId, borrowDate, dueDate, returnDate, status, fine);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -402,13 +404,14 @@ public class DatabaseUtil {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
+                String pass = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phone_number");
                 String address = resultSet.getString("address");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 String avatar = resultSet.getString("avatar");
                 LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
                 if(role.equals(Role.LIBRARIAN)){
-                    return new Librarian(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate);
+                    return new Librarian(id, name, email, pass, phoneNumber, address, gender, role, avatar, birthOfDate);
                 }else if(role.equals(Role.MEMBER)){
                     try(PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM members WHERE id = ? ")){
                         memberStatement.setString(1, id);
@@ -416,7 +419,7 @@ public class DatabaseUtil {
                         if (memberResultSet.next()) {
                             long fineAmount = memberResultSet.getLong("fine_amount");
                             long totalBookBorrowed = memberResultSet.getLong("total_books_borrowed");
-                            return new Member(id, name, email, phoneNumber, address, gender, role, avatar, birthOfDate, fineAmount, totalBookBorrowed);
+                            return new Member(id, name, email, pass, phoneNumber, address, gender, role, avatar, birthOfDate, fineAmount, totalBookBorrowed);
                         }
                     }
                 }

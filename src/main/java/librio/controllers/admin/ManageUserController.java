@@ -394,4 +394,18 @@ public class ManageUserController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void openProfileSettingsScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
+            Parent manageBorrowRoot = loader.load();
+
+            Stage currentStage = (Stage) createUserButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBorrowRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -114,10 +114,12 @@ public class CreateBorrowController implements Initializable {
             return;
         }
 
-        String query = "INSERT INTO borrows (email, book_isbn, borrow_date, due_date, return_date, status, fine) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String memberId = getUserByEmail(email).getId();
+
+        String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, email);
+            statement.setString(1, memberId);
             statement.setString(2, isbn);
             statement.setString(3, LocalDate.now().toString());
             statement.setString(4, dueDate.toString());

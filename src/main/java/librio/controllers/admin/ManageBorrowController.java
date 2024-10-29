@@ -11,28 +11,33 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import librio.controllers.LogoutController;
+import librio.controllers.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
 import librio.models.Status;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.getBorrowById;
 import static librio.util.DatabaseUtil.getTotalBorrowCount;
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class ManageBorrowController implements Initializable {
 
@@ -62,6 +67,11 @@ public class ManageBorrowController implements Initializable {
     private TextField searchTextField;
     @FXML
     private Button createBorrowButton;
+    @FXML
+    private Label userNameUser;
+    @FXML
+    private ImageView avatarUser;
+
 
     private ObservableList<Borrow> borrowList;
 
@@ -73,6 +83,7 @@ public class ManageBorrowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setAvatarAndUserName();
         borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         bookIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("bookIsbn"));
@@ -116,19 +127,19 @@ public class ManageBorrowController implements Initializable {
 
                         btnDetail.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
-                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            Borrow dbBorrow = getBorrowById(String.valueOf(borrow.getId()));
                             openBorrowDetailScene(dbBorrow);
                         });
 
                         btnUpdate.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
-                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            Borrow dbBorrow = getBorrowById(String.valueOf(borrow.getId()));
                             openUpdateBorrowScene(dbBorrow);
                         });
 
                         btnDelete.setOnAction(event -> {
                             Borrow borrow = getTableView().getItems().get(getIndex());
-                            Borrow dbBorrow = getBorrowById(borrow.getId());
+                            Borrow dbBorrow = getBorrowById(String.valueOf(borrow.getId()));
                             openDeleteBorrowScene(dbBorrow);
                         });
 
@@ -160,7 +171,8 @@ public class ManageBorrowController implements Initializable {
             PreparedStatement statement;
 
             if (keyword == null || keyword.isEmpty()) {
-                query = "SELECT * FROM borrows LIMIT ? OFFSET ?";
+                query = "SELECT * FROM borrows b JOIN users u ON b.member_id = u.id " +
+                        "LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setInt(1, rowsPerPage);
                 statement.setInt(2, offset);
@@ -176,7 +188,7 @@ public class ManageBorrowController implements Initializable {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String borrowId = resultSet.getString("id");
+                Integer borrowId = resultSet.getInt("id");
                 String email = resultSet.getString("email");
                 String bookIsbn = resultSet.getString("book_isbn");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
@@ -335,5 +347,64 @@ public class ManageBorrowController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void openProfileSettingsScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
+            Parent manageBorrowRoot = loader.load();
+
+            Stage currentStage = (Stage) createBorrowButton.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBorrowRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openLogOutScene() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
+
+            LogoutController logoutController = loader.getController();
+            logoutController.setOwnerStage(currentStage);
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Logout");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(currentStage);
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            loadBorrows(keyword, currentPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setAvatarAndUserName(){
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+
+        File file = new File(path);
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 38.5);
+        } else {
+            String defaultImage = avatarsDir + "Male User.png";
+            File defaultImageFile = new File(defaultImage);
+            Image image = new Image(defaultImageFile.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 38.5);
+        }
+        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
     }
 }
