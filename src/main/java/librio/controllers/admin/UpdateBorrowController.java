@@ -124,7 +124,7 @@ public class UpdateBorrowController implements Initializable {
             statement.setDate(3, returnDate != null ? Date.valueOf(returnDate) : null);
             statement.setString(4,status.name());
             statement.setString(5,String.valueOf(fine));
-            statement.setString(6, borrow.getId());
+            statement.setInt(6, borrow.getId());
 
 
             int rowsAffected = statement.executeUpdate();

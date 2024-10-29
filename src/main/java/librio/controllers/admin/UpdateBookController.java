@@ -191,7 +191,7 @@ public class UpdateBookController implements Initializable {
             statement.setString(9, numberOfPages);
             statement.setString(10, description);
             statement.setString(11, bookImageFilePath != null ? bookImageFilePath : book.getImagePath());
-            statement.setString(12, book.getId());
+            statement.setInt(12, book.getId());
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 if (previousBookFilePath != null && bookImageFilePath != null) {
