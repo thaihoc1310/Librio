@@ -10,7 +10,6 @@ public class Borrow {
     private IntegerProperty id;
     private StringProperty bookIsbn;
     private StringProperty memberId;
-    private StringProperty email;
     private ObjectProperty<LocalDate> borrowDate;
     private ObjectProperty<LocalDate> dueDate;
     private ObjectProperty<LocalDate> returnDate;
@@ -21,10 +20,10 @@ public class Borrow {
     private StringProperty update_by;
     private ObjectProperty<Instant> update_at;
 
-    public Borrow(Integer id, String bookIsbn, String email, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, Status status, double fine) {
+    public Borrow(Integer id, String bookIsbn, String memberId, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, Status status, double fine) {
         this.id = new SimpleIntegerProperty(id);
         this.bookIsbn = new SimpleStringProperty(bookIsbn);
-        this.email = new SimpleStringProperty(email);
+        this.memberId = new SimpleStringProperty(memberId);
         this.borrowDate = new SimpleObjectProperty<>(borrowDate);
         this.dueDate = new SimpleObjectProperty<>(dueDate);
         this.returnDate = new SimpleObjectProperty<>(returnDate);
@@ -176,15 +175,4 @@ public class Borrow {
         return bookIsbn;
     }
 
-    public String getEmail() {
-        return email.get();
-    }
-
-    public StringProperty emailProperty() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
 }

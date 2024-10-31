@@ -234,7 +234,7 @@ public class ManageUserController implements Initializable {
             stage.setTitle("Create New User");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(createUserButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
@@ -260,7 +260,7 @@ public class ManageUserController implements Initializable {
             stage.setTitle("Update User");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(userTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
@@ -287,7 +287,7 @@ public class ManageUserController implements Initializable {
             stage.setTitle("User detail");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(userTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
@@ -314,7 +314,7 @@ public class ManageUserController implements Initializable {
             stage.setTitle("Delete User");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(userTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
