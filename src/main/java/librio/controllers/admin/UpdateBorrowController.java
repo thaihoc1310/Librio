@@ -84,7 +84,7 @@ public class UpdateBorrowController implements Initializable {
         LocalDate dueDate = dueDatePicker.getValue();
         LocalDate returnDate = returnDatePicker.getValue();
         Status status = Status.valueOf(statusLabel.getText());
-        double fine = Double.parseDouble(fineLabel.getText());
+        double fine = Double.parseDouble(fineLabel.getText().replace(" VNĐ", ""));
         boolean validation = false;
 
         if (borrowDate.isAfter(LocalDate.now())){

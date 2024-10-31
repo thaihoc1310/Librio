@@ -172,14 +172,14 @@ public class ManageBorrowController implements Initializable {
 
             if (keyword == null || keyword.isEmpty()) {
                 query = "SELECT * FROM borrows b JOIN users u ON b.member_id = u.id " +
-                        "LIMIT ? OFFSET ?";
+                        "ORDER BY b.id LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setInt(1, rowsPerPage);
                 statement.setInt(2, offset);
             } else {
                 query = "SELECT * FROM borrows b JOIN users u ON b.member_id = u.id " +
                         "WHERE b.status LIKE ? OR b.book_isbn LIKE ? OR u.email LIKE ?" +
-                        "LIMIT ? OFFSET ?";
+                        "ORDER BY b.id LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, "%" + keyword + "%");
                 statement.setString(2, "%" + keyword + "%");
