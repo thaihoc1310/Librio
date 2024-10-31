@@ -17,13 +17,16 @@ public class LogoutController {
     private Button cancelButton;
 
     private Stage ownerStage;
-private StackPane stackPaneRoot;
+    private StackPane stackPaneRoot;
+
     public void setOwnerStage(Stage ownerStage) {
         this.ownerStage = ownerStage;
     }
+
     public void setStackPaneRoot(StackPane stackPaneRoot) {
         this.stackPaneRoot = stackPaneRoot;
     }
+
     @FXML
     void cancel() throws IOException {
         stackPaneRoot.setOpacity(1.0);
@@ -37,7 +40,7 @@ private StackPane stackPaneRoot;
         Stage stage = new Stage();
         stage.setTitle("Librio");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-        Parent loginRoot  = loader.load();
+        Parent loginRoot = loader.load();
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
