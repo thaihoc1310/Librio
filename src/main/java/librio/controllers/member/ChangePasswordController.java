@@ -1,38 +1,31 @@
-package librio.controllers.admin;
+package librio.controllers.member;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import librio.controllers.LogoutController;
 import librio.controllers.auth.Session;
 import librio.database.DatabaseConnection;
-import librio.models.Gender;
-import librio.models.Role;
 import librio.models.User;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class ChangePasswordController implements Initializable {
@@ -40,9 +33,6 @@ public class ChangePasswordController implements Initializable {
     private boolean ignoreListener = false;
 
     private User loggedInUser =  Session.getInstance().getLoggedInUser();
-
-    @FXML
-    private ImageView avatarUser;
 
     @FXML
     private Label confirmPasswordErrorLabel;
@@ -68,9 +58,6 @@ public class ChangePasswordController implements Initializable {
     @FXML
     private Button saveButton;
 
-    @FXML
-    private Label userNameLabel;
-
 
 
 
@@ -84,7 +71,6 @@ public class ChangePasswordController implements Initializable {
         confirmPasswordTextField.setText("");
         hideErrorLabels();
         addListeners();
-        setAvatarAndUserName();
     }
 
     @FXML
@@ -93,6 +79,7 @@ public class ChangePasswordController implements Initializable {
         if (loggedInUser == null) {
             return;
         }
+
         String currentPassword = currentPasswordTextField != null ? currentPasswordTextField.getText() : "";
         String newPassword = newPasswordTextField != null ? newPasswordTextField.getText() : "";
         String confirmPassword = confirmPasswordTextField != null ? confirmPasswordTextField.getText() : "";
@@ -159,6 +146,7 @@ public class ChangePasswordController implements Initializable {
 
     private void addListeners() {
         hideErrorLabels();
+
         // Ẩn notification khi click vào 1 textField nào đó
         currentPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
         newPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
@@ -196,119 +184,19 @@ public class ChangePasswordController implements Initializable {
         });
     }
 
-    @FXML
-    private void openAdDashboardScene() {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot  = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(adminDashboardRoot);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openManageBorrowScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBorrow.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openManageBookScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openManageUserScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageUser.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openLogOutScene() {
-        try {
-            // Tải FXML của scene mới
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
-            Parent root = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-
-            LogoutController logoutController = loader.getController();
-            logoutController.setOwnerStage(currentStage);
-            // Tạo stage mới cho scene
-            Stage stage = new Stage();
-            stage.setTitle("Logout");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
-            stage.initOwner(currentStage);
-            stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
 
     private void hideErrorLabels() {
-
         newPasswordErrorLabel.setText("");
         confirmPasswordErrorLabel.setText("");
         currentPasswordErrorLabel.setText("");
     }
 
-    public void setAvatarAndUserName(){
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + loggedInUser.getAvatar();
-
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        }
-        userNameLabel.setText(loggedInUser.getName());
-    }
 
     @FXML
-    private void openPersonalInformationScene() {
+    private void openEditProfileScene() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/EditProfile.fxml"));
             Parent manageBorrowRoot = loader.load();
 
             Stage currentStage = (Stage) saveButton.getScene().getWindow();

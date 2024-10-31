@@ -10,9 +10,14 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import librio.controllers.LogoutController;
+import librio.controllers.admin.UpdateUserController;
 import librio.controllers.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
@@ -357,4 +362,24 @@ public class BookController implements Initializable {
         currenStage.close();
     }
 
+    @FXML
+    private void openEditProfileScene(){
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/EditProfile.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Profile");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(searchTextField.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
