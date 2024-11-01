@@ -35,15 +35,17 @@ import static java.lang.Character.isDigit;
 
 public class AddBookApiController implements Initializable {
     @FXML
-    public Button addBookButton;
+    private Button addBookButton;
     @FXML
-    public ImageView searchButton;
+    private ImageView searchButton;
     @FXML
-    public ComboBox<String> filterBox;
+    private ComboBox<String> filterBox;
     @FXML
-    public TextField searchTextField;
+    private TextField searchTextField;
     @FXML
     private ScrollPane bookListScrollPane;
+    @FXML
+    private ProgressIndicator loadingIndicator;
 
     private List<Book> bookList = new ArrayList<>();
     private ExecutorService executor;
@@ -61,6 +63,7 @@ public class AddBookApiController implements Initializable {
     }
 
     private void loadBooksAsync(String searchKeyWord) {
+        Platform.runLater(() -> loadingIndicator.setVisible(true));
         Task<List<Book>> loadTask = new Task<>() {
             @Override
             protected List<Book> call() throws Exception {
@@ -74,6 +77,12 @@ public class AddBookApiController implements Initializable {
                     bookList.addAll(fetchedBooks);
                     displayBooks(fetchedBooks);
                 }
+                Platform.runLater(() -> loadingIndicator.setVisible(false));
+            }
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> loadingIndicator.setVisible(false));
+                getException().printStackTrace();
             }
         };
 
