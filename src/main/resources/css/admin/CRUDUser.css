@@ -63,4 +63,8 @@ and open the template in the editor.
     -fx-font-weight: semi-bold;   /* Tăng độ dày của chữ */
 }
 
+.progress-indicator {
+    -fx-stroke: #F1DEBC;
+    -fx-accent: #F1DEBC;
+}
 
