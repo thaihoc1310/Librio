@@ -5,7 +5,6 @@ import javafx.beans.property.*;
 import java.time.Instant;
 
 public class Book {
-    //Copy lại phần này rồi paste lại nếu bị conflict
     private IntegerProperty id;
     private StringProperty title;
     private StringProperty author;

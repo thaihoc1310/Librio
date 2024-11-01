@@ -57,14 +57,14 @@ public class AddBookApiController implements Initializable {
         filterBox.getSelectionModel().selectFirst();
         executor = Executors.newFixedThreadPool(2);
         bookList.clear();
-        loadBooksAsync("", startIndex); // Initial book load
+        loadBooksAsync("");
     }
 
-    private void loadBooksAsync(String searchKeyWord, int startIndex) {
+    private void loadBooksAsync(String searchKeyWord) {
         Task<List<Book>> loadTask = new Task<>() {
             @Override
             protected List<Book> call() throws Exception {
-                return loadBooksFromGoogleAPI(searchKeyWord, startIndex);
+                return loadBooksFromGoogleAPI(searchKeyWord);
             }
 
             @Override
@@ -80,14 +80,14 @@ public class AddBookApiController implements Initializable {
         executor.submit(loadTask);
     }
 
-    private List<Book> loadBooksFromGoogleAPI(String searchKeyWord, int startIndex) {
+    private List<Book> loadBooksFromGoogleAPI(String searchKeyWord) {
         List<Book> fetchedBooks = new ArrayList<>();
         try {
             String apiKey = "AIzaSyBRX3PmHB6TlSwDsU5KmcbexZxISjyd9hI";
             String filter = filterBox.getValue();
             String encodeKeyword = java.net.URLEncoder.encode(searchKeyWord, StandardCharsets.UTF_8);
             String apiUrl = "https://www.googleapis.com/books/v1/volumes?q=" + getFilter(filter) + encodeKeyword
-                    + "&startIndex=" + startIndex + "&maxResults=10&key=" + apiKey;
+                    + "&startIndex=" + startIndex + "&maxResults=15&key=" + apiKey;
 
             HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
             connection.setRequestMethod("GET");
@@ -103,6 +103,7 @@ public class AddBookApiController implements Initializable {
             totalItems = responseJson.optInt("totalItems", 0);
 
             JSONArray items = responseJson.optJSONArray("items");
+
             if (items != null) {
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject volumeInfo = items.getJSONObject(i).getJSONObject("volumeInfo");
@@ -115,12 +116,13 @@ public class AddBookApiController implements Initializable {
                     String language = volumeInfo.optString("language", "Unknown Language");
                     String description = volumeInfo.optString("description", "No Description");
                     String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail") : "defaultBook.jpg";
-
+                    Integer numberOfPages = volumeInfo.optInt("pageCount", 0);
                     if (isDigit(isbn.charAt(0))) isbn = "ISBN : " + isbn;
 
-                    Book book = new Book(0, title, author, isbn, category, publisher, 0, 0.0, yearPublished, language, "100", description, imageBook);
+                    Book book = new Book(0, title, author, isbn, category, publisher, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
                     fetchedBooks.add(book);
                 }
+                startIndex += 15;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,7 +142,7 @@ public class AddBookApiController implements Initializable {
         startIndex = 0;
         totalItems = 0;
         bookList.clear();
-        loadBooksAsync(keyword, startIndex);
+        loadBooksAsync(keyword);
         bookListScrollPane.setVvalue(0);
     }
 
@@ -165,9 +167,7 @@ public class AddBookApiController implements Initializable {
         }
     }
 
-    /**
-     * Display the list of books in the ScrollPane
-     */
+
     private void displayBooks(List<Book> booksToDisplay) {
         Platform.runLater(() -> {
             if (startIndex == 0) {
@@ -180,24 +180,19 @@ public class AddBookApiController implements Initializable {
                 }
             }
 
-            // Add newly fetched books
             for (Book book : booksToDisplay) {
                 AnchorPane bookPane = createBookPane(book);
                 contentPane.getChildren().add(bookPane);
             }
 
-            // Check if there are more books to load
-            if ((startIndex + 10) < totalItems) {
+            if ((startIndex + 15) < totalItems) {
                 Button moreButton = new Button("More");
                 moreButton.setPrefHeight(32.0);
                 moreButton.setPrefWidth(667.0);
                 moreButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;");
                 moreButton.setOnMouseEntered(event -> moreButton.setStyle("-fx-background-color: #4c2113; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px; -fx-cursor: hand;"));
                 moreButton.setOnMouseExited(event -> moreButton.setStyle("-fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;-fx-background-color: #72311c;"));
-                moreButton.setOnAction(event -> {
-                    startIndex += 10;
-                    loadBooksAsync(searchTextField.getText().trim(), startIndex);
-                });
+                moreButton.setOnAction(event -> loadBooksAsync(searchTextField.getText().trim()));
                 contentPane.getChildren().add(moreButton);
             }
 
@@ -271,6 +266,8 @@ public class AddBookApiController implements Initializable {
         addButton.setPrefHeight(32.0);
         addButton.setPrefWidth(106.0);
         addButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;");
+        addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color: #4c2113; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px; -fx-cursor: hand;"));
+        addButton.setOnMouseExited(event -> addButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;"));
         addButton.setOnAction(event -> openCreateBookScene(book));
         bookPane.getChildren().add(addButton);
 

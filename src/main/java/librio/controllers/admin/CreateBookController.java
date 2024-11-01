@@ -119,15 +119,14 @@ public class CreateBookController implements Initializable {
             publisherTextField.setText(apiBook.getPublisher());
             categoryTextField.setText(apiBook.getCategory());
             languageTextField.setText(apiBook.getLanguage());
-            yearPublishedTextField.setText(apiBook.getYearPublished());
+            yearPublishedTextField.setText(apiBook.getYearPublished().equals("Unknown ISBN") ? "Unknown ISBN" : apiBook.getYearPublished().substring(0,4));
             descriptionTextArea.setText(apiBook.getDescription());
+            numberOfPagesTextField.setText(apiBook.getNumberOfPages());
 
-            // Nếu apiBook có hình ảnh, đặt hình ảnh của sách vào ImageView
             if (apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()) {
                 bookImageView.setImage(new Image(apiBook.getImagePath()));
             }
 
-            // Khóa tất cả các trường ngoại trừ quantity và number of pages
             bookTitleTextField.setEditable(false);
             isbnTextField.setEditable(false);
             authorTextField.setEditable(false);
@@ -136,10 +135,8 @@ public class CreateBookController implements Initializable {
             languageTextField.setEditable(false);
             yearPublishedTextField.setEditable(false);
             descriptionTextArea.setEditable(false);
+            numberOfPagesTextField.setEditable(false);
 
-            // Chỉ cho phép chỉnh sửa hai trường này
-            quantityOfCopyTextField.setEditable(true);
-            numberOfPagesTextField.setEditable(true);
 
         }
     }
