@@ -273,7 +273,7 @@ public class ManageBorrowController implements Initializable {
             stage.setTitle("Open Borrow Delete Scene");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(borrowTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
@@ -296,7 +296,7 @@ public class ManageBorrowController implements Initializable {
             stage.setTitle("Open Borrow Detail");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(borrowTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
@@ -319,7 +319,7 @@ public class ManageBorrowController implements Initializable {
             stage.setTitle("Update Borrow");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(borrowTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
@@ -341,7 +341,7 @@ public class ManageBorrowController implements Initializable {
             stage.setTitle("Create New User");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(createBorrowButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
@@ -382,7 +382,7 @@ public class ManageBorrowController implements Initializable {
             stage.setTitle("Logout");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene

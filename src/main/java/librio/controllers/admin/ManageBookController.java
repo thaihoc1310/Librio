@@ -56,6 +56,8 @@ public class ManageBookController implements Initializable {
     @FXML
     private Button addBookButton;
     @FXML
+    private Button addBookApiButton;
+    @FXML
     private Pagination pagination;
     @FXML
     private TextField searchTextField;
@@ -234,7 +236,7 @@ public class ManageBookController implements Initializable {
             stage.setTitle("Add New Book");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(addBookButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
@@ -264,7 +266,7 @@ public class ManageBookController implements Initializable {
             stage.setTitle("Book Detail");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(bookTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
@@ -292,7 +294,7 @@ public class ManageBookController implements Initializable {
             stage.setTitle("Update Book");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(bookTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
@@ -321,7 +323,30 @@ public class ManageBookController implements Initializable {
             stage.setTitle("Delete Book");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initOwner(bookTableView.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            loadBooks(keyword,currentPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openAddBookApiScene() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AddBookApi.fxml"));
+            Parent root = loader.load();
+
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Librio");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(bookTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
@@ -404,7 +429,7 @@ public class ManageBookController implements Initializable {
             stage.setTitle("Logout");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene

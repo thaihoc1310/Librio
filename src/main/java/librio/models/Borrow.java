@@ -9,7 +9,6 @@ import java.time.LocalDate;
 public class Borrow {
     private IntegerProperty id;
     private StringProperty bookIsbn;
-    private StringProperty memberId;
     private StringProperty email;
     private ObjectProperty<LocalDate> borrowDate;
     private ObjectProperty<LocalDate> dueDate;
@@ -60,16 +59,16 @@ public class Borrow {
         return bookIsbn;
     }
 
-    public String getMemberId() {
-        return memberId.get();
+    public String getEmail() {
+        return email.get();
     }
 
-    public void setMemberId(String memberId) {
-        this.memberId.set(memberId);
+    public void setEmail(String email) {
+        this.email.set(email);
     }
 
-    public StringProperty memberIdProperty() {
-        return memberId;
+    public StringProperty emailProperty() {
+        return email;
     }
 
     public LocalDate getBorrowDate() {
@@ -176,15 +175,4 @@ public class Borrow {
         return bookIsbn;
     }
 
-    public String getEmail() {
-        return email.get();
-    }
-
-    public StringProperty emailProperty() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
 }

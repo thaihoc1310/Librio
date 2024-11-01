@@ -153,10 +153,8 @@ public class BookController implements Initializable {
                     imageBook = "defaultBook.jpg";
                 }
 
-                // Tạo đối tượng Book với tất cả các thuộc tính
                 Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
 
-                // Thêm vào danh sách
                 bookList.add(book);
             }
 
@@ -261,7 +259,6 @@ public class BookController implements Initializable {
             starBox.getChildren().add(star);
         }
 
-
         AnchorPane.setTopAnchor(starBox, 370.0);
         AnchorPane.setLeftAnchor(starBox, 29.0);
         AnchorPane.setRightAnchor(starBox, 29.0);
@@ -309,7 +306,6 @@ public class BookController implements Initializable {
     private void cancelMenuButton() {
         if (isAnchorPaneVisible) {
             menuPane.toBack();
-            System.out.println("hello");
             isAnchorPaneVisible = false;
         }
     }
@@ -325,7 +321,6 @@ public class BookController implements Initializable {
         try {
             bookCoverImage.setImage(new Image(book.getImagePath()));
         } catch (Exception e) {
-            System.out.println("Không thể tải ảnh, sử dụng ảnh mặc định.");
             bookCoverImage.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
         }
 

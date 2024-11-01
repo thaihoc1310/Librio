@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
+import librio.models.Book;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,10 +97,48 @@ public class CreateBookController implements Initializable {
     @FXML
     private Label quantityOfCopyErrorLabel;
 
+    private Book apiBook;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hideErrorLabels();
         addListeners();
+    }
+
+    public void setBook(Book book) {
+        this.apiBook = book;
+        populateFields();
+    }
+
+    public void populateFields() {
+        if (apiBook != null) {
+            // Đặt giá trị của các trường từ đối tượng apiBook
+            bookTitleTextField.setText(apiBook.getTitle());
+            isbnTextField.setText(apiBook.getIsbn());
+            authorTextField.setText(apiBook.getAuthor());
+            publisherTextField.setText(apiBook.getPublisher());
+            categoryTextField.setText(apiBook.getCategory());
+            languageTextField.setText(apiBook.getLanguage());
+            yearPublishedTextField.setText(apiBook.getYearPublished().equals("Unknown ISBN") ? "Unknown ISBN" : apiBook.getYearPublished().substring(0,4));
+            descriptionTextArea.setText(apiBook.getDescription());
+            numberOfPagesTextField.setText(apiBook.getNumberOfPages());
+
+            if (apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()) {
+                bookImageView.setImage(new Image(apiBook.getImagePath()));
+            }
+
+            bookTitleTextField.setEditable(false);
+            isbnTextField.setEditable(false);
+            authorTextField.setEditable(false);
+            publisherTextField.setEditable(false);
+            categoryTextField.setEditable(false);
+            languageTextField.setEditable(false);
+            yearPublishedTextField.setEditable(false);
+            descriptionTextArea.setEditable(false);
+            numberOfPagesTextField.setEditable(false);
+
+
+        }
     }
 
 
