@@ -131,7 +131,6 @@ public class AddBookApiController implements Initializable {
                     Book book = new Book(0, title, author, isbn, category, publisher, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
                     fetchedBooks.add(book);
                 }
-                startIndex += 15;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,7 +200,10 @@ public class AddBookApiController implements Initializable {
                 moreButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;");
                 moreButton.setOnMouseEntered(event -> moreButton.setStyle("-fx-background-color: #4c2113; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px; -fx-cursor: hand;"));
                 moreButton.setOnMouseExited(event -> moreButton.setStyle("-fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;-fx-background-color: #72311c;"));
-                moreButton.setOnAction(event -> loadBooksAsync(searchTextField.getText().trim()));
+                moreButton.setOnAction(event -> {
+                    startIndex += 15;
+                    loadBooksAsync(searchTextField.getText().trim());
+                });
                 contentPane.getChildren().add(moreButton);
             }
 
