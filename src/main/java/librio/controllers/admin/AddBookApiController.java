@@ -332,12 +332,11 @@ public class AddBookApiController implements Initializable {
             createBookStage.setTitle("Create New Book");
             createBookStage.setScene(new Scene(root));
             createBookStage.setResizable(false);
+            createBookStage.initOwner(addBookStage);
             createBookStage.initStyle(StageStyle.UNDECORATED);
             createBookStage.initModality(Modality.APPLICATION_MODAL);
 
-            addBookStage.close();
-
-            createBookStage.show();
+            createBookStage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();

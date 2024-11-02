@@ -286,30 +286,6 @@ public class CreateBookController implements Initializable {
                 if(previousBookFilePath != null){
                     Files.copy(Paths.get(previousBookFilePath), Paths.get(booksDir + bookImageFilePath));
                 }
-                if(!openedFromApi){
-                    clearInputFields();
-                    closeStage();
-                }else{
-                    Stage currentStage = (Stage) cancelButton.getScene().getWindow();
-                    currentStage.close();
-
-                    try {
-                        FXMLLoader loader;
-
-                        // Trở về AddBookApi
-                        loader = new FXMLLoader(getClass().getResource("/fxml/admin/AddBookApi.fxml"));
-
-                        Parent root = loader.load();
-                        Scene scene = new Scene(root);
-                        Stage stage = new Stage();
-                        stage.setScene(scene);
-                        stage.initModality(Modality.WINDOW_MODAL);
-                        stage.initOwner(currentStage);
-                        stage.show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -440,30 +416,8 @@ public class CreateBookController implements Initializable {
 
     @FXML
     private void cancel() {
-        if(!openedFromApi){
             clearInputFields();
             closeStage();
-        }else{
-            Stage currentStage = (Stage) cancelButton.getScene().getWindow();
-            currentStage.close();
-
-            try {
-                FXMLLoader loader;
-
-                // Trở về AddBookApi
-                loader = new FXMLLoader(getClass().getResource("/fxml/admin/AddBookApi.fxml"));
-
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.initModality(Modality.WINDOW_MODAL);
-                stage.initOwner(currentStage);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 
