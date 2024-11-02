@@ -17,16 +17,24 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import librio.controllers.LogoutController;
 import librio.controllers.admin.CreateBookController;
+import librio.database.DatabaseConnection;
 import librio.models.Book;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -127,7 +135,6 @@ public class AddBookApiController implements Initializable {
                     String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail") : "defaultBook.jpg";
                     Integer numberOfPages = volumeInfo.optInt("pageCount", 0);
                     if (isDigit(isbn.charAt(0))) isbn = "ISBN : " + isbn;
-
                     Book book = new Book(0, title, author, isbn, category, publisher, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
                     fetchedBooks.add(book);
                 }
@@ -294,24 +301,44 @@ public class AddBookApiController implements Initializable {
     @FXML
     private void openCreateBookScene(Book book) {
         try {
-            // Tải FXML của scene mới
+            System.out.println(book.getIsbn());
+            if(!book.getIsbn().contains("ISBN") || book.getIsbn().equals("Unknown ISBN")){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("ISBN Code Missing");
+                alert.setHeaderText(null);
+                alert.setContentText("This book does not provide ISBN Code");
+
+                DialogPane dialogPane = alert.getDialogPane();
+                dialogPane.setStyle("-fx-background-color: #f4f4f4;");
+                dialogPane.setPrefWidth(400);
+                dialogPane.setPrefHeight(100);
+
+                ButtonBar buttonBar = (ButtonBar) dialogPane.lookup(".button-bar");
+                buttonBar.setStyle("-fx-background-color: #85553c;");
+                buttonBar.setPrefHeight(40);
+
+                alert.showAndWait();
+                return;
+            }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateBook.fxml"));
             Parent root = loader.load();
 
-            Stage currentStage = (Stage) searchButton.getScene().getWindow();
+            Stage addBookStage = (Stage) searchButton.getScene().getWindow();
 
             CreateBookController createBookController = loader.getController();
             createBookController.setBook(book);
 
-            Stage stage = new Stage();
-            stage.setTitle("Create New User");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            // Hiển thị scene
-            stage.show();
-            currentStage.close();
+            Stage createBookStage = new Stage();
+            createBookStage.setTitle("Create New Book");
+            createBookStage.setScene(new Scene(root));
+            createBookStage.setResizable(false);
+            createBookStage.initStyle(StageStyle.UNDECORATED);
+            createBookStage.initModality(Modality.APPLICATION_MODAL);
+
+            addBookStage.close();
+
+            createBookStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
