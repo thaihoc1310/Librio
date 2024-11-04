@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import librio.controllers.LogoutController;
-import librio.controllers.auth.Session;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
 import librio.models.Status;
@@ -176,14 +176,14 @@ public class ManageBorrowController implements Initializable {
 
             if (keyword == null || keyword.isEmpty()) {
                 query = "SELECT * FROM borrows b JOIN users u ON b.member_id = u.id " +
-                        "LIMIT ? OFFSET ?";
+                        "ORDER BY b.id LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setInt(1, rowsPerPage);
                 statement.setInt(2, offset);
             } else {
                 query = "SELECT * FROM borrows b JOIN users u ON b.member_id = u.id " +
                         "WHERE b.status LIKE ? OR b.book_isbn LIKE ? OR u.email LIKE ?" +
-                        "LIMIT ? OFFSET ?";
+                        "ORDER BY b.id LIMIT ? OFFSET ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, "%" + keyword + "%");
                 statement.setString(2, "%" + keyword + "%");

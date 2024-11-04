@@ -3,7 +3,10 @@ package librio.controllers.admin;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -11,15 +14,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,6 +34,9 @@ import static librio.util.DatabaseUtil.isBookTitleExists;
 import static librio.util.DatabaseUtil.isIsbnExists;
 
 public class CreateBookController implements Initializable {
+
+    private boolean openedFromApi = false;
+
     @FXML
     private Label authorErrorLabel;
 
@@ -105,23 +114,48 @@ public class CreateBookController implements Initializable {
         addListeners();
     }
 
+    public interface BookAddedListener {
+        void onBookAdded();
+    }
+
     public void setBook(Book book) {
         this.apiBook = book;
         populateFields();
+    }
+
+    private String downloadImage(String imageUrl) {
+        String savedImagePath = "defaultBook.jpg";
+        try {
+            String projectDir = System.getProperty("user.dir");
+            String imageDir = projectDir + "/src/main/resources/images/book/";
+            String imageName = System.currentTimeMillis() + "_book_image.jpg";
+            savedImagePath = imageDir + imageName;
+
+            InputStream in = new URL(imageUrl).openStream();
+            Files.copy(in, Paths.get(savedImagePath), StandardCopyOption.REPLACE_EXISTING);
+            in.close();
+
+            return imageName;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return savedImagePath;
     }
 
     public void populateFields() {
         if (apiBook != null) {
             // Đặt giá trị của các trường từ đối tượng apiBook
             bookTitleTextField.setText(apiBook.getTitle());
-            isbnTextField.setText(apiBook.getIsbn());
+            isbnTextField.setText(apiBook.getIsbn().equals("Unknown ISBN") ? "Unknown ISBN" : apiBook.getIsbn().substring(7));
             authorTextField.setText(apiBook.getAuthor());
             publisherTextField.setText(apiBook.getPublisher());
             categoryTextField.setText(apiBook.getCategory());
             languageTextField.setText(apiBook.getLanguage());
-            yearPublishedTextField.setText(apiBook.getYearPublished().equals("Unknown ISBN") ? "Unknown ISBN" : apiBook.getYearPublished().substring(0,4));
+            yearPublishedTextField.setText(apiBook.getYearPublished().equals("Unknown") ? "Unknown" : apiBook.getYearPublished().substring(0,4));
             descriptionTextArea.setText(apiBook.getDescription());
             numberOfPagesTextField.setText(apiBook.getNumberOfPages());
+            openedFromApi = true;
+
 
             if (apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()) {
                 bookImageView.setImage(new Image(apiBook.getImagePath()));
@@ -136,8 +170,6 @@ public class CreateBookController implements Initializable {
             yearPublishedTextField.setEditable(false);
             descriptionTextArea.setEditable(false);
             numberOfPagesTextField.setEditable(false);
-
-
         }
     }
 
@@ -155,6 +187,10 @@ public class CreateBookController implements Initializable {
         String yearPublished = yearPublishedTextField.getText();
         String description = descriptionTextArea.getText();
         String averageOfRating = "0.0";
+
+        if (apiBook != null && apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()) {
+            bookImageFilePath = downloadImage(apiBook.getImagePath());
+        }
 
         boolean validation = false;
 
@@ -210,11 +246,10 @@ public class CreateBookController implements Initializable {
         }
 
         if (!yearPublished.isEmpty() ){
-            if(!yearPublished.matches("\\d++")){
-                yearPublishedErrorLabel.setText("Year published must be a number");
+            if(!yearPublished.matches("\\d++") && !yearPublished.equals("Unknown")){
+                yearPublishedErrorLabel.setText("Year published must be a number or Unknown");
                 validation = true;
             }
-
         }
 
         if(validation) {
@@ -251,8 +286,6 @@ public class CreateBookController implements Initializable {
                 if(previousBookFilePath != null){
                     Files.copy(Paths.get(previousBookFilePath), Paths.get(booksDir + bookImageFilePath));
                 }
-                clearInputFields();
-                closeStage();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -349,8 +382,8 @@ public class CreateBookController implements Initializable {
 
         yearPublishedTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.trim().isEmpty()){
-                if (!newValue.matches("\\d+")){
-                    yearPublishedErrorLabel.setText("Year published must be a number");
+                if (!newValue.matches("\\d+") && !newValue.equals("Unknown")){
+                    yearPublishedErrorLabel.setText("Year published must be a number or Unknown");
                 }
             }
             else {
@@ -383,9 +416,10 @@ public class CreateBookController implements Initializable {
 
     @FXML
     private void cancel() {
-        clearInputFields();
-        closeStage();
+            clearInputFields();
+            closeStage();
     }
+
 
     private void clearInputFields() {
         bookTitleTextField.clear();

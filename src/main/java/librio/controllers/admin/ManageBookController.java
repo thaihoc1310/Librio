@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import librio.controllers.LogoutController;
-import librio.controllers.auth.Session;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -77,6 +77,13 @@ public class ManageBookController implements Initializable {
 
     private String keyword = null;
 
+    public String getKeyword(){
+        return keyword;
+    }
+
+    public int getCurrentPage(){
+        return currentPage;
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setAvatarAndUserName();

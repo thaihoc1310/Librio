@@ -1,4 +1,4 @@
-package librio.controllers.admin;
+package librio.controllers.member;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -6,16 +6,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import librio.controllers.LogoutController;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Gender;
@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 
-public class ProfileSettingsController implements Initializable {
+public class EditProfileController implements Initializable {
 
     private User loggedInUser =  Session.getInstance().getLoggedInUser();
 
@@ -46,17 +46,11 @@ public class ProfileSettingsController implements Initializable {
     @FXML
     private Button saveButton;
 
-    @FXML
-    private ImageView avatar;
     private String avatarFilePath;
     private String previousAvatarFilePath;
 
     @FXML
-    private Label userNameLabel;
-    @FXML
-    private StackPane stackPaneRoot;
-    @FXML
-    private ImageView avatarUser;
+    private ImageView avatar;
 
     @FXML
     private DatePicker birthOfDatePicker;
@@ -194,7 +188,6 @@ public class ProfileSettingsController implements Initializable {
                         }
                     }
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
-                    setAvatarAndUserName();
                 }
             }
 
@@ -211,7 +204,6 @@ public class ProfileSettingsController implements Initializable {
             return;
         }
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
-        setAvatarAndUserName();
         emailTextField.setText(loggedInUser.getEmail());
         nameTextField.setText(loggedInUser.getName());
         phoneNumberTextField.setText(loggedInUser.getPhoneNumber());
@@ -249,7 +241,6 @@ public class ProfileSettingsController implements Initializable {
 
 
     private void addListeners() {
-        // Ẩn notification khi click vào 1 textField nào đó
         memberIdTextField.setOnMouseClicked(event -> notification.setText(""));
         nameTextField.setOnMouseClicked(event -> notification.setText(""));
         emailTextField.setOnMouseClicked(event -> notification.setText(""));
@@ -302,124 +293,10 @@ public class ProfileSettingsController implements Initializable {
         dateOfBirthErrorLabel.setText("");
     }
 
-    public void setAvatarAndUserName(){
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + loggedInUser.getAvatar();
-
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-            cropAndClipToCircle(image, avatar, 100);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-            cropAndClipToCircle(image, avatar, 100);
-        }
-        userNameLabel.setText(loggedInUser.getName());
-    }
-
-    @FXML
-    private void openAdDashboardScene() {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot  = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(adminDashboardRoot);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openManageBorrowScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBorrow.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openManageBookScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openManageUserScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageUser.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void openLogOutScene() {
-        try {
-            // Tải FXML của scene mới
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
-            Parent root = loader.load();
-            stackPaneRoot.setOpacity(0.45);
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-
-            LogoutController logoutController = loader.getController();
-            logoutController.setOwnerStage(currentStage);
-            logoutController.setStackPaneRoot(stackPaneRoot);
-            // Tạo stage mới cho scene
-            Stage stage = new Stage();
-            stage.setTitle("Logout");
-            stage.setScene(new Scene(root));
-            Rectangle clip = new Rectangle();
-            clip.setWidth(424);
-            clip.setHeight(204);
-            clip.setArcWidth(20);
-            clip.setArcHeight(20);
-            root.setClip(clip);
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initOwner(currentStage);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.setOnShown(event -> {
-                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
-                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
-            });
-
-            // Hiển thị scene
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     private void openChangePasswordScene(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ChangePassword.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ChangePassword.fxml"));
             Parent manageBorrowRoot = loader.load();
 
             Stage currentStage = (Stage) saveButton.getScene().getWindow();
@@ -430,3 +307,4 @@ public class ProfileSettingsController implements Initializable {
         }
     }
 }
+

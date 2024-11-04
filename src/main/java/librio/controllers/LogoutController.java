@@ -7,8 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import librio.controllers.auth.Session;
+import librio.auth.Session;
 
 import java.io.IOException;
 

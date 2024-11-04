@@ -1,4 +1,4 @@
-package librio.controllers.auth;
+package librio.auth;
 
 import librio.models.Role;
 import librio.models.User;

@@ -212,9 +212,9 @@ public class DatabaseUtil {
 
 
             // Delete borrows associated with the book
-            String deleteBorrowQuery = "DELETE FROM Borrows WHERE book_id = ?";
+            String deleteBorrowQuery = "DELETE FROM Borrows WHERE book_isbn = ?";
             try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
-                deleteBorrowStmt.setInt(1, book.getId());
+                deleteBorrowStmt.setString(1,book.getIsbn());
                 deleteBorrowStmt.executeUpdate();
             }
 
