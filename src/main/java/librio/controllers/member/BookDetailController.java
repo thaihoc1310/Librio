@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import librio.models.Book;
@@ -18,84 +19,56 @@ public class BookDetailController implements Initializable {
 
     @FXML
     private Text title;
-
     @FXML
     private Label author;
-
-    @FXML
-    private Label yearPagesAndPublisher;
-
     @FXML
     private Label isbn;
-
     @FXML
-    private Label copies;
-
+    private Label year;
     @FXML
-    private ImageView bookCoverImage;
-
+    private Label publisher;
     @FXML
     private Text description;
-
     @FXML
-    private Button borrowButton;
-
+    private ImageView bookCoverImage;
     @FXML
-    private ImageView exitButton;
+    private AnchorPane bookDetailsPane;
 
-    @FXML
-    private Button backButton; // Nút back thứ hai (nếu có)
-
-    // Biến lưu hành động quay lại
-    private Runnable onBackAction;
-
-    // Phương thức khởi tạo để nhận thông tin sách và hiển thị
-    public void setBookDetails(Book book) {
-
-        title.setText(book.getTitle());
-        author.setText(book.getAuthor());
-
-        // Hiển thị năm, số trang và nhà xuất bản
-        yearPagesAndPublisher.setText(book.getYearPublished() + "    " + book.getNumberOfPages() + " pages (" + book.getPublisher() + ")");
-
-        isbn.setText("ISBN: " + book.getIsbn());
-
-        // Kiểm tra và đặt ảnh bìa sách
-        try {
-            bookCoverImage.setImage(new Image(book.getImagePath()));
-        } catch (Exception e) {
-            System.out.println("Không thể tải ảnh, sử dụng ảnh mặc định.");
-            bookCoverImage.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
-        }
-
-        copies.setText("Copies: " + book.getQuantityCopy());
-        description.setText(book.getDescription());
-    }
-
-    // Đặt hành động quay lại
-    public void setOnBackAction(Runnable onBackAction) {
-        this.onBackAction = onBackAction;
-    }
-
-    // Phương thức quay lại màn hình danh sách sách
-    @FXML
-    private void openBookScene() {
-        if (onBackAction != null) {
-            onBackAction.run();  // Quay lại Scene trước đó
-        } else {
-            System.out.println("Hành động quay lại chưa được thiết lập.");
-        }
-    }
+    private Book book;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Đặt hành động cho exitButton
-        exitButton.setCursor(Cursor.HAND);
-        exitButton.setOnMouseClicked(event -> openBookScene());  // Sử dụng cho ImageView
 
-        // Đặt hành động cho backButton (nếu có nút "Back")
-        if (backButton != null) {
-            backButton.setOnAction(event -> openBookScene());
+    }
+
+    public void setBook(Book book){
+        this.book = book;
+        setBookDetails();
+    }
+
+    public void setBookDetails() {
+        title.setText(book.getTitle());
+        author.setText(book.getAuthor());
+        year.setText("Published:    "+book.getYearPublished());
+        isbn.setText("ISBN:   " + book.getIsbn());
+        publisher.setText("Publisher:   " + book.getPublisher());
+        description.setText(book.getDescription());
+        try {
+            bookCoverImage.setImage(new Image(book.getImagePath()));
+        } catch (Exception e) {
+            bookCoverImage.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
         }
+
+
+    }
+
+    @FXML
+    private void cancelBookDetail(){
+        closeStage();
+    }
+
+    private void closeStage() {
+        Stage stage = (Stage) title.getScene().getWindow();
+        stage.close();
     }
 }
