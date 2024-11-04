@@ -56,6 +56,8 @@ public class BookController implements Initializable {
     @FXML
     private ImageView searchButton;
 
+    private int offsetIndex = 0;
+
     private boolean isAnchorPaneVisible = false;
 
     private List<Book> bookList = new ArrayList<>();
@@ -84,12 +86,16 @@ public class BookController implements Initializable {
             PreparedStatement preparedStatement;
 
             if (keyword == null || keyword.isEmpty()) {
-                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books";
+                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books LIMIT ? OFFSET ?";
                 preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setInt(1, 20);
+                preparedStatement.setInt(2, offsetIndex);
             } else {
-                query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ?";
+                query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? LIMIT ? OFFSET ?";
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setString(1, "%" + keyword + "%");
+                preparedStatement.setInt(2, 20);
+                preparedStatement.setInt(3, offsetIndex);
             }
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -147,6 +153,8 @@ public class BookController implements Initializable {
 
     @FXML
     private void handleSearch() {
+        bookList.clear();
+        offsetIndex = 0;
         keyword = searchTextField.getText().trim();
         loadBooksFromDatabase();
     }
@@ -155,11 +163,32 @@ public class BookController implements Initializable {
      * Hiển thị danh sách các cuốn sách trong TilePane
      */
     private void displayBooks(List<Book> booksToDisplay) {
-        tilePane.getChildren().clear();
+        if (offsetIndex == 0) {
+            tilePane.getChildren().clear();
+        } else {
+            if (!tilePane.getChildren().isEmpty() && tilePane.getChildren().get(tilePane.getChildren().size() - 1) instanceof Button) {
+                tilePane.getChildren().remove(tilePane.getChildren().size() - 1);
+            }
+        }
         for (Book book : booksToDisplay) {
             AnchorPane bookPane = createBookPane(book);
             tilePane.getChildren().add(bookPane);
         }
+
+        if (!booksToDisplay.isEmpty() && booksToDisplay.size() % 4 == 0) {
+            Button moreButton = new Button("More");
+            moreButton.setPrefHeight(32.0);
+            moreButton.setPrefWidth(667.0);
+            moreButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;");
+            moreButton.setOnMouseEntered(event -> moreButton.setStyle("-fx-background-color: #4c2113; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px; -fx-cursor: hand;"));
+            moreButton.setOnMouseExited(event -> moreButton.setStyle("-fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;-fx-background-color: #72311c;"));
+            moreButton.setOnAction(event -> {
+                offsetIndex += 20;
+                loadBooksFromDatabase();
+            });
+            tilePane.getChildren().add(moreButton);
+        }
+
         tilePane.widthProperty().addListener((obs, oldWidth, newWidth) -> {
             double paneWidth = newWidth.doubleValue();
             adjustBookPaneLayout(paneWidth);
@@ -285,7 +314,6 @@ public class BookController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             // Hiển thị scene
             stage.showAndWait();
-            loadBooksFromDatabase();
         } catch (IOException e) {
             e.printStackTrace();
         }
