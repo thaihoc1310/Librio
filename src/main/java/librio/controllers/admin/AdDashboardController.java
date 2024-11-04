@@ -15,7 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import librio.controllers.LogoutController;
-import librio.controllers.auth.Session;
+import librio.auth.Session;
 
 import java.io.File;
 import java.io.IOException;
