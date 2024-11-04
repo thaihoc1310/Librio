@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageBookController">
+<StackPane fx:id="stackPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ManageBookController">
     <children>
         <AnchorPane prefHeight="600.0" prefWidth="1110.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
             <children>
