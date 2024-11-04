@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -55,6 +57,8 @@ public class ManageBookController implements Initializable {
     private TableColumn<Book, Void> actionColumn;
     @FXML
     private Button addBookButton;
+    @FXML
+    private StackPane stackPaneRoot;
     @FXML
     private Button addBookApiButton;
     @FXML
@@ -416,28 +420,36 @@ public class ManageBookController implements Initializable {
     @FXML
     private void openLogOutScene() {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
             Parent root = loader.load();
-
+            stackPaneRoot.setOpacity(0.45);
             Stage currentStage = (Stage) bookTableView.getScene().getWindow();
-
             LogoutController logoutController = loader.getController();
             logoutController.setOwnerStage(currentStage);
-            // Tạo stage mới cho scene
+            logoutController.setStackPaneRoot(stackPaneRoot);
             Stage stage = new Stage();
-            stage.setTitle("Logout");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
             stage.initStyle(StageStyle.UNDECORATED);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            Rectangle clip = new Rectangle();
+            clip.setWidth(424);
+            clip.setHeight(204);
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            root.setClip(clip);
+            stage.setResizable(false);
             stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
             stage.showAndWait();
             loadBooks(keyword, currentPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }
 
