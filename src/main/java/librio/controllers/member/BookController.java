@@ -10,15 +10,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.controllers.LogoutController;
-import librio.controllers.admin.UpdateUserController;
-import librio.controllers.auth.Session;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 

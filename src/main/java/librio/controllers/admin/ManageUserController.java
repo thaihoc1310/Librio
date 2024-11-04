@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import librio.controllers.LogoutController;
-import librio.controllers.auth.Session;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Gender;
 import librio.models.Role;
