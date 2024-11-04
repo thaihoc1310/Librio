@@ -353,6 +353,18 @@ public class BookController implements Initializable {
         Session.getInstance().logout();
         currenStage.close();
     }
+    @FXML
+    private void openBorrowed() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
+            Parent manageUserRoot  = loader.load();
+            Stage currentStage = (Stage) avatarUser.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageUserRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void openEditProfileScene(){

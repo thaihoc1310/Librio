@@ -70,8 +70,10 @@ public class ManageUserController implements Initializable {
     private ImageView avatarUser;
     @FXML
     private Label userNameUser;
+
     @FXML
     private StackPane stackPaneRoot;
+
     private ObservableList<User> userList;
     private int currentPage = 0;
     private String keyword;
@@ -331,19 +333,12 @@ public class ManageUserController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
             Parent root = loader.load();
             stackPaneRoot.setOpacity(0.45);
-
             Stage currentStage = (Stage) userTableView.getScene().getWindow();
             LogoutController logoutController = loader.getController();
             logoutController.setOwnerStage(currentStage);
             logoutController.setStackPaneRoot(stackPaneRoot);
-
             Stage stage = new Stage();
-            stage.setTitle("Logout");
-
-            // Loại bỏ thanh tiêu đề
             stage.initStyle(StageStyle.UNDECORATED);
-
-            // Tạo cảnh mới và áp dụng hình cắt bo cong
             Scene scene = new Scene(root);
             stage.setScene(scene);
             Rectangle clip = new Rectangle();
@@ -352,7 +347,6 @@ public class ManageUserController implements Initializable {
             clip.setArcWidth(20);
             clip.setArcHeight(20);
             root.setClip(clip);
-
             stage.setResizable(false);
             stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);
