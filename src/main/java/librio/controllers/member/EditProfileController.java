@@ -117,31 +117,32 @@ public class EditProfileController implements Initializable {
         boolean validation = false;
 
         if (name.isEmpty()) {
-            nameErrorLabel.setText("Name cannot be empty");
+            nameErrorLabel.setText("Name cannot be empty!");
             validation = true;
         }
 
         if (email.isEmpty()) {
-            emailErrorLabel.setText("Email cannot be empty");
+            emailErrorLabel.setText("Email cannot be empty!");
             validation = true;
         } else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            emailErrorLabel.setText("Invalid email format");
+            emailErrorLabel.setText("Invalid email format!");
             validation = true;
         } else if (isEmailExists(email) && !email.equals(loggedInUser.getEmail())) {
-            emailErrorLabel.setText("Email already exists");
+            emailErrorLabel.setText("Email already exists!");
             validation = true;
         }
 
         if (phoneNumber.isEmpty()) {
-            phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            phoneNumberErrorLabel.setText("Phone number cannot be empty!");
             validation = true;
         } else if (!phoneNumber.matches("\\d{10}")) {
-            phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+            phoneNumberErrorLabel.setText("Phone number must be 10 digits!");
             validation = true;
         }
 
         if (birthOfDate.isAfter(LocalDate.now())) {
-            dateOfBirthErrorLabel.setText("Birth of Date must not be after today");
+            dateOfBirthErrorLabel.setText("Date of birth must not be after today!");
+            validation = true;
         }
 
         if (validation) {
@@ -279,7 +280,7 @@ public class EditProfileController implements Initializable {
 
         birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue.isAfter(LocalDate.now())) {
-                dateOfBirthErrorLabel.setText("Date of birth must be after now");
+                dateOfBirthErrorLabel.setText("Date of birth must not be after today!");
             }else{
                 dateOfBirthErrorLabel.setText("");
             }
