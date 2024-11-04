@@ -286,6 +286,8 @@ public class CreateBookController implements Initializable {
                 if(previousBookFilePath != null){
                     Files.copy(Paths.get(previousBookFilePath), Paths.get(booksDir + bookImageFilePath));
                 }
+                clearInputFields();
+                closeStage();
             }
         } catch (SQLException e) {
             e.printStackTrace();
