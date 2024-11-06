@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
@@ -50,7 +52,32 @@ public class ChangePasswordController implements Initializable {
     @FXML
     private Button saveButton;
 
+    @FXML
+    private TextField currentPasswordTextVisible;
 
+    @FXML
+    private TextField newPasswordTextVisible;
+
+    @FXML
+    private TextField confirmPasswordTextVisible;
+
+    @FXML
+    private ImageView currentPasswordOpenEyeImage;
+
+    @FXML
+    private ImageView newPasswordOpenEyeImage;
+
+    @FXML
+    private ImageView confirmPasswordOpenEyeImage;
+
+    @FXML
+    private ImageView currentPasswordCloseEyeImage;
+
+    @FXML
+    private ImageView newPasswordCloseEyeImage;
+
+    @FXML
+    private ImageView confirmPasswordCloseEyeImage;
 
 
     @Override
@@ -61,6 +88,9 @@ public class ChangePasswordController implements Initializable {
         currentPasswordTextField.setText("");
         newPasswordTextField.setText("");
         confirmPasswordTextField.setText("");
+        currentPasswordTextVisible.setVisible(false);
+        newPasswordTextVisible.setVisible(false);
+        confirmPasswordTextVisible.setVisible(false);
         hideErrorLabels();
         addListeners();
     }
@@ -210,4 +240,72 @@ public class ChangePasswordController implements Initializable {
         // Bật lại các listener sau khi đã xóa
         ignoreListener = false;
     }
+
+    @FXML
+    private void showCurrentPassword() {
+        currentPasswordTextVisible.setText(currentPasswordTextField.getText());
+        currentPasswordTextVisible.setVisible(true);
+        currentPasswordTextField.setVisible(false);
+        currentPasswordOpenEyeImage.setVisible(false);
+        currentPasswordCloseEyeImage.setVisible(true);
+        currentPasswordTextVisible.requestFocus();
+        currentPasswordTextVisible.positionCaret(currentPasswordTextVisible.getText().length());
+    }
+
+    @FXML
+    private void hideCurrentPassword() {
+        currentPasswordTextField.setText(currentPasswordTextVisible.getText());
+        currentPasswordTextField.setVisible(true);
+        currentPasswordTextVisible.setVisible(false);
+        currentPasswordOpenEyeImage.setVisible(true);
+        currentPasswordCloseEyeImage.setVisible(false);
+        currentPasswordTextField.requestFocus();
+        currentPasswordTextField.positionCaret(currentPasswordTextVisible.getText().length());
+    }
+
+    @FXML
+    private void showNewPassword() {
+        newPasswordTextVisible.setText(newPasswordTextField.getText());
+        newPasswordTextVisible.setVisible(true);
+        newPasswordTextField.setVisible(false);
+        newPasswordOpenEyeImage.setVisible(false);
+        newPasswordCloseEyeImage.setVisible(true);
+        newPasswordTextVisible.requestFocus();
+        newPasswordTextVisible.positionCaret(newPasswordTextVisible.getText().length());
+    }
+
+    @FXML
+    private void hideNewPassword() {
+        newPasswordTextField.setText(newPasswordTextVisible.getText());
+        newPasswordTextField.setVisible(true);
+        newPasswordTextVisible.setVisible(false);
+        newPasswordOpenEyeImage.setVisible(true);
+        newPasswordCloseEyeImage.setVisible(false);
+        newPasswordTextField.requestFocus();
+        newPasswordTextField.positionCaret(newPasswordTextVisible.getText().length());
+    }
+
+    @FXML
+    private void showConfirmPassword() {
+        confirmPasswordTextVisible.setText(confirmPasswordTextField.getText());
+        confirmPasswordTextVisible.setVisible(true);
+        confirmPasswordTextField.setVisible(false);
+        confirmPasswordOpenEyeImage.setVisible(false);
+        confirmPasswordCloseEyeImage.setVisible(true);
+        confirmPasswordTextVisible.requestFocus();
+        confirmPasswordTextVisible.positionCaret(confirmPasswordTextVisible.getText().length());
+    }
+
+    @FXML
+    private void hideConfirmPassword() {
+        confirmPasswordTextField.setText(confirmPasswordTextVisible.getText());
+        confirmPasswordTextField.setVisible(true);
+        confirmPasswordTextVisible.setVisible(false);
+        confirmPasswordOpenEyeImage.setVisible(true);
+        confirmPasswordCloseEyeImage.setVisible(false);
+        confirmPasswordTextField.requestFocus();
+        confirmPasswordTextField.positionCaret(confirmPasswordTextVisible.getText().length());
+    }
+
+
 }

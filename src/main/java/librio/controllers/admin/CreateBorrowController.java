@@ -3,10 +3,7 @@ package librio.controllers.admin;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
@@ -108,6 +105,25 @@ public class CreateBorrowController implements Initializable {
             dueDatePicker.setValue(LocalDate.now().plusDays(14));
         }else if(dueDate.isBefore(LocalDate.now())){
             dueDateErrorLabel.setText("Due date must be before current date!");
+            validation = true;
+        }
+
+        if(isBookAlreadyBorrowedByUser(getUserByEmail(email).getId(), isbn) == true){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            //alert.setTitle("User already borrowed");
+            alert.setHeaderText(null);
+            alert.setContentText("This user has already borrowed this book!");
+
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.setStyle("-fx-background-color: #f4f4f4;");
+            dialogPane.setPrefWidth(400);
+            dialogPane.setPrefHeight(100);
+
+            ButtonBar buttonBar = (ButtonBar) dialogPane.lookup(".button-bar");
+            buttonBar.setStyle("-fx-background-color: #85553c;");
+            buttonBar.setPrefHeight(40);
+
+            alert.showAndWait();
             validation = true;
         }
 

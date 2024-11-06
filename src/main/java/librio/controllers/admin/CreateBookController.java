@@ -30,8 +30,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import static librio.util.DatabaseUtil.isBookTitleExists;
-import static librio.util.DatabaseUtil.isIsbnExists;
+
+import static librio.util.DatabaseUtil.*;
 
 public class CreateBookController implements Initializable {
 
@@ -151,15 +151,25 @@ public class CreateBookController implements Initializable {
             publisherTextField.setText(apiBook.getPublisher());
             categoryTextField.setText(apiBook.getCategory());
             languageTextField.setText(apiBook.getLanguage());
-            yearPublishedTextField.setText(apiBook.getYearPublished().equals("Unknown") ? "Unknown" : apiBook.getYearPublished().substring(0,4));
+            yearPublishedTextField.setText(apiBook.getYearPublished().contains("Unknown") ? "Unknown" : apiBook.getYearPublished().substring(0,4));
             descriptionTextArea.setText(apiBook.getDescription());
             numberOfPagesTextField.setText(apiBook.getNumberOfPages());
             openedFromApi = true;
 
 
-            if (apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()) {
+//            if (apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()) {
+//                bookImageView.setImage(new Image(apiBook.getImagePath()));
+//            }
+
+            if (apiBook.getImagePath().equals("defaultBook.jpg")) {
+                bookImageView.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
+                bookImageFilePath = null;
+            } else {
                 bookImageView.setImage(new Image(apiBook.getImagePath()));
+                bookImageFilePath = apiBook.getImagePath();
             }
+
+
 
             bookTitleTextField.setEditable(false);
             isbnTextField.setEditable(false);
@@ -250,6 +260,8 @@ public class CreateBookController implements Initializable {
                 yearPublishedErrorLabel.setText("Year published must be a number or Unknown");
                 validation = true;
             }
+        }else{
+            yearPublished = null;
         }
 
         if(validation) {
@@ -265,10 +277,10 @@ public class CreateBookController implements Initializable {
             statement.setString(5, category);
             statement.setString(6, quantityOfCopy);
             statement.setString(7, averageOfRating);
-            if(yearPublishedTextField.getText().isEmpty()){
+            if (yearPublished == null || yearPublished.equals("Unknown")) {
                 statement.setNull(8, java.sql.Types.INTEGER);
-            }else {
-                statement.setString(8, yearPublished);
+            } else {
+                statement.setInt(8, Integer.parseInt(yearPublished));
             }
             statement.setString(9, language);
             statement.setString(10, numberOfPages);
@@ -278,7 +290,7 @@ public class CreateBookController implements Initializable {
                 statement.setString(11, description);
             }
 
-            statement.setString(12, bookImageFilePath);
+            statement.setString(12, (bookImageFilePath == null || bookImageFilePath.equals("defaultBook.jpg")) ? null : bookImageFilePath);
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 String projectDir = System.getProperty("user.dir");
@@ -385,7 +397,9 @@ public class CreateBookController implements Initializable {
         yearPublishedTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.trim().isEmpty()){
                 if (!newValue.matches("\\d+") && !newValue.equals("Unknown")){
-                    yearPublishedErrorLabel.setText("Year published must be a number or Unknown");
+                    yearPublishedErrorLabel.setText("Year published must be a \nnumber or Unknown");
+                }else {
+                    yearPublishedErrorLabel.setText("");
                 }
             }
             else {

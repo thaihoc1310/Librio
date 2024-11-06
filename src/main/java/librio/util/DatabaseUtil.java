@@ -430,4 +430,20 @@ public class DatabaseUtil {
         }
         return null;
     }
+
+    public static boolean isBookAlreadyBorrowedByUser(String userId, String isbn) {
+        String query = "SELECT COUNT(*) FROM borrows WHERE member_id = ? AND book_isbn = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, userId);
+            statement.setString(2, isbn);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
