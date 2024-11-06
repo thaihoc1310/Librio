@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         // Khởi tạo cơ sở dữ liệu khi bắt đầu ứng dụng
         DatabaseInitializer.initializeDatabase();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/fxml/member/Homepage.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/fxml/Login.fxml"));
         ///fxml/member/Book.fxml
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Librio");
@@ -22,6 +22,8 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
+        System.setProperty("prism.lcdtext", "true");
+        System.setProperty("prism.text", "true");
         launch();
     }
 }

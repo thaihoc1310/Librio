@@ -134,3 +134,54 @@
         .image-avatar: hover {
          -fx-cursor: hand;
         }
+
+        .tab-pane {
+            -fx-background-color: #ffffff;
+            -fx-border-width: 10px;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
+        }
+
+        .tab {
+            -fx-background-color: #e0e0e0;
+           -fx-background-radius: 5px 5px 0 0;
+             -fx-padding: 5px 10px;
+             -fx-focus-color: transparent;
+              -fx-faint-focus-color: transparent;
+        }
+
+        .tab:selected {
+            -fx-background-color: #b20203;
+            -fx-text-fill: white;
+             -fx-focus-color: transparent;
+              -fx-faint-focus-color: transparent;
+        }
+
+
+        .tab .tab-label {
+            -fx-font-size: 14px;
+            -fx-font-weight: bold;
+             -fx-focus-color: transparent;
+              -fx-faint-focus-color: transparent;
+        }
+
+
+        .tab:hover {
+            -fx-background-color: #d0d0d0; /* Màu nền khi di chuột */
+             -fx-focus-color: transparent;
+              -fx-faint-focus-color: transparent;
+        }
+
+
+        .tab-header-background {
+            -fx-background-color: #f0f0f0;
+        }
+
+
+        .tab:selected .tab-label {
+            -fx-text-fill: white;
+        }
+        *:focus {
+            -fx-focus-color: transparent;
+            -fx-faint-focus-color: transparent;
+        }
+

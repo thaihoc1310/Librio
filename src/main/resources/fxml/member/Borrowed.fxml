@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -34,7 +35,7 @@
                                                 <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
                                             </image>
                                         </ImageView>
-                                        <Label fx:id="userNameUser" layoutX="78.0" layoutY="14.0" prefHeight="38.0" prefWidth="217.0" text="User">
+                                        <Label fx:id="userNameUser2" layoutX="78.0" layoutY="14.0" prefHeight="38.0" prefWidth="217.0" text="User">
                                             <font>
                                                 <Font name="System Bold" size="15.0" />
                                             </font>
@@ -71,7 +72,7 @@
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="372.0" styleClass="button-ctrl" text="Log Out">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" onAction="#logOut" prefHeight="50.0" prefWidth="372.0" styleClass="button-ctrl" text="Log Out">
                                             <graphic>
                                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
@@ -89,7 +90,7 @@
                             <children>
                                 <BorderPane prefHeight="741.0" prefWidth="1400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <top>
-                                        <AnchorPane prefHeight="81.0" prefWidth="1400.0" style="-fx-background-color: #481f10;" BorderPane.alignment="CENTER">
+                                        <AnchorPane onMouseClicked="#cancelMenuButton" prefHeight="81.0" prefWidth="1400.0" style="-fx-background-color: #481f10;" BorderPane.alignment="CENTER">
                                             <children>
                                                 <TextField fx:id="searchTextField" layoutX="437.0" layoutY="18.0" prefHeight="38.0" prefWidth="648.0">
                                                     <font>
@@ -102,107 +103,112 @@
                                                         <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                                                     </image>
                                                 </ImageView>
-                                                <ImageView fitHeight="56.0" fitWidth="203.0" layoutX="63.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="56.0" fitWidth="203.0" layoutX="63.0" layoutY="10.0" onMouseClicked="#openBorrowed" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../../icons/MemberIcon/Librio.png" />
                                                     </image>
                                                 </ImageView>
+                                    <Label fx:id="userNameUser" alignment="CENTER_RIGHT" layoutX="1114.0" layoutY="26.0" prefHeight="22.0" prefWidth="200.0" text="Đinh Viết Huy" textFill="WHITE">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="16.0" />
+                                       </font>
+                                    </Label>
                                             </children>
                                         </AnchorPane>
                                     </top>
                                     <center>
                                         <AnchorPane prefHeight="654.0" prefWidth="1400.0" style="-fx-background-color: #e3e6e6;" BorderPane.alignment="CENTER">
-                                            <children>
-                                                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutY="-7.2" prefHeight="653.0" prefWidth="1400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <content>
-                                          <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
-                                            <tabs>
-                                              <Tab text="Borrowed Books">
-                                                <content>
-                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TabPane fx:id="tabPane" layoutX="274.0" layoutY="250.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1400.0" prefWidth="2000.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <tabs>
+                                          <Tab text="Borrowing Books">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1400.0" prefWidth="2000.0">
+                                                   <children>
+                                                      <AnchorPane layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1400.0" prefWidth="2000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
-                                                            <AnchorPane layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="1400.0">
-                                                               <children>
-                                                                  <ScrollPane prefHeight="638.0" prefWidth="1400.0">
-                                                                     <content>
-                                                                        <TilePane fx:id="tilePane" hgap="20.0" prefHeight="624.0" prefWidth="1398.0">
+                                                            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="638.0" prefWidth="1400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <content>
+                                                                  <TilePane fx:id="tilePane" hgap="30.0" onMouseClicked="#cancelMenuButton" prefHeight="624.0" prefWidth="1398.0" style="-fx-background-color: ffffff;" vgap="50.0">
+                                                                     <children>
+                                                                        <AnchorPane prefHeight="363.0" prefWidth="170.0">
                                                                            <children>
-                                                                              <AnchorPane prefHeight="310.0" prefWidth="172.0">
-                                                                                 <children>
-                                                                                    <ImageView fitHeight="256.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                                                                       <image>
-                                                                                          <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
-                                                                                       </image>
-                                                                                    </ImageView>
-                                                                                    <Text layoutX="7.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người" wrappingWidth="156.53665161132812" />
-                                                                                    <Label layoutX="51.0" layoutY="278.0" text="Còn 10 ngày" />
-                                                                                 </children>
-                                                                              </AnchorPane>
-                                                                              <AnchorPane prefHeight="310.0" prefWidth="172.0">
-                                                                                 <children>
-                                                                                    <ImageView fitHeight="256.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                                                                       <image>
-                                                                                          <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
-                                                                                       </image>
-                                                                                    </ImageView>
-                                                                                    <Text layoutX="7.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người" wrappingWidth="156.53665161132812" />
-                                                                                    <Label layoutX="51.0" layoutY="278.0" text="Còn 10 ngày" />
-                                                                                 </children>
-                                                                              </AnchorPane>
-                                                                              <AnchorPane prefHeight="310.0" prefWidth="172.0">
-                                                                                 <children>
-                                                                                    <ImageView fitHeight="256.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                                                                       <image>
-                                                                                          <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
-                                                                                       </image>
-                                                                                    </ImageView>
-                                                                                    <Text layoutX="7.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người" wrappingWidth="156.53665161132812" />
-                                                                                    <Label layoutX="51.0" layoutY="278.0" text="Còn 10 ngày" />
-                                                                                 </children>
-                                                                              </AnchorPane>
-                                                                              <AnchorPane prefHeight="310.0" prefWidth="172.0">
-                                                                                 <children>
-                                                                                    <ImageView fitHeight="256.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                                                                       <image>
-                                                                                          <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
-                                                                                       </image>
-                                                                                    </ImageView>
-                                                                                    <Text layoutX="7.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người" wrappingWidth="156.53665161132812" />
-                                                                                    <Label layoutX="51.0" layoutY="278.0" text="Còn 10 ngày" />
-                                                                                 </children>
-                                                                              </AnchorPane>
+                                                                              <ImageView fitHeight="268.0" fitWidth="179.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                              <Text layoutX="12.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người" wrappingWidth="156.53665161132812">
+                                                                                 <font>
+                                                                                    <Font name="SansSerif Bold" size="16.0" />
+                                                                                 </font></Text>
                                                                            </children>
-                                                                           <padding>
-                                                                              <Insets left="50.0" top="30.0" />
-                                                                           </padding>
-                                                                        </TilePane>
-                                                                     </content>
-                                                                  </ScrollPane>
-                                                               </children>
-                                                            </AnchorPane>
-                                                         </children></AnchorPane>
-                                                </content>
-                                              </Tab>
-                                              <Tab text="Returned Books">
-                                                <content>
-                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                </content>
-                                              </Tab>
-                                            </tabs>
-                                          </TabPane>
-                                       </content>
-                                                </ScrollPane>
-                                            </children>
+                                                                        </AnchorPane>
+                                                                        <AnchorPane prefHeight="310.0" prefWidth="172.0">
+                                                                           <children>
+                                                                              <ImageView fitHeight="256.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                              <Text layoutX="7.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người" wrappingWidth="156.53665161132812" />
+                                                                              <Label layoutX="51.0" layoutY="278.0" text="Còn 10 ngày" />
+                                                                           </children>
+                                                                        </AnchorPane>
+                                                                        <AnchorPane prefHeight="310.0" prefWidth="172.0">
+                                                                           <children>
+                                                                              <ImageView fitHeight="256.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                              <Text layoutX="7.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người" wrappingWidth="156.53665161132812" />
+                                                                              <Label layoutX="51.0" layoutY="278.0" text="Còn 10 ngày" />
+                                                                           </children>
+                                                                        </AnchorPane>
+                                                                        <AnchorPane prefHeight="310.0" prefWidth="172.0">
+                                                                           <children>
+                                                                              <ImageView fitHeight="256.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                              <Text layoutX="7.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người" wrappingWidth="156.53665161132812" />
+                                                                              <Label layoutX="51.0" layoutY="278.0" text="Còn 10 ngày" />
+                                                                           </children>
+                                                                        </AnchorPane>
+                                                                     </children>
+                                                                     <padding>
+                                                                        <Insets left="100.0" top="70.0" />
+                                                                     </padding>
+                                                                  </TilePane>
+                                                               </content>
+                                                            </ScrollPane>
+                                                         </children>
+                                                      </AnchorPane>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </Tab>
+                                          <Tab text="Returned Books">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                             </content>
+                                          </Tab>
+                                       </tabs>
+                                    </TabPane>
+                                 </children>
                                         </AnchorPane>
                                     </center>
                                 </BorderPane>
                             </children>
                         </AnchorPane>
-                        <ImageView fx:id="ClickAvatar" fitHeight="46.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="15.0">
+                        <ImageView fx:id="ClickAvatar" fitHeight="46.0" fitWidth="46.0" onMouseClicked="#handleAvatarClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="15.0">
                             <image>
                                 <Image url="@../../icons/MemberIcon/MaleUser.png" />
                             </image>
                         </ImageView>
+                  <Circle fx:id="moreIcon" fill="#1f93ff" layoutX="1360.0" layoutY="51.0" radius="9.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="42.0" />
                     </children>
                 </AnchorPane>
             </children>
