@@ -1,17 +1,27 @@
 package librio.controllers.member;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import librio.database.DatabaseConnection;
+import librio.models.Book;
 
+import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class HomePageController implements Initializable {
@@ -26,7 +36,7 @@ public class HomePageController implements Initializable {
     private Button leftMainBannerButton;
 
     @FXML
-    private Button leftScrollButton1;
+    private Button leftToprateButton;
 
     @FXML
     private Button leftScrollButton2;
@@ -50,7 +60,7 @@ public class HomePageController implements Initializable {
     private Button rightMainBannerButton;
 
     @FXML
-    private Button rightScrollButton1;
+    private Button rightToprateButton;
 
     @FXML
     private Button rightScrollButton2;
@@ -61,16 +71,32 @@ public class HomePageController implements Initializable {
     @FXML
     private TextField searchTextField;
 
+    @FXML
+    private HBox topRateContainer;
+
+    @FXML
+    private ScrollPane topRateScroll;
+
     private Timeline autoScrollTimeline;
+
+    private List<Book> topRateList = new ArrayList<>();
+
+    private int currentRatingBookIndex = 0;
+    private static final int TOTAL_BOOKS = 18;
+    private static final int BOOKS_PER_PAGE = 6;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         leftMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(-1));
         rightMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(1));
+        leftToprateButton.setOnMouseClicked(event -> scrollTopRate(-1));
+        rightToprateButton.setOnMouseClicked(event -> scrollTopRate(1));
         startAutoScroll();
+        loadTopRatedBooks();
     }
 
     private void scrollMainBanner(int direction) {
+        stopAutoScroll();
         double currentHValue = mainBannerScroll.getHvalue();
         final double targetHValue = getTargetHValue(direction, currentHValue);
 
@@ -96,16 +122,17 @@ public class HomePageController implements Initializable {
 
             fadeOut.play();
         }
+        startAutoScroll();
     }
 
     private double getTargetHValue(int direction, double currentHValue) {
-        double scrollAmount = 1.0 / (mainBannerContainer.getChildren().size() - 1); // Calculate scroll increment based on the number of banners
+        double scrollAmount = 1.0 / (mainBannerContainer.getChildren().size() - 1);
         final double targetHValue;
 
         if (direction == -1 && currentHValue == 0) {
-            targetHValue = 1; // Wrap around to the last banner if at the beginning
+            targetHValue = 1;
         } else if (direction == 1 && currentHValue == 1) {
-            targetHValue = 0; // Wrap around to the first banner if at the end
+            targetHValue = 0;
         } else {
             targetHValue = currentHValue + (scrollAmount * direction);
         }
@@ -125,5 +152,107 @@ public class HomePageController implements Initializable {
         autoScrollTimeline.setCycleCount(Timeline.INDEFINITE);
         autoScrollTimeline.play();
     }
+    private void stopAutoScroll() {
+        if (autoScrollTimeline != null) {
+            autoScrollTimeline.stop();
+        }
+    }
 
+    private void loadTopRatedBooks() {
+        topRateList.clear();
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String  query = "SELECT id, title, author, isbn, category, publisher, quantity_copy," +
+                    " average_of_rating, year_published, language, number_of_pages, description," +
+                    " book_image FROM books ORDER BY average_of_rating DESC LIMIT ?";
+            PreparedStatement  preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, TOTAL_BOOKS);
+
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author");
+                String isbn = resultSet.getString("isbn");
+                String category = resultSet.getString("category");
+                String publisher = resultSet.getString("publisher");
+                Integer quantityCopy = resultSet.getInt("quantity_copy");
+                Double averageOfRating = resultSet.getDouble("average_of_rating");
+                String yearPublished = resultSet.getString("year_published");
+                String language = resultSet.getString("language");
+                String numberOfPages = resultSet.getString("number_of_pages");
+                String description = resultSet.getString("description");
+                String imageBook = resultSet.getString("book_image");
+
+                if (imageBook == null) {
+                    imageBook = "defaultBook.jpg";
+                }
+
+                Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
+
+                topRateList.add(book);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        displayTopRatedBooks();
+    }
+
+    private void displayTopRatedBooks() {
+        for (int i = 0; i < topRateList.size(); i++) {
+            Book book = topRateList.get(i);
+            AnchorPane bookPane = new AnchorPane();
+            bookPane.setPrefSize(188, 325);
+
+            ImageView bookImage = new ImageView();
+            bookImage.setFitHeight(226);
+            bookImage.setFitWidth(163);
+            bookImage.setLayoutX(13);
+            bookImage.setPickOnBounds(true);
+            bookImage.setSmooth(true);
+            String projectDir = System.getProperty("user.dir");
+            String booksDir = projectDir + "/src/main/resources/images/book/";
+            String path = booksDir + book.getImagePath();
+            File file = new File(path);
+            bookImage.setImage(new Image(file.toURI().toString()));
+
+            Label titleLabel = new Label(book.getTitle());
+            titleLabel.setLayoutX(11);
+            titleLabel.setLayoutY(233);
+            titleLabel.setPrefWidth(157);
+            titleLabel.setWrapText(true);
+            titleLabel.setFont(new javafx.scene.text.Font(14));
+
+            Label authorLabel = new Label(book.getAuthor());
+            authorLabel.setLayoutX(11);
+            authorLabel.setLayoutY(275);
+            authorLabel.setPrefWidth(157);
+            authorLabel.setUnderline(true);
+
+            bookPane.getChildren().addAll(bookImage, titleLabel, authorLabel);
+            topRateContainer.getChildren().add(bookPane);
+        }
+    }
+
+    private void scrollTopRate(int direction) {
+        int newBookIndex = currentRatingBookIndex + (direction * BOOKS_PER_PAGE);
+        if (newBookIndex >= 0 && newBookIndex <= TOTAL_BOOKS - BOOKS_PER_PAGE) {
+            currentRatingBookIndex = newBookIndex;
+            double targetHValue = (double) currentRatingBookIndex / (TOTAL_BOOKS - BOOKS_PER_PAGE);
+            Timeline timeline = new Timeline();
+            KeyFrame keyFrame = new KeyFrame(
+                    Duration.seconds(0.4),
+                    new javafx.animation.KeyValue(
+                            topRateScroll.hvalueProperty(),
+                            targetHValue,
+                            Interpolator.EASE_BOTH // Dùng Interpolator để tạo hiệu ứng mềm mại
+                    )
+            );
+            timeline.getKeyFrames().add(keyFrame);
+            timeline.play();
+        }
+    }
 }
+

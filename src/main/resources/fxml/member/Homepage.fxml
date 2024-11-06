@@ -168,116 +168,41 @@
                      </Button>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="37.0" layoutY="496.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1321.0">
+                  <AnchorPane layoutX="77.0" layoutY="496.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                      <children>
                         <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Bestsellers">
                            <font>
                               <Font name="System Bold Italic" size="24.0" />
                            </font>
                         </Label>
-                        <Label layoutX="1271.0" layoutY="1.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                        <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ScrollPane layoutY="41.0" prefHeight="329.0" prefWidth="1321.0">
+                        <ScrollPane fx:id="topRateScroll" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
                            <content>
-                              <HBox prefHeight="325.0" prefWidth="1318.0" spacing="15.0">
-                                 <children>
-                                    <Button fx:id="leftScrollButton1" mnemonicParsing="false" prefHeight="325.0" prefWidth="41.0" styleClass="scroll">
-                                       <graphic>
-                                          <ImageView fitHeight="20" fitWidth="20">
-                                             <image>
-                                                <Image url="@../../icons/MemberIcon/left-arrow.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <AnchorPane prefHeight="325.0" prefWidth="188.0">
-                                       <children>
-                                          <ImageView fitHeight="226.0" fitWidth="163.0" layoutX="13.0" pickOnBounds="true">
-                                          </ImageView>
-                                          <Label layoutX="11.0" layoutY="233.0" prefHeight="20.0" prefWidth="157.0" text="Clean Code" wrapText="true">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label layoutX="11.0" layoutY="275.0" prefHeight="17.0" prefWidth="52.0" text="thaihoc" underline="true" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="325.0" prefWidth="188.0">
-                                       <children>
-                                          <ImageView fitHeight="226.0" fitWidth="163.0" layoutX="13.0" pickOnBounds="true">
-                                          </ImageView>
-                                          <Label layoutX="11.0" layoutY="233.0" prefHeight="20.0" prefWidth="157.0" text="Clean Code" wrapText="true">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label layoutX="11.0" layoutY="275.0" prefHeight="17.0" prefWidth="52.0" text="thaihoc" underline="true" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="325.0" prefWidth="188.0">
-                                       <children>
-                                          <ImageView fitHeight="226.0" fitWidth="163.0" layoutX="13.0" pickOnBounds="true">
-                                          </ImageView>
-                                          <Label layoutX="11.0" layoutY="233.0" prefHeight="20.0" prefWidth="157.0" text="Clean Code" wrapText="true">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label layoutX="11.0" layoutY="275.0" prefHeight="17.0" prefWidth="52.0" text="thaihoc" underline="true" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="325.0" prefWidth="188.0">
-                                       <children>
-                                          <ImageView fitHeight="226.0" fitWidth="163.0" layoutX="13.0" pickOnBounds="true">
-                                          </ImageView>
-                                          <Label layoutX="11.0" layoutY="233.0" prefHeight="20.0" prefWidth="157.0" text="Clean Code" wrapText="true">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label layoutX="11.0" layoutY="275.0" prefHeight="17.0" prefWidth="52.0" text="thaihoc" underline="true" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="325.0" prefWidth="188.0">
-                                       <children>
-                                          <ImageView fitHeight="226.0" fitWidth="163.0" layoutX="13.0" pickOnBounds="true">
-                                          </ImageView>
-                                          <Label layoutX="11.0" layoutY="233.0" prefHeight="20.0" prefWidth="157.0" text="Clean Code" wrapText="true">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label layoutX="11.0" layoutY="275.0" prefHeight="17.0" prefWidth="52.0" text="thaihoc" underline="true" />
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="325.0" prefWidth="188.0">
-                                       <children>
-                                          <ImageView fitHeight="226.0" fitWidth="163.0" layoutX="13.0" pickOnBounds="true">
-                                          </ImageView>
-                                          <Label layoutX="11.0" layoutY="233.0" prefHeight="20.0" prefWidth="157.0" text="Clean Code" wrapText="true">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label layoutX="11.0" layoutY="275.0" prefHeight="17.0" prefWidth="52.0" text="thaihoc" underline="true" />
-                                       </children>
-                                    </AnchorPane>
-                                    <Button fx:id="rightScrollButton1" mnemonicParsing="false" prefHeight="325.0" prefWidth="41.0" styleClass="scroll">
-                                       <graphic>
-                                          <ImageView fitHeight="20" fitWidth="20">
-                                             <image>
-                                                <Image url="@../../icons/MemberIcon/right-arrow.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                              <HBox fx:id="topRateContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
                            </content>
                         </ScrollPane>
+                        <Button fx:id="leftToprateButton" layoutX="-5.0" layoutY="179.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                           <graphic>
+                              <ImageView fitHeight="20" fitWidth="20">
+                                 <image>
+                                    <Image url="@../../icons/MemberIcon/left-arrow.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="rightToprateButton" layoutX="1203.0" layoutY="185.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                           <graphic>
+                              <ImageView fitHeight="20" fitWidth="20">
+                                 <image>
+                                    <Image url="@../../icons/MemberIcon/right-arrow.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                      </children>
                   </AnchorPane>
                   <AnchorPane layoutX="37.0" layoutY="904.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1321.0">
