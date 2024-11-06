@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -174,6 +175,11 @@
                                           <Image url="@../../icons/MemberIcon/Librio.png" />
                                        </image>
                                     </ImageView>
+                                    <Label fx:id="userNameUser2" alignment="CENTER_RIGHT" layoutX="1114.0" layoutY="26.0" prefHeight="22.0" prefWidth="200.0" text="Đinh Viết Huy" textFill="WHITE">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="16.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </AnchorPane>
                            </top>
@@ -247,9 +253,15 @@
                         <Image url="@../../icons/MemberIcon/MaleUser.png" />
                      </image>
                   </ImageView>
+                  <Pane fx:id="overlayPane" layoutX="658.0" layoutY="-315.0" onMouseClicked="#cancelBookDetail" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Circle fill="#e4e6eb" layoutX="1359.0" layoutY="52.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.5" />
+                        <Line endX="-31.699951171875" endY="3.6000022888183594" layoutX="1359.0" layoutY="52.0" startX="-18.4000244140625" startY="-3.1999969482421875" />
+                     </children>
+                  </Pane>
                </children>
             </AnchorPane>
-            <Pane fx:id="overlayPane" onMouseClicked="#cancelBookDetail" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Circle fx:id="moreIcon" fill="#1f93ff" layoutX="1360.0" layoutY="51.0" radius="9.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="42.0" />
          </children>
       </AnchorPane>
    </children>

@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -18,6 +20,7 @@ import javafx.stage.StageStyle;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import librio.util.DesignUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,13 +71,19 @@ public class BookController implements Initializable {
     @FXML
     private Label userNameUser;
     @FXML
+    private Label userNameUser2;
+    @FXML
     private ScrollPane scrollPane;
     @FXML
     private ImageView searchButton;
+    @FXML
+    private Circle moreIcon;
     private List<Book> bookList = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
+        moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN", "Rating");
         filterBox.getSelectionModel().selectFirst();
@@ -203,19 +212,17 @@ public class BookController implements Initializable {
         bookPane.setPrefSize(270, 400);
         bookPane.getStyleClass().add("tilePane-book");
 
-        // Thiết lập ImageView cho hình ảnh bìa sách
+
         ImageView bookCover = new ImageView();
-        bookCover.setFitHeight(314);
-        bookCover.setFitWidth(215);
-        bookCover.setX(29);  // Đảm bảo hình ảnh nằm giữa AnchorPane
+        bookCover.setX(29);
         bookCover.setY(1);
 
-        // set image
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
         File file = new File(path);
-        bookCover.setImage(new Image(file.toURI().toString()));
+        Image image = new Image(file.toURI().toString());
+        DesignUtil.cropToAspectRatio(image,bookCover,215,314);
 
         bookCover.setPickOnBounds(true);
         bookCover.setPreserveRatio(true);
@@ -283,6 +290,7 @@ public class BookController implements Initializable {
             cropAndClipToCircle(image, ClickAvatar, 23);
         }
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
+        userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
 

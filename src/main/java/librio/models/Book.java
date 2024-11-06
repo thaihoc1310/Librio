@@ -32,6 +32,14 @@ public class Book {
         this.averageOfRating = new SimpleDoubleProperty(averageOfRating);
     }
 
+    public Book(Integer id, String title, String isbn, String author, String imagePath) {
+        this.id = new SimpleIntegerProperty(id);
+        this.title = new SimpleStringProperty(title);
+        this.author = new SimpleStringProperty(author);
+        this.isbn = new SimpleStringProperty(isbn);
+        this.imagePath = new SimpleStringProperty(imagePath);
+    }
+
     public Book() {
         this.id = new SimpleIntegerProperty();
         this.title = new SimpleStringProperty();
@@ -44,7 +52,6 @@ public class Book {
         this.update_at = new SimpleObjectProperty<>();
         this.update_by = new SimpleStringProperty();
     }
-
 
 
     public Book(Integer id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, Double averageOfRating, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
@@ -64,19 +71,18 @@ public class Book {
     }
 
 
-
     // Getters và Setters cho các thuộc tính
 
     public int getId() {
         return id.get();
     }
 
-    public IntegerProperty idProperty() {
-        return id;
-    }
-
     public void setId(int id) {
         this.id.set(id);
+    }
+
+    public IntegerProperty idProperty() {
+        return id;
     }
 
     public String getTitle() {
@@ -195,71 +201,71 @@ public class Book {
         return update_by.get();
     }
 
-    public StringProperty update_byProperty() {
-        return update_by;
-    }
-
     public void setUpdate_by(String update_by) {
         this.update_by.set(update_by);
+    }
+
+    public StringProperty update_byProperty() {
+        return update_by;
     }
 
     public Instant getUpdate_at() {
         return update_at.get();
     }
 
-    public ObjectProperty<Instant> update_atProperty() {
-        return update_at;
-    }
-
     public void setUpdate_at(Instant update_at) {
         this.update_at.set(update_at);
+    }
+
+    public ObjectProperty<Instant> update_atProperty() {
+        return update_at;
     }
 
     public String getYearPublished() {
         return yearPublished.get();
     }
 
-    public StringProperty yearPublishedProperty() {
-        return yearPublished;
-    }
-
     public void setYearPublished(String yearPublished) {
         this.yearPublished.set(yearPublished);
+    }
+
+    public StringProperty yearPublishedProperty() {
+        return yearPublished;
     }
 
     public String getNumberOfPages() {
         return numberOfPages.get();
     }
 
-    public StringProperty numberOfPagesProperty() {
-        return numberOfPages;
-    }
-
     public void setNumberOfPages(String numberOfPages) {
         this.numberOfPages.set(numberOfPages);
+    }
+
+    public StringProperty numberOfPagesProperty() {
+        return numberOfPages;
     }
 
     public String getDescription() {
         return description.get();
     }
 
-    public StringProperty descriptionProperty() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description.set(description);
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
     }
 
     public String getImagePath() {
         return imagePath.get();
     }
 
-    public StringProperty imagePathProperty() {
-        return imagePath;
-    }
-
     public void setImagePath(String imagePath) {
         this.imagePath.set(imagePath);
+    }
+
+    public StringProperty imagePathProperty() {
+        return imagePath;
     }
 }
