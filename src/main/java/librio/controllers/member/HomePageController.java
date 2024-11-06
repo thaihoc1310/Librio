@@ -1,11 +1,9 @@
 package librio.controllers.member;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -201,8 +199,7 @@ public class HomePageController implements Initializable {
     }
 
     private void displayTopRatedBooks() {
-        for (int i = 0; i < topRateList.size(); i++) {
-            Book book = topRateList.get(i);
+        for (Book book : topRateList) {
             AnchorPane bookPane = new AnchorPane();
             bookPane.setPrefSize(188, 325);
 
@@ -224,14 +221,77 @@ public class HomePageController implements Initializable {
             titleLabel.setPrefWidth(157);
             titleLabel.setWrapText(true);
             titleLabel.setFont(new javafx.scene.text.Font(14));
+            titleLabel.setMaxHeight(48);
+            titleLabel.setAlignment(Pos.CENTER);
 
             Label authorLabel = new Label(book.getAuthor());
             authorLabel.setLayoutX(11);
             authorLabel.setLayoutY(275);
             authorLabel.setPrefWidth(157);
             authorLabel.setUnderline(true);
+//            authorLabel.setAlignment(Pos.CENTER);
 
-            bookPane.getChildren().addAll(bookImage, titleLabel, authorLabel);
+            AnchorPane buttonPane = new AnchorPane();
+            buttonPane.setPrefSize(164, 45);
+            buttonPane.setLayoutY(225);
+            buttonPane.setLayoutX(12);
+            buttonPane.setStyle("-fx-background-color: #FFF;");
+            buttonPane.setVisible(false);
+
+            Button returnButton = new Button("QUICK BORROW");
+            returnButton.setStyle(
+                    "-fx-background-color: #ffffff; " +
+                            "-fx-text-fill: #000000; " +
+                            "-fx-font-size: 12px; " +
+                            "-fx-font-weight: bold;" +
+                            "-fx-cursor: hand; " +
+                            "-fx-border-color: #3d6bb5; " +
+                            "-fx-border-width: 2px; " +
+                            "-fx-background-radius: 0; " +
+                            "-fx-border-radius: 0;"
+            );
+            returnButton.setLayoutX(7.5);
+            returnButton.setLayoutY(7);
+            returnButton.setPrefHeight(10);
+            returnButton.setPrefWidth(150);
+            buttonPane.getChildren().add(returnButton);
+
+            // Animation for buttonPane sliding up
+            bookPane.setOnMouseEntered(e -> {
+                buttonPane.setVisible(true);
+                
+                TranslateTransition slideUp = new TranslateTransition(Duration.millis(300), buttonPane);
+                slideUp.setFromY(0); // Adjust from outside the pane to its set position
+                slideUp.setToY(-48);
+                slideUp.play();
+            });
+            bookPane.setOnMouseExited(e -> {
+                TranslateTransition slideDown = new TranslateTransition(Duration.millis(300), buttonPane);
+                slideDown.setFromY(-48);
+                slideDown.setToY(0);
+                slideDown.setOnFinished(event -> buttonPane.setVisible(false));
+                slideDown.play();
+            });
+
+            HBox starBox = new HBox(5);
+            double rating = book.getAverageOfRating();
+            for (int i = 1; i <= 5; i++) {
+                ImageView star = new ImageView();
+                if (i <= rating) {
+                    star.setImage(new Image(getClass().getResource("/images/book/ratings/Star.png").toExternalForm())); // Hình ảnh ngôi sao đầy
+                }
+
+                star.setFitHeight(15);
+                star.setFitWidth(15);
+                starBox.getChildren().add(star);
+            }
+
+            AnchorPane.setTopAnchor(starBox, 300.0);
+            AnchorPane.setLeftAnchor(starBox, 11.0);
+            AnchorPane.setRightAnchor(starBox, 29.0);
+            bookPane.getChildren().add(starBox);
+
+            bookPane.getChildren().addAll(bookImage, titleLabel, authorLabel,buttonPane);
             topRateContainer.getChildren().add(bookPane);
         }
     }
@@ -247,7 +307,7 @@ public class HomePageController implements Initializable {
                     new javafx.animation.KeyValue(
                             topRateScroll.hvalueProperty(),
                             targetHValue,
-                            Interpolator.EASE_BOTH // Dùng Interpolator để tạo hiệu ứng mềm mại
+                            Interpolator.EASE_BOTH
                     )
             );
             timeline.getKeyFrames().add(keyFrame);

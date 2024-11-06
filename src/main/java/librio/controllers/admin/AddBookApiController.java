@@ -43,8 +43,6 @@ import static java.lang.Character.isDigit;
 
 public class AddBookApiController implements Initializable {
     @FXML
-    private Button addBookButton;
-    @FXML
     private ImageView searchButton;
     @FXML
     private ComboBox<String> filterBox;
