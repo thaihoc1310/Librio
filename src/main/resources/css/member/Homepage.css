@@ -1,0 +1,89 @@
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
+}
+
+/* TextField style for search */
+.text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 4;
+    -fx-padding: 8;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.combo-box {
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 14px;
+}
+
+.combo-box:hover {
+    -fx-cursor: hand;
+
+}
+
+.image-view {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+
+
+
+
+.label.bold-italic {
+    -fx-font-family: "System Bold Italic";
+    -fx-font-size: 24px;
+    -fx-text-fill: #333333;
+}
+
+.label.see-all {
+    -fx-font-size: 14px;
+    -fx-text-fill: #0077CC;
+    -fx-cursor: hand;
+}
+
+.label.see-all:hover {
+    -fx-underline: true;
+}
+
+/* Button styles */
+.button {
+    -fx-background-color: #0077CC;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #005FA3;
+}
+
+.label-button {
+    -fx-font-size: 15px;
+    -fx-text-fill: #333;
+}
+
+.label-button:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #B38B60;
+}
+
+.line-style {
+    -fx-stroke: #4C2113; /* Light gray color for the lines */
+}
+/* Specific styles for the left and right scroll buttons */
+.button.scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.button.scroll:hover {
+    -fx-opacity: 0.6;
+}
+

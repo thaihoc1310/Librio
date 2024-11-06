@@ -1,0 +1,69 @@
+/* Loại bỏ viền của tất cả các Pane */
+Pane, AnchorPane, VBox, HBox, BorderPane, ScrollPane {
+    -fx-border-color: transparent; /* Loại bỏ màu viền */
+    -fx-border-width: 0; /* Đặt độ dày viền thành 0 */
+    -fx-border-insets: 0; /* Loại bỏ khoảng cách của viền nếu có */
+}
+
+/* Loại bỏ viền focus của tất cả các thành phần */
+* {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Tạo màu nền cho BorderPane */
+.border-pane-background {
+    -fx-background-color: #F1F1F1; /* Màu nền xám nhạt */
+}
+
+/* Tạo bo góc cho ImageView */
+.image-view-rounded {
+    -fx-background-radius: 20px; /* Bo tròn góc */
+    -fx-border-radius: 20px; /* Bo tròn góc viền */
+    -fx-background-color: white; /* Màu nền bao quanh ảnh, nếu cần */
+    -fx-padding: 5px; /* Đệm giữa ảnh và góc bo tròn */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 5); /* Bóng mờ nhẹ nếu cần */
+}
+
+/* Đặt màu nền của Button thành màu trắng và không có viền */
+.button {
+    -fx-background-color: white;
+    -fx-text-fill: black; /* Màu chữ */
+    -fx-background-radius: 5px; /* Bo tròn góc */
+}
+
+/* Hiệu ứng khi di chuột qua Button */
+.button:hover {
+    -fx-background-color: #f9f9f9;
+}
+
+/* Tùy chỉnh ComboBox */
+.combo-box, .combo-box .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: black; /* Màu chữ */
+    -fx-background-radius: 5px;
+}
+
+/* Tùy chỉnh phần hiển thị của ComboBox khi được chọn */
+.combo-box .arrow-button {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+}
+
+.combo-box .arrow {
+    -fx-background-color: black;
+}
+
+/* Tùy chỉnh phần hiển thị của danh sách lựa chọn trong ComboBox */
+.combo-box-popup .list-view {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.rounded-pane {
+    -fx-background-color: white; /* Màu nền (giống màu nền bạn muốn) */
+    -fx-background-radius: 20px; /* Đặt bán kính bo góc */
+    -fx-border-radius: 20px; /* Đặt bán kính cho viền nếu cần */
+}
+
+
