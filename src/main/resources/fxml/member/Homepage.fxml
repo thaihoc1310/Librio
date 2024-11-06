@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0">
+         <content>
+            <AnchorPane prefHeight="738.0" prefWidth="1399.0">
+               <children>
+                  <AnchorPane prefHeight="155.0" prefWidth="1400.0" style="-fx-background-color: #F1DEBC;">
+                     <children>
+                        <TextField fx:id="searchTextField" layoutX="437.0" layoutY="22.0" prefHeight="38.0" prefWidth="648.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <ComboBox fx:id="filterBox" layoutX="317.0" layoutY="22.0" prefHeight="37.0" prefWidth="120.0" promptText="All" />
+                        <ImageView fx:id="searchButton" fitHeight="27.0" fitWidth="27.0" layoutX="1040.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="56.0" fitWidth="203.0" layoutX="35.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/MemberIcon/Librio.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="ClickAvatar" fitHeight="46.0" fitWidth="46.0" layoutX="1319.0" layoutY="18.0" onMouseClicked="#handleAvatarClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar">
+                           <image>
+                              <Image url="@../../icons/MemberIcon/MaleUser.png" />
+                           </image>
+                        </ImageView>
+                        <HBox layoutX="71.0" layoutY="94.0" prefHeight="61.0" prefWidth="1257.0">
+                           <children>
+                              <Label prefHeight="61.0" prefWidth="61.0" text="Books">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="43.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="18.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="63.0" text="Fiction">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="91.0" text="Non-fiction">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="67.0" text="Science">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="94.0" text="Technology">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="81.0" text="Education">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="61.0" text="Health">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="66.0" text="History">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="61.0" text="Music">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="88.0" text="Computer">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="46.0" text="Art">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="61.0" prefWidth="39.0">
+                                 <children>
+                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" />
+                                 </children>
+                              </AnchorPane>
+                              <Label prefHeight="61.0" prefWidth="39.0" text="Law">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutY="155.0" prefHeight="305.0" prefWidth="1400.0">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" layoutX="-1.0" prefHeight="305.0" prefWidth="1400.0" vbarPolicy="NEVER">
+                           <content>
+                              <HBox prefHeight="302.0" prefWidth="1397.0">
+                                 <children>
+                                    <ImageView fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../../Pictures/Screenshots/Screenshot%202024-11-06%20092937.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </HBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+   </children>
+</StackPane>
