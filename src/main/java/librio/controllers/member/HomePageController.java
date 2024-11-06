@@ -79,12 +79,12 @@ public class HomePageController implements Initializable {
 
         if (currentBanner != null && nextBanner != null) {
             // Fade out current banner
-            FadeTransition fadeOut = new FadeTransition(Duration.millis(300), currentBanner);
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(250), currentBanner);
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.7);
 
             // Fade in next banner
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(300), nextBanner);
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(250), nextBanner);
             fadeIn.setFromValue(0.7);
             fadeIn.setToValue(1.0);
 

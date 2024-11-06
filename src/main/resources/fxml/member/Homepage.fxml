@@ -19,7 +19,7 @@
          <content>
             <AnchorPane prefHeight="2027.0" prefWidth="1397.0">
                <children>
-                  <AnchorPane prefHeight="155.0" prefWidth="1399.0" style="-fx-background-color: #F1DEBC;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane prefHeight="137.0" prefWidth="1397.0" style="-fx-background-color: #F1DEBC;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <TextField fx:id="searchTextField" layoutX="437.0" layoutY="22.0" prefHeight="38.0" prefWidth="648.0">
                            <font>
@@ -42,7 +42,7 @@
                               <Image url="@../../icons/MemberIcon/MaleUser.png" />
                            </image>
                         </ImageView>
-                        <HBox layoutX="71.0" layoutY="94.0" prefHeight="61.0" prefWidth="1257.0">
+                        <HBox layoutX="70.0" layoutY="78.0" prefHeight="61.0" prefWidth="1257.0">
                            <children>
                               <Label prefHeight="61.0" prefWidth="61.0" text="Books">
                                  <font>
@@ -124,7 +124,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutY="155.0" prefHeight="305.0" prefWidth="1396.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <AnchorPane layoutY="139.0" prefHeight="305.0" prefWidth="1396.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <ScrollPane fx:id="mainBannerScroll" hbarPolicy="NEVER" layoutX="-1.0" prefHeight="305.0" prefWidth="1400.0" vbarPolicy="NEVER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <content>
