@@ -259,7 +259,7 @@ public class HomePageController implements Initializable {
             // Animation for buttonPane sliding up
             bookPane.setOnMouseEntered(e -> {
                 buttonPane.setVisible(true);
-                
+
                 TranslateTransition slideUp = new TranslateTransition(Duration.millis(300), buttonPane);
                 slideUp.setFromY(0); // Adjust from outside the pane to its set position
                 slideUp.setToY(-48);

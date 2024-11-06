@@ -43,22 +43,6 @@ public class BookController implements Initializable {
     @FXML
     private Pane overlayPane;
     @FXML
-    private Text title;
-    @FXML
-    private Label author;
-    @FXML
-    private Label isbn;
-    @FXML
-    private Label year;
-    @FXML
-    private Label publisher;
-    @FXML
-    private Text description;
-    @FXML
-    private ImageView bookCoverImage;
-    @FXML
-    private AnchorPane bookDetailsPane;
-    @FXML
     private AnchorPane mainAnchorPane;
     @FXML
     private TextField searchTextField;
@@ -78,25 +62,32 @@ public class BookController implements Initializable {
     private ImageView searchButton;
     @FXML
     private Circle moreIcon;
+
+    private int offsetIndex = 0;
+
+    private boolean isAnchorPaneVisible = false;
+
     private List<Book> bookList = new ArrayList<>();
+
+    private String keyword = "";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
-        filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN", "Rating");
+        filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
-        overlayPane.setVisible(false); // Ẩn overlay khi khởi động
-        overlayPane.setOnMouseClicked(event -> cancelBookDetail());
-        loadBooksFromDatabase("");
+        overlayPane.setVisible(false);
+//        overlayPane.setOnMouseClicked(event -> cancelBookDetail());
+        loadBooksFromDatabase();
 
     }
 
     /**
      * Tải danh sách sách từ cơ sở dữ liệu
      */
-    private void loadBooksFromDatabase(String keyword) {
+    private void loadBooksFromDatabase() {
         bookList.clear();
         try (Connection connection = DatabaseConnection.getConnection()) {
             String selectedFilter = filterBox.getValue();
@@ -104,38 +95,16 @@ public class BookController implements Initializable {
             PreparedStatement preparedStatement;
 
             if (keyword == null || keyword.isEmpty()) {
-                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books";
+                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books LIMIT ? OFFSET ?";
                 preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setInt(1, 20);
+                preparedStatement.setInt(2, offsetIndex);
             } else {
-                switch (selectedFilter) {
-                    case "Author":
-                        query = "SELECT * FROM books WHERE author LIKE ?";
-                        break;
-                    case "ISBN":
-                        query = "SELECT * FROM books WHERE isbn LIKE ?";
-                        break;
-                    case "Category":
-                        query = "SELECT * FROM books WHERE category LIKE ?";
-                        break;
-                    case "Language":
-                        query = "SELECT * FROM books WHERE language LIKE ?";
-                        break;
-                    case "Publisher":
-                        query = "SELECT * FROM books WHERE publisher LIKE ?";
-                        break;
-                    case "Year published":
-                        query = "SELECT * FROM books WHERE year_published LIKE ?";
-                        break;
-                    case "Rating":
-                        query = "SELECT * FROM books WHERE average_of_rating LIKE ?";
-                        break;
-                    case "Title":
-                    default:
-                        query = "SELECT * FROM books WHERE title LIKE ?";
-                        break;
-                }
+                query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? LIMIT ? OFFSET ?";
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setString(1, "%" + keyword + "%");
+                preparedStatement.setInt(2, 20);
+                preparedStatement.setInt(3, offsetIndex);
             }
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -171,20 +140,61 @@ public class BookController implements Initializable {
         displayBooks(bookList);
     }
 
+    private String getFilter(String filter) {
+        switch (filter) {
+            case "Author":
+                return "author";
+            case "Category":
+                return "category";
+            case "Language":
+                return "language";
+            case "Publisher":
+                return "publisher";
+            case "Year published":
+                return "year_published";
+            case "ISBN":
+                return "isbn";
+            case "Title":
+            default:
+                return "title";
+        }
+    }
+
     @FXML
     private void handleSearch() {
-        String keyword = searchTextField.getText().trim();
-        loadBooksFromDatabase(keyword);
+        bookList.clear();
+        offsetIndex = 0;
+        keyword = searchTextField.getText().trim();
+        loadBooksFromDatabase();
     }
 
     /**
      * Hiển thị danh sách các cuốn sách trong TilePane
      */
     private void displayBooks(List<Book> booksToDisplay) {
-        tilePane.getChildren().clear();
+        if (offsetIndex == 0) {
+            tilePane.getChildren().clear();
+        } else {
+            if (!tilePane.getChildren().isEmpty() && tilePane.getChildren().get(tilePane.getChildren().size() - 1) instanceof Button) {
+                tilePane.getChildren().remove(tilePane.getChildren().size() - 1);
+            }
+        }
         for (Book book : booksToDisplay) {
             AnchorPane bookPane = createBookPane(book);
             tilePane.getChildren().add(bookPane);
+        }
+        if (!booksToDisplay.isEmpty() && booksToDisplay.size() % 4 == 0) {
+            Button moreButton = new Button("More");
+            moreButton.setPrefHeight(32.0);
+            moreButton.setPrefWidth(667.0);
+            moreButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;");
+            moreButton.setOnMouseEntered(event -> moreButton.setStyle("-fx-background-color: #4c2113; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px; -fx-cursor: hand;"));
+            moreButton.setOnMouseExited(event -> moreButton.setStyle("-fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;-fx-background-color: #72311c;"));
+            moreButton.setOnAction(event -> {
+                offsetIndex += 20;
+                loadBooksFromDatabase();
+            });
+            tilePane.getChildren().add(moreButton);
         }
         tilePane.widthProperty().addListener((obs, oldWidth, newWidth) -> {
             double paneWidth = newWidth.doubleValue();
@@ -206,7 +216,6 @@ public class BookController implements Initializable {
     /**
      * Tạo một AnchorPane cho mỗi cuốn sách
      */
-    private boolean isBookDetailVisible = false;
     private AnchorPane createBookPane(Book book) {
         AnchorPane bookPane = new AnchorPane();
         bookPane.setPrefSize(270, 400);
@@ -267,7 +276,7 @@ public class BookController implements Initializable {
         AnchorPane.setLeftAnchor(starBox, 29.0);
         AnchorPane.setRightAnchor(starBox, 29.0);
         bookPane.getChildren().add(starBox);
-        bookPane.setOnMouseClicked(event -> showBookDetails(book));
+        bookPane.setOnMouseClicked(event -> openBookDetailScene(book));
 
         return bookPane;
     }
@@ -293,8 +302,27 @@ public class BookController implements Initializable {
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
-
-    private boolean isAnchorPaneVisible = false;
+    private void openBookDetailScene(Book book){
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
+            Parent root = loader.load();
+            BookDetailController bookDetailController = loader.getController();
+            bookDetailController.setBook(book);
+            // Tạo stage mới cho scene
+            Stage stage = new Stage();
+            stage.setTitle("Librio");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initOwner(searchTextField.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void handleAvatarClick() {
@@ -315,40 +343,7 @@ public class BookController implements Initializable {
         }
     }
 
-    public void setBookDetails(Book book) {
 
-        title.setText(book.getTitle());
-        author.setText(book.getAuthor());
-        year.setText("Published:    "+book.getYearPublished());
-        isbn.setText("ISBN:   " + book.getIsbn());
-        publisher.setText("Publisher:   " + book.getPublisher());
-        description.setText(book.getDescription());
-        try {
-            bookCoverImage.setImage(new Image(book.getImagePath()));
-        } catch (Exception e) {
-            bookCoverImage.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
-        }
-
-
-    }
-
-    private void showBookDetails(Book book) {
-            setBookDetails(book);
-            mainAnchorPane.setOpacity(0.4);
-            bookDetailsPane.toFront();
-            overlayPane.setVisible(true);
-            isBookDetailVisible = true;
-
-    }
-    @FXML
-    private void cancelBookDetail(){
-        if (isBookDetailVisible) {
-            bookDetailsPane.toBack();
-            mainAnchorPane.setOpacity(1);
-            overlayPane.setVisible(false);
-            isBookDetailVisible = false;
-        }
-    }
     @FXML
     void logOut() throws IOException {
         Stage currenStage = (Stage) searchTextField.getScene().getWindow();

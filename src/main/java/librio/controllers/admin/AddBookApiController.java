@@ -215,7 +215,7 @@ public class AddBookApiController implements Initializable {
             bookListScrollPane.setContent(contentPane);
             bookListScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             bookListScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            bookListScrollPane.setPannable(true);
+            bookListScrollPane.setPannable(false);
         });
     }
 

@@ -84,7 +84,7 @@
                      </image>
                   </ImageView>
                   <Button layoutX="36.0" layoutY="402.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
-                  <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="841.0" layoutY="14.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="841.0" layoutY="14.0"  pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons/MemberIcon/cancel.png" />
                      </image>
@@ -253,7 +253,7 @@
                         <Image url="@../../icons/MemberIcon/MaleUser.png" />
                      </image>
                   </ImageView>
-                  <Pane fx:id="overlayPane" layoutX="658.0" layoutY="-315.0" onMouseClicked="#cancelBookDetail" prefHeight="200.0" prefWidth="200.0">
+                  <Pane fx:id="overlayPane" layoutX="658.0" layoutY="-315.0"  prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Circle fill="#e4e6eb" layoutX="1359.0" layoutY="52.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.5" />
                         <Line endX="-31.699951171875" endY="3.6000022888183594" layoutX="1359.0" layoutY="52.0" startX="-18.4000244140625" startY="-3.1999969482421875" />

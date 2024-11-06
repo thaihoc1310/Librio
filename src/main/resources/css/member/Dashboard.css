@@ -3,6 +3,7 @@ Pane, AnchorPane, VBox, HBox, BorderPane, ScrollPane {
     -fx-border-color: transparent; /* Loại bỏ màu viền */
     -fx-border-width: 0; /* Đặt độ dày viền thành 0 */
     -fx-border-insets: 0; /* Loại bỏ khoảng cách của viền nếu có */
+    -fx-background-color: white;
 }
 
 /* Loại bỏ viền focus của tất cả các thành phần */
