@@ -294,6 +294,7 @@ public class HomePageController implements Initializable {
             bookPane.getChildren().addAll(bookImage, titleLabel, authorLabel,buttonPane);
             topRateContainer.getChildren().add(bookPane);
         }
+        topRateContainer.setSpacing(20);
     }
 
     private void scrollTopRate(int direction) {

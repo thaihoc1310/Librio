@@ -46,5 +46,106 @@
     -fx-font-family: 'Wingdings 3';
 }
 
+.combo-box {
+    -fx-border-color: transparent;
+}
+
+.combo-box, .combo-box .list-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+}
+
+.combo-box:hover, .combo-box:focused {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+}
+
+/* Định dạng cho DatePicker */
+.date-picker {
+    -fx-border-color: transparent;
+}
+
+.date-picker, .date-picker .text-field, .date-picker .content {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+}
+
+.date-picker:hover, .date-picker:focused {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+}
+
+.date-picker:hover,.combo-box:hover, .date-picker .text-field:hover{
+    -fx-cursor: hand;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #F1DEBC;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #4C2113; /* Màu cho biểu tượng lịch */
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #F1DEBC;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #4C2113; /* Màu cho mũi tên */
+}
+
+.date-picker .month-year-pane {
+    -fx-background-color: #DCB485; /* Màu nền cho tiêu đề tháng/năm */
+    -fx-text-fill: #4C2113; /* Màu chữ cho tháng và năm */
+}
+
+.date-picker .month-year-label {
+    -fx-text-fill: #4C2113; /* Màu chữ cho tháng và năm */
+}
+
+.date-picker .day-name-cell {
+    -fx-background-color: #F1DEBC; /* Màu nền cho các tên ngày (Mon, Tue, ...) */
+    -fx-text-fill: #4C2113; /* Màu chữ cho tên ngày */
+}
+
+/* Thay đổi màu nền và màu chữ cho các ô ngày */
+.date-picker .day-cell {
+    -fx-background-color: #FFFFFF; /* Màu nền cho các ô ngày */
+    -fx-text-fill: #4C2113; /* Màu chữ cho ngày */
+}
+
+.date-picker .day-cell:hover {
+    -fx-background-color: #F1DEBC; /* Màu nền khi hover vào các ô ngày */
+}
+
+/* Thay đổi màu nền và màu chữ cho ngày được chọn */
+.date-picker .day-cell:selected {
+    -fx-background-color: #4C2113; /* Màu nền cho ngày được chọn */
+    -fx-text-fill: #FFFFFF; /* Màu chữ cho ngày được chọn */
+}
+
+/* Định dạng các mũi tên chuyển tháng/năm */
+.date-picker .left-arrow .arrow, .date-picker .right-arrow .arrow {
+    -fx-background-color: #4C2113; /* Màu cho mũi tên chuyển tháng/năm */
+}
+
+.forgot-password-label {
+    -fx-text-fill: #A45C23;
+}
+
+.forgot-password-label:hover {
+    -fx-text-fill: #DCB485;
+    -fx-cursor: hand;
+
+}
+
+
+.text-label {
+    -fx-text-fill: #4C2113;
+}
+
 .right-pane {
 }
