@@ -17,7 +17,7 @@
    <children>
       <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER">
          <content>
-            <AnchorPane prefHeight="2027.0" prefWidth="1397.0">
+            <AnchorPane prefHeight="2027.0" prefWidth="1397.0" styleClass="white-pane">
                <children>
                   <AnchorPane prefHeight="137.0" prefWidth="1397.0" style="-fx-background-color: #F1DEBC;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -168,7 +168,7 @@
                      </Button>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="77.0" layoutY="496.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
+                  <AnchorPane layoutX="77.0" layoutY="496.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0" styleClass="white-pane">
                      <children>
                         <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
                            <font>
@@ -182,7 +182,7 @@
                         </Label>
                         <ScrollPane fx:id="topRateScroll" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
                            <content>
-                              <HBox fx:id="topRateContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                              <HBox fx:id="topRateContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" styleClass="white-pane" />
                            </content>
                         </ScrollPane>
                         <Button fx:id="leftToprateButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">

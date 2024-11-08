@@ -100,7 +100,6 @@ public class HomePageController implements Initializable {
 
         Node currentBanner = getCurrentBanner(currentHValue);
         Node nextBanner = getCurrentBanner(targetHValue);
-
         if (currentBanner != null && nextBanner != null) {
             // Fade out current banner
             FadeTransition fadeOut = new FadeTransition(Duration.millis(250), currentBanner);
@@ -201,12 +200,20 @@ public class HomePageController implements Initializable {
     private void displayTopRatedBooks() {
         for (Book book : topRateList) {
             AnchorPane bookPane = new AnchorPane();
-            bookPane.setPrefSize(188, 325);
+            bookPane.setPrefSize(183, 325);
+
+            AnchorPane bookImagePane = new AnchorPane();
+            bookImagePane.setPrefSize(183,226);
+            bookImagePane.setLayoutX(0);
+
+            AnchorPane infoPane = new AnchorPane();
+            infoPane.setPrefSize(183, 99);
+            infoPane.setLayoutY(226);
 
             ImageView bookImage = new ImageView();
             bookImage.setFitHeight(226);
-            bookImage.setFitWidth(163);
-            bookImage.setLayoutX(13);
+            bookImage.setFitWidth(160);
+            bookImage.setLayoutX(12);
             bookImage.setPickOnBounds(true);
             bookImage.setSmooth(true);
             String projectDir = System.getProperty("user.dir");
@@ -217,26 +224,24 @@ public class HomePageController implements Initializable {
 
             Label titleLabel = new Label(book.getTitle());
             titleLabel.setLayoutX(11);
-            titleLabel.setLayoutY(233);
-            titleLabel.setPrefWidth(157);
+            titleLabel.setLayoutY(5);
+            titleLabel.setPrefWidth(160);
             titleLabel.setWrapText(true);
             titleLabel.setFont(new javafx.scene.text.Font(14));
             titleLabel.setMaxHeight(48);
-            titleLabel.setAlignment(Pos.CENTER);
 
             Label authorLabel = new Label(book.getAuthor());
             authorLabel.setLayoutX(11);
-            authorLabel.setLayoutY(275);
-            authorLabel.setPrefWidth(157);
+            authorLabel.setLayoutY(47);
+            authorLabel.setPrefWidth(160);
             authorLabel.setUnderline(true);
-//            authorLabel.setAlignment(Pos.CENTER);
 
             AnchorPane buttonPane = new AnchorPane();
-            buttonPane.setPrefSize(164, 45);
-            buttonPane.setLayoutY(225);
-            buttonPane.setLayoutX(12);
             buttonPane.setStyle("-fx-background-color: #FFF;");
-            buttonPane.setVisible(false);
+            buttonPane.setPrefSize(162, 40);
+            buttonPane.setLayoutY(225);
+            buttonPane.setLayoutX(11);
+
 
             Button returnButton = new Button("QUICK BORROW");
             returnButton.setStyle(
@@ -244,41 +249,41 @@ public class HomePageController implements Initializable {
                             "-fx-text-fill: #000000; " +
                             "-fx-font-size: 12px; " +
                             "-fx-font-weight: bold;" +
-                            "-fx-cursor: hand; " +
                             "-fx-border-color: #3d6bb5; " +
                             "-fx-border-width: 2px; " +
                             "-fx-background-radius: 0; " +
-                            "-fx-border-radius: 0;"
+                            "-fx-border-radius: 0;"+
+                            "-fx-min-height: 30px; -fx-pref-height: 30px; -fx-max-height: 30px;"+
+                            "-fx-padding: 0;"
             );
-            returnButton.setLayoutX(7.5);
-            returnButton.setLayoutY(7);
-            returnButton.setPrefHeight(10);
-            returnButton.setPrefWidth(150);
+            returnButton.setLayoutX(6);
+            returnButton.setLayoutY(5);
+            returnButton.setPrefWidth(149);
             buttonPane.getChildren().add(returnButton);
 
-            // Animation for buttonPane sliding up
-            bookPane.setOnMouseEntered(e -> {
-                buttonPane.setVisible(true);
-
-                TranslateTransition slideUp = new TranslateTransition(Duration.millis(300), buttonPane);
-                slideUp.setFromY(0); // Adjust from outside the pane to its set position
-                slideUp.setToY(-48);
+            bookImagePane.getChildren().addAll(bookImage,buttonPane);
+            bookImagePane.setOnMouseEntered(e -> {
+                TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
+                slideUp.setFromY(0);
+                slideUp.setToY(-38);
                 slideUp.play();
             });
-            bookPane.setOnMouseExited(e -> {
-                TranslateTransition slideDown = new TranslateTransition(Duration.millis(300), buttonPane);
-                slideDown.setFromY(-48);
+
+            bookImagePane.setOnMouseExited(e -> {
+                TranslateTransition slideDown = new TranslateTransition(Duration.millis(250), buttonPane);
+                slideDown.setFromY(-38);
                 slideDown.setToY(0);
-                slideDown.setOnFinished(event -> buttonPane.setVisible(false));
                 slideDown.play();
             });
+
+            bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
 
             HBox starBox = new HBox(5);
             double rating = book.getAverageOfRating();
             for (int i = 1; i <= 5; i++) {
                 ImageView star = new ImageView();
                 if (i <= rating) {
-                    star.setImage(new Image(getClass().getResource("/images/book/ratings/Star.png").toExternalForm())); // Hình ảnh ngôi sao đầy
+                    star.setImage(new Image(getClass().getResource("/images/book/ratings/Star.png").toExternalForm()));
                 }
 
                 star.setFitHeight(15);
@@ -286,15 +291,14 @@ public class HomePageController implements Initializable {
                 starBox.getChildren().add(star);
             }
 
-            AnchorPane.setTopAnchor(starBox, 300.0);
-            AnchorPane.setLeftAnchor(starBox, 11.0);
-            AnchorPane.setRightAnchor(starBox, 29.0);
-            bookPane.getChildren().add(starBox);
-
-            bookPane.getChildren().addAll(bookImage, titleLabel, authorLabel,buttonPane);
+            starBox.setLayoutX(11);
+            starBox.setLayoutY(75);
+            infoPane.setStyle("-fx-background-color: #FFFFFF;");
+            infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
+            bookPane.getChildren().addAll(bookImagePane,infoPane);
             topRateContainer.getChildren().add(bookPane);
         }
-        topRateContainer.setSpacing(20);
+        topRateContainer.setSpacing(10);
     }
 
     private void scrollTopRate(int direction) {
