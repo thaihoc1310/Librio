@@ -4,23 +4,25 @@ import javafx.animation.FadeTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.animation.ParallelTransition;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import librio.auth.Session;
+import librio.database.DatabaseConnection;
+import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
 
 import java.io.IOException;
+import java.sql.*;
+import java.time.LocalDate;
 
 import static librio.util.DatabaseUtil.authenticate;
 
@@ -39,11 +41,25 @@ public class LoginController {
     @FXML
     private ImageView closeEyeImage1;
     @FXML
-    private ImageView closeEyeImage11;
-    @FXML
     private ImageView openEyeImage1;
     @FXML
-    private ImageView openEyeImage11;
+    private ImageView closeEyeImage2;
+    @FXML
+    private ImageView openEyeImage2;
+    @FXML
+    private TextField userNameTextField;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextField phoneNumberTextField;
+    @FXML
+    private PasswordField signUpPasswordField;
+    @FXML
+    private PasswordField signUpConfirmPasswordField;
+    @FXML
+    private ComboBox<Gender> genderComboBox;
+    @FXML
+    private DatePicker birthDatePicker;
     @FXML
     private ImageView openEyeImage;
     @FXML
@@ -61,11 +77,13 @@ public class LoginController {
 
     @FXML
     private void initialize() {
+        genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
         passwordTextVisible.setVisible(false);
         usernameField.setOnMouseClicked(event -> clearErrorMessage());
         passwordField.setOnMouseClicked(event -> clearErrorMessage());
         switchSignUp.setOnMouseClicked(event -> switchToSignUp());
         switchSignIn.setOnMouseClicked(event -> switchToSignIn());
+        //addListeners();
     }
 
     @FXML
@@ -165,6 +183,48 @@ public class LoginController {
         }
     }
 
+    @FXML
+    private void handleSignUp() throws IOException {
+        String name = userNameTextField.getText();
+        String email = emailTextField.getText();
+        String phoneNumber = phoneNumberTextField.getText();
+        String signUpPassword = signUpPasswordField.getText();
+        String signUpConfirmPassword = signUpConfirmPasswordField.getText();
+        Gender gender = genderComboBox.getValue();
+        LocalDate birthDate = birthDatePicker.getValue();
+
+        String query = "INSERT INTO users (name, email, password, phone_number, gender, birth_of_date, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, name);
+            statement.setString(2, email);
+            statement.setString(3, signUpPassword);
+            statement.setString(4, phoneNumber);
+            statement.setString(5, gender.name());
+            assert birthDate != null;
+            statement.setDate(6, Date.valueOf(birthDate));
+            statement.setString(7, email);
+
+            int rowsInserted = statement.executeUpdate();
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int userId = generatedKeys.getInt(1);
+
+                String insertMemberQuery = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES (?, ?, ?)";
+                try (PreparedStatement memberStatement = connection.prepareStatement(insertMemberQuery)) {
+                    memberStatement.setInt(1, userId); // userId là id của user vừa tạo
+                    memberStatement.setLong(2, 0); // Fine amount bắt đầu từ 0
+                    memberStatement.setLong(3, 0); // Total books borrowed bắt đầu từ 0
+                    memberStatement.executeUpdate();
+                }
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void checkAuthorization(User loginUser) throws IOException {
         Role userRole = loginUser.getRole();
         Stage currentStage = (Stage) loginButton.getScene().getWindow();
@@ -181,6 +241,17 @@ public class LoginController {
         }
         stage.show();
         currentStage.close();
+    }
+
+    private void addListeners() {
+
+        genderComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                //genderErrorLabel.setText("Gender must be selected");
+            } else {
+                //.setText("");
+            }
+        });
     }
 }
 
