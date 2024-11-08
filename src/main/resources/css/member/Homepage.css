@@ -1,7 +1,12 @@
 .scroll-pane {
-    -fx-background-color: transparent;
+    -fx-background-color: #FFFFFF;
     -fx-hbar-policy: never;
     -fx-vbar-policy: never;
+}
+
+
+.white-pane {
+    -fx-background-color: #FFFFFF;
 }
 
 /* TextField style for search */
