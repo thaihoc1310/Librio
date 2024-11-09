@@ -1,9 +1,10 @@
 package librio.controllers.member;
 
 import javafx.animation.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -23,6 +24,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class HomePageController implements Initializable {
+
+    @FXML
+    private ScrollPane mainScroll;
 
     @FXML
     private ImageView avatar;
@@ -238,27 +242,15 @@ public class HomePageController implements Initializable {
 
             AnchorPane buttonPane = new AnchorPane();
             buttonPane.setStyle("-fx-background-color: #FFF;");
-            buttonPane.setPrefSize(162, 40);
+            buttonPane.setPrefSize(162, 45);
             buttonPane.setLayoutY(225);
             buttonPane.setLayoutX(11);
 
 
             Button returnButton = new Button("QUICK BORROW");
-            returnButton.setStyle(
-                    "-fx-background-color: #ffffff; " +
-                            "-fx-text-fill: #000000; " +
-                            "-fx-font-size: 12px; " +
-                            "-fx-font-weight: bold;" +
-                            "-fx-border-color: #3d6bb5; " +
-                            "-fx-border-width: 2px; " +
-                            "-fx-background-radius: 0; " +
-                            "-fx-border-radius: 0;"+
-                            "-fx-min-height: 30px; -fx-pref-height: 30px; -fx-max-height: 30px;"+
-                            "-fx-padding: 0;"
-            );
+            returnButton.getStyleClass().add("quick-borrow-button");
             returnButton.setLayoutX(6);
             returnButton.setLayoutY(5);
-            returnButton.setPrefWidth(149);
             buttonPane.getChildren().add(returnButton);
 
             bookImagePane.getChildren().addAll(bookImage,buttonPane);
