@@ -85,19 +85,16 @@ public class ChangePasswordController implements Initializable {
         if(loggedInUser == null) {
             return;
         }
-        currentPasswordTextField.setText("");
-        newPasswordTextField.setText("");
-        confirmPasswordTextField.setText("");
+        addHideErrorListeners();
+
         currentPasswordTextVisible.setVisible(false);
         newPasswordTextVisible.setVisible(false);
         confirmPasswordTextVisible.setVisible(false);
-        hideErrorLabels();
-        addListeners();
     }
 
     @FXML
     private void save(){
-        hideErrorLabels();
+        //hideErrorLabels();
         if (loggedInUser == null) {
             return;
         }
@@ -159,52 +156,52 @@ public class ChangePasswordController implements Initializable {
             int rowsUpdated = statement.executeUpdate();
             if(rowsUpdated > 0){
                 notification.setText("Password updated successfully!");
-                clearPasswordFieldAndHideErrorLabels();
+                clearFieldData();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void addListeners() {
-        hideErrorLabels();
+//    private void addListeners() {
+//        hideErrorLabels();
 
-        // Ẩn notification khi click vào 1 textField nào đó
-        currentPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
-        newPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
-        confirmPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
-
-        currentPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!ignoreListener) {
-                if(newValue.trim().isEmpty()){
-                    currentPasswordErrorLabel.setText("Password must not be empty!");
-                }else{
-                    currentPasswordErrorLabel.setText("");
-                }
-            }
-
-        });
-
-        newPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!ignoreListener) {
-                if(newValue.trim().isEmpty()){
-                    newPasswordErrorLabel.setText("Password must not be empty!");
-                }else{
-                    newPasswordErrorLabel.setText("");
-                }
-            }
-        });
-
-        confirmPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!ignoreListener){
-                if(newValue.trim().isEmpty()){
-                    confirmPasswordErrorLabel.setText("Password must not be empty!");
-                }else{
-                    confirmPasswordErrorLabel.setText("");
-                }
-            }
-        });
-    }
+//        // Ẩn notification khi click vào 1 textField nào đó
+//        currentPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
+//        newPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
+//        confirmPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
+//
+//        currentPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if (!ignoreListener) {
+//                if(newValue.trim().isEmpty()){
+//                    currentPasswordErrorLabel.setText("Password must not be empty!");
+//                }else{
+//                    currentPasswordErrorLabel.setText("");
+//                }
+//            }
+//
+//        });
+//
+//        newPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if (!ignoreListener) {
+//                if(newValue.trim().isEmpty()){
+//                    newPasswordErrorLabel.setText("Password must not be empty!");
+//                }else{
+//                    newPasswordErrorLabel.setText("");
+//                }
+//            }
+//        });
+//
+//        confirmPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if(!ignoreListener){
+//                if(newValue.trim().isEmpty()){
+//                    confirmPasswordErrorLabel.setText("Password must not be empty!");
+//                }else{
+//                    confirmPasswordErrorLabel.setText("");
+//                }
+//            }
+//        });
+//    }
 
 
 
@@ -212,13 +209,32 @@ public class ChangePasswordController implements Initializable {
         newPasswordErrorLabel.setText("");
         confirmPasswordErrorLabel.setText("");
         currentPasswordErrorLabel.setText("");
+        notification.setText("");
+    }
+
+    private void addHideErrorListeners() {
+        currentPasswordTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        currentPasswordTextVisible.setOnMouseClicked(event -> {hideErrorLabels();});
+        newPasswordTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        newPasswordTextVisible.setOnMouseClicked(event -> {hideErrorLabels();});
+        confirmPasswordTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        confirmPasswordTextVisible.setOnMouseClicked(event -> {hideErrorLabels();});
+    }
+
+    private void clearFieldData(){
+        currentPasswordTextField.clear();
+        currentPasswordTextVisible.clear();
+        newPasswordTextField.clear();
+        newPasswordTextVisible.clear();
+        confirmPasswordTextField.clear();
+        confirmPasswordTextVisible.clear();
     }
 
 
     @FXML
     private void openEditProfileScene() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/EditProfile.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
             Parent manageBorrowRoot = loader.load();
 
             Stage currentStage = (Stage) saveButton.getScene().getWindow();
@@ -230,15 +246,8 @@ public class ChangePasswordController implements Initializable {
     }
 
     private void clearPasswordFieldAndHideErrorLabels() {
+        clearFieldData();
         hideErrorLabels();
-        ignoreListener = true;
-
-        currentPasswordTextField.clear();
-        newPasswordTextField.clear();
-        confirmPasswordTextField.clear();
-
-        // Bật lại các listener sau khi đã xóa
-        ignoreListener = false;
     }
 
     @FXML

@@ -2,18 +2,39 @@ package librio.controllers.member;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import librio.models.Book;
+import librio.database.DatabaseConnection;
+import librio.models.*;
+import librio.util.DatabaseUtil;
+import librio.util.DesignUtil;
 
+import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class BookDetailController implements Initializable {
 
@@ -28,22 +49,36 @@ public class BookDetailController implements Initializable {
     @FXML
     private Label publisher;
     @FXML
-    private Text description;
-    @FXML
     private ImageView bookCoverImage;
     @FXML
     private AnchorPane bookDetailsPane;
+    @FXML
+    private Text descriptionText;
+    @FXML
+    private Text moreLessLabel;
+
+    private boolean isExpanded = false;
+    private String fullDescription;
+    private static final int DESCRIPTION_LIMIT = 580;
 
     private Book book;
 
+    private List<Feedback> feedbackList = new ArrayList<>();
+
+    @FXML
+    private VBox feedbackContainer;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        moreLessLabel.setText("more");
+        moreLessLabel.setOnMouseClicked(event -> toggleDescription());moreLessLabel.setText(" more");
+        moreLessLabel.setOnMouseClicked(event -> toggleDescription());
     }
 
     public void setBook(Book book){
         this.book = book;
         setBookDetails();
+        loadFeedbacksFromDatabase();
     }
 
     public void setBookDetails() {
@@ -52,19 +87,115 @@ public class BookDetailController implements Initializable {
         year.setText("Published:    "+book.getYearPublished());
         isbn.setText("ISBN:   " + book.getIsbn());
         publisher.setText("Publisher:   " + book.getPublisher());
-        description.setText(book.getDescription());
+
+        fullDescription = book.getDescription();
+        if (fullDescription.length() > DESCRIPTION_LIMIT) {
+            descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
+            moreLessLabel.setVisible(true);
+        } else {
+            descriptionText.setText(fullDescription);
+            moreLessLabel.setVisible(false);
+        }
+
         try {
             bookCoverImage.setImage(new Image(book.getImagePath()));
         } catch (Exception e) {
             bookCoverImage.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
         }
+    }
 
-
+    @FXML
+    private void toggleDescription() {
+        if (isExpanded) {
+            descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
+            moreLessLabel.setText(" more");
+        } else {
+            descriptionText.setText(fullDescription);
+            moreLessLabel.setText(" less");
+        }
+        isExpanded = !isExpanded;
     }
 
     @FXML
     private void cancelBookDetail(){
         closeStage();
+    }
+
+    private void loadFeedbacksFromDatabase(){
+        feedbackList.clear();
+        String querry = "SELECT id, book_id, member_id, rating, about, created_at FROM feedbacks WHERE book_id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(querry)) {
+            statement.setString(1, String.valueOf(book.getId()));
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String id = resultSet.getString("id");
+                String memberId = resultSet.getString("member_id");
+                int rating = resultSet.getInt("rating");
+                String about = resultSet.getString("about");
+                String createdAt = resultSet.getString("created_at");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime localDateTime = LocalDateTime.parse(createdAt, formatter);
+                Instant createdAtInstant = localDateTime.toInstant(ZoneOffset.UTC);
+
+                Feedback feedback1 = new Feedback(id, String.valueOf(book.getId()), memberId, rating, about, createdAtInstant);
+                feedbackList.add(feedback1);
+
+                HBox feedbackBox = new HBox();
+                feedbackBox.setSpacing(15);
+                feedbackBox.setStyle("-fx-padding: 10; -fx-background-color: #F4F4F4; -fx-border-color: #E0E0E0; -fx-border-radius: 5; -fx-background-radius: 5;");
+                feedbackBox.setAlignment(Pos.TOP_LEFT);
+
+                User user = DatabaseUtil.getUserById(memberId);
+
+                String projectDir = System.getProperty("user.dir");
+                String avatarsDir = projectDir + "/src/main/resources/images/user/";
+                String path = avatarsDir + user.getAvatar();
+                ImageView avatar = new ImageView();
+                avatar.setFitWidth(50);
+                avatar.setFitHeight(50);
+
+                File file = new File(path);
+                if (file.exists()) {
+                    Image image = new Image(file.toURI().toString());
+                    cropAndClipToCircle(image, avatar, 25);
+                } else {
+                    String defaultImage = avatarsDir + "Male User.png";
+                    File defaultImageFile = new File(defaultImage);
+                    Image image = new Image(defaultImageFile.toURI().toString());
+                    cropAndClipToCircle(image, avatar, 25);
+                }
+
+
+
+                VBox detailsBox = new VBox();
+                detailsBox.setSpacing(5);
+
+                Text borrowerNameText = new Text(user.getName());
+                borrowerNameText.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+
+                StringBuilder stars = new StringBuilder();
+                for (int i = 0; i < rating; i++) {
+                    stars.append("★");
+                }
+                Text ratingText = new Text("Rating: " + stars.toString());
+                ratingText.setStyle("-fx-font-size: 12; -fx-fill: #FFB700;");
+
+                LocalDateTime formattedDate = LocalDateTime.ofInstant(createdAtInstant, ZoneOffset.UTC);
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                Text dateText = new Text("Return at: " + formattedDate.format(dateFormatter));
+                dateText.setStyle("-fx-font-size: 12; -fx-fill: #666666;");
+
+                Text commentText = new Text(about);
+                commentText.setStyle("-fx-font-size: 13; -fx-fill: #333333;");
+
+                detailsBox.getChildren().addAll(borrowerNameText, ratingText, dateText, commentText);
+                feedbackBox.getChildren().addAll(avatar, detailsBox);
+                feedbackContainer.getChildren().add(feedbackBox);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void closeStage() {

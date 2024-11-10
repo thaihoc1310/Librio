@@ -117,6 +117,7 @@ public class LoginController {
 
         usernameField.setOnMouseClicked(event -> clearErrorMessage());
         passwordField.setOnMouseClicked(event -> clearErrorMessage());
+        passwordTextVisible.setOnMouseClicked(event -> clearErrorMessage());
         switchSignUp.setOnMouseClicked(event -> switchToSignUp());
         switchSignIn.setOnMouseClicked(event -> switchToSignIn());
         addHideErrorListenersToSignUpFields();
@@ -323,7 +324,7 @@ public class LoginController {
             Parent adminDashboardRoot = loader.load();
             stage.setScene(new Scene(adminDashboardRoot));
         } else if (userRole.equals(Role.MEMBER)) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Book.fxml"));
             Parent adminDashboardRoot = loader.load();
             stage.setScene(new Scene(adminDashboardRoot));
         }
@@ -336,7 +337,9 @@ public class LoginController {
         emailTextField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
         phoneNumberTextField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
         signUpPasswordField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
+        signUpPasswordTextVisible.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
         signUpConfirmPasswordField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
+        signUpConfirmPasswordTextVisible.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
         genderComboBox.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
         birthDatePicker.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
     }
@@ -352,7 +355,6 @@ public class LoginController {
 
     private void clearFieldData(){
         userNameTextField.clear();
-        passwordField.clear();
         passwordField.clear();
         usernameField.clear();
         phoneNumberTextField.clear();

@@ -10,76 +10,96 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="920.0" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
+<ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="920.0" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
    <content>
-      <AnchorPane fx:id="bookDetailsPane" prefHeight="550.0" prefWidth="920.0" styleClass="grayPane" stylesheets="@../../css/DesignUI.css">
-         <children>
-            <AnchorPane layoutX="288.0" layoutY="361.0" prefHeight="158.0" prefWidth="593.0" styleClass="whitePane">
-               <children>
-                  <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="141.8619384765625">
-                     <font>
-                        <Font size="23.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="description" layoutX="11.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="532.9569091796875">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Text>
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="288.0" layoutY="62.0" prefHeight="255.0" prefWidth="553.0" styleClass="whitePane">
-               <children>
-                  <Label fx:id="author" layoutX="36.0" prefHeight="40.0" prefWidth="235.0" text="Đinh Viết Huy">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Text fx:id="title" layoutX="33.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người bạn" wrappingWidth="548.9567260742188">
-                     <font>
-                        <Font name="System Bold" size="30.0" />
-                     </font>
-                  </Text>
-                  <VBox layoutX="33.0" layoutY="117.0" prefHeight="118.0" prefWidth="559.0">
-                     <children>
-                        <Label fx:id="isbn" prefHeight="29.0" prefWidth="266.0" text="ISBN:     2983012830">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="year" prefHeight="25.0" prefWidth="266.0" text="Published:       2024">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="publisher" prefHeight="26.0" prefWidth="266.0" text="Publisher:        Sphere">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label text="Page count:      329">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <Line endX="392.39996337890625" endY="-1.52587890625E-5" layoutX="133.0" layoutY="102.0" startX="-114.800048828125" startY="-1.52587890625E-5" strokeWidth="0.25" />
-               </children>
-            </AnchorPane>
-            <ImageView fx:id="bookCoverImage" fitHeight="315.0" fitWidth="217.0" layoutX="36.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar-view">
-               <image>
-                  <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
-               </image>
-            </ImageView>
-            <Button layoutX="36.0" layoutY="402.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
-            <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="841.0" layoutY="14.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../icons/MemberIcon/cancel.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
+      <VBox fx:id="contentContainer" alignment="TOP_CENTER" prefWidth="920.0" spacing="10" styleClass="grayPane" stylesheets="@../../css/DesignUI.css">
+         <!-- Book Details Pane -->
+         <AnchorPane fx:id="bookDetailsPane" prefHeight="550.0" prefWidth="920.0" styleClass="grayPane">
+            <children>
+               <AnchorPane layoutX="288.0" layoutY="361.0" prefHeight="158.0" prefWidth="593.0" styleClass="whitePane">
+                  <children>
+                     <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="141.8619384765625">
+                        <font>
+                           <Font size="23.0" />
+                        </font>
+                     </Text>
+                     <TextFlow fx:id="descriptionFlow" layoutX="14.0" layoutY="52.0" prefHeight="19.0" prefWidth="567.0" textAlignment="JUSTIFY">
+                        <children>
+                           <Text fx:id="descriptionText" textAlignment="JUSTIFY">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Text>
+                           <Text fx:id="moreLessLabel" style="-fx-fill: blue; -fx-cursor: hand;" text=" More" textAlignment="JUSTIFY">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </TextFlow>
+                  </children>
+               </AnchorPane>
+               <AnchorPane layoutX="288.0" layoutY="62.0" prefHeight="255.0" prefWidth="553.0" styleClass="whitePane">
+                  <children>
+                     <Label fx:id="author" layoutX="36.0" prefHeight="40.0" prefWidth="235.0" text="Author Name">
+                        <font>
+                           <Font name="System Bold Italic" size="18.0" />
+                        </font>
+                     </Label>
+                     <Text fx:id="title" layoutX="33.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Book Title" wrappingWidth="548.9567260742188">
+                        <font>
+                           <Font name="System Bold" size="30.0" />
+                        </font>
+                     </Text>
+                     <VBox layoutX="33.0" layoutY="117.0" prefHeight="118.0" prefWidth="559.0">
+                        <children>
+                           <Label fx:id="isbn" prefHeight="29.0" prefWidth="266.0" text="ISBN:     2983012830">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Label>
+                           <Label fx:id="year" prefHeight="25.0" prefWidth="266.0" text="Published:       2024">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Label>
+                           <Label fx:id="publisher" prefHeight="26.0" prefWidth="266.0" text="Publisher:        Sphere">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Label>
+                           <Label text="Page count:      329">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </VBox>
+                     <Line endX="392.39996337890625" endY="-1.52587890625E-5" layoutX="132.0" layoutY="108.0" startX="-114.800048828125" startY="-1.52587890625E-5" strokeWidth="0.25" />
+                  </children>
+               </AnchorPane>
+               <ImageView fx:id="bookCoverImage" fitHeight="315.0" fitWidth="217.0" layoutX="36.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar-view">
+                  <image>
+                     <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
+                  </image>
+               </ImageView>
+               <Button layoutX="36.0" layoutY="402.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
+               <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="841.0" layoutY="14.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../../icons/MemberIcon/cancel.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </AnchorPane>
+         <VBox fx:id="feedbackContainer" prefWidth="920.0" spacing="10" styleClass="whitePane">
+            <Text layoutX="14.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Feedback" wrappingWidth="141.8619384765625">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Text>
+         </VBox>
+      </VBox>
    </content>
 </ScrollPane>

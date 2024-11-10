@@ -155,10 +155,40 @@ public class DatabaseInitializer {
                 statement.execute(insertBorrows);
 
                 String insertFeedbacks = "INSERT INTO Feedbacks (book_id, member_id, rating, about, created_by, created_at) VALUES " +
-                        "(1, 1, 5, 'Great book for learning Java!', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 2, 4, 'Very helpful for clean coding practices.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 3, 5, 'Excellent resource for programmers.', 'alice.johnson@example.com', CURRENT_TIMESTAMP);";
+                        "(1, 1, 5, 'Excellent introduction to Java!', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 2, 4, 'Very useful for beginners in clean coding.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 3, 5, 'Amazing book, highly recommend it!', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 4, 3, 'Good overview, but some topics could be more detailed.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 1, 4, 'Comprehensive guide to algorithms.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 2, 5, 'The best book for understanding algorithms.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 3, 4, 'Useful for both study and reference.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 4, 3, 'A bit too theoretical in some parts.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 1, 5, 'Fantastic explanations on data structures.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 2, 4, 'Clear and concise writing, very helpful.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 3, 5, 'A must-read for computer science students.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 4, 4, 'Covers everything you need to know.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+                        "(4, 1, 5, 'Great guide for advanced Java concepts.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(4, 2, 4, 'Deep insights into memory management.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+                        "(4, 3, 5, 'Excellent for experienced Java developers.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+                        "(4, 4, 3, 'A bit too complex for beginners.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 1, 5, 'Perfect for getting a good foundation in programming.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 2, 4, 'A comprehensive guide with many examples.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 3, 5, 'Best book I have read on Java so far!', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+                        "(1, 4, 4, 'Useful for both beginners and experienced programmers.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 1, 5, 'In-depth analysis of algorithms.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 2, 3, 'Some sections are hard to understand.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 3, 5, 'Highly detailed and practical.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+                        "(2, 4, 4, 'Good book for learning complex algorithms.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 1, 5, 'Best data structures book available.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 2, 4, 'Excellent coverage of all main topics.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 3, 5, 'Very informative and easy to read.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+                        "(3, 4, 3, 'Lacks advanced data structure topics.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+                        "(4, 1, 4, 'Good content, but could use more examples.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+                        "(4, 2, 5, 'Comprehensive and in-depth for Java professionals.', 'jane.smith@example.com', CURRENT_TIMESTAMP);";
                 statement.execute(insertFeedbacks);
+
+
+
             }
 
         } catch (SQLException e) {
