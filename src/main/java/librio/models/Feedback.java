@@ -26,6 +26,15 @@ public class Feedback {
         this.update_by = new SimpleStringProperty();
     }
 
+    public Feedback(String id, String bookId, String memberId, Integer rating, String about, Instant created_at) {
+        this.id = new SimpleStringProperty(id);
+        this.bookId = new SimpleStringProperty(bookId);
+        this.memberId = new SimpleStringProperty(memberId);
+        this.rating = new SimpleIntegerProperty(rating);
+        this.about = new SimpleStringProperty(about);
+        this.update_at = new SimpleObjectProperty<>(created_at);
+    }
+
     // Getters và Setters
     public String getId() {
         return id.get();

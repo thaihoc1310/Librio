@@ -373,7 +373,7 @@ public class BookController implements Initializable {
     private void openEditProfileScene(){
         try {
             // Tải FXML của scene mới
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/EditProfile.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -385,6 +385,7 @@ public class BookController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             // Hiển thị scene
             stage.showAndWait();
+            setAvatarAndUserName();
         } catch (IOException e) {
             e.printStackTrace();
         }

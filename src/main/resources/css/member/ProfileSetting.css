@@ -1,0 +1,143 @@
+/* Nền chính */
+.root {
+    -fx-background-color: #fff7ec;
+}
+
+/* Gray Pane - cho các vùng màu xám nhạt */
+.grayPane {
+    -fx-background-color: #F2EFEA; /* màu xám rất nhạt để phân biệt */
+    -fx-border-color: #D8BFAA; /* màu viền cam nhạt để phù hợp với chủ đề */
+    -fx-border-radius: 4px;
+    //-fx-background-radius: 4px;
+}
+
+/* White Pane - cho các vùng màu trắng */
+.whitePane {
+    -fx-background-color: #FFFFFF; /* màu trắng để tạo độ tương phản */
+    -fx-border-color: #D8BFAA; /* màu viền cam nhạt */
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+/* Sidebar buttons */
+/* Sidebar buttons */
+.sidebar-button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #040000;
+    -fx-padding: 10px 20px;
+    -fx-alignment: CENTER;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #f1dfc8;
+    -fx-cursor: hand;
+    -fx-border-color: #DCB485;
+    -fx-border-width: 0 4px 0 0;
+}
+
+.sidebar-button:focused {
+    -fx-background-color: #e5d6c3;
+    -fx-border-color: #DCB485;
+    -fx-border-width: 0 4px 0 0;
+    -fx-text-fill: #4C2113;
+}
+
+.sidebar-button1 {
+    -fx-background-color: #f1dfc8;
+    -fx-cursor: hand;
+    -fx-border-color: #DCB485;
+    -fx-border-width: 0 4px 0 0;
+}
+/* Các ô nhập liệu */
+
+.text-field:hover {
+    -fx-border-radius: 2px;
+}
+
+.text-field:hover {
+    -fx-background-color: #FDFBF8;
+    -fx-border-color: #D8BFAA;
+    -fx-border-radius: 2px;
+    -fx-border-width: 2px;
+    -fx-padding: 4px;
+}
+
+/* Nút Lưu thay đổi */
+.save-button {
+    -fx-background-color: #DCB485;
+    -fx-text-fill: #4C2113;
+    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+}
+
+.save-button:hover {
+    -fx-background-color: #F1DEBC;
+    -fx-cursor: hand;
+}
+
+/* Style mặc định cho nút với màu xám */
+.button-gray {
+    -fx-background-color: #D3D3D3; /* Màu xám nhạt cho nền nút */
+    -fx-text-fill: #4C2113; /* Màu chữ */
+    -fx-background-radius: 3px;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+.button-gray:hover {
+    -fx-background-color: #DCB485; /* Màu cam nhạt khi hover */
+    -fx-cursor: hand;
+}
+
+/* Ảnh đại diện */
+.avatar-circle {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D8BFAA;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-padding: 5px;
+}
+
+/* ComboBox (Gender) */
+.combo-box {
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 5px;
+    -fx-font-size: 13px;
+}
+
+.combo-box:hover {
+    -fx-background-color: #F2EFEA;
+    -fx-border-color: #DCB485;
+    -fx-text-fill: #4C2113;
+    -fx-border-width: 2px;
+    -fx-cursor: hand;
+}
+
+
+/* DatePicker */
+.date-picker {
+    -fx-background-radius: 4px;
+    -fx-padding: 3px;
+    -fx-font-size: 13px;
+}
+
+.date-picker:hover {
+    -fx-background-color: #F2EFEA;
+    -fx-border-color: #DCB485;
+    -fx-text-fill: #4C2113;
+    -fx-border-width: 2px;
+    -fx-cursor: hand;
+}
+
+.date-picker .arrow {
+    -fx-background-color: #DCB485;
+}
+
+
+
+

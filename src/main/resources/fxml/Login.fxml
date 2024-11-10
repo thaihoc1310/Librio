@@ -81,9 +81,9 @@
               <ComboBox fx:id="genderComboBox" layoutX="65.0" layoutY="250.0" prefHeight="25.0" prefWidth="93.0" promptText="Gender" />
               <DatePicker fx:id="birthDatePicker" editable="false" layoutX="166.0" layoutY="250.0" prefHeight="28.0" prefWidth="105.0" promptText="Birth Date" />
               <PasswordField fx:id="signUpPasswordField" layoutX="333.0" layoutY="175.0" prefHeight="25.0" prefWidth="202.0" promptText="Password" styleClass="input-field" />
-              <TextField fx:id="signUpPasswordTextVisible" layoutX="333.0" layoutY="177.0" prefHeight="25.0" prefWidth="202.0" styleClass="input-field" visible="false" />
+              <TextField fx:id="signUpPasswordTextVisible" layoutX="333.0" layoutY="177.0" prefHeight="25.0" prefWidth="202.0" promptText="Password" styleClass="input-field" visible="false" />
               <PasswordField fx:id="signUpConfirmPasswordField" layoutX="333.0" layoutY="250.0" prefHeight="26.0" prefWidth="202.0" promptText="Confirm Password" styleClass="input-field" />
-              <TextField fx:id="signUpConfirmPasswordTextVisible" layoutX="333.0" layoutY="251.0" prefHeight="26.0" prefWidth="202.0" styleClass="input-field" visible="false" />
+              <TextField fx:id="signUpConfirmPasswordTextVisible" layoutX="333.0" layoutY="251.0" prefHeight="26.0" prefWidth="202.0" promptText="Confirm Password" styleClass="input-field" visible="false" />
               <Label layoutX="188.0" layoutY="362.0" styleClass="text-label" text="You already have an account?" />
               <Label fx:id="switchSignIn" layoutX="352.0" layoutY="362.0" styleClass="forgot-password-label" text="Sign in" />
               <Label fx:id="nameErrorLabel" layoutX="65.0" layoutY="130.0" prefHeight="13.0" prefWidth="202.0" textFill="#ff0f0f">

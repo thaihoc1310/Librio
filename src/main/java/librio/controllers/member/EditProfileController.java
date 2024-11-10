@@ -6,12 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -98,7 +93,7 @@ public class EditProfileController implements Initializable {
         if (selectedFile != null) {
             avatarFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
             Image avatarImage = new Image(selectedFile.toURI().toString());
-            cropAndClipToCircle(avatarImage, avatar, 100);
+            cropAndClipToCircle(avatarImage, avatar, 50);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
     }
@@ -141,7 +136,7 @@ public class EditProfileController implements Initializable {
         }
 
         if (birthOfDate.isAfter(LocalDate.now())) {
-            dateOfBirthErrorLabel.setText("Date of birth must not be after today!");
+            dateOfBirthErrorLabel.setText("Birth date cannot be after now!");
             validation = true;
         }
 
@@ -212,22 +207,22 @@ public class EditProfileController implements Initializable {
         genderComboBox.setValue(loggedInUser.getGender());
         birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
 
-//        // Lấy đường dẫn ảnh từ project
-//        String projectDir = System.getProperty("user.dir");
-//        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-//        String path = avatarsDir + loggedInUser.getAvatar();
-//
-//        // Chuyển đổi đường dẫn thành URL
-//        File file = new File(path);
-//        if (file.exists()) {
-//            Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-//            cropAndClipToCircle(image, avatar, 100);
-//        } else {
-//            String defaultImage = avatarsDir + "Male User.png";
-//            File defaultImageFile = new File(defaultImage);
-//            Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-//            cropAndClipToCircle(image, avatar, 100);
-//        }
+        // Lấy đường dẫn ảnh từ project
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + loggedInUser.getAvatar();
+
+        // Chuyển đổi đường dẫn thành URL
+        File file = new File(path);
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+            cropAndClipToCircle(image, avatar, 50);
+        } else {
+            String defaultImage = avatarsDir + "Male User.png";
+            File defaultImageFile = new File(defaultImage);
+            Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+            cropAndClipToCircle(image, avatar, 50);
+        }
 
         nameTextField.setText(loggedInUser.getName());
         emailTextField.setText(loggedInUser.getEmail());
@@ -250,41 +245,41 @@ public class EditProfileController implements Initializable {
         birthOfDatePicker.setOnMouseClicked(event -> notification.setText(""));
         addressTextArea.setOnMouseClicked(event -> notification.setText(""));
 
-        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.trim().isEmpty()) {
-                nameErrorLabel.setText("Name must not be empty!");
-            }else{
-                nameErrorLabel.setText("");
-            }
-        });
-
-        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                emailErrorLabel.setText("Email cannot be empty");
-            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-                emailErrorLabel.setText("Invalid email format");
-            }  else {
-                emailErrorLabel.setText("");
-            }
-        });
-
-        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                phoneNumberErrorLabel.setText("Phone number cannot be empty");
-            } else if (!newValue.matches("\\d{10}")) {
-                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
-            } else {
-                phoneNumberErrorLabel.setText("");
-            }
-        });
-
-        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.isAfter(LocalDate.now())) {
-                dateOfBirthErrorLabel.setText("Date of birth must not be after today!");
-            }else{
-                dateOfBirthErrorLabel.setText("");
-            }
-        });
+//        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if(newValue.trim().isEmpty()) {
+//                nameErrorLabel.setText("Name must not be empty!");
+//            }else{
+//                nameErrorLabel.setText("");
+//            }
+//        });
+//
+//        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue.trim().isEmpty()) {
+//                emailErrorLabel.setText("Email cannot be empty");
+//            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+//                emailErrorLabel.setText("Invalid email format");
+//            }  else {
+//                emailErrorLabel.setText("");
+//            }
+//        });
+//
+//        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue.trim().isEmpty()) {
+//                phoneNumberErrorLabel.setText("Phone number cannot be empty");
+//            } else if (!newValue.matches("\\d{10}")) {
+//                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+//            } else {
+//                phoneNumberErrorLabel.setText("");
+//            }
+//        });
+//
+//        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            if(newValue.isAfter(LocalDate.now())) {
+//                dateOfBirthErrorLabel.setText("Date of birth must not be after today!");
+//            }else{
+//                dateOfBirthErrorLabel.setText("");
+//            }
+//        });
     }
 
     private void hideErrorLabels() {
@@ -297,7 +292,7 @@ public class EditProfileController implements Initializable {
     @FXML
     private void openChangePasswordScene(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ChangePassword.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Password.fxml"));
             Parent manageBorrowRoot = loader.load();
 
             Stage currentStage = (Stage) saveButton.getScene().getWindow();
@@ -306,6 +301,52 @@ public class EditProfileController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void deleteAvatar() {
+        if(loggedInUser.getAvatar() != null) {
+
+        }
+        // Hiển thị thông báo xác nhận
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Avatar");
+        alert.setHeaderText("Are you sure you want to delete your avatar?");
+        alert.setContentText("This action cannot be undone.");
+
+
+        ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+        ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == buttonTypeYes) {
+                String projectDir = System.getProperty("user.dir");
+                String avatarsDir = projectDir + "/src/main/resources/images/user/";
+
+                if (loggedInUser.getAvatar() != null && !loggedInUser.getAvatar().isEmpty()) {
+                    File oldAvatarFile = new File(avatarsDir + loggedInUser.getAvatar());
+                    if (oldAvatarFile.exists() && !oldAvatarFile.delete()) {
+                        System.out.println("Không thể xóa tệp ảnh cũ: " + oldAvatarFile.getAbsolutePath());
+                    }
+                }
+                String defaultImage = avatarsDir + "Male User.png";
+                File defaultImageFile = new File(defaultImage);
+                Image defaultAvatar = new Image(defaultImageFile.toURI().toString());
+                cropAndClipToCircle(defaultAvatar, avatar, 50);
+                loggedInUser.setAvatar(null);
+
+                String query = "UPDATE users SET avatar = NULL WHERE id = ?";
+
+                try (Connection connection = DatabaseConnection.getConnection();
+                     PreparedStatement statement = connection.prepareStatement(query)) {
+                    statement.setString(1, loggedInUser.getId());
+                    statement.executeUpdate();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
 

@@ -64,7 +64,7 @@ public class DatabaseUtil {
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phone_number");
-                String address = resultSet.getString("address") ;
+                String address = resultSet.getString("address");
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
                 String avatar = resultSet.getString("avatar");
@@ -214,7 +214,7 @@ public class DatabaseUtil {
             // Delete borrows associated with the book
             String deleteBorrowQuery = "DELETE FROM Borrows WHERE book_isbn = ?";
             try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
-                deleteBorrowStmt.setString(1,book.getIsbn());
+                deleteBorrowStmt.setString(1, book.getIsbn());
                 deleteBorrowStmt.executeUpdate();
             }
 
@@ -410,10 +410,10 @@ public class DatabaseUtil {
                 Gender gender = Gender.valueOf(resultSet.getString("gender").toUpperCase());
                 String avatar = resultSet.getString("avatar");
                 LocalDate birthOfDate = resultSet.getDate("birth_of_date").toLocalDate();
-                if(role.equals(Role.LIBRARIAN)){
+                if (role.equals(Role.LIBRARIAN)) {
                     return new Librarian(id, name, email, pass, phoneNumber, address, gender, role, avatar, birthOfDate);
-                }else if(role.equals(Role.MEMBER)){
-                    try(PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM members WHERE id = ? ")){
+                } else if (role.equals(Role.MEMBER)) {
+                    try (PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM members WHERE id = ? ")) {
                         memberStatement.setString(1, id);
                         ResultSet memberResultSet = memberStatement.executeQuery();
                         if (memberResultSet.next()) {
