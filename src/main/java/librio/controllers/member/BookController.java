@@ -12,7 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -264,7 +263,7 @@ public class BookController implements Initializable {
         for (int i = 1; i <= 5; i++) {
             ImageView star = new ImageView();
             if (i <= rating) {
-                star.setImage(new Image(getClass().getResource("/images/book/ratings/Star.png").toExternalForm())); // Hình ảnh ngôi sao đầy
+                star.setImage(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm())); // Hình ảnh ngôi sao đầy
             }
 
             star.setFitHeight(15);

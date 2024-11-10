@@ -1,8 +1,6 @@
 package librio.controllers.member;
 
 import javafx.animation.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -10,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
@@ -220,6 +219,7 @@ public class HomePageController implements Initializable {
             bookImage.setLayoutX(12);
             bookImage.setPickOnBounds(true);
             bookImage.setSmooth(true);
+            bookImage.setPreserveRatio(false);
             String projectDir = System.getProperty("user.dir");
             String booksDir = projectDir + "/src/main/resources/images/book/";
             String path = booksDir + book.getImagePath();
@@ -228,17 +228,15 @@ public class HomePageController implements Initializable {
 
             Label titleLabel = new Label(book.getTitle());
             titleLabel.setLayoutX(11);
-            titleLabel.setLayoutY(5);
+            titleLabel.setLayoutY(8);
             titleLabel.setPrefWidth(160);
-            titleLabel.setWrapText(true);
-            titleLabel.setFont(new javafx.scene.text.Font(14));
-            titleLabel.setMaxHeight(48);
+            titleLabel.getStyleClass().add("title-label");
 
             Label authorLabel = new Label(book.getAuthor());
             authorLabel.setLayoutX(11);
-            authorLabel.setLayoutY(47);
+            authorLabel.setLayoutY(55);
             authorLabel.setPrefWidth(160);
-            authorLabel.setUnderline(true);
+            authorLabel.getStyleClass().add("author-label");
 
             AnchorPane buttonPane = new AnchorPane();
             buttonPane.setStyle("-fx-background-color: #FFF;");
@@ -272,20 +270,35 @@ public class HomePageController implements Initializable {
 
             HBox starBox = new HBox(5);
             double rating = book.getAverageOfRating();
-            for (int i = 1; i <= 5; i++) {
-                ImageView star = new ImageView();
-                if (i <= rating) {
-                    star.setImage(new Image(getClass().getResource("/images/book/ratings/Star.png").toExternalForm()));
-                }
+            int fullStars = (int) rating;
+            double decimalPart = rating - fullStars;
 
-                star.setFitHeight(15);
-                star.setFitWidth(15);
-                starBox.getChildren().add(star);
+            for (int i = 1; i <= 5; i++) {
+                StackPane starPane = new StackPane();
+
+                ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+
+                ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
+                emptyStar.setFitHeight(15);
+                emptyStar.setFitWidth(15);
+
+                if (i <= fullStars) {
+                    starPane.getChildren().add(fullStar);
+                } else if (i == fullStars + 1 && decimalPart > 0) {
+                    starPane.getChildren().addAll(emptyStar, fullStar);
+                    Rectangle clip = new Rectangle(15 * decimalPart, 15);
+                    fullStar.setClip(clip);
+                } else {
+                    starPane.getChildren().add(emptyStar);
+                }
+                starBox.getChildren().add(starPane);
             }
 
-            starBox.setLayoutX(11);
-            starBox.setLayoutY(75);
-            infoPane.setStyle("-fx-background-color: #FFFFFF;");
+            starBox.setLayoutX(42);
+            starBox.setLayoutY(80);
+            infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
             infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
             bookPane.getChildren().addAll(bookImagePane,infoPane);
             topRateContainer.getChildren().add(bookPane);
