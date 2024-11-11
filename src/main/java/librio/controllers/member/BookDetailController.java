@@ -1,11 +1,16 @@
 package librio.controllers.member;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -13,18 +18,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import librio.auth.Session;
+import librio.controllers.admin.BorrowDetailController;
 import librio.database.DatabaseConnection;
 import librio.models.*;
 import librio.util.DatabaseUtil;
 import librio.util.DesignUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,8 +39,10 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static librio.util.DatabaseUtil.authenticate;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class BookDetailController implements Initializable {
@@ -49,6 +58,8 @@ public class BookDetailController implements Initializable {
     @FXML
     private Label publisher;
     @FXML
+    private Label totalBorrowsLabel;
+    @FXML
     private ImageView bookCoverImage;
     @FXML
     private AnchorPane bookDetailsPane;
@@ -60,10 +71,14 @@ public class BookDetailController implements Initializable {
     private Label numberOfAvailableBook;
     @FXML
     private Label pageCount;
+    @FXML
+    private Button borrowButton;
 
     private boolean isExpanded = false;
     private String fullDescription;
     private static final int DESCRIPTION_LIMIT = 580;
+
+    User loginUser = Session.getInstance().getLoggedInUser();
 
     private Book book;
 
@@ -75,11 +90,12 @@ public class BookDetailController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         moreLessLabel.setText("more");
-        moreLessLabel.setOnMouseClicked(event -> toggleDescription());moreLessLabel.setText(" more");
+        moreLessLabel.setOnMouseClicked(event -> toggleDescription());
+        moreLessLabel.setText(" more");
         moreLessLabel.setOnMouseClicked(event -> toggleDescription());
     }
 
-    public void setBook(Book book){
+    public void setBook(Book book) {
         this.book = book;
         setBookDetails();
         loadFeedbacksFromDatabase();
@@ -88,12 +104,12 @@ public class BookDetailController implements Initializable {
     public void setBookDetails() {
         title.setText(book.getTitle());
         author.setText(book.getAuthor());
-        year.setText("Published:    "+book.getYearPublished());
+        year.setText("Published:    " + book.getYearPublished());
         isbn.setText("ISBN:   " + book.getIsbn());
         publisher.setText("Publisher:   " + book.getPublisher());
         pageCount.setText("Page count:      " + book.getNumberOfPages());
         numberOfAvailableBook.setText("Number of Available books :    " + book.getQuantityCopy());
-
+        totalBorrowsLabel.setText("Total Borrows:     " + getTotalBorrows());
 
         fullDescription = book.getDescription();
         if (fullDescription.length() > DESCRIPTION_LIMIT) {
@@ -104,11 +120,20 @@ public class BookDetailController implements Initializable {
             moreLessLabel.setVisible(false);
         }
 
-        try {
-            bookCoverImage.setImage(new Image(book.getImagePath()));
-        } catch (Exception e) {
-            bookCoverImage.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
+        String projectDir = System.getProperty("user.dir");
+        String booksDir = projectDir + "/src/main/resources/images/book/";
+        String path = booksDir + book.getImagePath();
+        File file = new File(path);
+        Image image;
+
+
+        if(file.exists()) {
+            image = new Image(file.toURI().toString());
+        }else{
+            image = new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm());
         }
+
+        DesignUtil.cropToAspectRatio(image, bookCoverImage,217,315);
     }
 
     @FXML
@@ -124,17 +149,17 @@ public class BookDetailController implements Initializable {
     }
 
     @FXML
-    private void cancelBookDetail(){
+    private void cancelBookDetail() {
         closeStage();
     }
 
-    private void loadFeedbacksFromDatabase(){
+    private void loadFeedbacksFromDatabase() {
         feedbackList.clear();
         feedbackContainer.setSpacing(15);
         feedbackContainer.setStyle("-fx-padding: 10");
-        String querry = "SELECT id, book_id, member_id, rating, about, created_at FROM feedbacks WHERE book_id = ?";
+        String query = "SELECT id, book_id, member_id, rating, about, created_at FROM feedbacks WHERE book_id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(querry)) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, String.valueOf(book.getId()));
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -176,7 +201,6 @@ public class BookDetailController implements Initializable {
                 }
 
 
-
                 VBox detailsBox = new VBox();
                 detailsBox.setSpacing(5);
 
@@ -203,7 +227,7 @@ public class BookDetailController implements Initializable {
                 feedbackContainer.getChildren().add(feedbackBox);
             }
 
-            if(feedbackList.isEmpty()){
+            if (feedbackList.isEmpty()) {
                 Text noComments = new Text("No comments provided for this book");
                 feedbackContainer.getChildren().addAll(noComments);
             }
@@ -212,8 +236,51 @@ public class BookDetailController implements Initializable {
         }
     }
 
+    @FXML
+    private void openBorrowConfirmation() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
+            Parent root  = loader.load();
+            BorrowConfirmationController borrowConfirmationController = loader.getController();
+            borrowConfirmationController.setBook(book);
+
+            Stage stage = new Stage();
+            stage.setTitle("Open Borrow Confirmation");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            Stage bookDetailStage = (Stage) bookDetailsPane.getScene().getWindow();
+            bookDetailStage.hide(); //Ẩn
+            stage.initOwner(bookDetailStage);
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            stage.setOnHidden(event -> bookDetailStage.show());
+
+            stage.showAndWait();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     private void closeStage() {
         Stage stage = (Stage) title.getScene().getWindow();
         stage.close();
     }
+
+    private int getTotalBorrows(){
+        int total = 0;
+        String query = "select count(id) from borrows where book_isbn = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, String.valueOf(book.getIsbn()));
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                total = resultSet.getInt(1);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return total;
+    }
 }
+

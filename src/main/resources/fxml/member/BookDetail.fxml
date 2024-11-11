@@ -41,7 +41,7 @@
                      </TextFlow>
                   </children>
                </AnchorPane>
-               <AnchorPane layoutX="288.0" layoutY="62.0" prefHeight="255.0" prefWidth="553.0" styleClass="whitePane">
+               <AnchorPane layoutX="288.0" layoutY="62.0" prefHeight="253.0" prefWidth="594.0" styleClass="whitePane">
                   <children>
                      <Label fx:id="author" layoutX="36.0" prefHeight="40.0" prefWidth="235.0" text="Author Name">
                         <font>
@@ -53,7 +53,7 @@
                            <Font name="System Bold" size="30.0" />
                         </font>
                      </Text>
-                     <VBox layoutX="33.0" layoutY="117.0" prefHeight="118.0" prefWidth="559.0">
+                     <VBox layoutX="33.0" layoutY="117.0" prefHeight="146.0" prefWidth="559.0">
                         <children>
                            <Label fx:id="isbn" prefHeight="29.0" prefWidth="266.0" text="ISBN:     2983012830">
                               <font>
@@ -75,7 +75,12 @@
                                  <Font size="14.0" />
                               </font>
                            </Label>
-                           <Label fx:id="numberOfAvailableBook" text="Number of Available books :    329">
+                           <Label fx:id="numberOfAvailableBook" prefHeight="28.0" prefWidth="214.0" text="Number of Available books :    329">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Label>
+                           <Label fx:id="totalBorrowsLabel" prefHeight="28.0" prefWidth="214.0" text="Total Borrows:     3">
                               <font>
                                  <Font size="14.0" />
                               </font>
@@ -90,8 +95,8 @@
                      <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
                   </image>
                </ImageView>
-               <Button layoutX="36.0" layoutY="402.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
-               <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="841.0" layoutY="14.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true">
+               <Button fx:id="borrowButton" layoutX="36.0" layoutY="402.0" mnemonicParsing="false" onAction="#openBorrowConfirmation" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
+               <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="841.0" layoutY="14.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                   <image>
                      <Image url="@../../icons/MemberIcon/cancel.png" />
                   </image>

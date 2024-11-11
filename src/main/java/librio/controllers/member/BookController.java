@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -256,15 +257,29 @@ public class BookController implements Initializable {
         HBox starBox = new HBox(5);
 
         double rating = book.getAverageOfRating();
+        int fullStars = (int) rating;
+        double decimalPart = rating - fullStars;
         for (int i = 1; i <= 5; i++) {
-            ImageView star = new ImageView();
-            if (i <= rating) {
-                star.setImage(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm())); // Hình ảnh ngôi sao đầy
-            }
+            StackPane starPane = new StackPane();
 
-            star.setFitHeight(15);
-            star.setFitWidth(15);
-            starBox.getChildren().add(star);
+            ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
+            fullStar.setFitHeight(15);
+            fullStar.setFitWidth(15);
+
+            ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
+            emptyStar.setFitHeight(15);
+            emptyStar.setFitWidth(15);
+
+            if (i <= fullStars) {
+                starPane.getChildren().add(fullStar);
+            } else if (i == fullStars + 1 && decimalPart > 0) {
+                starPane.getChildren().addAll(emptyStar, fullStar);
+                Rectangle clip = new Rectangle(15 * decimalPart, 15); // Cắt theo phần thập phân
+                fullStar.setClip(clip);
+            } else {
+                starPane.getChildren().add(emptyStar);
+            }
+            starBox.getChildren().add(starPane);
         }
 
         AnchorPane.setTopAnchor(starBox, 370.0);
