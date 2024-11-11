@@ -56,6 +56,10 @@ public class BookDetailController implements Initializable {
     private Text descriptionText;
     @FXML
     private Text moreLessLabel;
+    @FXML
+    private Label numberOfAvailableBook;
+    @FXML
+    private Label pageCount;
 
     private boolean isExpanded = false;
     private String fullDescription;
@@ -87,6 +91,9 @@ public class BookDetailController implements Initializable {
         year.setText("Published:    "+book.getYearPublished());
         isbn.setText("ISBN:   " + book.getIsbn());
         publisher.setText("Publisher:   " + book.getPublisher());
+        pageCount.setText("Page count:      " + book.getNumberOfPages());
+        numberOfAvailableBook.setText("Number of Available books :    " + book.getQuantityCopy());
+
 
         fullDescription = book.getDescription();
         if (fullDescription.length() > DESCRIPTION_LIMIT) {
@@ -123,6 +130,8 @@ public class BookDetailController implements Initializable {
 
     private void loadFeedbacksFromDatabase(){
         feedbackList.clear();
+        feedbackContainer.setSpacing(15);
+        feedbackContainer.setStyle("-fx-padding: 10");
         String querry = "SELECT id, book_id, member_id, rating, about, created_at FROM feedbacks WHERE book_id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(querry)) {
@@ -192,6 +201,11 @@ public class BookDetailController implements Initializable {
                 detailsBox.getChildren().addAll(borrowerNameText, ratingText, dateText, commentText);
                 feedbackBox.getChildren().addAll(avatar, detailsBox);
                 feedbackContainer.getChildren().add(feedbackBox);
+            }
+
+            if(feedbackList.isEmpty()){
+                Text noComments = new Text("No comments provided for this book");
+                feedbackContainer.getChildren().addAll(noComments);
             }
         } catch (SQLException e) {
             e.printStackTrace();

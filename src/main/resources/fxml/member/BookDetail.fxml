@@ -32,7 +32,7 @@
                                  <Font size="14.0" />
                               </font>
                            </Text>
-                           <Text fx:id="moreLessLabel" style="-fx-fill: blue; -fx-cursor: hand;" text=" More" textAlignment="JUSTIFY">
+                           <Text fx:id="moreLessLabel" style="-fx-fill: #A45C23; -fx-cursor: hand;" text=" More" textAlignment="JUSTIFY">
                               <font>
                                  <Font size="14.0" />
                               </font>
@@ -70,7 +70,12 @@
                                  <Font size="14.0" />
                               </font>
                            </Label>
-                           <Label text="Page count:      329">
+                           <Label fx:id="pageCount" text="Page count:      329">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Label>
+                           <Label fx:id="numberOfAvailableBook" text="Number of Available books :    329">
                               <font>
                                  <Font size="14.0" />
                               </font>

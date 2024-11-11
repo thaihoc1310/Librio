@@ -237,30 +237,26 @@ public class BookController implements Initializable {
         bookCover.setPreserveRatio(true);
         bookPane.getChildren().add(bookCover);
 
-        // Tạo TextFlow chứa tiêu đề
         TextFlow bookInfo = new TextFlow();
         Label titleLabel = new Label(book.getTitle());
 
-        // Giới hạn Label chỉ hiển thị 2 dòng và thêm dấu "..." nếu quá dài
         titleLabel.setWrapText(true);
-        titleLabel.setMaxWidth(215);  // Giới hạn chiều rộng tối đa cho tiêu đề
-        titleLabel.setStyle("-fx-font-weight: 200;");  // Giảm độ dày của chữ
-        titleLabel.setMaxHeight(48);  // Chiều cao tối đa cho 2 dòng
+        titleLabel.setMaxWidth(215);
+        titleLabel.setStyle("-fx-font-weight: 200;");
+        titleLabel.setMaxHeight(48);
 
-        // Căn giữa TextFlow theo chiều ngang trong AnchorPane
         bookInfo.getChildren().addAll(titleLabel);
         bookInfo.setMaxWidth(Double.MAX_VALUE);
 
-        // Thêm TextFlow vào AnchorPane
         AnchorPane.setLeftAnchor(bookInfo, 29.0);
         AnchorPane.setRightAnchor(bookInfo, 29.0);
         AnchorPane.setTopAnchor(bookInfo, 320.0);
         bookPane.getChildren().add(bookInfo);
 
-        // Thêm HBox để hiển thị rating bằng ngôi sao
+
         HBox starBox = new HBox(5);
 
-        double rating = book.getAverageOfRating(); // Giả sử bạn có phương thức getRating() trả về số sao (từ 1 đến 5)
+        double rating = book.getAverageOfRating();
         for (int i = 1; i <= 5; i++) {
             ImageView star = new ImageView();
             if (i <= rating) {
