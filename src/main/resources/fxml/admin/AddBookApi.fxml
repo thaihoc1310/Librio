@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
@@ -51,11 +50,7 @@
                         <Line endX="363.0" endY="-45.666656494140625" layoutX="279.0" layoutY="52.0" startX="-272.3333435058594" startY="-45.666656494140625" stroke="#00000032" />
                      </children>
                   </AnchorPane>
-                  <ScrollPane fx:id="bookListScrollPane" layoutY="14.0" prefHeight="500.0" prefWidth="661.0">
-                     <padding>
-                        <Insets top="10.0" />
-                     </padding>
-                  </ScrollPane>
+                  <ScrollPane fx:id="bookListScrollPane" layoutY="14.0" prefHeight="497.0" prefWidth="659.0" />
                </children>
             </AnchorPane>
          </center>
