@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import librio.models.Book;
@@ -35,7 +36,7 @@ public class BookDetailController implements Initializable {
     private AnchorPane bookDetailsPane;
 
     private Book book;
-
+    private StackPane stackPaneRoot;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -62,12 +63,17 @@ public class BookDetailController implements Initializable {
 
     }
 
+    public void setStackPaneRoot(StackPane stackPaneRoot) {
+        this.stackPaneRoot = stackPaneRoot;
+    }
+
     @FXML
     private void cancelBookDetail(){
         closeStage();
     }
 
     private void closeStage() {
+        stackPaneRoot.setOpacity(1);
         Stage stage = (Stage) title.getScene().getWindow();
         stage.close();
     }

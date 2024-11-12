@@ -323,7 +323,7 @@ public class LoginController {
             Parent adminDashboardRoot = loader.load();
             stage.setScene(new Scene(adminDashboardRoot));
         } else if (userRole.equals(Role.MEMBER)) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Book.fxml"));
             Parent adminDashboardRoot = loader.load();
             stage.setScene(new Scene(adminDashboardRoot));
         }

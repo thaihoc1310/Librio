@@ -14,20 +14,20 @@
     -fx-border-radius: 6px;
 }
 .button:hover {
-    -fx-background-color:#f1debc; /* Màu nền khi hover */
-    -fx-cursor: hand;              /* Con trỏ chuột chuyển thành tay khi hover */
+    -fx-background-color:#f1debc;
+    -fx-cursor: hand;
 
 }
 .table-view .column-header,
 .table-view .column-header-background .filler {
     -fx-cell-size : 20;
-    -fx-background-color: #f0f0f4; /* Màu nền của tiêu đề cột */
+    -fx-background-color: #f0f0f4;
 
 }
 
 .table-view .column-header .label {
-    -fx-text-fill: #4C2113;  /* Màu chữ của tiêu đề cột */
-    -fx-font-weight: bold;   /* Tùy chọn: Đậm chữ tiêu đề */
+    -fx-text-fill: #4C2113;
+    -fx-font-weight: bold;
      -fx-alignment: center;
 }
 
@@ -41,19 +41,18 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #f1debc; /* Màu nền khi hàng được chọn */
+    -fx-background-color: #f1debc;
 }
 
 .table-row-cell:selected .text {
-    -fx-fill: #000000; /* Màu chữ khi hàng được chọn */
+    -fx-fill: #000000;
 }
 
-/* Thay đổi màu chữ của tiêu đề khi hover (tùy chọn) */
 .table-view .column-header:hover .label {
-    -fx-text-fill: #B8860B; /* Màu chữ khi hover tiêu đề cột */
+    -fx-text-fill: #B8860B;
     }
 .table-view:focused {
-    -fx-focus-color: #f1debc;  /* Màu của đường highlight khi TableView được chọn */
+    -fx-focus-color: #f1debc
 }
 .table-row-cell:focused {
    -fx-focus-color: #f1debc;
@@ -68,50 +67,48 @@
 .pagination .label {
     -fx-opacity: 0;
 }
-/* Tùy chỉnh nền của ScrollPane */
+
 .scroll-pane {
-    -fx-background-color: #F8EDD9; /* Màu nền chính của ScrollPane */
+    -fx-background-color: #F8EDD9;
 }
 
-/* Tùy chỉnh nền của nội dung bên trong ScrollPane */
 .scroll-pane .viewport {
-    -fx-background-color: #f8edd9; /* Màu nền cho khu vực hiển thị nội dung */
+    -fx-background-color: #f8edd9;
 }
 
-/* Tùy chỉnh thanh cuộn dọc */
 .scroll-bar:vertical {
-    -fx-background-color: #DCB485; /* Màu nền cho thanh cuộn dọc */
+    -fx-background-color: #DCB485;
 }
 
-/* Tùy chỉnh thanh cuộn ngang */
+
 .scroll-bar:horizontal {
-    -fx-background-color: #DCB485; /* Màu nền cho thanh cuộn ngang */
+    -fx-background-color: #DCB485;
 }
 
-/* Tùy chỉnh thumb của thanh cuộn (phần có thể kéo) */
+
 .scroll-bar .thumb {
-    -fx-background-color: #B08968; /* Màu thumb (phần kéo) của thanh cuộn */
-    -fx-background-radius: 5px;    /* Bo tròn góc cho thumb */
+    -fx-background-color: #B08968;
+    -fx-background-radius: 5px;
 }
 .tilePane-book {
-    -fx-background-color: #ffffff; /* Màu nền */
-    -fx-background-radius: 5px;   /* Bo tròn góc */
-    -fx-border-color: #B08968;     /* Màu viền */
-    -fx-border-radius: 5px;       /* Bo góc cho viền */
-    -fx-border-width: 1px;         /* Độ dày viền */
-}
-/* Kiểu mặc định cho .tilePane-book */
-.tilePane-book {
-    -fx-background-color: #f8f2e8; /* Màu nền */
-    -fx-background-radius: 5px;    /* Bo tròn góc */
-    -fx-border-color: #B08968;     /* Màu viền */
-    -fx-border-radius: 5px;        /* Bo góc cho viền */
-    -fx-border-width: 1px;         /* Độ dày viền */
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #B08968;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
 }
 
-/* Hiệu ứng khi di chuột vào */
+.tilePane-book {
+    -fx-background-color: #f8f2e8;
+    -fx-background-radius: 5px;
+    -fx-border-color: #B08968;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+}
+
+
 .tilePane-book:hover {
-    -fx-cursor: hand; /* Chuyển con trỏ chuột thành hình bàn tay */
+    -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 0); /* Hiệu ứng đổ bóng phát sáng */
 
 }

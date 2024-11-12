@@ -14,88 +14,93 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.CreateBorrowController">
-    <children>
-        <AnchorPane prefHeight="650.0" prefWidth="700.0">
-            <children>
-                <AnchorPane layoutX="10.0" layoutY="12.0" prefHeight="625.0" prefWidth="680.0" styleClass="background">
-                    <children>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="689.0" prefWidth="754.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.CreateBorrowController">
+   <children>
+      <StackPane layoutX="27.0" layoutY="19.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css">
+         <children>
+            <AnchorPane prefHeight="650.0" prefWidth="700.0">
+               <children>
+                  <AnchorPane layoutX="10.0" layoutY="12.0" prefHeight="625.0" prefWidth="680.0" styleClass="background">
+                     <children>
                         <Text layoutX="24.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New Borrow">
-                            <font>
-                                <Font name="System Bold" size="30.0" />
-                            </font>
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
                         </Text>
                         <GridPane layoutX="40.0" layoutY="98.0" prefHeight="430.0" prefWidth="362.0">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.79996337890626" minWidth="10.0" prefWidth="117.20003662109374" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.600048828125" minWidth="10.0" prefWidth="245.9999633789063" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints maxHeight="48.599996948242186" minHeight="2.1999992370605455" prefHeight="42.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="42.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="74.20000076293945" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="124.79999999999998" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="233.60001220703128" minHeight="8.000021362304707" prefHeight="20.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="45.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="20.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="292.3999847412109" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="270.59999694824216" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <Label text="Email :">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Borrow Date :" GridPane.rowIndex="8">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Due Date :" GridPane.rowIndex="10">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Book Title :" GridPane.rowIndex="6">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Book ISBN :" GridPane.rowIndex="4">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="emailErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="207.0" GridPane.columnIndex="1" />
-                                <DatePicker fx:id="dueDatePicker" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                                <Label fx:id="bookIsbnErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                <TextField fx:id="bookIsbnTextField" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                <Label text="Name :" GridPane.rowIndex="2">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="dueDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                        <TextField fx:id="nameTextField" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="bookTitleTextField" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <TextField fx:id="borrowDateTextField" editable="false" prefHeight="30.0" prefWidth="189.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                            </children>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.79996337890626" minWidth="10.0" prefWidth="117.20003662109374" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.600048828125" minWidth="10.0" prefWidth="245.9999633789063" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="48.599996948242186" minHeight="2.1999992370605455" prefHeight="42.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="74.20000076293945" minHeight="0.0" prefHeight="42.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="74.20000076293945" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="124.79999999999998" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="233.60001220703128" minHeight="8.000021362304707" prefHeight="20.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="45.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="265.7999786376953" minHeight="6.000015258789091" prefHeight="20.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="292.3999847412109" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="292.3999847412109" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="270.59999694824216" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Email :">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Borrow Date :" GridPane.rowIndex="8">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Due Date :" GridPane.rowIndex="10">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Book Title :" GridPane.rowIndex="6">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Book ISBN :" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="emailErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="207.0" GridPane.columnIndex="1" />
+                              <DatePicker fx:id="dueDatePicker" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                              <Label fx:id="bookIsbnErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="bookIsbnTextField" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label text="Name :" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dueDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                              <TextField fx:id="nameTextField" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="bookTitleTextField" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <TextField fx:id="borrowDateTextField" editable="false" prefHeight="30.0" prefWidth="189.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                           </children>
                         </GridPane>
-                        <ImageView fx:id="bookImageView" fitHeight="290.0" fitWidth="200.0" layoutX="451.0" layoutY="98.0" pickOnBounds="true">
-                            <image>
-                                <Image url="@../../images/book/harryPottersample.jpg" />
-                            </image>
+                        <ImageView fx:id="bookImageView" fitHeight="280.0" fitWidth="194.0" layoutX="451.0" layoutY="105.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@../../images/book/harryPottersample.jpg" />
+                           </image>
                         </ImageView>
                         <Button layoutX="385.0" layoutY="568.0" mnemonicParsing="false" onAction="#back" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Back" />
                         <Button fx:id="createButton" layoutX="213.0" layoutY="568.0" mnemonicParsing="false" onAction="#createBorrow" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Create" />
-                    </children>
-                </AnchorPane>
-            </children>
-        </AnchorPane>
-    </children>
-</StackPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

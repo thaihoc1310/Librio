@@ -9,7 +9,9 @@ and open the template in the editor.
 */
 
 .background-wrapper {
+    -fx-background-radius: 10px;
     -fx-background-color: #F1DEBC;
+     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 40, 0.3, 0, 0);
 }
 
 .background_pane{

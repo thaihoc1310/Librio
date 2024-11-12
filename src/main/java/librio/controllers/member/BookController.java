@@ -7,11 +7,14 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -61,6 +64,8 @@ public class BookController implements Initializable {
     private ImageView searchButton;
     @FXML
     private Circle moreIcon;
+    @FXML
+    private StackPane stackPaneRoot;
 
     private int offsetIndex = 0;
 
@@ -230,36 +235,32 @@ public class BookController implements Initializable {
         String path = booksDir + book.getImagePath();
         File file = new File(path);
         Image image = new Image(file.toURI().toString());
-        DesignUtil.cropToAspectRatio(image,bookCover,215,314);
+        DesignUtil.cropToAspectRatio(image, bookCover, 215, 314);
 
         bookCover.setPickOnBounds(true);
         bookCover.setPreserveRatio(true);
         bookPane.getChildren().add(bookCover);
 
-        // Tạo TextFlow chứa tiêu đề
+
         TextFlow bookInfo = new TextFlow();
         Label titleLabel = new Label(book.getTitle());
 
-        // Giới hạn Label chỉ hiển thị 2 dòng và thêm dấu "..." nếu quá dài
-        titleLabel.setWrapText(true);
-        titleLabel.setMaxWidth(215);  // Giới hạn chiều rộng tối đa cho tiêu đề
-        titleLabel.setStyle("-fx-font-weight: 200;");  // Giảm độ dày của chữ
-        titleLabel.setMaxHeight(48);  // Chiều cao tối đa cho 2 dòng
 
-        // Căn giữa TextFlow theo chiều ngang trong AnchorPane
+        titleLabel.setWrapText(true);
+        titleLabel.setMaxWidth(215);
+        titleLabel.setStyle("-fx-font-weight: 200;");
+        titleLabel.setMaxHeight(48);
         bookInfo.getChildren().addAll(titleLabel);
         bookInfo.setMaxWidth(Double.MAX_VALUE);
 
-        // Thêm TextFlow vào AnchorPane
         AnchorPane.setLeftAnchor(bookInfo, 29.0);
         AnchorPane.setRightAnchor(bookInfo, 29.0);
         AnchorPane.setTopAnchor(bookInfo, 320.0);
         bookPane.getChildren().add(bookInfo);
 
-        // Thêm HBox để hiển thị rating bằng ngôi sao
         HBox starBox = new HBox(5);
 
-        double rating = book.getAverageOfRating(); // Giả sử bạn có phương thức getRating() trả về số sao (từ 1 đến 5)
+        double rating = book.getAverageOfRating();
         for (int i = 1; i <= 5; i++) {
             ImageView star = new ImageView();
             if (i <= rating) {
@@ -301,27 +302,35 @@ public class BookController implements Initializable {
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
-    private void openBookDetailScene(Book book){
+    @FXML
+    private void openBookDetailScene(Book book) {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
-            Parent root = loader.load();
+            Parent rootContent = loader.load();
+            stackPaneRoot.setOpacity(0.3);
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
             BookDetailController bookDetailController = loader.getController();
             bookDetailController.setBook(book);
-            // Tạo stage mới cho scene
+            bookDetailController.setStackPaneRoot(stackPaneRoot);
             Stage stage = new Stage();
-            stage.setTitle("Librio");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(rootContent);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initOwner(searchTextField.getScene().getWindow());
+            stage.initOwner(currentStage);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void handleAvatarClick() {
@@ -349,17 +358,18 @@ public class BookController implements Initializable {
         Stage stage = new Stage();
         stage.setTitle("Librio");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-        Parent loginRoot  = loader.load();
+        Parent loginRoot = loader.load();
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
         currenStage.close();
     }
+
     @FXML
     private void openBorrowed() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
-            Parent manageUserRoot  = loader.load();
+            Parent manageUserRoot = loader.load();
             Stage currentStage = (Stage) avatarUser.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(manageUserRoot);
@@ -369,9 +379,8 @@ public class BookController implements Initializable {
     }
 
     @FXML
-    private void openEditProfileScene(){
+    private void openEditProfileScene() {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/EditProfile.fxml"));
             Parent root = loader.load();
 
