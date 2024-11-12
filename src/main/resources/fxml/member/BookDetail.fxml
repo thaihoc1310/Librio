@@ -18,9 +18,9 @@
          <children>
             <ScrollPane hbarPolicy="NEVER" layoutY="41.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-faint-focus-color: transparent;" stylesheets="@../../css/DesignUI.css">
                <content>
-                  <VBox prefHeight="471.0" prefWidth="1025.0" spacing="10.0">
+                  <VBox prefHeight="603.0" prefWidth="1026.0" spacing="10.0">
                      <children>
-                        <AnchorPane fx:id="bookDetailsPane" minHeight="550.0" prefHeight="1000.0" prefWidth="1026.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="whitePane" stylesheets="@../../css/DesignUI.css">
+                        <AnchorPane fx:id="bookDetailsPane" prefHeight="473.0" prefWidth="1026.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="whitePane" stylesheets="@../../css/DesignUI.css">
                            <children>
                               <AnchorPane layoutX="324.0" layoutY="62.0" prefHeight="255.0" prefWidth="635.0" styleClass="whitePane">
                                  <children>
@@ -81,7 +81,7 @@
                                  </image>
                               </ImageView>
                               <Button layoutX="57.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmation" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
-                              <AnchorPane layoutX="324.0" layoutY="341.0" prefHeight="181.0" prefWidth="635.0" styleClass="whitePane">
+                              <AnchorPane layoutX="324.0" layoutY="341.0" prefHeight="181.0" prefWidth="635.0" styleClass="whitePane" AnchorPane.bottomAnchor="27.799999999999983" AnchorPane.topAnchor="340.79999999999995">
                                  <children>
                                     <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="141.8619384765625">
                                        <font>
@@ -106,7 +106,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <VBox fx:id="feedbackContainer" prefWidth="920.0" spacing="10" styleClass="whitePane">
+                        <VBox fx:id="feedbackContainer" prefWidth="920.0" spacing="10" style="-fx-padding: 20;" styleClass="whitePane">
                            <children>
                               <Text layoutX="14.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Feedback" wrappingWidth="141.8619384765625">
                                  <font>

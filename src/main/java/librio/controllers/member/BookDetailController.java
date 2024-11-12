@@ -93,8 +93,6 @@ public class BookDetailController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         moreLessLabel.setText("more");
         moreLessLabel.setOnMouseClicked(event -> toggleDescription());
-        moreLessLabel.setText(" more");
-        moreLessLabel.setOnMouseClicked(event -> toggleDescription());
     }
 
     public void setBook(Book book) {
