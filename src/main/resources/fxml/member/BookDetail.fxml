@@ -18,20 +18,20 @@
          <children>
             <ScrollPane hbarPolicy="NEVER" layoutY="41.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-faint-focus-color: transparent;" stylesheets="@../../css/DesignUI.css">
                <content>
-                  <VBox prefHeight="603.0" prefWidth="1026.0" spacing="10.0">
+                  <VBox prefHeight="700.0" prefWidth="1007.0" spacing="10.0">
                      <children>
-                        <AnchorPane fx:id="bookDetailsPane" prefHeight="473.0" prefWidth="1026.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="whitePane" stylesheets="@../../css/DesignUI.css">
+                        <AnchorPane fx:id="bookDetailsPane" maxHeight="553.0" minHeight="553.0" prefHeight="553.0" prefWidth="1007.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="whitePane" stylesheets="@../../css/DesignUI.css">
                            <children>
                               <AnchorPane layoutX="324.0" layoutY="62.0" prefHeight="255.0" prefWidth="635.0" styleClass="whitePane">
                                  <children>
-                                    <Label fx:id="author" layoutX="36.0" prefHeight="40.0" prefWidth="235.0" text="Đinh Viết Huy">
+                                    <Label fx:id="author" layoutX="33.0" layoutY="36.0" prefHeight="40.0" prefWidth="235.0" text="Đinh Viết Huy">
                                        <font>
-                                          <Font name="System Bold Italic" size="18.0" />
+                                          <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Text fx:id="title" layoutX="33.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người bạn" wrappingWidth="548.9567260742188">
+                                    <Text fx:id="title" layoutX="20.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harry Potter và những người bạn" wrappingWidth="590.5567016601562">
                                        <font>
-                                          <Font name="System Bold" size="30.0" />
+                                          <Font name="System Bold" size="24.0" />
                                        </font>
                                     </Text>
                                     <VBox layoutX="33.0" layoutY="134.0" prefHeight="101.0" prefWidth="190.0" spacing="5.0">
@@ -81,7 +81,7 @@
                                  </image>
                               </ImageView>
                               <Button layoutX="57.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmation" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
-                              <AnchorPane layoutX="324.0" layoutY="341.0" prefHeight="181.0" prefWidth="635.0" styleClass="whitePane" AnchorPane.bottomAnchor="27.799999999999983" AnchorPane.topAnchor="340.79999999999995">
+                              <AnchorPane layoutX="324.0" layoutY="346.0" prefHeight="170.0" prefWidth="635.0" styleClass="whitePane" AnchorPane.bottomAnchor="37.0" AnchorPane.topAnchor="346.0">
                                  <children>
                                     <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="141.8619384765625">
                                        <font>
@@ -106,7 +106,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <VBox fx:id="feedbackContainer" prefWidth="920.0" spacing="10" style="-fx-padding: 20;" styleClass="whitePane">
+                        <VBox fx:id="feedbackContainer" prefHeight="125.0" prefWidth="1007.0" spacing="10" styleClass="whitePane">
                            <children>
                               <Text layoutX="14.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Feedback" wrappingWidth="141.8619384765625">
                                  <font>
