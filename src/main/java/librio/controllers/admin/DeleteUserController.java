@@ -1,5 +1,6 @@
 package librio.controllers.admin;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -18,6 +19,17 @@ public class DeleteUserController implements Initializable {
     @FXML
     private void deleteUser() {
         DatabaseUtil.deleteUser(user);
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        if (user.getAvatar() != null && !user.getAvatar().isEmpty() ) {
+            File oldFile = new File(avatarsDir + user.getAvatar());
+            if (oldFile.exists()) {
+                boolean deleted = oldFile.delete();
+                if (!deleted) {
+                    System.out.println("Không thể xóa tệp ảnh cũ: " + oldFile.getAbsolutePath());
+                }
+            }
+        }
         closeWindow();
     }
 

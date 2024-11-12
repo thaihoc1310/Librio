@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import librio.models.Book;
 import librio.util.DatabaseUtil;
 
+import java.io.File;
+
 
 public class DeleteBookController {
     @FXML
@@ -17,6 +19,17 @@ public class DeleteBookController {
     @FXML
     private void deleteUser() {
         DatabaseUtil.deleteBook(book);
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/book/";
+        if (book.getImagePath() != null && !book.getImagePath().isEmpty() && !book.getImagePath().equals("defaultBook.jpg")) {
+            File oldFile = new File(avatarsDir + book.getImagePath());
+            if (oldFile.exists()) {
+                boolean deleted = oldFile.delete();
+                if (!deleted) {
+                    System.out.println("Không thể xóa tệp ảnh cũ: " + oldFile.getAbsolutePath());
+                }
+            }
+        }
         closeWindow();
     }
 

@@ -61,7 +61,7 @@ public class AddBookApiController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
+        filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         executor = Executors.newFixedThreadPool(2);
         bookList.clear();
@@ -101,20 +101,7 @@ public class AddBookApiController implements Initializable {
             String apiKey = "AIzaSyBRX3PmHB6TlSwDsU5KmcbexZxISjyd9hI";
             String filter = filterBox.getValue();
             String encodeKeyword = java.net.URLEncoder.encode(searchKeyWord, StandardCharsets.UTF_8);
-            String apiUrl = "https://www.googleapis.com/books/v1/volumes?q=" + getFilter(filter) + encodeKeyword
-                    + "&startIndex=" + startIndex + "&maxResults=15&key=" + apiKey;
-
-            HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
-            connection.setRequestMethod("GET");
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder content = new StringBuilder();
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-
-            JSONObject responseJson = new JSONObject(content.toString());
+            JSONObject responseJson = getJsonObject(filter, encodeKeyword, apiKey);
             totalItems = responseJson.optInt("totalItems", 0);
 
             JSONArray items = responseJson.optJSONArray("items");
@@ -134,13 +121,45 @@ public class AddBookApiController implements Initializable {
                     Integer numberOfPages = volumeInfo.optInt("pageCount", 0);
                     if (isDigit(isbn.charAt(0))) isbn = "ISBN : " + isbn;
                     Book book = new Book(0, title, author, isbn, category, publisher, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
-                    fetchedBooks.add(book);
+                     fetchedBooks.add(book);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return fetchedBooks;
+    }
+
+    private JSONObject getJsonObject(String filter, String encodeKeyword, String apiKey) throws IOException {
+        String apiUrl = getApiUrl(filter, encodeKeyword, apiKey);
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
+        connection.setRequestMethod("GET");
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder content = new StringBuilder();
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+        }
+        in.close();
+
+        return new JSONObject(content.toString());
+    }
+
+    private String getApiUrl(String filter, String encodeKeyword, String apiKey) {
+        String apiUrl;
+        if (filter.equals("Language")) {
+            apiUrl = "https://www.googleapis.com/books/v1/volumes?q=\"\""
+                    + "&langRestrict=" + encodeKeyword
+                    + "&startIndex=" + startIndex
+                    + "&maxResults=15&key=" + apiKey;
+        } else {
+            apiUrl = "https://www.googleapis.com/books/v1/volumes?q="
+                    + getFilter(filter) + encodeKeyword
+                    + "&startIndex=" + startIndex
+                    + "&maxResults=15&key=" + apiKey;
+        }
+        return apiUrl;
     }
 
     @FXML
@@ -155,41 +174,33 @@ public class AddBookApiController implements Initializable {
         startIndex = 0;
         totalItems = 0;
         bookList.clear();
+        displayBooks(bookList);
         loadBooksAsync(keyword);
         bookListScrollPane.setVvalue(0);
     }
 
     private String getFilter(String filter) {
-        switch (filter) {
-            case "Title":
-                return "intitle:";
-            case "Author":
-                return "inauthor:";
-            case "Category":
-                return "subject:";
-            case "Language":
-                return "langRestrict:";
-            case "Publisher":
-                return "inpublisher:";
-            case "Year published":
-                return "publishedDate:";
-            case "ISBN":
-                return "isbn:";
-            default:
-                return "";
-        }
+        return switch (filter) {
+            case "Title" -> "intitle:";
+            case "Author" -> "inauthor:";
+            case "Category" -> "subject:";
+            case "Year published" -> "publishedDate:";
+            case "ISBN" -> "isbn:";
+            default -> "";
+        };
     }
 
 
     private void displayBooks(List<Book> booksToDisplay) {
         Platform.runLater(() -> {
             if (startIndex == 0) {
+                contentPane.setStyle("-fx-padding: 10 0 0 0;");
                 contentPane.getChildren().clear();
                 contentPane.setPrefWidth(bookListScrollPane.getPrefWidth());
             } else {
                 // Remove existing 'More' button if it exists
-                if (!contentPane.getChildren().isEmpty() && contentPane.getChildren().get(contentPane.getChildren().size() - 1) instanceof Button) {
-                    contentPane.getChildren().remove(contentPane.getChildren().size() - 1);
+                if (!contentPane.getChildren().isEmpty() && contentPane.getChildren().getLast() instanceof Button) {
+                    contentPane.getChildren().removeLast();
                 }
             }
 
