@@ -1,14 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="fxml.member.SearchPage"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
+   <children>
+      <ScrollPane fx:id="mainScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" styleClass="main-scroll" vbarPolicy="ALWAYS" />
+      <AnchorPane prefHeight="2027.0" prefWidth="1385.0" styleClass="white-pane">
+         <children>
+            <AnchorPane prefHeight="137.0" prefWidth="1397.0" style="-fx-background-color: #F1DEBC;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TextField fx:id="searchTextField" layoutX="437.0" layoutY="22.0" prefHeight="38.0" prefWidth="648.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextField>
+                  <ComboBox fx:id="filterBox" layoutX="317.0" layoutY="22.0" prefHeight="37.0" prefWidth="120.0" promptText="All" />
+                  <ImageView fx:id="searchButton" fitHeight="27.0" fitWidth="27.0" layoutX="1040.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="56.0" fitWidth="203.0" layoutX="35.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/MemberIcon/Librio.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="avatar" fitHeight="46.0" fitWidth="46.0" layoutX="1319.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar">
+                     <image>
+                        <Image url="@../../icons/MemberIcon/MaleUser.png" />
+                     </image>
+                  </ImageView>
+                  <HBox layoutX="70.0" layoutY="78.0" prefHeight="61.0" prefWidth="1257.0">
+                     <children>
+                        <Label prefHeight="61.0" prefWidth="61.0" text="Books">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <AnchorPane prefHeight="61.0" prefWidth="24.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="18.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="       Fiction" />
+                        <AnchorPane prefHeight="61.0" prefWidth="18.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="      Non-fiction" />
+                        <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="      Science" />
+                        <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="     Technology" />
+                        <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="      Education" />
+                        <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="      Health" />
+                        <AnchorPane prefHeight="61.0" prefWidth="20.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="     History" />
+                        <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="96.0" styleClass="label-button" text="      Music" />
+                        <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="      Computer" />
+                        <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                           <children>
+                              <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                           </children>
+                        </AnchorPane>
+                        <Label prefHeight="61.0" prefWidth="46.0" styleClass="label-button" text="   Art" />
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
