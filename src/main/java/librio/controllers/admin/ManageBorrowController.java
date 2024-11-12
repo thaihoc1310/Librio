@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -342,13 +343,14 @@ public class ManageBorrowController implements Initializable {
             Parent root = loader.load();
 
             Stage stage = new Stage();
-            stage.setTitle("Create New User");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(createBorrowButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+
             stage.showAndWait();
             loadBorrows(keyword,currentPage);
         } catch (IOException e) {

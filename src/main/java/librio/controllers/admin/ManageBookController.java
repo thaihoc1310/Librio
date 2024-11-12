@@ -11,11 +11,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -444,6 +447,7 @@ public class ManageBookController implements Initializable {
             clip.setArcWidth(20);
             clip.setArcHeight(20);
             root.setClip(clip);
+
             stage.setResizable(false);
             stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);
