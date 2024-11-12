@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -62,6 +63,8 @@ public class BookController implements Initializable {
     private ImageView searchButton;
     @FXML
     private Circle moreIcon;
+    @FXML
+    private StackPane stackPaneRoot;
 
     private int offsetIndex = 0;
 
@@ -312,22 +315,28 @@ public class BookController implements Initializable {
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
-    private void openBookDetailScene(Book book){
+    private void openBookDetailScene(Book book) {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
-            Parent root = loader.load();
+            Parent rootContent = loader.load();
+            stackPaneRoot.setOpacity(0.3);
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
             BookDetailController bookDetailController = loader.getController();
             bookDetailController.setBook(book);
-            // Tạo stage mới cho scene
+            bookDetailController.setStackPaneRoot(stackPaneRoot);
             Stage stage = new Stage();
-            stage.setTitle("Librio");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(rootContent);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initOwner(searchTextField.getScene().getWindow());
+            stage.initOwner(currentStage);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();

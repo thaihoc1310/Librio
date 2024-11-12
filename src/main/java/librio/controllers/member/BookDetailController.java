@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -74,6 +75,7 @@ public class BookDetailController implements Initializable {
     @FXML
     private Button borrowButton;
 
+    private StackPane stackPaneRoot;
     private boolean isExpanded = false;
     private String fullDescription;
     private static final int DESCRIPTION_LIMIT = 580;
@@ -99,6 +101,10 @@ public class BookDetailController implements Initializable {
         this.book = book;
         setBookDetails();
         loadFeedbacksFromDatabase();
+    }
+
+    public void setStackPaneRoot(StackPane stackPaneRoot) {
+        this.stackPaneRoot = stackPaneRoot;
     }
 
     public void setBookDetails() {
@@ -150,6 +156,7 @@ public class BookDetailController implements Initializable {
 
     @FXML
     private void cancelBookDetail() {
+        stackPaneRoot.setOpacity(1);
         closeStage();
     }
 
