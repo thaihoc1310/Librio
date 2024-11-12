@@ -13,10 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -78,7 +75,7 @@ public class BookDetailController implements Initializable {
     private StackPane stackPaneRoot;
     private boolean isExpanded = false;
     private String fullDescription;
-    private static final int DESCRIPTION_LIMIT = 580;
+    private static final int DESCRIPTION_LIMIT = 500;
 
     User loginUser = Session.getInstance().getLoggedInUser();
 
@@ -93,8 +90,7 @@ public class BookDetailController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         moreLessLabel.setText("more");
         moreLessLabel.setOnMouseClicked(event -> toggleDescription());
-        moreLessLabel.setText(" more");
-        moreLessLabel.setOnMouseClicked(event -> toggleDescription());
+
     }
 
     public void setBook(Book book) {
@@ -119,6 +115,8 @@ public class BookDetailController implements Initializable {
 
         fullDescription = book.getDescription();
         if (fullDescription.length() > DESCRIPTION_LIMIT) {
+            bookDetailsPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
+            bookDetailsPane.setMinHeight(Region.USE_COMPUTED_SIZE);
             descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
             moreLessLabel.setVisible(true);
         } else {
@@ -145,6 +143,7 @@ public class BookDetailController implements Initializable {
     @FXML
     private void toggleDescription() {
         if (isExpanded) {
+
             descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
             moreLessLabel.setText(" more");
         } else {
