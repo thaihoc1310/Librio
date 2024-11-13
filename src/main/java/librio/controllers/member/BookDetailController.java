@@ -7,13 +7,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -35,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,11 +70,43 @@ public class BookDetailController implements Initializable {
     private Label pageCount;
     @FXML
     private Button borrowButton;
+    @FXML
+    private AnchorPane borrowConfirmationPane;
+    @FXML
+    private Label authorNameLabel;
+
+    @FXML
+    private HBox averageRatingBox;
+
+    @FXML
+    private Label borrowDateLabel;
+
+    @FXML
+    private Button confirmButton;
+
+    @FXML
+    private Label languageLabel;
+
+    @FXML
+    private Label publisherLabel;
+
+    @FXML
+    private Label dueDateErrorLabel;
+
+    @FXML
+    private DatePicker dueDatePicker;
+
+    @FXML
+    private Label titleLabel;
+
+    @FXML
+    private ImageView bookImage;
 
     private StackPane stackPaneRoot;
     private boolean isExpanded = false;
     private String fullDescription;
     private static final int DESCRIPTION_LIMIT = 500;
+    private boolean isBorrowConfirmationPaneVisible = false;
 
     User loginUser = Session.getInstance().getLoggedInUser();
 
@@ -96,6 +127,7 @@ public class BookDetailController implements Initializable {
     public void setBook(Book book) {
         this.book = book;
         setBookDetails();
+        loadBookDetails();
         loadFeedbacksFromDatabase();
     }
 
@@ -131,13 +163,13 @@ public class BookDetailController implements Initializable {
         Image image;
 
 
-        if(file.exists()) {
+        if (file.exists()) {
             image = new Image(file.toURI().toString());
-        }else{
+        } else {
             image = new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm());
         }
 
-        DesignUtil.cropToAspectRatio(image, bookCoverImage,217,315);
+        DesignUtil.cropToAspectRatio(image, bookCoverImage, 217, 315);
     }
 
     @FXML
@@ -242,38 +274,12 @@ public class BookDetailController implements Initializable {
         }
     }
 
-    @FXML
-    private void openBorrowConfirmation() {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
-            Parent root  = loader.load();
-            BorrowConfirmationController borrowConfirmationController = loader.getController();
-            borrowConfirmationController.setBook(book);
-
-            Stage stage = new Stage();
-            stage.setTitle("Open Borrow Confirmation");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
-            Stage bookDetailStage = (Stage) bookDetailsPane.getScene().getWindow();
-            bookDetailStage.hide(); //Ẩn
-            stage.initOwner(bookDetailStage);
-            stage.initModality(Modality.WINDOW_MODAL);
-
-            stage.setOnHidden(event -> bookDetailStage.show());
-
-            stage.showAndWait();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
     private void closeStage() {
         Stage stage = (Stage) title.getScene().getWindow();
         stage.close();
     }
 
-    private int getTotalBorrows(){
+    private int getTotalBorrows() {
         int total = 0;
         String query = "select count(id) from borrows where book_isbn = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -283,10 +289,130 @@ public class BookDetailController implements Initializable {
             if (resultSet.next()) {
                 total = resultSet.getInt(1);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return total;
+    }
+
+    private void loadBookDetails() {
+        authorNameLabel.setText(book.getAuthor());
+        titleLabel.setText(book.getTitle());
+        publisherLabel.setText("Publisher:   " + book.getPublisher());
+        languageLabel.setText("Language:   " + book.getLanguage());
+        borrowDateLabel.setText("Borrow Date:    " + LocalDate.now().toString());
+
+        averageRatingBox.getChildren().clear();
+
+        double rating = book.getAverageOfRating();
+        int fullStars = (int) rating;
+        double decimalPart = rating - fullStars;
+
+        for (int i = 1; i <= 5; i++) {
+            StackPane starPane = new StackPane();
+
+            ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
+            fullStar.setFitHeight(15);
+            fullStar.setFitWidth(15);
+
+            ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
+            emptyStar.setFitHeight(15);
+            emptyStar.setFitWidth(15);
+
+            if (i <= fullStars) {
+                starPane.getChildren().add(fullStar);
+            } else if (i == fullStars + 1 && decimalPart > 0) {
+                starPane.getChildren().addAll(emptyStar, fullStar);
+                Rectangle clip = new Rectangle(15 * decimalPart, 15);
+                fullStar.setClip(clip);
+            } else {
+                starPane.getChildren().add(emptyStar);
+            }
+
+            averageRatingBox.getChildren().add(starPane);
+
+            String projectDir = System.getProperty("user.dir");
+            String booksDir = projectDir + "/src/main/resources/images/book/";
+            String path = booksDir + book.getImagePath();
+            File file = new File(path);
+            Image image;
+
+
+            if (file.exists()) {
+                image = new Image(file.toURI().toString());
+            } else {
+                image = new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm());
+            }
+
+            DesignUtil.cropToAspectRatio(image, bookImage, 137, 182);
+        }
+    }
+
+
+    @FXML
+    private void confirm() {
+        LocalDate dueDate = dueDatePicker.getValue();
+
+        boolean validation = false;
+
+        if (dueDate == null) {
+            dueDateErrorLabel.setText("Please choose your expected return date!");
+            validation = true;
+        } else if (dueDate.isBefore(dueDate)) {
+            dueDateErrorLabel.setText("Expected return date must be after today!");
+            validation = true;
+        } else if (ChronoUnit.DAYS.between(LocalDate.now(), dueDate) > 60) {
+            dueDateErrorLabel.setText("The borrowing period cannot exceed 60 days!");
+            validation = true;
+        } else if (dueDate.isBefore(LocalDate.now())) {
+            dueDateErrorLabel.setText("Expected return date must be after today!");
+            validation = true;
+        } else {
+            dueDateErrorLabel.setText("");
+        }
+
+        if (validation) {
+            return;
+        }
+
+        String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, Session.getInstance().getLoggedInUser().getId());
+            statement.setString(2, book.getIsbn());
+            statement.setString(3, LocalDate.now().toString());
+            statement.setString(4, dueDate.toString());
+            statement.setString(5, null);
+            statement.setString(6, "BORROWING");
+            statement.setString(7, String.valueOf(0));
+            statement.setString(8, LocalDateTime.now().toString());
+
+            int rowsInserted = statement.executeUpdate();
+            closeStage();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openBorrowConfirmationPane() {
+        if (isBorrowConfirmationPaneVisible == false) {
+            borrowConfirmationPane.toFront();
+            isBorrowConfirmationPaneVisible = true;
+            bookDetailsPane.setMouseTransparent(true);
+            confirmButton.setPrefSize(82.4, 40);
+            confirmButton.setTranslateY(0);
+            confirmButton.setTranslateX(0);
+        }
+    }
+
+    @FXML
+    private void closeBorrowConfirmationPane() {
+        if (isBorrowConfirmationPaneVisible == true) {
+            borrowConfirmationPane.toBack();
+            isBorrowConfirmationPaneVisible = false;
+            bookDetailsPane.setMouseTransparent(false);
+        }
     }
 }
 

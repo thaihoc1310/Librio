@@ -117,6 +117,7 @@
  -fx-font-size: 14;
  -fx-font-weight: 700;
  -fx-background-radius: 4px;
+    -fx-cursor: hand;
                 }
  .button-borrow2:hover {
   -fx-background-color:#943f20;

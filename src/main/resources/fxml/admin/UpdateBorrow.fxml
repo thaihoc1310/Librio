@@ -17,7 +17,7 @@
             <children>
                 <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="330.0" prefWidth="460.0" styleClass="background">
                     <children>
-                        <Text layoutX="24.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrow Details:">
+                        <Text layoutX="24.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Details:">
                             <font>
                                 <Font name="System Bold" size="30.0" />
                             </font>
@@ -75,7 +75,7 @@
                                   </font>
                               </Label>
                         <DatePicker fx:id="dueDatePicker" editable="false" prefHeight="26.0" prefWidth="196.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <DatePicker fx:id="borrowDatePicker" editable="false" prefHeight="26.0" prefWidth="196.0" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="borrowDatePicker" disable="true" editable="false" prefHeight="26.0" prefWidth="196.0" GridPane.columnIndex="1" />
                         <DatePicker fx:id="returnDatePicker" editable="false" prefHeight="26.0" prefWidth="196.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label fx:id="borrowDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="returnDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="5" />

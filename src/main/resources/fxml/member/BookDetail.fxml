@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
@@ -14,13 +17,83 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1082.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
    <children>
-      <AnchorPane layoutX="38.0" layoutY="38.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="1026.0" styleClass="whitePane2" stylesheets="@../../css/DesignUI.css">
+      <AnchorPane fx:id="borrowConfirmationPane" layoutX="250.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="612.0" styleClass="background_pane">
+         <children>
+            <ImageView fitHeight="26.0" fitWidth="28.0" layoutX="576.0" layoutY="9.0" onMouseClicked="#closeBorrowConfirmationPane" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@../../icons/MemberIcon/cancel.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="bookImage" fitHeight="196.0" fitWidth="144.0" layoutX="18.0" layoutY="60.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../css/background_tile_pane.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="139.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrow Confirmation">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Text>
+            <Button fx:id="confirmButton" defaultButton="true" layoutX="265.0" layoutY="361.0" onAction="#confirm" prefHeight="30.0" prefWidth="82.0" styleClass="btn-2" text="Confirm">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <DatePicker fx:id="dueDatePicker" layoutX="14.0" layoutY="303.0" prefHeight="26.0" prefWidth="152.0" />
+            <AnchorPane layoutX="204.0" layoutY="60.0" prefHeight="269.0" prefWidth="366.0" styleClass="background-wrapper">
+               <children>
+                  <Label fx:id="titleLabel" layoutX="14.0" layoutY="27.0" prefHeight="40.0" prefWidth="324.0" text="Title" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="23.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="authorNameLabel" layoutX="14.0" layoutY="1.0" text="Author Name">
+                     <font>
+                        <Font name="System Bold Italic" size="16.0" />
+                     </font>
+                  </Label>
+                  <VBox layoutX="14.0" layoutY="131.0" prefHeight="103.0" prefWidth="242.0">
+                     <children>
+                        <HBox fx:id="averageRatingBox" prefHeight="26.0" prefWidth="182.0" />
+                        <Label fx:id="publisherLabel" prefHeight="26.0" prefWidth="266.0" text="Publisher:        Sphere">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="languageLabel" prefHeight="26.0" prefWidth="266.0" text="Language:       English">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="borrowDateLabel" prefHeight="26.0" prefWidth="266.0" text="Borrow Date:    ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <Line endX="223.20001220703125" layoutX="108.0" layoutY="113.0" startX="-100.0" strokeWidth="0.2" />
+               </children>
+            </AnchorPane>
+            <Text layoutX="14.0" layoutY="290.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expected Return Date:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Label fx:id="dueDateErrorLabel" layoutX="15.0" layoutY="330.0" />
+         </children>
+         <stylesheets>
+            <URL value="@../../css/DesignUI.css" />
+            <URL value="@../../css/admin/CRUDUser.css" />
+         </stylesheets>
+      </AnchorPane>
+      <AnchorPane fx:id="bookDetailsPane" layoutX="38.0" layoutY="38.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="1026.0" styleClass="whitePane2" stylesheets="@../../css/DesignUI.css">
          <children>
             <ScrollPane hbarPolicy="NEVER" layoutY="41.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-faint-focus-color: transparent;" stylesheets="@../../css/DesignUI.css">
                <content>
                   <VBox prefHeight="700.0" prefWidth="1007.0" spacing="10.0">
                      <children>
-                        <AnchorPane fx:id="bookDetailsPane" maxHeight="553.0" minHeight="553.0" prefHeight="553.0" prefWidth="1007.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="whitePane" stylesheets="@../../css/DesignUI.css">
+                        <AnchorPane maxHeight="553.0" minHeight="553.0" prefHeight="553.0" prefWidth="1007.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="whitePane" stylesheets="@../../css/DesignUI.css">
                            <children>
                               <AnchorPane layoutX="324.0" layoutY="62.0" prefHeight="255.0" prefWidth="635.0" styleClass="whitePane">
                                  <children>
@@ -80,7 +153,7 @@
                                     <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
                                  </image>
                               </ImageView>
-                              <Button layoutX="57.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmation" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
+                              <Button layoutX="57.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmationPane" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
                               <AnchorPane layoutX="324.0" layoutY="346.0" prefHeight="170.0" prefWidth="635.0" styleClass="whitePane" AnchorPane.bottomAnchor="37.0" AnchorPane.topAnchor="346.0">
                                  <children>
                                     <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="141.8619384765625">
@@ -119,7 +192,7 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="972.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="972.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                <image>
                   <Image url="@../../icons/MemberIcon/cancel.png" />
                </image>
