@@ -116,41 +116,45 @@ public class UpdateUserController implements Initializable {
         boolean validation = false;
 
         if(name.isEmpty()){
-            nameErrorLabel.setText("Name cannot be empty");
+            nameErrorLabel.setText("Name cannot be empty!");
             validation = true;
         }
 
         if (email.isEmpty()) {
-            emailErrorLabel.setText("Email cannot be empty");
+            emailErrorLabel.setText("Email cannot be empty!");
             validation = true;
         } else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            emailErrorLabel.setText("Invalid email format");
+            emailErrorLabel.setText("Invalid email format!");
             validation = true;
         } else if (isEmailExists(email) && !email.equals(user.getEmail())) {
-            emailErrorLabel.setText("Email already exists");
+            emailErrorLabel.setText("Email already exists!");
             validation = true;
         }
 
         if (phoneNumber.isEmpty()) {
-            phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            phoneNumberErrorLabel.setText("Phone number cannot be empty!");
             validation = true;
         } else if (!phoneNumber.matches("\\d{10}")) {
-            phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+            phoneNumberErrorLabel.setText("Phone number must be 10 digits!");
             validation = true;
         }
 
         if(role == null){
-            roleErrorLabel.setText("Role must be selected");
+            roleErrorLabel.setText("Role must be selected!");
             validation = true;
         }
 
         if(gender == null){
-            genderErrorLabel.setText("Gender must be selected");
+            genderErrorLabel.setText("Gender must be selected!");
             validation = true;
         }
 
         if(birthOfDate == null){
-            birthOfDateErrorLabel.setText("Birth of Date must be selected");
+            birthOfDateErrorLabel.setText("Birth of Date must be selected!");
+            validation = true;
+        }else if(birthOfDate.isAfter(LocalDate.now())){
+            birthOfDateErrorLabel.setText("Birth of Date cannot be after now!");
+            validation = true;
         }
 
         if(validation) {
@@ -243,7 +247,7 @@ public class UpdateUserController implements Initializable {
         // Name validation
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                nameErrorLabel.setText("Name cannot be empty");
+                nameErrorLabel.setText("Name cannot be empty!");
             } else {
                 nameErrorLabel.setText("");
             }
@@ -252,9 +256,9 @@ public class UpdateUserController implements Initializable {
         // Email validation
         emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                emailErrorLabel.setText("Email cannot be empty");
+                emailErrorLabel.setText("Email cannot be empty!");
             } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-                emailErrorLabel.setText("Invalid email format");
+                emailErrorLabel.setText("Invalid email format!");
             } else {
                 emailErrorLabel.setText("");
             }
@@ -263,9 +267,9 @@ public class UpdateUserController implements Initializable {
         // Phone number validation
         phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
-                phoneNumberErrorLabel.setText("Phone number cannot be empty");
+                phoneNumberErrorLabel.setText("Phone number cannot be empty!");
             } else if (!newValue.matches("\\d{10}")) {
-                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+                phoneNumberErrorLabel.setText("Phone number must be 10 digits!");
             } else {
                 phoneNumberErrorLabel.setText("");
             }
@@ -274,7 +278,7 @@ public class UpdateUserController implements Initializable {
         // Role validation
         roleComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
-                roleErrorLabel.setText("Role must be selected");
+                roleErrorLabel.setText("Role must be selected!");
             } else {
                 roleErrorLabel.setText("");
             }
@@ -282,7 +286,7 @@ public class UpdateUserController implements Initializable {
 
         genderComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
-                genderErrorLabel.setText("Gender must be selected");
+                genderErrorLabel.setText("Gender must be selected!");
             } else {
                 genderErrorLabel.setText("");
             }
@@ -290,7 +294,7 @@ public class UpdateUserController implements Initializable {
 
         birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
-                birthOfDateErrorLabel.setText("Birth of Date must be selected");
+                birthOfDateErrorLabel.setText("Birth of Date must be selected!");
             } else {
                 birthOfDateErrorLabel.setText("");
             }

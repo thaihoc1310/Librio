@@ -226,7 +226,7 @@
                                         <Label fx:id="dateOfBirthErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="11" />
                                     </children>
                                 </GridPane>
-                                <ImageView fx:id="avatar" fitHeight="183.0" fitWidth="172.0" layoutX="828.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fx:id="avatar" fitHeight="180.0" fitWidth="180.0" layoutX="830.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../icons/AdminDashBoardIcon/Male%20User.png" />
                                     </image>
@@ -248,8 +248,8 @@
                                         <Image url="@../../icons/AdminDashBoardIcon/Settings.png" />
                                     </image>
                                 </ImageView>
-                                <Button layoutX="73.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-color: f1debc;" text="Personal Information" />
-                                <Button layoutX="247.0" layoutY="20.0" mnemonicParsing="false" onAction="#openChangePasswordScene" text="Change password" />
+                                <Button layoutX="67.0" layoutY="-1.0" mnemonicParsing="false" style="-fx-background-color: f1debc;" text="Personal Information" />
+                                <Button layoutX="252.0" layoutY="-1.0" mnemonicParsing="false" onAction="#openChangePasswordScene" text="Change password" />
                         <Label fx:id="notification" layoutX="322.0" layoutY="559.0" />
                             </children>
                         </AnchorPane>

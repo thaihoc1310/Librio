@@ -272,7 +272,6 @@ public class ManageBookController implements Initializable {
     @FXML
     private void openBookDetailScene(Book book) {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/BookDetail.fxml"));
             Parent root = loader.load();
             Stage currentStage = (Stage) bookTableView.getScene().getWindow();

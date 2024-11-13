@@ -27,12 +27,12 @@
                            </image>
                         </ImageView>
                         <TextField fx:id="genderTextField" editable="false" layoutX="110.0" layoutY="218.0" prefHeight="30.0" prefWidth="130.0" styleClass="text-field-custom" />
-                        <TextField fx:id="roleTextField" editable="false" layoutX="91.0" layoutY="270.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
+                        <TextField fx:id="roleTextField" editable="false" layoutX="91.0" layoutY="274.0" prefHeight="30.0" prefWidth="129.0" styleClass="text-field-custom" />
                         <Line endX="-100.0" endY="-29.00001335144043" layoutX="128.0" layoutY="43.0" startX="-100.0" stroke="#4c2113" />
                         <TextField fx:id="bodTextField" editable="false" layoutX="146.0" layoutY="246.0" prefHeight="34.0" prefWidth="120.0" styleClass="text-field-custom" />
                         <Label layoutX="48.0" layoutY="253.0" styleClass="label-13" text="Birth of date :" />
                         <Label layoutX="48.0" layoutY="225.0" styleClass="label-13" text="Gender :" />
-                        <Label layoutX="48.0" layoutY="276.0" styleClass="label-13" text="Role :" />
+                        <Label layoutX="48.0" layoutY="281.0" styleClass="label-13" text="Role :" />
                         <AnchorPane layoutX="269.0" layoutY="60.0" prefHeight="294.0" prefWidth="438.0" styleClass="background-wrapper2">
                            <children>
                               <VBox layoutX="105.0" layoutY="22.0" prefHeight="275.0" prefWidth="286.0" spacing="13.0">

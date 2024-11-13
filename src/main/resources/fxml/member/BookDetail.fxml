@@ -34,7 +34,7 @@
                   <Font name="System Bold" size="30.0" />
                </font>
             </Text>
-            <Button fx:id="confirmButton" defaultButton="true" layoutX="265.0" layoutY="361.0" onAction="#confirm" prefHeight="30.0" prefWidth="82.0" styleClass="btn-2" text="Confirm">
+            <Button fx:id="confirmButton" defaultButton="true" layoutX="265.0" layoutY="361.0" onAction="#confirmAction" prefHeight="30.0" prefWidth="82.0" styleClass="btn-2" text="Confirm">
                <font>
                   <Font size="15.0" />
                </font>
@@ -42,7 +42,7 @@
             <DatePicker fx:id="dueDatePicker" layoutX="14.0" layoutY="303.0" prefHeight="26.0" prefWidth="152.0" />
             <AnchorPane layoutX="204.0" layoutY="60.0" prefHeight="269.0" prefWidth="366.0" styleClass="background-wrapper">
                <children>
-                  <Label fx:id="titleLabel" layoutX="14.0" layoutY="27.0" prefHeight="40.0" prefWidth="324.0" text="Title" wrapText="true">
+                  <Label fx:id="titleLabel" layoutX="14.0" layoutY="27.0" prefHeight="40.0" prefWidth="324.0" text="Title">
                      <font>
                         <Font name="System Bold" size="23.0" />
                      </font>
@@ -93,7 +93,7 @@
                <content>
                   <VBox prefHeight="700.0" prefWidth="1007.0" spacing="10.0">
                      <children>
-                        <AnchorPane maxHeight="553.0" minHeight="553.0" prefHeight="553.0" prefWidth="1007.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="whitePane" stylesheets="@../../css/DesignUI.css">
+                        <AnchorPane fx:id="bookDetailsPane" maxHeight="553.0" minHeight="553.0" prefHeight="553.0" prefWidth="1007.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="whitePane" stylesheets="@../../css/DesignUI.css">
                            <children>
                               <AnchorPane layoutX="324.0" layoutY="62.0" prefHeight="255.0" prefWidth="635.0" styleClass="whitePane">
                                  <children>

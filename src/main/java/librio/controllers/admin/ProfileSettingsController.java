@@ -104,7 +104,7 @@ public class ProfileSettingsController implements Initializable {
         if (selectedFile != null) {
             avatarFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
             Image avatarImage = new Image(selectedFile.toURI().toString());
-            cropAndClipToCircle(avatarImage, avatar, 100);
+            cropAndClipToCircle(avatarImage, avatar, 90);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
     }
@@ -219,22 +219,22 @@ public class ProfileSettingsController implements Initializable {
         genderComboBox.setValue(loggedInUser.getGender());
         birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
 
-//        // Lấy đường dẫn ảnh từ project
-//        String projectDir = System.getProperty("user.dir");
-//        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-//        String path = avatarsDir + loggedInUser.getAvatar();
-//
-//        // Chuyển đổi đường dẫn thành URL
-//        File file = new File(path);
-//        if (file.exists()) {
-//            Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-//            cropAndClipToCircle(image, avatar, 100);
-//        } else {
-//            String defaultImage = avatarsDir + "Male User.png";
-//            File defaultImageFile = new File(defaultImage);
-//            Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-//            cropAndClipToCircle(image, avatar, 100);
-//        }
+        // Lấy đường dẫn ảnh từ project
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + loggedInUser.getAvatar();
+
+        // Chuyển đổi đường dẫn thành URL
+        File file = new File(path);
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+            cropAndClipToCircle(image, avatar, 90);
+        } else {
+            String defaultImage = avatarsDir + "Male User.png";
+            File defaultImageFile = new File(defaultImage);
+            Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
+            cropAndClipToCircle(image, avatar, 90);
+        }
 
         nameTextField.setText(loggedInUser.getName());
         emailTextField.setText(loggedInUser.getEmail());

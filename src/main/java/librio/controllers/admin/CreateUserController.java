@@ -87,51 +87,54 @@ public class CreateUserController implements Initializable {
         boolean validation = false;
 
         if(name.isEmpty()){
-            nameErrorLabel.setText("Name cannot be empty");
+            nameErrorLabel.setText("Name cannot be empty!");
             validation = true;
         }
 
         if(password.isEmpty()){
-            passwordErrorLabel.setText("Password cannot be empty");
+            passwordErrorLabel.setText("Password cannot be empty!");
+            validation = true;
+        }else if (password.length() < 6){
+            passwordErrorLabel.setText("Password must be at least 6 characters!");
             validation = true;
         }
 
         if (email.isEmpty()) {
-            emailErrorLabel.setText("Email cannot be empty");
+            emailErrorLabel.setText("Email cannot be empty!");
             validation = true;
         } else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            emailErrorLabel.setText("Invalid email format");
+            emailErrorLabel.setText("Invalid email format!");
             validation = true;
         } else if (isEmailExists(email)) {
-            emailErrorLabel.setText("Email already exists");
+            emailErrorLabel.setText("Email already exists!");
             validation = true;
         }
 
         if (confirmPassword.isEmpty() || !confirmPassword.equals(password)) {
-            confirmPasswordErrorLabel.setText("Passwords do not match");
+            confirmPasswordErrorLabel.setText("Passwords do not match!");
             validation = true;
         }
 
         if (phoneNumber.isEmpty()) {
-            phoneNumberErrorLabel.setText("Phone number cannot be empty");
+            phoneNumberErrorLabel.setText("Phone number cannot be empty!");
             validation = true;
         } else if (!phoneNumber.matches("\\d{10}")) {
-            phoneNumberErrorLabel.setText("Phone number must be 10 digits");
+            phoneNumberErrorLabel.setText("Phone number must be 10 digits!");
             validation = true;
         }
 
         if(role == null){
-            roleErrorLabel.setText("Role must be selected");
+            roleErrorLabel.setText("Role must be selected!");
             validation = true;
         }
 
         if(gender == null){
-            genderErrorLabel.setText("Gender must be selected");
+            genderErrorLabel.setText("Gender must be selected!");
             validation = true;
         }
 
         if(birthOfDate == null){
-            birthOfDateErrorLabel.setText("Birth of Date must be selected");
+            birthOfDateErrorLabel.setText("Birth of Date must be selected!");
         }
 
         if(validation) {

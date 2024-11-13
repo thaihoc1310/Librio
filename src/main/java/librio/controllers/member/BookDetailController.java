@@ -102,6 +102,7 @@ public class BookDetailController implements Initializable {
     @FXML
     private ImageView bookImage;
 
+    private StackPane stackPaneRoot;
     private boolean isExpanded = false;
     private String fullDescription;
     private static final int DESCRIPTION_LIMIT = 500;
@@ -130,7 +131,9 @@ public class BookDetailController implements Initializable {
         loadFeedbacksFromDatabase();
     }
 
-
+    public void setStackPaneRoot(StackPane stackPaneRoot) {
+        this.stackPaneRoot = stackPaneRoot;
+    }
 
     public void setBookDetails() {
         title.setText(book.getTitle());
@@ -169,7 +172,6 @@ public class BookDetailController implements Initializable {
         DesignUtil.cropToAspectRatio(image, bookCoverImage, 217, 315);
     }
 
-    @FXML
     private void toggleDescription() {
         if (isExpanded) {
 
@@ -346,7 +348,7 @@ public class BookDetailController implements Initializable {
 
 
     @FXML
-    private void confirm() {
+    private void confirmAction() {
         LocalDate dueDate = dueDatePicker.getValue();
 
         boolean validation = false;
@@ -411,4 +413,3 @@ public class BookDetailController implements Initializable {
         }
     }
 }
-
