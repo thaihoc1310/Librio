@@ -102,7 +102,6 @@ public class BookDetailController implements Initializable {
     @FXML
     private ImageView bookImage;
 
-    private StackPane stackPaneRoot;
     private boolean isExpanded = false;
     private String fullDescription;
     private static final int DESCRIPTION_LIMIT = 500;
@@ -131,9 +130,7 @@ public class BookDetailController implements Initializable {
         loadFeedbacksFromDatabase();
     }
 
-    public void setStackPaneRoot(StackPane stackPaneRoot) {
-        this.stackPaneRoot = stackPaneRoot;
-    }
+
 
     public void setBookDetails() {
         title.setText(book.getTitle());
@@ -187,7 +184,6 @@ public class BookDetailController implements Initializable {
 
     @FXML
     private void cancelBookDetail() {
-        stackPaneRoot.setOpacity(1);
         closeStage();
     }
 

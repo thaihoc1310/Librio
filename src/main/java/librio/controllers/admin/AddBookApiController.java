@@ -8,10 +8,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -333,18 +335,24 @@ public class AddBookApiController implements Initializable {
             Parent root = loader.load();
 
             Stage addBookStage = (Stage) searchButton.getScene().getWindow();
-
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            addBookStage.getScene().getRoot().setEffect(colorAdjust);
             CreateBookController createBookController = loader.getController();
             createBookController.setBook(book);
 
             Stage createBookStage = new Stage();
-            createBookStage.setTitle("Create New Book");
-            createBookStage.setScene(new Scene(root));
+            createBookStage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            createBookStage.setScene(scene);
             createBookStage.setResizable(false);
             createBookStage.initOwner(addBookStage);
-            createBookStage.initStyle(StageStyle.UNDECORATED);
             createBookStage.initModality(Modality.APPLICATION_MODAL);
-
+            createBookStage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                addBookStage.getScene().getRoot().setEffect(null);
+            });
             createBookStage.showAndWait();
 
         } catch (IOException e) {
