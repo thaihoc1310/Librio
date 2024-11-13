@@ -1,178 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.BookDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="734.0" prefWidth="1144.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.BookDetailController">
    <children>
-      <AnchorPane prefHeight="650.0" prefWidth="700.0">
+      <AnchorPane layoutX="47.0" layoutY="42.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1026.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css">
          <children>
-            <AnchorPane layoutX="10.0" layoutY="12.0" prefHeight="625.0" prefWidth="680.0" styleClass="background">
-               <children>
-                  <Text layoutX="24.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Book Details:">
-                     <font>
-                        <Font name="System Bold" size="30.0" />
-                     </font>
-                  </Text>
-                  <GridPane layoutX="44.0" layoutY="58.0" prefHeight="326.0" prefWidth="368.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.20001220703125" minWidth="10.0" prefWidth="118.4" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="259.9999877929688" minWidth="10.0" prefWidth="211.20000000000002" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="49.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-faint-focus-color: transparent;" stylesheets="@../../css/DesignUI.css">
+               <content>
+                  <AnchorPane fx:id="bookDetailsPane" maxHeight="554.0" minHeight="553.0" prefHeight="554.0" prefWidth="1026.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="background-wrapper2">
                      <children>
-                        <Label fx:id="bookTitleLabel" text="Harry Potter and the Socerer Stone" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="authorLabel" text="J.K. Rowling" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="categoryLabel" text="Fantasy" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="publisherLabel" text="Nhi đồng" GridPane.columnIndex="1" GridPane.rowIndex="7">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="yearPublishedLabel" text="2003" GridPane.columnIndex="1" GridPane.rowIndex="8">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="languageLabel" text="English" GridPane.columnIndex="1" GridPane.rowIndex="9">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="numberOfPagesLabel" text="20" GridPane.columnIndex="1" GridPane.rowIndex="10">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="bookIdLabel" text="1" GridPane.columnIndex="1">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="isbnLabel" text="06598874566" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="quantityOfCopyLabel" text="25" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="ID :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Book Title :" GridPane.rowIndex="1">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Author :" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="ISBN :" GridPane.rowIndex="3">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Category :" GridPane.rowIndex="4">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Quantity of copy :" GridPane.rowIndex="5">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Publisher :" GridPane.rowIndex="7">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Year published :" GridPane.rowIndex="8">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Language :" GridPane.rowIndex="9">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Number of pages :" GridPane.rowIndex="10">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Average of rating :" GridPane.rowIndex="6">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="averageOfRatingLabel" text="3.5" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
+                        <AnchorPane layoutX="324.0" layoutY="62.0" prefHeight="255.0" prefWidth="635.0" styleClass="background-wrapper2">
+                           <children>
+                              <Label fx:id="authorLabel" layoutX="33.0" layoutY="36.0" prefHeight="40.0" prefWidth="235.0" text="Đinh Viết Huy">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Line endX="459.800048828125" endY="-1.52587890625E-5" layoutX="133.0" layoutY="102.0" startX="-114.800048828125" startY="-1.52587890625E-5" strokeWidth="0.25" />
+                              <Label layoutX="33.0" layoutY="68.0" text="ISBN :">
+                                 <font>
+                                    <Font name="System Italic" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="isbnLabel" layoutX="68.0" layoutY="68.0" text="06598874566" />
+                              <GridPane layoutX="39.0" layoutY="110.0" prefHeight="135.0" prefWidth="285.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="123.1999755859375" minWidth="10.0" prefWidth="123.1999755859375" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="80.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="ID :">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="bookIdLabel" text="1" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Category :" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="categoryLabel" text="Fantasy" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Quantity of copy :" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Average of rating :" GridPane.rowIndex="3">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="averageOfRatingLabel" text="3.5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="quantityOfCopyLabel" text="25" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </GridPane>
+                              <GridPane layoutX="347.0" layoutY="110.0" prefHeight="135.0" prefWidth="254.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="140.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.199951171875" minWidth="10.0" prefWidth="60.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Publisher :">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="publisherLabel" text="Nhi đồng" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Year published :" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="yearPublishedLabel" text="2003" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Language :" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="languageLabel" text="English" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Number of pages :" GridPane.rowIndex="3">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="numberOfPagesLabel" text="20" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </GridPane>
+                              <Label fx:id="bookTitleLabel" layoutX="27.0" layoutY="14.0" prefHeight="29.0" prefWidth="542.0" text="Harray potter và những người bạn" wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <ImageView fx:id="bookImageView" fitHeight="315.0" fitWidth="217.0" layoutX="58.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar-view">
+                           <image>
+                              <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
+                           </image>
+                        </ImageView>
+                        <AnchorPane layoutX="324.0" layoutY="346.0" prefHeight="170.0" prefWidth="635.0" styleClass="background-wrapper2" AnchorPane.bottomAnchor="37.0" AnchorPane.topAnchor="346.0">
+                           <children>
+                              <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="141.8619384765625">
+                                 <font>
+                                    <Font size="23.0" />
+                                 </font>
+                              </Text>
+                              <TextFlow fx:id="descriptionFlow" layoutX="14.0" layoutY="52.0" prefHeight="19.0" prefWidth="567.0" textAlignment="JUSTIFY">
+                                 <children>
+                                    <Text fx:id="descriptionText" textAlignment="JUSTIFY">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </TextFlow>
+                           </children>
+                        </AnchorPane>
                      </children>
-                  </GridPane>
-                  <Text layoutX="24.0" layoutY="424.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Text>
-                  <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="24.0" layoutY="438.0" prefHeight="128.0" prefWidth="604.0" text="&quot;Harry Potter and the Socerer Stone&quot; is the perfect introduction to the Harry Potter Colouring Book series! This special Celebratory Edition features a selection of artwork from the Harry Potter Colouring Book, Harry Potter Magical Creatures Colouring Book, and Harry Potter Magical Places &amp; Characters Colouring Book, along with several exclusive never-before-seen images. For best results, we recommend the use of colouring pencils to colour and create your stunning pictures!" textAlignment="JUSTIFY" wrapText="true">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <ImageView fx:id="bookImageView" fitHeight="290.0" fitWidth="200.0" layoutX="428.0" layoutY="67.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../../images/book/harryPottersample.jpg" />
-                     </image>
-                  </ImageView>
-                  <Button fx:id="backButton" layoutX="542.0" layoutY="577.0" mnemonicParsing="false" onAction="#back" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Back" />
-               </children>
-            </AnchorPane>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <ImageView fitHeight="40.0" fitWidth="42.0" layoutX="972.0" layoutY="5.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../icons/MemberIcon/cancel.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="451.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Book Details" wrappingWidth="135.33441162109375">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
    </children>
-</StackPane>
+</AnchorPane>

@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -63,8 +64,7 @@ public class BookController implements Initializable {
     private ImageView searchButton;
     @FXML
     private Circle moreIcon;
-    @FXML
-    private StackPane stackPaneRoot;
+
 
     private int offsetIndex = 0;
 
@@ -319,11 +319,13 @@ public class BookController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
             Parent rootContent = loader.load();
-            stackPaneRoot.setOpacity(0.3);
             Stage currentStage = (Stage) searchTextField.getScene().getWindow();
             BookDetailController bookDetailController = loader.getController();
             bookDetailController.setBook(book);
-            bookDetailController.setStackPaneRoot(stackPaneRoot);
+
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
             stage.initStyle(StageStyle.TRANSPARENT);
             Scene scene = new Scene(rootContent);
@@ -337,6 +339,11 @@ public class BookController implements Initializable {
             });
 
             stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
+
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();

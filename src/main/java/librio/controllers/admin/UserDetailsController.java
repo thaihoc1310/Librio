@@ -70,12 +70,12 @@ public class UserDetailsController implements Initializable {
             File file = new File(path);
             if (file.exists()) {
                 Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-                cropAndClipToCircle(image, avatarImageView, 70);
+                cropAndClipToCircle(image, avatarImageView, 55);
             } else {
                 String defaultImage = avatarsDir + "Male User.png";
                 File defaultImageFile = new File(defaultImage);
                 Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-                cropAndClipToCircle(image, avatarImageView, 70);
+                cropAndClipToCircle(image, avatarImageView, 55);
             }
         }
     }

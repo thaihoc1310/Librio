@@ -6,21 +6,24 @@ package librio.controllers.admin;
  * and open the template in the editor.
  */
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import librio.models.Book;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import librio.models.Book;
 
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
@@ -53,10 +56,11 @@ public class BookDetailController implements Initializable {
     @FXML
     private Label numberOfPagesLabel;
     @FXML
-    private Label descriptionLabel;
+    private Text descriptionText;
     @FXML
     private ImageView bookImageView;
-
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     private Button backButton;
 
@@ -79,7 +83,7 @@ public class BookDetailController implements Initializable {
             yearPublishedLabel.setText(book.getYearPublished());
             languageLabel.setText(book.getLanguage());
             numberOfPagesLabel.setText(book.getNumberOfPages());
-            descriptionLabel.setText(book.getDescription());
+            descriptionText.setText(book.getDescription());
 
             if (book.getImagePath() != null && !book.getImagePath().isEmpty()) {
                 String projectDir = System.getProperty("user.dir");
@@ -109,12 +113,25 @@ public class BookDetailController implements Initializable {
 
     private void closeWindow() {
         // Đóng cửa sổ hiện tại
-        Stage stage = (Stage) backButton.getScene().getWindow();
+        Stage stage = (Stage) isbnLabel.getScene().getWindow();
         stage.close();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        backButton.setCursor(Cursor.HAND);
+        scrollPane.setOnScroll(event -> {
+            Node thumb = scrollPane.lookup(".thumb");
+
+            if (thumb != null) {
+
+                thumb.getStyleClass().add("scrolling");
+
+                new Timeline(new KeyFrame(Duration.millis(2000), e -> {
+                    thumb.getStyleClass().remove("scrolling");
+                })).play();
+            }
+        });
+
     }
+
 }

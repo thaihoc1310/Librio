@@ -27,9 +27,9 @@
                             <children>
                                 <VBox layoutY="65.0" prefHeight="181.0" prefWidth="174.0" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                                     <children>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openAdDashboardScene" prefHeight="38.0" prefWidth="222.0" text="Dashboard" VBox.vgrow="ALWAYS">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openAdDashboardScene" prefHeight="45.0" prefWidth="222.0" text="Dashboard" VBox.vgrow="ALWAYS">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" />
+                                                <Insets />
                                             </VBox.margin>
                                             <graphic>
                                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -42,9 +42,9 @@
                                                 <Insets left="30.0" />
                                             </padding>
                                         </Button>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openManageUserScene" prefHeight="40.0" prefWidth="222.0" text="Users" VBox.vgrow="ALWAYS">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openManageUserScene" prefHeight="45.0" prefWidth="222.0" text="Users" VBox.vgrow="ALWAYS">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" />
+                                                <Insets />
                                             </VBox.margin>
                                             <graphic>
                                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -57,9 +57,9 @@
                                                 <Insets left="30.0" />
                                             </padding>
                                         </Button>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="222.0" style="-fx-background-color: f1debc;" text="Books">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="222.0" style="-fx-background-color: f1debc;" text="Books">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" />
+                                                <Insets />
                                             </VBox.margin>
                                             <graphic>
                                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -72,7 +72,7 @@
                                                 <Insets left="30.0" />
                                             </padding>
                                         </Button>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openManageBorrowScene" prefHeight="40.0" prefWidth="222.0" text="Borrows">
+                                        <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" mnemonicParsing="false" onAction="#openManageBorrowScene" prefHeight="45.0" prefWidth="222.0" text="Borrows">
                                             <graphic>
                                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
@@ -83,12 +83,12 @@
                                             <VBox.margin>
                                                 <Insets />
                                             </VBox.margin>
-                                            <padding>
-                                                <Insets left="30.0" />
-                                            </padding></Button>
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding></Button>
                                     </children>
                                 </VBox>
-                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="31.0" layoutY="405.0" mnemonicParsing="false" onAction="#openLogOutScene" prefHeight="38.0" prefWidth="220.0" text="Log out" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutX="31.0" layoutY="405.0" mnemonicParsing="false" onAction="#openLogOutScene" prefHeight="45.0" prefWidth="220.0" text="Log out" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                     <graphic>
                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -99,7 +99,7 @@
                                     <padding>
                                         <Insets left="30.0" />
                                     </padding></Button>
-                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="302.0" mnemonicParsing="false" onAction="#openProfileSettingsScene" prefHeight="43.0" prefWidth="220.0" text="Profile Settings" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                <Button alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="302.0" mnemonicParsing="false" onAction="#openProfileSettingsScene" prefHeight="45.0" prefWidth="220.0" text="Profile Settings" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                     <graphic>
                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
