@@ -7,11 +7,14 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -61,6 +64,7 @@ public class BookController implements Initializable {
     private ImageView searchButton;
     @FXML
     private Circle moreIcon;
+
 
     private int offsetIndex = 0;
 
@@ -236,39 +240,49 @@ public class BookController implements Initializable {
         bookCover.setPreserveRatio(true);
         bookPane.getChildren().add(bookCover);
 
-        // Tạo TextFlow chứa tiêu đề
         TextFlow bookInfo = new TextFlow();
         Label titleLabel = new Label(book.getTitle());
 
-        // Giới hạn Label chỉ hiển thị 2 dòng và thêm dấu "..." nếu quá dài
         titleLabel.setWrapText(true);
-        titleLabel.setMaxWidth(215);  // Giới hạn chiều rộng tối đa cho tiêu đề
-        titleLabel.setStyle("-fx-font-weight: 200;");  // Giảm độ dày của chữ
-        titleLabel.setMaxHeight(48);  // Chiều cao tối đa cho 2 dòng
+        titleLabel.setMaxWidth(215);
+        titleLabel.setStyle("-fx-font-weight: 200;");
+        titleLabel.setMaxHeight(48);
 
-        // Căn giữa TextFlow theo chiều ngang trong AnchorPane
         bookInfo.getChildren().addAll(titleLabel);
         bookInfo.setMaxWidth(Double.MAX_VALUE);
 
-        // Thêm TextFlow vào AnchorPane
         AnchorPane.setLeftAnchor(bookInfo, 29.0);
         AnchorPane.setRightAnchor(bookInfo, 29.0);
         AnchorPane.setTopAnchor(bookInfo, 320.0);
         bookPane.getChildren().add(bookInfo);
 
-        // Thêm HBox để hiển thị rating bằng ngôi sao
+
         HBox starBox = new HBox(5);
 
-        double rating = book.getAverageOfRating(); // Giả sử bạn có phương thức getRating() trả về số sao (từ 1 đến 5)
+        double rating = book.getAverageOfRating();
+        int fullStars = (int) rating;
+        double decimalPart = rating - fullStars;
         for (int i = 1; i <= 5; i++) {
-            ImageView star = new ImageView();
-            if (i <= rating) {
-                star.setImage(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm())); // Hình ảnh ngôi sao đầy
-            }
+            StackPane starPane = new StackPane();
 
-            star.setFitHeight(15);
-            star.setFitWidth(15);
-            starBox.getChildren().add(star);
+            ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
+            fullStar.setFitHeight(15);
+            fullStar.setFitWidth(15);
+
+            ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
+            emptyStar.setFitHeight(15);
+            emptyStar.setFitWidth(15);
+
+            if (i <= fullStars) {
+                starPane.getChildren().add(fullStar);
+            } else if (i == fullStars + 1 && decimalPart > 0) {
+                starPane.getChildren().addAll(emptyStar, fullStar);
+                Rectangle clip = new Rectangle(15 * decimalPart, 15); // Cắt theo phần thập phân
+                fullStar.setClip(clip);
+            } else {
+                starPane.getChildren().add(emptyStar);
+            }
+            starBox.getChildren().add(starPane);
         }
 
         AnchorPane.setTopAnchor(starBox, 370.0);
@@ -301,22 +315,35 @@ public class BookController implements Initializable {
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
-    private void openBookDetailScene(Book book){
+    private void openBookDetailScene(Book book) {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
-            Parent root = loader.load();
+            Parent rootContent = loader.load();
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
             BookDetailController bookDetailController = loader.getController();
             bookDetailController.setBook(book);
-            // Tạo stage mới cho scene
+
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Librio");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(rootContent);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initOwner(searchTextField.getScene().getWindow());
+            stage.initOwner(currentStage);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
+
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();

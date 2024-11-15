@@ -3,13 +3,18 @@ package librio.util;
 import librio.database.DatabaseConnection;
 import librio.models.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 
 public class DatabaseUtil {
+
+    private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     public static boolean isEmailExists(String email) {
         boolean exists = false;
         String query = "SELECT COUNT(*) FROM users WHERE email = ?";
@@ -446,4 +451,59 @@ public class DatabaseUtil {
         }
         return false;
     }
+
+    public static void startAutoUpdate() {
+        updateBookStatus();
+        scheduler.scheduleAtFixedRate(DatabaseUtil::updateBookStatus, 1, 1, TimeUnit.MINUTES);
+    }
+
+
+    public static void stopAutoUpdate() {
+        scheduler.shutdown();
+    }
+
+    public static void updateBookStatus() {
+        try {
+            String query = "SELECT id, due_date, return_date FROM borrows WHERE status = 'BORROWING'";
+            try (Connection connection = DatabaseConnection.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    int borrowId = resultSet.getInt("id");
+                    LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
+                    Date returnDateSql = resultSet.getDate("return_date");
+                    LocalDate returnDate = (returnDateSql != null) ? ((java.sql.Date) returnDateSql).toLocalDate() : null;
+                    String status = "BORROWING";
+
+                    long overDueDays = 0;
+
+                    if (returnDate == null && LocalDate.now().isAfter(dueDate)) {
+                        status = "OVERDUE";
+                        overDueDays = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
+                    } else if (returnDate != null) {
+                        status = returnDate.isAfter(dueDate) ? "RETURNED_LATED" : "RETURNED";
+                        if(status.equals("RETURNED_LATED")) {
+                            overDueDays = ChronoUnit.DAYS.between(dueDate, returnDate);
+                        }
+                    }
+
+                    double fine = (overDueDays * 5000 < 100000) ? overDueDays * 5000 : 100000;
+
+                    String updateQuery = "UPDATE borrows SET status = ?, fine = ? WHERE id = ?";
+                    PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+                    updateStatement.setString(1, status);
+                    updateStatement.setDouble(2, fine);
+                    updateStatement.setInt(3, borrowId);
+                    updateStatement.executeUpdate();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

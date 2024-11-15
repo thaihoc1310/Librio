@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
    <children>
       <ScrollPane fx:id="mainScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" styleClass="main-scroll" vbarPolicy="ALWAYS">
          <content>
@@ -32,7 +32,7 @@
                               <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="56.0" fitWidth="203.0" layoutX="35.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="71.0" fitWidth="173.0" layoutX="70.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../icons/MemberIcon/Librio.png" />
                            </image>

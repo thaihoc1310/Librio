@@ -11,11 +11,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -272,15 +274,22 @@ public class ManageBorrowController implements Initializable {
             Parent root  = loader.load();
             BorrowDetailController borrowDetailController = loader.getController();
             borrowDetailController.setBorrow(borrow);
-
+            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Open Borrow Delete Scene");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(borrowTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadBorrows(keyword,currentPage);
         }catch(IOException e){
@@ -295,15 +304,22 @@ public class ManageBorrowController implements Initializable {
             Parent root  = loader.load();
             DeleteBorrowController deleteBorrowController = loader.getController();
             deleteBorrowController.setBorrow(borrow);
-
+            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Open Borrow Detail");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(borrowTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadBorrows(keyword,currentPage);
         }catch(IOException e){
@@ -320,7 +336,7 @@ public class ManageBorrowController implements Initializable {
             updateBorrowController.setBorrow(borrow);
 
             Stage stage = new Stage();
-            stage.setTitle("Update Borrow");
+
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.initStyle(StageStyle.UNDECORATED);
@@ -337,18 +353,25 @@ public class ManageBorrowController implements Initializable {
     @FXML
     private void openCreateBorrowScene() {
         try {
-            // Tải FXML của scene mới
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateBorrow.fxml"));
             Parent root = loader.load();
-
+            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Create New User");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(createBorrowButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadBorrows(keyword,currentPage);
         } catch (IOException e) {

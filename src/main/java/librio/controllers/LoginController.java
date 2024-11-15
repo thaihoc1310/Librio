@@ -211,7 +211,7 @@ public class LoginController {
     private void handleLogin() throws IOException {
         String email = usernameField.getText();
         String password = passwordField.getText();
-        User loginUser = authenticate(email, password);
+        User loginUser = authenticate(email.trim(), password);
         if (loginUser != null) {
             Session session = Session.getInstance();
             session.setLoggedInUser(loginUser);
@@ -238,6 +238,10 @@ public class LoginController {
             validation = true;
         }
 
+        if(validation){
+            return;
+        }
+
         if(email.trim().isEmpty()){
             emailErrorLabel.setText("Email cannot be empty!");
             validation = true;
@@ -249,12 +253,20 @@ public class LoginController {
             validation = true;
         }
 
+        if(validation){
+            return;
+        }
+
         if (phoneNumber.trim().isEmpty()) {
             phoneNumberErrorLabel.setText("Phone number cannot be empty!");
             validation = true;
         } else if (!phoneNumber.trim().matches("\\d{10}")) {
             phoneNumberErrorLabel.setText("Phone number must be 10 digits!");
             validation = true;
+        }
+
+        if(validation){
+            return;
         }
 
         if(gender == null || birthDate == null){
@@ -264,9 +276,20 @@ public class LoginController {
             genderAndbirthDateErrorLabel.setText("Birth date must be before now!");
         }
 
+        if(validation){
+            return;
+        }
+
         if(signUpPassword.isEmpty()){
             passwordErrorLabel.setText("Password cannot be empty!");
             validation = true;
+        }else if(signUpPassword.length() < 6){
+            passwordErrorLabel.setText("Password must be at least 6 characters!");
+            validation = true;
+        }
+
+        if(validation){
+            return;
         }
 
         if(signUpConfirmPassword.isEmpty()){

@@ -11,11 +11,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -238,23 +242,27 @@ public class ManageBookController implements Initializable {
     @FXML
     private void openAddBookScene() {
         try {
-            // Tải FXML của scene thêm sách mới
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateBook.fxml"));
             Parent root = loader.load();
-
-            // Tạo stage mới cho scene
+            Stage currentStage = (Stage) bookTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Add New Book");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(addBookButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
 
-            // Sau khi đóng cửa sổ thêm sách, tải lại danh sách sách từ database
             loadBooks(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
@@ -264,24 +272,26 @@ public class ManageBookController implements Initializable {
     @FXML
     private void openBookDetailScene(Book book) {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/BookDetail.fxml"));
             Parent root = loader.load();
-
-            // Lấy controller của BookForMemberDetailController và truyền dữ liệu
+            Stage currentStage = (Stage) bookTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             BookDetailController bookDetailController = loader.getController();
             bookDetailController.setBook(book);
-
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
-            stage.setTitle("Book Detail");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(bookTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadBooks(keyword,currentPage);
         } catch (IOException e) {
@@ -292,24 +302,28 @@ public class ManageBookController implements Initializable {
     @FXML
     private void openUpdateBookScene(Book book) {
         try {
-            // Tải FXML của scene mới
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UpdateBook.fxml"));
             Parent root = loader.load();
-
-            // Lấy controller của BookDetailController và truyền dữ liệu
+            Stage currentStage = (Stage) bookTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             UpdateBookController updateBookController = loader.getController();
             updateBookController.setBook(book);
 
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
-            stage.setTitle("Update Book");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(bookTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
 
             loadBooks(keyword,currentPage);
@@ -324,21 +338,24 @@ public class ManageBookController implements Initializable {
             // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/DeleteBook.fxml"));
             Parent root = loader.load();
-
-            // Tạo controller và truyền ManageUserController và User vào
+            Stage currentStage = (Stage) bookTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             DeleteBookController deleteBookController = loader.getController();
             deleteBookController.setBook(book);
-
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
-            stage.setTitle("Delete Book");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(bookTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
-            stage.showAndWait();
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });   stage.showAndWait();
             loadBooks(keyword,currentPage);
         } catch (IOException e) {
             e.printStackTrace();
@@ -348,19 +365,24 @@ public class ManageBookController implements Initializable {
     @FXML
     private void openAddBookApiScene() {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AddBookApi.fxml"));
             Parent root = loader.load();
-
-            // Tạo stage mới cho scene
+            Stage currentStage = (Stage) bookTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Librio");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(bookTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadBooks(keyword,currentPage);
         } catch (IOException e) {
@@ -444,6 +466,7 @@ public class ManageBookController implements Initializable {
             clip.setArcWidth(20);
             clip.setArcHeight(20);
             root.setClip(clip);
+
             stage.setResizable(false);
             stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);

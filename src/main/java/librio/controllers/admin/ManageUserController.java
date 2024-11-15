@@ -11,11 +11,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -228,18 +230,25 @@ public class ManageUserController implements Initializable {
     @FXML
     private void openCreateUserScene() {
         try {
-            // Tải FXML của scene mới
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateUser.fxml"));
             Parent root = loader.load();
-
+            Stage currentStage = (Stage) userTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Create New User");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(createUserButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadUsers(keyword, currentPage);
         } catch (IOException e) {
@@ -253,19 +262,25 @@ public class ManageUserController implements Initializable {
             // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UpdateUser.fxml"));
             Parent root = loader.load();
-
-            // Tạo controller và truyền ManageUserController và User vào
+            Stage currentStage = (Stage) userTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             UpdateUserController updateUserController = loader.getController();
             updateUserController.setUser(user);
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
-            stage.setTitle("Update User");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(userTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadUsers(keyword, currentPage);
         } catch (IOException e) {
@@ -276,23 +291,26 @@ public class ManageUserController implements Initializable {
     @FXML
     private void openUserDetailScene(User user) {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UserDetails.fxml"));
             Parent root = loader.load();
-
-            // Tạo controller và truyền ManageUserController và User vào
             UserDetailsController userDetailsController = loader.getController();
             userDetailsController.setUser(user);
-
-            // Tạo stage mới cho scene
+            Stage currentStage = (Stage) userTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("User detail");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(userTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadUsers(keyword, currentPage);
         } catch (IOException e) {
@@ -306,20 +324,26 @@ public class ManageUserController implements Initializable {
             // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/DeleteUser.fxml"));
             Parent root = loader.load();
+            Stage currentStage = (Stage) userTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
 
-            // Tạo controller và truyền ManageUserController và User vào
             DeleteUserController deleteUserController = loader.getController();
             deleteUserController.setUser(user);
 
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
-            stage.setTitle("Delete User");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(userTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
             loadUsers(keyword, currentPage);
         } catch (IOException e) {

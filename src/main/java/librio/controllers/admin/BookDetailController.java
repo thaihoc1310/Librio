@@ -6,21 +6,26 @@ package librio.controllers.admin;
  * and open the template in the editor.
  */
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import librio.models.Book;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import librio.models.Book;
 
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
@@ -53,12 +58,21 @@ public class BookDetailController implements Initializable {
     @FXML
     private Label numberOfPagesLabel;
     @FXML
-    private Label descriptionLabel;
+    private Text descriptionText;
     @FXML
     private ImageView bookImageView;
-
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     private Button backButton;
+    @FXML
+    private Text moreLessLabel;
+    @FXML
+    private AnchorPane bookDetailsPane;
+
+    private boolean isExpanded = false;
+    private String fullDescription;
+    private static final int DESCRIPTION_LIMIT = 500;
 
 
     public void setBook(Book book) {
@@ -68,18 +82,28 @@ public class BookDetailController implements Initializable {
 
     private void populateFields() {
         if (book != null) {
-            bookIdLabel.setText(String.valueOf(book.getId()));
             bookTitleLabel.setText(book.getTitle());
             authorLabel.setText(book.getAuthor());
             isbnLabel.setText(book.getIsbn());
-            categoryLabel.setText(book.getCategory());
-            quantityOfCopyLabel.setText(String.valueOf(book.getQuantityCopy()));
-            averageOfRatingLabel.setText(String.valueOf(book.getAverageOfRating()));
-            publisherLabel.setText(book.getPublisher());
-            yearPublishedLabel.setText(book.getYearPublished());
-            languageLabel.setText(book.getLanguage());
-            numberOfPagesLabel.setText(book.getNumberOfPages());
-            descriptionLabel.setText(book.getDescription());
+
+            bookIdLabel.setText("ID :   " + String.valueOf(book.getId()));
+            categoryLabel.setText("Category :   " + book.getCategory());
+            quantityOfCopyLabel.setText("Quantity of copy :   " + String.valueOf(book.getQuantityCopy()));
+            averageOfRatingLabel.setText(String.valueOf("Average of rating :   " + book.getAverageOfRating()));
+            publisherLabel.setText("Publisher :   " + book.getPublisher());
+            yearPublishedLabel.setText("Year published :   " + book.getYearPublished());
+            languageLabel.setText("Language :   " + book.getLanguage());
+            numberOfPagesLabel.setText("Number of pages :   " + book.getNumberOfPages());
+            fullDescription = book.getDescription();
+            if (fullDescription.length() > DESCRIPTION_LIMIT) {
+                bookDetailsPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
+                bookDetailsPane.setMinHeight(Region.USE_COMPUTED_SIZE);
+                descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
+                moreLessLabel.setVisible(true);
+            } else {
+                descriptionText.setText(fullDescription);
+                moreLessLabel.setVisible(false);
+            }
 
             if (book.getImagePath() != null && !book.getImagePath().isEmpty()) {
                 String projectDir = System.getProperty("user.dir");
@@ -100,6 +124,17 @@ public class BookDetailController implements Initializable {
         }
     }
 
+    private void toggleDescription() {
+        if (isExpanded) {
+
+            descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
+            moreLessLabel.setText(" more");
+        } else {
+            descriptionText.setText(fullDescription);
+            moreLessLabel.setText(" less");
+        }
+        isExpanded = !isExpanded;
+    }
 
     @FXML
     private void back() {
@@ -109,12 +144,29 @@ public class BookDetailController implements Initializable {
 
     private void closeWindow() {
         // Đóng cửa sổ hiện tại
-        Stage stage = (Stage) backButton.getScene().getWindow();
+        Stage stage = (Stage) isbnLabel.getScene().getWindow();
         stage.close();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        backButton.setCursor(Cursor.HAND);
+
+        moreLessLabel.setText("more");
+        moreLessLabel.setOnMouseClicked(event -> toggleDescription());
+
+        scrollPane.setOnScroll(event -> {
+            Node thumb = scrollPane.lookup(".thumb");
+
+            if (thumb != null) {
+
+                thumb.getStyleClass().add("scrolling");
+
+                new Timeline(new KeyFrame(Duration.millis(2000), e -> {
+                    thumb.getStyleClass().remove("scrolling");
+                })).play();
+            }
+        });
+
     }
+
 }

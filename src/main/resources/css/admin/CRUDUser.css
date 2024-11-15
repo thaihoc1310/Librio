@@ -4,7 +4,14 @@
 }
 
 .background-wrapper {
-    -fx-background-color: #F1DEBC;
+    -fx-background-radius: 10px;
+    -fx-background-color: #f8edd9;
+     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 40, 0.3, 0, 0);
+}
+.background-wrapper2 {
+    -fx-background-radius: 10px;
+    -fx-background-color: #f8edd9;
+     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 0);
 }
 
 .background_pane{
@@ -23,7 +30,7 @@
 }
 .btn-2:hover{
     -fx-background-color: #4c2113;
-    -fx-cursor: hand; /* Đảm bảo con trỏ vẫn là hình bàn tay khi hover */
+    -fx-cursor: hand;
 }
 .btn-3{
     -fx-background-color: #f8edd9 ;
@@ -34,14 +41,14 @@
 }
 .btn-3:hover{
     -fx-background-color: #F1DEBC;
-    -fx-cursor: hand; /* Đảm bảo con trỏ vẫn là hình bàn tay khi hover */
+    -fx-cursor: hand;
 }
 
 
 .text-field-custom {
-    -fx-control-inner-background: #f8edd9; /* Màu nền của TextArea */
-    -fx-background-color: transparent;    /* Loại bỏ viền bên ngoài nếu có */
-    -fx-border-color: transparent;   /* Loại bỏ viền khi có focus */
+    -fx-control-inner-background: #f8edd9;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
     -fx-font-size: 15px;
     -fx-text-fill: #000000;
 }
@@ -50,16 +57,43 @@
 .label-13 {
     -fx-font-size: 15px;
     -fx-fill: #4C2113;
+    -fx-font-weight : bold
 }
 
 .title-text {
-    -fx-text-fill: #DCB485;  /* Đổi màu chữ cho Label */
+    -fx-text-fill: #4c2113;
     -fx-font-size: 30px;
-    -fx-font-weight: semi-bold;   /* Tăng độ dày của chữ */
+    -fx-font-weight: semi-bold;
 }
 
 .progress-indicator {
     -fx-stroke: #F1DEBC;
     -fx-accent: #F1DEBC;
 }
+.scroll-pane .scroll-bar:vertical {
+    -fx-pref-width: 12px;
+}
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #f8edd9;
+    -fx-background-radius: 5;
+}
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: #f8edd9;
+}
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+    -fx-background-color: #f8edd9;
+    -fx-max-width: 0;
+    -fx-max-height: 0;
+}
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #dcb485;
+}
+.scroll-pane .scroll-bar:vertical .thumb.scrolling {
+    -fx-background-color: #dcb485;
+}
+
 

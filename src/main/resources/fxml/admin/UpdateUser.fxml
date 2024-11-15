@@ -13,124 +13,110 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.RadialGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UpdateUserController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="857.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.UpdateUserController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="696.0" styleClass="background-wrapper">
+      <StackPane layoutX="78.0" layoutY="42.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css">
          <children>
-            <AnchorPane layoutX="12.0" layoutY="14.0" prefHeight="480.0" prefWidth="675.0" styleClass="background">
+            <AnchorPane prefHeight="200.0" prefWidth="696.0" styleClass="background-wrapper">
                <children>
-                  <VBox alignment="TOP_RIGHT" layoutX="13.0" layoutY="91.0" prefHeight="207.0" prefWidth="130.0" spacing="25.0">
+                  <AnchorPane layoutX="12.0" layoutY="14.0" prefHeight="480.0" prefWidth="675.0" styleClass="background">
                      <children>
-                        <Label alignment="CENTER_RIGHT" text="Name :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label alignment="CENTER_RIGHT" text="Email :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label alignment="CENTER_RIGHT" text="Phone Number :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label alignment="CENTER_RIGHT" text="Birth of Date:">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                        <Label alignment="CENTER_RIGHT">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
+                        <VBox alignment="TOP_RIGHT" layoutX="13.0" layoutY="80.0" prefHeight="207.0" prefWidth="130.0" spacing="25.0">
+                           <children>
+                              <Label alignment="CENTER_RIGHT" text="Name :">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" text="Email :">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" text="Phone Number :">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" text="Birth of Date:">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address :">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Text>
+                              <Label alignment="CENTER_RIGHT">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                        <VBox layoutX="166.0" layoutY="80.0" prefHeight="314.0" prefWidth="183.0" spacing="2.0">
+                           <children>
+                              <TextField fx:id="nameTextField" />
+                              <Label fx:id="nameErrorLabel" textFill="#ff0f0f" />
+                              <TextField fx:id="emailTextField" promptText="xyz@gmail.com" />
+                              <Label fx:id="emailErrorLabel" textFill="#ff0f0f" />
+                              <TextField fx:id="phoneNumberTextField" />
+                              <Label fx:id="phoneNumberErrorLabel" textFill="#ff0f0f" />
+                              <DatePicker fx:id="birthOfDatePicker" editable="false" prefHeight="25.0" prefWidth="189.0" />
+                              <Label fx:id="birthOfDateErrorLabel" prefHeight="17.0" prefWidth="188.0" textFill="#ff0f0f" />
+                              <TextArea fx:id="addressTextArea" prefHeight="93.0" prefWidth="183.0" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <Line endX="-100.00000762939453" endY="-18.200000762939453" fill="#4b2013" layoutX="110.0" layoutY="20.0" startX="-100.00000762939453" startY="13.800003051757812" stroke="#4b2013" />
+                        <Button layoutX="508.0" layoutY="167.0" mnemonicParsing="false" onAction="#addAvatar" text="Change avatar" />
+                        <ImageView fx:id="avatarImageView" fitHeight="110.0" fitWidth="110.0" layoutX="499.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/user/UserDetailImage.png" />
+                           </image>
+                        </ImageView>
+                        <Button fx:id="updateUserButton" layoutX="207.0" layoutY="423.0" mnemonicParsing="false" onAction="#updateUser" prefHeight="31.0" prefWidth="93.0" styleClass="btn-2" text="Update" />
+                        <Button fx:id="cancelButton" layoutX="379.0" layoutY="423.0" mnemonicParsing="false" onAction="#cancelUpdateUser" prefHeight="31.0" prefWidth="93.0" styleClass="btn-2" text="Cancel" />
+                        <Label layoutX="14.0" layoutY="-5.0" prefHeight="46.0" prefWidth="175.0" styleClass="title-text" text="Update User" />
+                        <VBox alignment="TOP_RIGHT" layoutX="371.0" layoutY="268.0" prefHeight="113.0" prefWidth="100.0" spacing="25.0">
+                           <children>
+                              <Label alignment="CENTER_RIGHT" text="Gender:">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Role :">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="499.0" layoutY="268.0" prefHeight="113.0" prefWidth="154.0" spacing="2.0">
+                           <children>
+                              <ComboBox fx:id="genderComboBox" prefHeight="26.0" prefWidth="137.0" />
+                              <Label fx:id="genderErrorLabel" prefHeight="17.0" prefWidth="159.0" textFill="#ff0f0f" />
+                              <ComboBox fx:id="roleComboBox" prefHeight="25.0" prefWidth="137.0" />
+                              <Label fx:id="roleErrorLabel" prefHeight="17.0" prefWidth="203.0" textFill="#ff0f0f" />
+                           </children>
+                        </VBox>
                      </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </VBox>
-                  <VBox layoutX="166.0" layoutY="91.0" prefHeight="314.0" prefWidth="183.0" spacing="2.0">
-                     <children>
-                        <TextField fx:id="nameTextField" />
-                        <Label fx:id="nameErrorLabel" textFill="#ff0f0f" />
-                        <TextField fx:id="emailTextField" promptText="xyz@gmail.com" />
-                        <Label fx:id="emailErrorLabel" textFill="#ff0f0f" />
-                        <TextField fx:id="phoneNumberTextField" />
-                        <Label fx:id="phoneNumberErrorLabel" textFill="#ff0f0f" />
-                        <DatePicker fx:id="birthOfDatePicker" editable="false" prefHeight="25.0" prefWidth="189.0" />
-                        <Label fx:id="birthOfDateErrorLabel" prefHeight="17.0" prefWidth="188.0" textFill="#ff0f0f" />
-                        <TextArea fx:id="addressTextArea" prefHeight="93.0" prefWidth="183.0" wrapText="true" />
-                     </children>
-                  </VBox>
-                  <Line endX="-100.00000762939453" endY="-18.200000762939453" layoutX="114.0" layoutY="37.0" startX="-100.00000762939453" startY="13.800003051757812" stroke="#dcb485">
-                     <stroke>
-                        <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-                           <stops>
-                              <Stop>
-                                 <color>
-                                    <Color />
-                                 </color>
-                              </Stop>
-                              <Stop offset="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </Stop>
-                           </stops>
-                        </RadialGradient>
-                     </stroke></Line>
-                  <Button layoutX="508.0" layoutY="192.0" mnemonicParsing="false" onAction="#addAvatar" text="Change avatar" />
-                  <ImageView fx:id="avatarImageView" fitHeight="150.0" fitWidth="150.0" layoutX="479.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/user/UserDetailImage.png" />
-                     </image>
-                  </ImageView>
-                  <Button fx:id="updateUserButton" layoutX="207.0" layoutY="423.0" mnemonicParsing="false" onAction="#updateUser" prefHeight="31.0" prefWidth="83.0" styleClass="btn-2" text="Update" />
-                  <Button fx:id="cancelButton" layoutX="379.0" layoutY="423.0" mnemonicParsing="false" onAction="#cancelUpdateUser" prefHeight="31.0" prefWidth="83.0" styleClass="btn-2" text="Cancel" />
-                  <Label layoutX="19.0" layoutY="12.0" prefHeight="46.0" prefWidth="175.0" styleClass="title-text" text="Update User" />
-                  <VBox alignment="TOP_RIGHT" layoutX="371.0" layoutY="268.0" prefHeight="113.0" prefWidth="100.0" spacing="25.0">
-                     <children>
-                        <Label alignment="CENTER_RIGHT" text="Gender:">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Role :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <VBox layoutX="499.0" layoutY="268.0" prefHeight="113.0" prefWidth="154.0" spacing="2.0">
-                     <children>
-                        <ComboBox fx:id="genderComboBox" prefHeight="26.0" prefWidth="137.0" />
-                        <Label fx:id="genderErrorLabel" prefHeight="17.0" prefWidth="159.0" textFill="#ff0f0f" />
-                        <ComboBox fx:id="roleComboBox" prefHeight="25.0" prefWidth="137.0" />
-                        <Label fx:id="roleErrorLabel" prefHeight="17.0" prefWidth="203.0" textFill="#ff0f0f" />
-                     </children>
-                  </VBox>
+                  </AnchorPane>
                </children>
+               <stylesheets>
+                  <URL value="@../../css/admin/CRUDUser.css" />
+                  <URL value="@../../css/admin/CRUDUser.css" />
+               </stylesheets>
             </AnchorPane>
          </children>
-         <stylesheets>
-            <URL value="@../../css/admin/CRUDUser.css" />
-            <URL value="@../../css/admin/CRUDUser.css" />
-         </stylesheets>
-      </AnchorPane>
+      </StackPane>
    </children>
-</StackPane>
+</AnchorPane>
