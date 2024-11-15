@@ -223,3 +223,8 @@
     -fx-cursor: hand;
     -fx-font-size: 14px;
 }
+
+.progress-indicator {
+    -fx-stroke: #F1DEBC;
+    -fx-accent: #F1DEBC;
+}

@@ -1,10 +1,13 @@
 package librio.controllers.member;
 
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.Initializable;
 
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,17 +21,16 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
-
-import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class SearchPageController implements Initializable {
     @FXML
@@ -44,7 +46,7 @@ public class SearchPageController implements Initializable {
     private FlowPane flowPane;
 
     @FXML
-    private ComboBox<?> limitBox;
+    private ComboBox<String> limitBox;
 
     @FXML
     private ScrollPane mainScroll;
@@ -62,18 +64,50 @@ public class SearchPageController implements Initializable {
     private TextField searchTextField;
 
     @FXML
-    private ComboBox<?> sortBox;
+    private ComboBox<String> sortBox;
+
+    @FXML
+    private ProgressIndicator loadingIndicator;
 
 
     private List<Book> bookList = new ArrayList<>();
-    private String keyword = "";
+    private String keyword;
+    private ExecutorService executor;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadingIndicator.setVisible(false);
+        executor = Executors.newFixedThreadPool(2);
         setupAnimatedPane(ratePane, 255);
         setupAnimatedPane(categoryPane, 454);
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
-        loadBooksFromDatabase();
+        pagination.setPageFactory(this::createPage);
+    }
+
+    private void loadBooksAsync(int pageIndex) {
+        Platform.runLater(() -> loadingIndicator.setVisible(true));
+        Task<List<Book>> loadTask = new Task<>() {
+            @Override
+            protected List<Book> call() throws Exception {
+                return loadBooksFromDatabase(pageIndex);
+            }
+
+            @Override
+            protected void succeeded() {
+                List<Book> fetchedBooks = getValue();
+                if (fetchedBooks != null) {
+                    displayBooks(fetchedBooks);
+                }
+                Platform.runLater(() -> loadingIndicator.setVisible(false));
+            }
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> loadingIndicator.setVisible(false));
+                getException().printStackTrace();
+            }
+        };
+
+        executor.submit(loadTask);
     }
 
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
@@ -97,24 +131,25 @@ public class SearchPageController implements Initializable {
         });
     }
 
-    private void loadBooksFromDatabase() {
-        bookList.clear();
+    private List<Book> loadBooksFromDatabase(int pageIndex) {
+        List<Book> fetchedBooks = new ArrayList<>();
+        int offsetIndex = pageIndex * 20;
         try (Connection connection = DatabaseConnection.getConnection()) {
             String selectedFilter = filterBox.getValue();
             String query;
             PreparedStatement preparedStatement;
 
             if (keyword == null || keyword.isEmpty()) {
-                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books LIMIT ? OFFSET 0";
+                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books LIMIT ? OFFSET ?";
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setInt(1, 20);
-//                preparedStatement.setInt(2, offsetIndex);
+                preparedStatement.setInt(2, offsetIndex);
             } else {
-                query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? LIMIT ? OFFSET 20";
+                query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? LIMIT ? OFFSET ?";
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setString(1, "%" + keyword + "%");
                 preparedStatement.setInt(2, 20);
-//                preparedStatement.setInt(3, offsetIndex);
+                preparedStatement.setInt(3, offsetIndex);
             }
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -140,16 +175,19 @@ public class SearchPageController implements Initializable {
 
                 Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
 
-                bookList.add(book);
+                fetchedBooks.add(book);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        displayBooks();
+        return fetchedBooks;
     }
 
+    private Node createPage(int pageIndex) {
+        loadBooksAsync(pageIndex);
+        return new BorderPane();
+    }
 
     private String getFilter(String filter) {
         return switch (filter) {
@@ -167,10 +205,12 @@ public class SearchPageController implements Initializable {
     private void handleSearch() {
         bookList.clear();
         keyword = searchTextField.getText().trim();
-        loadBooksFromDatabase();
+        loadBooksAsync(0);
+        pagination.setCurrentPageIndex(0);
     }
 
-    private void displayBooks() {
+    private void displayBooks(List<Book> bookList) {
+        flowPane.getChildren().clear();
         for (Book book : bookList) {
             AnchorPane bookPane = new AnchorPane();
             bookPane.setPrefSize(183, 325);
@@ -237,39 +277,59 @@ public class SearchPageController implements Initializable {
             });
 
             bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
-
-            HBox starBox = new HBox(5);
-            double rating = book.getAverageOfRating();
-            int fullStars = (int) rating;
-            double decimalPart = rating - fullStars;
-
-            for (int i = 1; i <= 5; i++) {
-                StackPane starPane = new StackPane();
-
-                ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
-                fullStar.setFitHeight(15);
-                fullStar.setFitWidth(15);
-
-                ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
-                emptyStar.setFitHeight(15);
-                emptyStar.setFitWidth(15);
-
-                if (i <= fullStars) {
-                    starPane.getChildren().add(fullStar);
-                } else if (i == fullStars + 1 && decimalPart > 0) {
-                    starPane.getChildren().addAll(emptyStar, fullStar);
-                    Rectangle clip = new Rectangle(15 * decimalPart, 15);
-                    fullStar.setClip(clip);
-                } else {
-                    starPane.getChildren().add(emptyStar);
-                }
-                starBox.getChildren().add(starPane);
-            }
-
-            starBox.setLayoutX(42);
-            starBox.setLayoutY(80);
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
-            infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
+            infoPane.getChildren().addAll(titleLabel, authorLabel);
+            Task<HBox> ratingTask = new Task<>() {
+                @Override
+                protected HBox call() {
+                    HBox starBox = new HBox(5);
+                    double rating = book.getAverageOfRating();
+                    int fullStars = (int) rating;
+                    double decimalPart = rating - fullStars;
+
+                    for (int i = 1; i <= 5; i++) {
+                        StackPane starPane = new StackPane();
+
+                        ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
+                        fullStar.setFitHeight(15);
+                        fullStar.setFitWidth(15);
+
+                        ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
+                        emptyStar.setFitHeight(15);
+                        emptyStar.setFitWidth(15);
+
+                        if (i <= fullStars) {
+                            starPane.getChildren().add(fullStar);
+                        } else if (i == fullStars + 1 && decimalPart > 0) {
+                            starPane.getChildren().addAll(emptyStar, fullStar);
+                            Rectangle clip = new Rectangle(15 * decimalPart, 15);
+                            fullStar.setClip(clip);
+                        } else {
+                            starPane.getChildren().add(emptyStar);
+                        }
+                        starBox.getChildren().add(starPane);
+                    }
+
+                    return starBox;
+                }
+
+                @Override
+                protected void succeeded() {
+                        HBox starBox = getValue();
+                        Platform.runLater(() -> {
+                        starBox.setLayoutX(42);
+                        starBox.setLayoutY(80);
+                        infoPane.getChildren().add(starBox);
+                    });
+                }
+
+                @Override
+                protected void failed() {
+                    Platform.runLater(() -> {
+                    });
+                }
+            };
+            executor.execute(ratingTask);
             bookPane.getChildren().addAll(bookImagePane,infoPane);
             flowPane.getChildren().add(bookPane);
             flowPane.setHgap(40);
