@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="797.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.AddBookApiController">
    <children>
       <StackPane layoutX="49.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css">
@@ -36,7 +35,7 @@
                               <Image url="@../../icons/MemberIcon/Librio.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="651.0" layoutY="8.0" onMouseClicked="#closeWindow" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="651.0" layoutY="8.0" onMouseClicked="#closeWindow" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
                               <Image url="@../../icons/MemberIcon/cancel.png" />
                            </image>
@@ -47,7 +46,7 @@
                <center>
                   <AnchorPane prefHeight="497.0" prefWidth="649.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ScrollPane fx:id="bookListScrollPane" layoutY="26.0" prefHeight="502.0" prefWidth="659.0" />
+                        <ScrollPane fx:id="bookListScrollPane" prefHeight="502.0" prefWidth="659.0" />
                      </children>
                   </AnchorPane>
                </center>

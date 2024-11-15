@@ -14,7 +14,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="753.0" prefWidth="793.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.CreateBookController">
    <children>
       <StackPane layoutX="47.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="700.0" stylesheets="@../../css/admin/CRUDUser.css">
@@ -100,7 +99,7 @@
                            </font>
                         </Label>
                         <TextArea fx:id="bookTitleTextField" layoutX="165.0" layoutY="72.0" prefHeight="40.0" prefWidth="207.0" wrapText="true" />
-                        <Button fx:id="createBookButton" layoutX="187.0" layoutY="568.0" mnemonicParsing="false" onAction="#createBook" prefHeight="32.0" prefWidth="106.0" styleClass="btn-2" text="Create Book" />
+                        <Button fx:id="createBookButton" layoutX="187.0" layoutY="568.0" mnemonicParsing="false" onAction="#createBook" prefHeight="32.0" prefWidth="106.0" styleClass="btn-2" text="Create" />
                         <Button fx:id="cancelButton" layoutX="393.0" layoutY="568.0" mnemonicParsing="false" onAction="#cancel" prefHeight="32.0" prefWidth="79.0" styleClass="btn-2" text="Cancel" />
                         <Label alignment="CENTER_RIGHT" layoutX="433.0" layoutY="319.0" prefHeight="22.0" prefWidth="73.0" text="Language :">
                            <font>

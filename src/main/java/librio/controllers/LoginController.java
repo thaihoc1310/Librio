@@ -19,6 +19,7 @@ import librio.database.DatabaseConnection;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
+import librio.util.DatabaseUtil;
 
 import java.io.IOException;
 import java.sql.*;
@@ -216,6 +217,7 @@ public class LoginController {
             Session session = Session.getInstance();
             session.setLoggedInUser(loginUser);
             checkAuthorization(loginUser);
+            DatabaseUtil.startAutoUpdate();
         } else {
             incorrectLoginInformation.setText("Incorrect login information!");
         }
@@ -226,8 +228,8 @@ public class LoginController {
         String name = userNameTextField.getText();
         String email = emailTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
-        String signUpPassword = signUpPasswordField.getText();
-        String signUpConfirmPassword = signUpConfirmPasswordField.getText();
+        String signUpPassword = signUpPasswordField.isVisible() == true ?  signUpPasswordField.getText() : signUpPasswordTextVisible.getText();
+        String signUpConfirmPassword = signUpConfirmPasswordField.isVisible() == true ? signUpConfirmPasswordField.getText() : signUpConfirmPasswordTextVisible.getText();
         Gender gender = genderComboBox.getValue();
         LocalDate birthDate = birthDatePicker.getValue();
 

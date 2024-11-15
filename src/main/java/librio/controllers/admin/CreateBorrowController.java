@@ -64,7 +64,7 @@ public class CreateBorrowController implements Initializable {
 
 
     @FXML
-    private void createBorrow(){
+    private void createBorrow() {
         String email = emailTextField.getText();
         String isbn = bookIsbnTextField.getText();
         LocalDate dueDate = dueDatePicker.getValue();
@@ -73,42 +73,45 @@ public class CreateBorrowController implements Initializable {
 
         boolean validation = false;
 
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             emailErrorLabel.setText("Email is required!");
             validation = true;
-        }else if(!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")){
+        } else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
             emailErrorLabel.setText("Invalid email format!");
             validation = true;
-        }else if(!isEmailExists(email)){
+        } else if (!isEmailExists(email)) {
             emailErrorLabel.setText("Email not exists!");
             validation = true;
-        }else {
+        } else {
             User user = getUserByEmail(email);
-            if(user == null || user.getRole() == Role.LIBRARIAN){
+            if (user == null || user.getRole() == Role.LIBRARIAN) {
                 emailErrorLabel.setText("LIBRARIAN cannot borrow books!");
                 validation = true;
             }
         }
 
-        if(isbn.isEmpty() ){
+        if (isbn.isEmpty()) {
             bookIsbnErrorLabel.setText("ISBN must not be empty!");
             validation = true;
         } else if (!isbn.matches("\\d{10}|\\d{13}")) {
             bookIsbnErrorLabel.setText("ISBN must have 10 or 13 digits!");
             validation = true;
-        }else if(book == null){
+        } else if (book == null) {
             bookIsbnErrorLabel.setText("Book not exists!");
+            validation = true;
+        } else if (book != null && book.getQuantityCopy() <= 0) {
+            bookIsbnErrorLabel.setText("Out of stock!");
             validation = true;
         }
 
-        if(dueDate == null){
+        if (dueDate == null) {
             dueDatePicker.setValue(LocalDate.now().plusDays(14));
-        }else if(dueDate.isBefore(LocalDate.now())){
+        } else if (dueDate.isBefore(LocalDate.now())) {
             dueDateErrorLabel.setText("Due date must be before current date!");
             validation = true;
         }
 
-        if(isBookAlreadyBorrowedByUser(getUserByEmail(email).getId(), isbn) == true){
+        if (isBookAlreadyBorrowedByUser(getUserByEmail(email).getId(), isbn) == true) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             //alert.setTitle("User already borrowed");
             alert.setHeaderText(null);
@@ -127,97 +130,108 @@ public class CreateBorrowController implements Initializable {
             validation = true;
         }
 
-        if(validation){
+        if (validation) {
             return;
         }
 
         String memberId = getUserByEmail(email).getId();
 
         String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, memberId);
-            statement.setString(2, isbn);
-            statement.setString(3, LocalDate.now().toString());
-            statement.setString(4, dueDate.toString());
-            statement.setString(5, null);
-            statement.setString(6, "BORROWING");
-            statement.setString(7, String.valueOf(0));
+        String updateBookQuery = "UPDATE books SET quantity_copy = quantity_copy - 1 WHERE isbn = ? AND quantity_copy > 0";
+        try (Connection connection = DatabaseConnection.getConnection()) {
 
-            int rowsInserted = statement.executeUpdate();
-            closeStage();
+            try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement updateBookStatement = connection.prepareStatement(updateBookQuery)) {
+                statement.setString(1, memberId);
+                statement.setString(2, isbn);
+                statement.setString(3, LocalDate.now().toString());
+                statement.setString(4, dueDate.toString());
+                statement.setString(5, null);
+                statement.setString(6, "BORROWING");
+                statement.setString(7, String.valueOf(0));
+
+                int rowsInserted = statement.executeUpdate();
+
+                if (rowsInserted > 0) {
+                    updateBookStatement.setString(1, isbn);
+                    updateBookStatement.executeUpdate();
+                }
+                closeStage();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void hideErrorLabels() {
-        emailErrorLabel.setText("");
-        dueDateErrorLabel.setText("");
-        bookIsbnErrorLabel.setText("");
-    }
+        private void hideErrorLabels () {
+            emailErrorLabel.setText("");
+            dueDateErrorLabel.setText("");
+            bookIsbnErrorLabel.setText("");
+        }
 
-    @FXML
-    private void back() {
-        closeStage();
-    }
+        @FXML
+        private void back () {
+            closeStage();
+        }
 
-    private void addListeners() {
+        private void addListeners () {
 
-        // Email validation
-        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(newValue);
-            if (newValue.trim().isEmpty()) {
-                emailErrorLabel.setText("Email is required!");
-            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-                emailErrorLabel.setText("Invalid email format!");
-            } else if (!isEmailExists(newValue)) {
-                emailErrorLabel.setText("Email not exists!");
-            } else {
-                User user = getUserByEmail(newValue);
-                if(user == null || user.getRole() == Role.LIBRARIAN){
-                    emailErrorLabel.setText("LIBRARIAN cannot borrow books!");
-                    nameTextField.setText("");
-                }else{
-                    emailErrorLabel.setText("");
-                    nameTextField.setText(user.getName());
-                }
-            }
-        });
-
-        bookIsbnTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                bookIsbnErrorLabel.setText("ISBN must not be empty!");
-            } else if (!newValue.matches("\\d{10}|\\d{13}")) {
-                bookIsbnErrorLabel.setText("ISBN must have 10 or 13 digits!");
-            } else if (getBookByIsbn(newValue) == null) {
-                bookIsbnErrorLabel.setText("Book not exists!");
-            } else {
-                bookIsbnErrorLabel.setText("");
-                Book book = getBookByIsbn(newValue);
-                if (book != null) {
-                    bookTitleTextField.setText(book.getTitle());
+            // Email validation
+            emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                System.out.println(newValue);
+                if (newValue.trim().isEmpty()) {
+                    emailErrorLabel.setText("Email is required!");
+                } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+                    emailErrorLabel.setText("Invalid email format!");
+                } else if (!isEmailExists(newValue)) {
+                    emailErrorLabel.setText("Email not exists!");
                 } else {
-                    bookTitleTextField.setText("");
+                    User user = getUserByEmail(newValue);
+                    if (user == null || user.getRole() == Role.LIBRARIAN) {
+                        emailErrorLabel.setText("LIBRARIAN cannot borrow books!");
+                        nameTextField.setText("");
+                    } else {
+                        emailErrorLabel.setText("");
+                        nameTextField.setText(user.getName());
+                    }
                 }
-            }
-        });
+            });
 
-        dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                dueDateErrorLabel.setText("Due date is required!");
-                dueDatePicker.setValue(LocalDate.now().plusDays(14));
-            } else if (newValue.isBefore(LocalDate.now())) {
-                dueDateErrorLabel.setText("Due date must not be before current date!");
-            } else {
-                dueDateErrorLabel.setText("");
-            }
-        });
+            bookIsbnTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.trim().isEmpty()) {
+                    bookIsbnErrorLabel.setText("ISBN must not be empty!");
+                } else if (!newValue.matches("\\d{10}|\\d{13}")) {
+                    bookIsbnErrorLabel.setText("ISBN must have 10 or 13 digits!");
+                } else if (getBookByIsbn(newValue) == null) {
+                    bookIsbnErrorLabel.setText("Book not exists!");
+                } else {
+                    bookIsbnErrorLabel.setText("");
+                    Book book = getBookByIsbn(newValue);
+                    if (book != null) {
+                        bookTitleTextField.setText(book.getTitle());
+                    } else {
+                        bookTitleTextField.setText("");
+                    }
+                }
+            });
 
+            dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue == null) {
+                    dueDateErrorLabel.setText("Due date is required!");
+                    dueDatePicker.setValue(LocalDate.now().plusDays(14));
+                } else if (newValue.isBefore(LocalDate.now())) {
+                    dueDateErrorLabel.setText("Due date must not be before current date!");
+                } else {
+                    dueDateErrorLabel.setText("");
+                }
+            });
+
+        }
+
+        private void closeStage () {
+            Stage stage = (Stage) createButton.getScene().getWindow();
+            stage.close();
+        }
     }
-
-    private void closeStage() {
-        Stage stage = (Stage) createButton.getScene().getWindow();
-        stage.close();
-    }
-}

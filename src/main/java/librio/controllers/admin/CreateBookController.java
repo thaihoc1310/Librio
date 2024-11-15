@@ -217,6 +217,7 @@ public class CreateBookController implements Initializable {
             validation = true;
         } else if (isIsbnExists(isbn)) {
             isbnErrorLabel.setText("isbn already exists");
+            validation = true;
         }
 
         if(author.isEmpty()){

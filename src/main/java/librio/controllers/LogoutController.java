@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import librio.auth.Session;
+import librio.util.DatabaseUtil;
 
 import java.io.IOException;
 
@@ -43,6 +44,7 @@ public class LogoutController {
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
+        DatabaseUtil.stopAutoUpdate();
 
         if (ownerStage != null) {
             ownerStage.close();

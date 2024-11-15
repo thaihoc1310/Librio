@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -54,6 +55,8 @@ public class AddBookApiController implements Initializable {
     private ScrollPane bookListScrollPane;
     @FXML
     private ProgressIndicator loadingIndicator;
+    @FXML
+    private AnchorPane isbnPane;
 
     private List<Book> bookList = new ArrayList<>();
     private ExecutorService executor;
@@ -309,26 +312,14 @@ public class AddBookApiController implements Initializable {
         stage.close();
     }
 
+    private boolean isIsbnPaneVisible = false;
+
     @FXML
     private void openCreateBookScene(Book book) {
         try {
             System.out.println(book.getIsbn());
             if(!book.getIsbn().contains("ISBN") || book.getIsbn().equals("Unknown ISBN")){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("ISBN Code Missing");
-                alert.setHeaderText(null);
-                alert.setContentText("This book does not provide ISBN Code");
-
-                DialogPane dialogPane = alert.getDialogPane();
-                dialogPane.setStyle("-fx-background-color: #f4f4f4;");
-                dialogPane.setPrefWidth(400);
-                dialogPane.setPrefHeight(100);
-
-                ButtonBar buttonBar = (ButtonBar) dialogPane.lookup(".button-bar");
-                buttonBar.setStyle("-fx-background-color: #85553c;");
-                buttonBar.setPrefHeight(40);
-
-                alert.showAndWait();
+                openIsbnNotAvailable();
                 return;
             }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/CreateBook.fxml"));
@@ -355,6 +346,33 @@ public class AddBookApiController implements Initializable {
             });
             createBookStage.showAndWait();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openIsbnNotAvailable() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/IsbnNotAvailable.fxml"));
+            Parent root = loader.load();
+            Stage currentStage = (Stage) searchButton.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initOwner(searchButton.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });   stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
