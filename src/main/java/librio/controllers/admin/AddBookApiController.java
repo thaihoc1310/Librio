@@ -335,9 +335,6 @@ public class AddBookApiController implements Initializable {
             Parent root = loader.load();
 
             Stage addBookStage = (Stage) searchButton.getScene().getWindow();
-            ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setBrightness(-0.25);
-            addBookStage.getScene().getRoot().setEffect(colorAdjust);
             CreateBookController createBookController = loader.getController();
             createBookController.setBook(book);
 
@@ -349,10 +346,6 @@ public class AddBookApiController implements Initializable {
             createBookStage.setResizable(false);
             createBookStage.initOwner(addBookStage);
             createBookStage.initModality(Modality.APPLICATION_MODAL);
-            createBookStage.setOnHidden(event -> {
-                colorAdjust.setBrightness(0);
-                addBookStage.getScene().getRoot().setEffect(null);
-            });
             createBookStage.showAndWait();
 
         } catch (IOException e) {

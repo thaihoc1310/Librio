@@ -96,4 +96,40 @@
     -fx-background-color: #dcb485;
 }
 
+.date-picker .month-year-pane {
+    -fx-background-color: #DCB485; /* Màu nền cho tiêu đề tháng/năm */
+    -fx-text-fill: #4C2113; /* Màu chữ cho tháng và năm */
+}
+
+.date-picker .month-year-label {
+    -fx-text-fill: #4C2113; /* Màu chữ cho tháng và năm */
+}
+
+.date-picker .day-name-cell {
+    -fx-background-color: #F1DEBC; /* Màu nền cho các tên ngày (Mon, Tue, ...) */
+    -fx-text-fill: #4C2113; /* Màu chữ cho tên ngày */
+}
+
+/* Thay đổi màu nền và màu chữ cho các ô ngày */
+.date-picker .day-cell {
+    -fx-background-color: #FFFFFF; /* Màu nền cho các ô ngày */
+    -fx-text-fill: #4C2113; /* Màu chữ cho ngày */
+}
+
+.date-picker .day-cell:hover {
+    -fx-background-color: #F1DEBC; /* Màu nền khi hover vào các ô ngày */
+}
+
+/* Thay đổi màu nền và màu chữ cho ngày được chọn */
+.date-picker .day-cell:selected {
+    -fx-background-color: #4C2113; /* Màu nền cho ngày được chọn */
+    -fx-text-fill: #FFFFFF; /* Màu chữ cho ngày được chọn */
+}
+
+/* Định dạng các mũi tên chuyển tháng/năm */
+.date-picker .left-arrow .arrow, .date-picker .right-arrow .arrow {
+    -fx-background-color: #4C2113; /* Màu cho mũi tên chuyển tháng/năm */
+}
+
+
 
