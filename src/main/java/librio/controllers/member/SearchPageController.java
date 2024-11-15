@@ -1,20 +1,34 @@
 package librio.controllers.member;
 
+import javafx.animation.TranslateTransition;
 import javafx.fxml.Initializable;
 
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
+import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import librio.auth.Session;
+import librio.database.DatabaseConnection;
+import librio.models.Book;
+
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class SearchPageController implements Initializable {
     @FXML
@@ -24,7 +38,7 @@ public class SearchPageController implements Initializable {
     private TitledPane categoryPane;
 
     @FXML
-    private ComboBox<?> filterBox;
+    private ComboBox<String> filterBox;
 
     @FXML
     private FlowPane flowPane;
@@ -34,6 +48,9 @@ public class SearchPageController implements Initializable {
 
     @FXML
     private ScrollPane mainScroll;
+
+    @FXML
+    private Pagination pagination;
 
     @FXML
     private TitledPane ratePane;
@@ -47,10 +64,16 @@ public class SearchPageController implements Initializable {
     @FXML
     private ComboBox<?> sortBox;
 
+
+    private List<Book> bookList = new ArrayList<>();
+    private String keyword = "";
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupAnimatedPane(ratePane, 255);
         setupAnimatedPane(categoryPane, 454);
+        filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
+        filterBox.getSelectionModel().selectFirst();
+        loadBooksFromDatabase();
     }
 
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
@@ -74,7 +97,185 @@ public class SearchPageController implements Initializable {
         });
     }
 
+    private void loadBooksFromDatabase() {
+        bookList.clear();
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String selectedFilter = filterBox.getValue();
+            String query;
+            PreparedStatement preparedStatement;
 
+            if (keyword == null || keyword.isEmpty()) {
+                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books LIMIT ? OFFSET 0";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setInt(1, 20);
+//                preparedStatement.setInt(2, offsetIndex);
+            } else {
+                query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? LIMIT ? OFFSET 20";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, "%" + keyword + "%");
+                preparedStatement.setInt(2, 20);
+//                preparedStatement.setInt(3, offsetIndex);
+            }
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author");
+                String isbn = resultSet.getString("isbn");
+                String category = resultSet.getString("category");
+                String publisher = resultSet.getString("publisher");
+                Integer quantityCopy = resultSet.getInt("quantity_copy");
+                Double averageOfRating = resultSet.getDouble("average_of_rating");
+                String yearPublished = resultSet.getString("year_published");
+                String language = resultSet.getString("language");
+                String numberOfPages = resultSet.getString("number_of_pages");
+                String description = resultSet.getString("description");
+                String imageBook = resultSet.getString("book_image");
+
+                if (imageBook == null) {
+                    imageBook = "defaultBook.jpg";
+                }
+
+                Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
+
+                bookList.add(book);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        displayBooks();
+    }
+
+
+    private String getFilter(String filter) {
+        return switch (filter) {
+            case "Author" -> "author";
+            case "Category" -> "category";
+            case "Language" -> "language";
+            case "Publisher" -> "publisher";
+            case "Year published" -> "year_published";
+            case "ISBN" -> "isbn";
+            default -> "title";
+        };
+    }
+
+    @FXML
+    private void handleSearch() {
+        bookList.clear();
+        keyword = searchTextField.getText().trim();
+        loadBooksFromDatabase();
+    }
+
+    private void displayBooks() {
+        for (Book book : bookList) {
+            AnchorPane bookPane = new AnchorPane();
+            bookPane.setPrefSize(183, 325);
+
+            AnchorPane bookImagePane = new AnchorPane();
+            bookImagePane.setPrefSize(183,226);
+            bookImagePane.setLayoutX(0);
+
+            AnchorPane infoPane = new AnchorPane();
+            infoPane.setPrefSize(183, 99);
+            infoPane.setLayoutY(226);
+
+            ImageView bookImage = new ImageView();
+            bookImage.setFitHeight(226);
+            bookImage.setFitWidth(160);
+            bookImage.setLayoutX(12);
+            bookImage.setPickOnBounds(true);
+            bookImage.setSmooth(true);
+            bookImage.setPreserveRatio(false);
+            String projectDir = System.getProperty("user.dir");
+            String booksDir = projectDir + "/src/main/resources/images/book/";
+            String path = booksDir + book.getImagePath();
+            File file = new File(path);
+            bookImage.setImage(new Image(file.toURI().toString()));
+
+            Label titleLabel = new Label(book.getTitle());
+            titleLabel.setLayoutX(11);
+            titleLabel.setLayoutY(8);
+            titleLabel.setPrefWidth(160);
+            titleLabel.getStyleClass().add("title-label");
+
+            Label authorLabel = new Label(book.getAuthor());
+            authorLabel.setLayoutX(11);
+            authorLabel.setLayoutY(55);
+            authorLabel.setPrefWidth(160);
+            authorLabel.getStyleClass().add("author-label");
+
+            AnchorPane buttonPane = new AnchorPane();
+            buttonPane.setStyle("-fx-background-color: #FFF;");
+            buttonPane.setPrefSize(162, 45);
+            buttonPane.setLayoutY(225);
+            buttonPane.setLayoutX(11);
+
+
+            Button returnButton = new Button("QUICK BORROW");
+            returnButton.getStyleClass().add("quick-borrow-button");
+            returnButton.setLayoutX(6);
+            returnButton.setLayoutY(5);
+            buttonPane.getChildren().add(returnButton);
+
+            bookImagePane.getChildren().addAll(bookImage,buttonPane);
+            bookImagePane.setOnMouseEntered(e -> {
+                TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
+                slideUp.setFromY(0);
+                slideUp.setToY(-38);
+                slideUp.play();
+            });
+
+            bookImagePane.setOnMouseExited(e -> {
+                TranslateTransition slideDown = new TranslateTransition(Duration.millis(250), buttonPane);
+                slideDown.setFromY(-38);
+                slideDown.setToY(0);
+                slideDown.play();
+            });
+
+            bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
+
+            HBox starBox = new HBox(5);
+            double rating = book.getAverageOfRating();
+            int fullStars = (int) rating;
+            double decimalPart = rating - fullStars;
+
+            for (int i = 1; i <= 5; i++) {
+                StackPane starPane = new StackPane();
+
+                ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+
+                ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
+                emptyStar.setFitHeight(15);
+                emptyStar.setFitWidth(15);
+
+                if (i <= fullStars) {
+                    starPane.getChildren().add(fullStar);
+                } else if (i == fullStars + 1 && decimalPart > 0) {
+                    starPane.getChildren().addAll(emptyStar, fullStar);
+                    Rectangle clip = new Rectangle(15 * decimalPart, 15);
+                    fullStar.setClip(clip);
+                } else {
+                    starPane.getChildren().add(emptyStar);
+                }
+                starBox.getChildren().add(starPane);
+            }
+
+            starBox.setLayoutX(42);
+            starBox.setLayoutY(80);
+            infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
+            infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
+            bookPane.getChildren().addAll(bookImagePane,infoPane);
+            flowPane.getChildren().add(bookPane);
+            flowPane.setHgap(40);
+            flowPane.setVgap(20);
+        }
+    }
 
 
 }

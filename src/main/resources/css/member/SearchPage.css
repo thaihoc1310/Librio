@@ -32,7 +32,9 @@
     -fx-background-color: transparent;
 }
 
-
+.pagination .label {
+    -fx-opacity: 0;
+}
 
 
 .label.bold-italic {
@@ -41,15 +43,6 @@
     -fx-text-fill: #333333;
 }
 
-/* Button styles */
-.button {
-    -fx-background-color: #fff;
-    -fx-text-fill: #000;
-    -fx-font-size: 14px;
-    -fx-padding: 10 20;
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
-}
 
 .label-button {
     -fx-font-size: 15px;
@@ -142,4 +135,91 @@
     -fx-font-size: 14px;
     -fx-text-fill: #4C2113;
     -fx-cursor: hand;
+}
+
+.book-pane {
+    -fx-margin: 10px 20px 30px 20px; /* top right bottom left */
+}
+
+.quick-borrow-button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #3d6bb5;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-border-color: #3d6bb5;
+    -fx-border-width: 2px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-min-height: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
+    -fx-min-width: 149px;
+    -fx-pref-width: 149px;
+    -fx-max-width: 149px;
+    -fx-padding: 0;
+}
+.quick-borrow-button:hover {
+    -fx-text-fill: #5a85cc;
+}
+
+.title-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #000000; /* Set to a darker color for readability */
+    -fx-font-family: 'Arial', sans-serif; /* Adjust to preferred font */
+    -fx-wrap-text: true;
+    -fx-padding: 0 15 0 15; /* Add some padding around the text */
+    -fx-max-height: 48px; /* Limit the height so it doesn't overflow */
+    -fx-alignment: center; /* Căn giữa chữ */
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
+.title-label:hover {
+    -fx-underline: true;
+}
+
+/* Author style */
+.author-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #000000;
+    -fx-underline: true;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-padding: 0 15 0 15;
+    -fx-alignment: center; /* Căn giữa chữ */
+    -fx-text-alignment: center;
+}
+
+.author-label:hover{
+    -fx-font-weight: bold;
+}
+
+
+.pagination .number-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #B38B60;
+    -fx-font-size: 16px;
+}
+
+.pagination .number-button:hover {
+    -fx-cursor: hand;
+    -fx-underline: true;
+}
+
+.pagination .number-button:selected {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4C2113;
+}
+
+.pagination .page-information {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+}
+
+
+.button {
+    -fx-background-color: #fff;
+    -fx-text-fill: #4C21130;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
 }
