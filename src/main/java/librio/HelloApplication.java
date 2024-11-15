@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import librio.database.DatabaseInitializer;
-import librio.util.DatabaseUtil;
 
 import java.io.IOException;
 
