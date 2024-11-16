@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -85,7 +86,8 @@ public class SearchPageController implements Initializable {
     }
 
     private void loadBooksAsync(int pageIndex) {
-        Platform.runLater(() -> loadingIndicator.setVisible(true));
+            flowPane.getChildren().clear();
+            loadingIndicator.setVisible(true);
         Task<List<Book>> loadTask = new Task<>() {
             @Override
             protected List<Book> call() throws Exception {
@@ -186,6 +188,7 @@ public class SearchPageController implements Initializable {
 
     private Node createPage(int pageIndex) {
         loadBooksAsync(pageIndex);
+        mainScroll.setVvalue(0);
         return new BorderPane();
     }
 
@@ -211,6 +214,15 @@ public class SearchPageController implements Initializable {
 
     private void displayBooks(List<Book> bookList) {
         flowPane.getChildren().clear();
+        if (bookList.isEmpty()) {
+            Label noBooksLabel = new Label("No books found");
+            noBooksLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #B38B60; -fx-font-weight: bold;");
+            flowPane.getChildren().add(noBooksLabel);
+            flowPane.setHgap(0); // Không cần khoảng cách nếu không có sách
+            flowPane.setVgap(0);
+            flowPane.setAlignment(Pos.CENTER);
+            return;
+        }
         for (Book book : bookList) {
             AnchorPane bookPane = new AnchorPane();
             bookPane.setPrefSize(183, 325);
