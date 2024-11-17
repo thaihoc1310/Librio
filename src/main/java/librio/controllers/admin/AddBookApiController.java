@@ -312,7 +312,6 @@ public class AddBookApiController implements Initializable {
     @FXML
     private void openCreateBookScene(Book book) {
         try {
-            System.out.println(book.getIsbn());
             if(!book.getIsbn().contains("ISBN") || book.getIsbn().equals("Unknown ISBN")){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("ISBN Code Missing");
