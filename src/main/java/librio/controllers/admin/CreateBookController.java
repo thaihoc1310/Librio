@@ -172,7 +172,6 @@ public class CreateBookController implements Initializable {
             }
 
 
-
             bookTitleTextField.setEditable(false);
             isbnTextField.setEditable(false);
             authorTextField.setEditable(false);
@@ -219,6 +218,7 @@ public class CreateBookController implements Initializable {
             validation = true;
         } else if (isIsbnExists(isbn)) {
             isbnErrorLabel.setText("isbn already exists");
+            validation = true;
         }
 
         if(author.isEmpty()){
@@ -324,94 +324,21 @@ public class CreateBookController implements Initializable {
 
 
     private void addListeners() {
-
-        bookTitleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                bookTitleErrorLabel.setText("Book title cannot be empty");
-            } else {
-                bookTitleErrorLabel.setText("");
-            }
-        });
-
-        isbnTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                isbnErrorLabel.setText("isbn cannot be empty");
-            } else if(!newValue.matches("\\d{10}|\\d{13}")){
-                isbnErrorLabel.setText("isbn must be 10 or 13 digits");
-            }
-            else {
-                isbnErrorLabel.setText("");
-            }
-        });
-
-        authorTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                authorErrorLabel.setText("Author cannot be empty");
-            } else {
-                authorErrorLabel.setText("");
-            }
-        });
-
-        publisherTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                publisherErrorLabel.setText("Publisher cannot be empty");
-            } else {
-                publisherErrorLabel.setText("");
-            }
-        });
-
-        categoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                categoryErrorLabel.setText("Category cannot be empty");
-            } else {
-                categoryErrorLabel.setText("");
-            }
-        });
-
-        numberOfPagesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                numberOfPagesErrorLabel.setText("Number of pages cannot be empty");
-            } else if(!newValue.matches("\\d+")) {
-                numberOfPagesErrorLabel.setText("Number of pages must be a number");
-            }else {
-                numberOfPagesErrorLabel.setText("");
-            }
-        });
-
-        quantityOfCopyTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty");
-            } else if(!newValue.matches("\\d+")) {
-                quantityOfCopyErrorLabel.setText("Quantity of copy must be a number");
-            } else {
-                quantityOfCopyErrorLabel.setText("");
-            }
-        });
-
-        languageTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                languageErrorLabel.setText("Language cannot be empty");
-            } else {
-                languageErrorLabel.setText("");
-            }
-        });
-
-        yearPublishedTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.trim().isEmpty()){
-                if (!newValue.matches("\\d+") && !newValue.equals("Unknown")){
-                    yearPublishedErrorLabel.setText("Year published must be a \nnumber or Unknown");
-                }else {
-                    yearPublishedErrorLabel.setText("");
-                }
-            }
-            else {
-                yearPublishedErrorLabel.setText("");
-            }
-        });
+        bookTitleTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        isbnTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        authorTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        publisherTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        categoryTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        numberOfPagesTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        quantityOfCopyTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        languageTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        descriptionTextArea.setOnMouseClicked(event -> {hideErrorLabels();});
+        yearPublishedTextField.setOnMouseClicked(event -> {hideErrorLabels();});
     }
 
     @FXML
     private void uploadImage() {
+        hideErrorLabels();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose image");
         fileChooser.getExtensionFilters().addAll(

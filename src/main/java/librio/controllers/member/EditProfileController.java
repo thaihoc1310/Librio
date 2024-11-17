@@ -7,12 +7,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import librio.auth.Session;
+import librio.controllers.admin.DeleteBookController;
 import librio.database.DatabaseConnection;
+import librio.models.Book;
 import librio.models.Gender;
 import librio.models.User;
 
@@ -79,6 +86,9 @@ public class EditProfileController implements Initializable {
 
     @FXML
     private Label notification;
+
+    @FXML
+    private AnchorPane profilePane;
 
     @FXML
     void changeAvatar() {
@@ -304,49 +314,33 @@ public class EditProfileController implements Initializable {
     }
 
     @FXML
-    private void deleteAvatar() {
-        if(loggedInUser.getAvatar() != null) {
-
+    private void openDeleteAvatarStage() {
+        try {
+            // Tải FXML của scene mới
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/DeleteAvatar.fxml"));
+            Parent root = loader.load();
+            Stage currentStage = (Stage) profilePane.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
+            DeleteAvatarController deleteAvatarController = loader.getController();
+            deleteAvatarController.setAvatar(avatar);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initOwner(profilePane.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        // Hiển thị thông báo xác nhận
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Avatar");
-        alert.setHeaderText("Are you sure you want to delete your avatar?");
-        alert.setContentText("This action cannot be undone.");
-
-
-        ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-        ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.NO);
-        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == buttonTypeYes) {
-                String projectDir = System.getProperty("user.dir");
-                String avatarsDir = projectDir + "/src/main/resources/images/user/";
-
-                if (loggedInUser.getAvatar() != null && !loggedInUser.getAvatar().isEmpty()) {
-                    File oldAvatarFile = new File(avatarsDir + loggedInUser.getAvatar());
-                    if (oldAvatarFile.exists() && !oldAvatarFile.delete()) {
-                        System.out.println("Không thể xóa tệp ảnh cũ: " + oldAvatarFile.getAbsolutePath());
-                    }
-                }
-                String defaultImage = avatarsDir + "Male User.png";
-                File defaultImageFile = new File(defaultImage);
-                Image defaultAvatar = new Image(defaultImageFile.toURI().toString());
-                cropAndClipToCircle(defaultAvatar, avatar, 50);
-                loggedInUser.setAvatar(null);
-
-                String query = "UPDATE users SET avatar = NULL WHERE id = ?";
-
-                try (Connection connection = DatabaseConnection.getConnection();
-                     PreparedStatement statement = connection.prepareStatement(query)) {
-                    statement.setString(1, loggedInUser.getId());
-                    statement.executeUpdate();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }
 

@@ -243,63 +243,26 @@ public class ProfileSettingsController implements Initializable {
         birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
         genderComboBox.setValue(loggedInUser.getGender());
         memberIdTextField.setText(String.valueOf(loggedInUser.getId()));
-        hideErrorLabels();
         addListeners();
     }
 
 
     private void addListeners() {
-        // Ẩn notification khi click vào 1 textField nào đó
-        memberIdTextField.setOnMouseClicked(event -> notification.setText(""));
-        nameTextField.setOnMouseClicked(event -> notification.setText(""));
-        emailTextField.setOnMouseClicked(event -> notification.setText(""));
-        phoneNumberTextField.setOnMouseClicked(event -> notification.setText(""));
-        genderComboBox.setOnMouseClicked(event -> notification.setText(""));
-        birthOfDatePicker.setOnMouseClicked(event -> notification.setText(""));
-        addressTextArea.setOnMouseClicked(event -> notification.setText(""));
-
-        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.trim().isEmpty()) {
-                nameErrorLabel.setText("Name must not be empty!");
-            }else{
-                nameErrorLabel.setText("");
-            }
-        });
-
-        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                emailErrorLabel.setText("Email cannot be empty");
-            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-                emailErrorLabel.setText("Invalid email format");
-            }  else {
-                emailErrorLabel.setText("");
-            }
-        });
-
-        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                phoneNumberErrorLabel.setText("Phone number cannot be empty");
-            } else if (!newValue.matches("\\d{10}")) {
-                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
-            } else {
-                phoneNumberErrorLabel.setText("");
-            }
-        });
-
-        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.isAfter(LocalDate.now())) {
-                dateOfBirthErrorLabel.setText("Date of birth must be after now");
-            }else{
-                dateOfBirthErrorLabel.setText("");
-            }
-        });
+        memberIdTextField.setOnMouseClicked(event -> {hideErrorAndNotificationLabels();});
+        nameTextField.setOnMouseClicked(event -> {hideErrorAndNotificationLabels();});
+        emailTextField.setOnMouseClicked(event -> {hideErrorAndNotificationLabels();});
+        phoneNumberTextField.setOnMouseClicked(event -> {hideErrorAndNotificationLabels();});
+        genderComboBox.setOnMouseClicked(event -> {hideErrorAndNotificationLabels();});
+        birthOfDatePicker.setOnMouseClicked(event -> {hideErrorAndNotificationLabels();});
+        addressTextArea.setOnMouseClicked(event -> {hideErrorAndNotificationLabels();});
     }
 
-    private void hideErrorLabels() {
+    private void hideErrorAndNotificationLabels() {
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");
         phoneNumberErrorLabel.setText("");
         dateOfBirthErrorLabel.setText("");
+        notification.setText("");
     }
 
     public void setAvatarAndUserName(){

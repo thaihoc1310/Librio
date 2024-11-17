@@ -112,3 +112,32 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 0); /* Hiệu ứng đổ bóng phát sáng */
 
 }
+
+
+.pie-chart {
+    -fx-pie-padding: 5px;
+    -fx-legend-side: bottom;
+}
+
+.chart-pie-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-fill: #333333;
+}
+
+.default-color0.chart-pie {
+    -fx-pie-color: #ff7043;
+}
+.default-color1.chart-pie {
+    -fx-pie-color: #ffa726;
+}
+
+.chart-legend-item-symbol {
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.chart-legend-item {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}

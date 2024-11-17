@@ -30,7 +30,7 @@ public class ChangePasswordController implements Initializable {
 
     private boolean ignoreListener = false;
 
-    private User loggedInUser =  Session.getInstance().getLoggedInUser();
+    private User loggedInUser = Session.getInstance().getLoggedInUser();
 
     @FXML
     private ImageView avatarUser;
@@ -92,7 +92,7 @@ public class ChangePasswordController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if(loggedInUser == null) {
+        if (loggedInUser == null) {
             return;
         }
         currentPasswordTextField.setText("");
@@ -101,60 +101,57 @@ public class ChangePasswordController implements Initializable {
         currentPasswordTextVisible.setVisible(false);
         newPasswordTextVisible.setVisible(false);
         confirmPasswordTextVisible.setVisible(false);
-        hideErrorLabels();
         addListeners();
+        hideErrorLabels();
         setAvatarAndUserName();
     }
 
     @FXML
-    private void save(){
+    private void save() {
         hideErrorLabels();
         if (loggedInUser == null) {
             return;
         }
-        String currentPassword = currentPasswordTextField != null ? currentPasswordTextField.getText() : "";
-        String newPassword = newPasswordTextField != null ? newPasswordTextField.getText() : "";
-        String confirmPassword = confirmPasswordTextField != null ? confirmPasswordTextField.getText() : "";
+        String currentPassword = currentPasswordTextField.isVisible() ? currentPasswordTextField.getText() : currentPasswordTextVisible.getText();
+        String newPassword = newPasswordTextField.isVisible() ? newPasswordTextField.getText() : newPasswordTextVisible.getText();
+        String confirmPassword = confirmPasswordTextField.isVisible() ? confirmPasswordTextField.getText() : confirmPasswordTextVisible.getText();
         boolean validation = false;
 
-        if(currentPassword.isEmpty()){
+        if (currentPassword.isEmpty()) {
             currentPasswordErrorLabel.setText("Password must not be empty!");
             validation = true;
-        }else if(!currentPassword.equals(loggedInUser.getPassword())){
+        } else if (!currentPassword.equals(loggedInUser.getPassword())) {
             currentPasswordErrorLabel.setText("Incorrect password!");
             validation = true;
-        }else{
-            currentPasswordErrorLabel.setText("");
         }
 
-        if(validation){
+        if (validation) {
             return;
         }
 
-        if(newPassword.isEmpty()){
+        if (newPassword.isEmpty()) {
             newPasswordErrorLabel.setText("Password must not be empty!");
             validation = true;
-        }else if(newPassword.equals(currentPassword)){
+        } else if (newPassword.equals(currentPassword)) {
             newPasswordErrorLabel.setText("Password must not be the same as the previous one!");
             validation = true;
-        }else{
-            newPasswordErrorLabel.setText("");
+        } else if (newPassword.length() < 6) {
+            newPasswordErrorLabel.setText("Password must be at least 6 characters!");
+            validation = true;
         }
 
-        if(validation){
+        if (validation) {
             return;
         }
 
-        if(confirmPassword.isEmpty()){
+        if (confirmPassword.isEmpty()) {
             confirmPasswordErrorLabel.setText("Password must not be empty!");
             validation = true;
-        }else if(!confirmPassword.equals(newPassword)){
-            confirmPasswordErrorLabel.setText("Passwords does not match!");
+        } else if (!confirmPassword.equals(newPassword)) {
+            confirmPasswordErrorLabel.setText("Passwords do not match!");
             validation = true;
-        }else{
-            confirmPasswordErrorLabel.setText("");
         }
-        if(validation){
+        if (validation) {
             return;
         }
         loggedInUser.setPassword(newPassword);
@@ -167,7 +164,7 @@ public class ChangePasswordController implements Initializable {
             statement.setString(2, loggedInUser.getId());
 
             int rowsUpdated = statement.executeUpdate();
-            if(rowsUpdated > 0){
+            if (rowsUpdated > 0) {
                 notification.setText("Password updated successfully!");
                 clearPasswordFieldAndHideErrorLabels();
             }
@@ -177,54 +174,36 @@ public class ChangePasswordController implements Initializable {
     }
 
     private void addListeners() {
-        hideErrorLabels();
-        // Ẩn notification khi click vào 1 textField nào đó
-        currentPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
-        newPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
-        confirmPasswordTextField.setOnMouseClicked(event -> notification.setText(""));
-
-        currentPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!ignoreListener) {
-                if(newValue.trim().isEmpty()){
-                    currentPasswordErrorLabel.setText("Password must not be empty!");
-                }else{
-                    currentPasswordErrorLabel.setText("");
-                }
-            }
-
+        currentPasswordTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
         });
-
-        newPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!ignoreListener) {
-                if(newValue.trim().isEmpty()){
-                    newPasswordErrorLabel.setText("Password must not be empty!");
-                }else{
-                    newPasswordErrorLabel.setText("");
-                }
-            }
+        currentPasswordTextVisible.setOnMouseClicked(event -> {
+            hideErrorLabels();
         });
-
-        confirmPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!ignoreListener){
-                if(newValue.trim().isEmpty()){
-                    confirmPasswordErrorLabel.setText("Password must not be empty!");
-                }else{
-                    confirmPasswordErrorLabel.setText("");
-                }
-            }
+        newPasswordTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        newPasswordTextVisible.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        confirmPasswordTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        confirmPasswordTextVisible.setOnMouseClicked(event -> {
+            hideErrorLabels();
         });
     }
 
     @FXML
     private void openAdDashboardScene() {
-        try{
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot  = loader.load();
+            Parent adminDashboardRoot = loader.load();
 
             Stage currentStage = (Stage) saveButton.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(adminDashboardRoot);
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -298,15 +277,14 @@ public class ChangePasswordController implements Initializable {
     }
 
 
-
     private void hideErrorLabels() {
-
         newPasswordErrorLabel.setText("");
         confirmPasswordErrorLabel.setText("");
         currentPasswordErrorLabel.setText("");
+        notification.setText("");
     }
 
-    public void setAvatarAndUserName(){
+    public void setAvatarAndUserName() {
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + loggedInUser.getAvatar();
@@ -339,15 +317,13 @@ public class ChangePasswordController implements Initializable {
     }
 
     private void clearPasswordFieldAndHideErrorLabels() {
-        hideErrorLabels();
-        ignoreListener = true;
 
         currentPasswordTextField.clear();
+        currentPasswordTextVisible.clear();
         newPasswordTextField.clear();
+        newPasswordTextVisible.clear();
         confirmPasswordTextField.clear();
-
-        // Bật lại các listener sau khi đã xóa
-        ignoreListener = false;
+        confirmPasswordTextVisible.clear();
     }
 
     @FXML

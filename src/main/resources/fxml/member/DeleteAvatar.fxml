@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="204.0" prefWidth="444.0" styleClass="background_pane" stylesheets="@../../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.DeleteAvatarController">
+    <children>
+        <Button fx:id="cancelButton" layoutX="212.0" layoutY="152.0" mnemonicParsing="false" onAction="#cancel" prefHeight="38.0" prefWidth="68.0" styleClass="btn-3" text="Cancel" />
+        <Button fx:id="deleteButton" layoutX="286.0" layoutY="152.0" mnemonicParsing="false" onAction="#delete" prefHeight="38.0" prefWidth="114.0" styleClass="btn-2" text="Yes, Delete" />
+        <Label layoutX="14.0" layoutY="56.0" text="Are you sure you want to delete your avatar?">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <Line endX="241.0929412841797" endY="-1.9073486328125E-5" layoutX="191.0" layoutY="47.0" startX="-190.99996948242188" startY="-7.62939453125E-6" strokeWidth="0.2" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="383.0" layoutY="11.0" onMouseClicked="#cancel" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../icons/MemberIcon/cancel.png" />
+         </image>
+        </ImageView>
+        <Label layoutX="51.0" layoutY="14.0" text="Delete Confirmation">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../icons/AdminDashBoardIcon/hoicham.png" />
+            </image>
+        </ImageView>
+      <Label layoutX="14.0" layoutY="102.0" text="You cannot undo this action!">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

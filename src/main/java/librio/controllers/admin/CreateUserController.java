@@ -91,14 +91,6 @@ public class CreateUserController implements Initializable {
             validation = true;
         }
 
-        if(password.isEmpty()){
-            passwordErrorLabel.setText("Password cannot be empty!");
-            validation = true;
-        }else if (password.length() < 6){
-            passwordErrorLabel.setText("Password must be at least 6 characters!");
-            validation = true;
-        }
-
         if (email.isEmpty()) {
             emailErrorLabel.setText("Email cannot be empty!");
             validation = true;
@@ -107,6 +99,14 @@ public class CreateUserController implements Initializable {
             validation = true;
         } else if (isEmailExists(email)) {
             emailErrorLabel.setText("Email already exists!");
+            validation = true;
+        }
+
+        if(password.isEmpty()){
+            passwordErrorLabel.setText("Password cannot be empty!");
+            validation = true;
+        }else if (password.length() < 6){
+            passwordErrorLabel.setText("Password must be at least 6 characters!");
             validation = true;
         }
 
@@ -135,6 +135,8 @@ public class CreateUserController implements Initializable {
 
         if(birthOfDate == null){
             birthOfDateErrorLabel.setText("Birth of Date must be selected!");
+        } else if (birthOfDate.isAfter(LocalDate.now())) {
+            birthOfDateErrorLabel.setText("Birth of Date cannot be after now!");
         }
 
         if(validation) {
@@ -203,83 +205,22 @@ public class CreateUserController implements Initializable {
 
     private void addListeners() {
         // Name validation
-        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                nameErrorLabel.setText("Name cannot be empty");
-            } else {
-                nameErrorLabel.setText("");
-            }
-        });
+        nameTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        emailTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        passwordTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        confirmPasswordTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        phoneNumberTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        addressTextArea.setOnMouseClicked(event -> {hideErrorLabels();});
+        birthOfDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
+        genderComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
+        roleComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
 
-        // Email validation
-        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                emailErrorLabel.setText("Email cannot be empty");
-            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-                emailErrorLabel.setText("Invalid email format");
-            } else {
-                emailErrorLabel.setText("");
-            }
-        });
-
-        // Password validation
-        passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                passwordErrorLabel.setText("Password cannot be empty");
-            } else {
-                passwordErrorLabel.setText("");
-            }
-        });
-
-        // Confirm password validation
-        confirmPasswordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty() || !newValue.equals(passwordTextField.getText())) {
-                confirmPasswordErrorLabel.setText("Passwords do not match");
-            } else {
-                confirmPasswordErrorLabel.setText("");
-            }
-        });
-
-        // Phone number validation
-        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                phoneNumberErrorLabel.setText("Phone number cannot be empty");
-            } else if (!newValue.matches("\\d{10}")) {
-                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
-            } else {
-                phoneNumberErrorLabel.setText("");
-            }
-        });
-
-        // Role validation
-        roleComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                roleErrorLabel.setText("Role must be selected");
-            } else {
-                roleErrorLabel.setText("");
-            }
-        });
-
-        genderComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                genderErrorLabel.setText("Gender must be selected");
-            } else {
-                genderErrorLabel.setText("");
-            }
-        });
-
-        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                birthOfDateErrorLabel.setText("Birth of Date must be selected");
-            } else {
-                birthOfDateErrorLabel.setText("");
-            }
-        });
     }
 
 
     @FXML
     private void addAvatar() {
+        hideErrorLabels();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose avatar");
         fileChooser.getExtensionFilters().addAll(

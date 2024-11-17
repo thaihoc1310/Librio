@@ -19,6 +19,7 @@ import librio.database.DatabaseConnection;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
+import librio.util.DatabaseUtil;
 
 import java.io.IOException;
 import java.sql.*;
@@ -210,12 +211,13 @@ public class LoginController {
     @FXML
     private void handleLogin() throws IOException {
         String email = usernameField.getText();
-        String password = passwordField.getText();
+        String password = passwordField.isVisible() ? passwordField.getText() : passwordTextVisible.getText();
         User loginUser = authenticate(email.trim(), password);
         if (loginUser != null) {
             Session session = Session.getInstance();
             session.setLoggedInUser(loginUser);
             checkAuthorization(loginUser);
+            DatabaseUtil.startAutoUpdate();
         } else {
             incorrectLoginInformation.setText("Incorrect login information!");
         }
@@ -226,8 +228,8 @@ public class LoginController {
         String name = userNameTextField.getText();
         String email = emailTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
-        String signUpPassword = signUpPasswordField.getText();
-        String signUpConfirmPassword = signUpConfirmPasswordField.getText();
+        String signUpPassword = signUpPasswordField.isVisible() == true ?  signUpPasswordField.getText() : signUpPasswordTextVisible.getText();
+        String signUpConfirmPassword = signUpConfirmPasswordField.isVisible() == true ? signUpConfirmPasswordField.getText() : signUpConfirmPasswordTextVisible.getText();
         Gender gender = genderComboBox.getValue();
         LocalDate birthDate = birthDatePicker.getValue();
 
@@ -236,10 +238,6 @@ public class LoginController {
         if(name.trim().isEmpty()){
             nameErrorLabel.setText("Name cannot be empty!");
             validation = true;
-        }
-
-        if(validation){
-            return;
         }
 
         if(email.trim().isEmpty()){
@@ -253,20 +251,12 @@ public class LoginController {
             validation = true;
         }
 
-        if(validation){
-            return;
-        }
-
         if (phoneNumber.trim().isEmpty()) {
             phoneNumberErrorLabel.setText("Phone number cannot be empty!");
             validation = true;
         } else if (!phoneNumber.trim().matches("\\d{10}")) {
             phoneNumberErrorLabel.setText("Phone number must be 10 digits!");
             validation = true;
-        }
-
-        if(validation){
-            return;
         }
 
         if(gender == null || birthDate == null){
@@ -276,20 +266,12 @@ public class LoginController {
             genderAndbirthDateErrorLabel.setText("Birth date must be before now!");
         }
 
-        if(validation){
-            return;
-        }
-
         if(signUpPassword.isEmpty()){
             passwordErrorLabel.setText("Password cannot be empty!");
             validation = true;
         }else if(signUpPassword.length() < 6){
             passwordErrorLabel.setText("Password must be at least 6 characters!");
             validation = true;
-        }
-
-        if(validation){
-            return;
         }
 
         if(signUpConfirmPassword.isEmpty()){

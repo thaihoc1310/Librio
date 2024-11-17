@@ -6,6 +6,10 @@ import librio.models.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -454,7 +458,7 @@ public class DatabaseUtil {
 
     public static void startAutoUpdate() {
         updateBookStatus();
-        scheduler.scheduleAtFixedRate(DatabaseUtil::updateBookStatus, 1, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(DatabaseUtil::updateBookStatus, 1, 1, TimeUnit.HOURS);
     }
 
 
@@ -464,7 +468,7 @@ public class DatabaseUtil {
 
     public static void updateBookStatus() {
         try {
-            String query = "SELECT id, due_date, return_date FROM borrows WHERE status = 'BORROWING'";
+            String query = "SELECT id, due_date, return_date FROM borrows WHERE status in ('BORROWING', 'OVERDUE')";
             try (Connection connection = DatabaseConnection.getConnection();
                  PreparedStatement statement = connection.prepareStatement(query)) {
                 ResultSet resultSet = statement.executeQuery();
@@ -505,5 +509,68 @@ public class DatabaseUtil {
         }
     }
 
+    public static int getAvailableBooks() {
+        String query = "SELECT SUM(quantity_copy) FROM books";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            int bookCount = 0;
+            if (resultSet.next()) {
+                bookCount = resultSet.getInt(1);
+            }
+            return bookCount;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getTotalBorrowedBooks() {
+        String query = "SELECT COUNT(*) FROM borrows WHERE status in('BORROWING', 'OVERDUE')";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            int bookCount = 0;
+            if (resultSet.next()) {
+                bookCount = resultSet.getInt(1);
+            }
+            return bookCount;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getTotalBooks(){
+        String query = "SELECT COUNT(*) FROM books";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            int bookCount = 0;
+            if (resultSet.next()) {
+                bookCount = resultSet.getInt(1);
+            }
+            return bookCount;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getTotalUsers() {
+        String query = "SELECT COUNT(*) FROM users";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            int userCount = 0;
+            if (resultSet.next()) {
+                userCount = resultSet.getInt(1);
+            }
+            return userCount;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }

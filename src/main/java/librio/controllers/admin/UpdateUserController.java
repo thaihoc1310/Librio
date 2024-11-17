@@ -244,66 +244,19 @@ public class UpdateUserController implements Initializable {
     }
 
     private void addListeners() {
-        // Name validation
-        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                nameErrorLabel.setText("Name cannot be empty!");
-            } else {
-                nameErrorLabel.setText("");
-            }
-        });
-
-        // Email validation
-        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                emailErrorLabel.setText("Email cannot be empty!");
-            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-                emailErrorLabel.setText("Invalid email format!");
-            } else {
-                emailErrorLabel.setText("");
-            }
-        });
-
-        // Phone number validation
-        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.trim().isEmpty()) {
-                phoneNumberErrorLabel.setText("Phone number cannot be empty!");
-            } else if (!newValue.matches("\\d{10}")) {
-                phoneNumberErrorLabel.setText("Phone number must be 10 digits!");
-            } else {
-                phoneNumberErrorLabel.setText("");
-            }
-        });
-
-        // Role validation
-        roleComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                roleErrorLabel.setText("Role must be selected!");
-            } else {
-                roleErrorLabel.setText("");
-            }
-        });
-
-        genderComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                genderErrorLabel.setText("Gender must be selected!");
-            } else {
-                genderErrorLabel.setText("");
-            }
-        });
-
-        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                birthOfDateErrorLabel.setText("Birth of Date must be selected!");
-            } else {
-                birthOfDateErrorLabel.setText("");
-            }
-        });
+        nameTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        emailTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        phoneNumberTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        birthOfDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
+        addressTextArea.setOnMouseClicked(event -> {hideErrorLabels();});
+        genderComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
+        roleComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
     }
 
 
     @FXML
     private void addAvatar() {
+        hideErrorLabels();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose avatar");
         fileChooser.getExtensionFilters().addAll(

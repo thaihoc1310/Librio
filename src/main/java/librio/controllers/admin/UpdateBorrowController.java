@@ -17,6 +17,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 
 public class UpdateBorrowController implements Initializable {
@@ -90,15 +91,11 @@ public class UpdateBorrowController implements Initializable {
         if (borrowDate.isAfter(LocalDate.now())){
             borrowDateErrorLabel.setText("Borrow Date must not be after current Date!");
             validation = true;
-        }else{
-            borrowDateErrorLabel.setText("");
         }
 
         if (borrowDate.isAfter(dueDate)) {
             dueDateErrorLabel.setText("Due Date must be after Borrow Date!");
             validation = true;
-        }else {
-            dueDateErrorLabel.setText("");
         }
 
         if (returnDate != null) {
@@ -108,8 +105,9 @@ public class UpdateBorrowController implements Initializable {
             } else if (returnDate.isAfter(LocalDate.now())) {
                 returnDateErrorLabel.setText("Return Date must not be after current Date!");
                 validation = true;
-            }else {
-                returnDateErrorLabel.setText("");
+            } else if (ChronoUnit.DAYS.between(borrowDate, dueDate) > 60) {
+                dueDateErrorLabel.setText("The borrowing period cannot exceed 60 days!");
+                validation = true;
             }
         }
 
@@ -156,31 +154,8 @@ public class UpdateBorrowController implements Initializable {
         LocalDate returnDate = returnDatePicker.getValue();
         boolean validation = false;
 
-        if (borrowDate.isAfter(LocalDate.now())){
-            borrowDateErrorLabel.setText("Borrow Date must not be after current Date!");
-            validation = true;
-        } else {
-            borrowDateErrorLabel.setText("");
-        }
-
-        if (borrowDate.isAfter(dueDate)) {
-            dueDateErrorLabel.setText("Due Date must be after Borrow Date!");
-            validation = true;
-        } else {
-            dueDateErrorLabel.setText("");
-        }
-
-        if (returnDate != null) {
-            if (borrowDate.isAfter(returnDate)) {
-                returnDateErrorLabel.setText("Return Date must be after Borrow Date!");
-                validation = true;
-            } else if (returnDate.isAfter(LocalDate.now())) {
-                returnDateErrorLabel.setText("Return Date must not be beyond current Date!");
-                validation = true;
-            } else {
-                returnDateErrorLabel.setText("");
-            }
-        }
+        dueDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
+        returnDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
 
         if (validation) {
             return;
@@ -192,23 +167,22 @@ public class UpdateBorrowController implements Initializable {
         if (returnDate == null) {
             if (LocalDate.now().isAfter(dueDate)) {
                 newStatus = Status.OVERDUE;
-                long overdueDays = java.time.temporal.ChronoUnit.DAYS.between(dueDate, LocalDate.now());
-                fine = overdueDays * 5000;
+                long overdueDays = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
+                fine = overdueDays * 5000 < 100000 ? overdueDays * 5000 : 100000;
             } else {
                 newStatus = Status.BORROWING;
             }
         } else {
             if (returnDate.isAfter(dueDate)) {
                 newStatus = Status.RETURNED_LATE;
-                long overdueDays = java.time.temporal.ChronoUnit.DAYS.between(dueDate, returnDate);
-                fine = overdueDays * 5000;
+                long overdueDays = ChronoUnit.DAYS.between(dueDate, returnDate);
+                fine = overdueDays * 5000 < 100000 ? overdueDays * 5000 : 100000;;
             } else {
                 newStatus = Status.RETURNED;
                 fine = 0;
             }
         }
 
-        // Cập nhật status và fine lên giao diện
         statusLabel.setText(newStatus.toString());
         fineLabel.setText(String.valueOf(fine));
     }
