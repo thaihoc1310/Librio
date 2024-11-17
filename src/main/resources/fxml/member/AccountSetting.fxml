@@ -20,7 +20,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.EditProfileController">
    <children>
-      <AnchorPane prefHeight="750.0" prefWidth="750.0" styleClass="root" stylesheets="@../../css/member/ProfileSetting.css">
+      <AnchorPane fx:id="profilePane" prefHeight="750.0" prefWidth="750.0" styleClass="root" stylesheets="@../../css/member/ProfileSetting.css">
          <children>
             <BorderPane layoutX="11.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="750.0">
                <left>
@@ -62,7 +62,7 @@
                            </image>
                         </ImageView>
                         <Button layoutX="178.0" layoutY="78.0" mnemonicParsing="false" onAction="#changeAvatar" prefHeight="42.0" prefWidth="130.0" styleClass="save-button" text="Upload Avatar" />
-                        <Button layoutX="327.0" layoutY="78.0" mnemonicParsing="false" onAction="#deleteAvatar" prefHeight="42.0" prefWidth="126.0" styleClass="save-button" text="Delete Avatar" />
+                        <Button layoutX="327.0" layoutY="78.0" mnemonicParsing="false" onAction="#openDeleteAvatarStage" prefHeight="42.0" prefWidth="126.0" styleClass="save-button" text="Delete Avatar" />
                         <GridPane layoutX="24.0" layoutY="211.0" prefHeight="238.0" prefWidth="419.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.59996337890624" minWidth="10.0" prefWidth="209.59993896484374" />

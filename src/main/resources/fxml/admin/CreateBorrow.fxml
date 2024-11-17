@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -13,7 +14,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="689.0" prefWidth="754.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.CreateBorrowController">
    <children>
@@ -73,25 +73,57 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="emailErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="207.0" GridPane.columnIndex="1" />
-                              <DatePicker fx:id="dueDatePicker" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                              <Label fx:id="bookIsbnErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <TextField fx:id="bookIsbnTextField" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label fx:id="emailErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets top="-5.0" />
+                                 </GridPane.margin></Label>
+                              <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="207.0" GridPane.columnIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="-10.0" />
+                                 </GridPane.margin></TextField>
+                              <DatePicker fx:id="dueDatePicker" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                                 <GridPane.margin>
+                                    <Insets bottom="-10.0" />
+                                 </GridPane.margin></DatePicker>
+                              <Label fx:id="bookIsbnErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                 <GridPane.margin>
+                                    <Insets top="-5.0" />
+                                 </GridPane.margin></Label>
+                              <TextField fx:id="bookIsbnTextField" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <GridPane.margin>
+                                    <Insets bottom="-10.0" />
+                                 </GridPane.margin></TextField>
                               <Label text="Name :" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="dueDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                              <TextField fx:id="nameTextField" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField fx:id="bookTitleTextField" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <TextField fx:id="borrowDateTextField" editable="false" prefHeight="30.0" prefWidth="189.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                              <Label fx:id="dueDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                                 <GridPane.margin>
+                                    <Insets top="-5.0" />
+                                 </GridPane.margin></Label>
+                              <TextField fx:id="nameTextField" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets bottom="-10.0" />
+                                 </GridPane.margin></TextField>
+                              <TextField fx:id="bookTitleTextField" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                 <GridPane.margin>
+                                    <Insets bottom="-10.0" />
+                                 </GridPane.margin></TextField>
+                              <TextField fx:id="borrowDateTextField" disable="true" editable="false" prefHeight="30.0" prefWidth="189.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                 <GridPane.margin>
+                                    <Insets bottom="-10.0" />
+                                 </GridPane.margin></TextField>
+                              <Label fx:id="userAlreadyBorrowErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                 <GridPane.margin>
+                                    <Insets top="-5.0" />
+                                 </GridPane.margin>
+                              </Label>
                            </children>
                         </GridPane>
                         <ImageView fx:id="bookImageView" fitHeight="280.0" fitWidth="194.0" layoutX="451.0" layoutY="105.0" pickOnBounds="true">
                            <image>
-                              <Image url="@../../images/book/harryPottersample.jpg" />
+                              <Image url="@../../images/book/defaultBook.jpg" />
                            </image>
                         </ImageView>
                         <Button layoutX="385.0" layoutY="568.0" mnemonicParsing="false" onAction="#back" prefHeight="34.0" prefWidth="85.0" styleClass="btn-2" text="Back" />

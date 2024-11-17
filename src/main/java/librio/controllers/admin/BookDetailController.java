@@ -126,7 +126,6 @@ public class BookDetailController implements Initializable {
 
     private void toggleDescription() {
         if (isExpanded) {
-
             descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
             moreLessLabel.setText(" more");
         } else {

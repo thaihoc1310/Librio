@@ -4,22 +4,27 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.models.Role;
 import librio.models.User;
+import librio.util.DesignUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.*;
+import static librio.util.DatabaseUtil.isEmailExists;
 
 public class CreateBorrowController implements Initializable {
     @FXML
@@ -55,6 +60,9 @@ public class CreateBorrowController implements Initializable {
     @FXML
     private Label dueDateErrorLabel;
 
+    @FXML
+    private Label userAlreadyBorrowErrorLabel;
+
     public void initialize(URL location, ResourceBundle resources) {
         borrowDateTextField.setText(LocalDate.now().toString());
         dueDatePicker.setValue(LocalDate.now().plusDays(30));
@@ -73,7 +81,7 @@ public class CreateBorrowController implements Initializable {
 
         boolean validation = false;
 
-        if (email.isEmpty()) {
+        if (email.trim().isEmpty()) {
             emailErrorLabel.setText("Email is required!");
             validation = true;
         } else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
@@ -84,7 +92,7 @@ public class CreateBorrowController implements Initializable {
             validation = true;
         } else {
             User user = getUserByEmail(email);
-            if (user == null || user.getRole() == Role.LIBRARIAN) {
+            if (user.getRole() == Role.LIBRARIAN) {
                 emailErrorLabel.setText("LIBRARIAN cannot borrow books!");
                 validation = true;
             }
@@ -104,29 +112,16 @@ public class CreateBorrowController implements Initializable {
             validation = true;
         }
 
-        if (dueDate == null) {
-            dueDatePicker.setValue(LocalDate.now().plusDays(14));
-        } else if (dueDate.isBefore(LocalDate.now())) {
-            dueDateErrorLabel.setText("Due date must be before current date!");
+        if (dueDate.isBefore(LocalDate.now())) {
+            dueDateErrorLabel.setText("Due date must not be before current date!");
+            validation = true;
+        } else if (ChronoUnit.DAYS.between(LocalDate.now(), dueDate) > 60) {
+            dueDateErrorLabel.setText("The borrowing period cannot exceed 60 days!");
             validation = true;
         }
 
         if (isBookAlreadyBorrowedByUser(getUserByEmail(email).getId(), isbn) == true) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            //alert.setTitle("User already borrowed");
-            alert.setHeaderText(null);
-            alert.setContentText("This user has already borrowed this book!");
-
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.setStyle("-fx-background-color: #f4f4f4;");
-            dialogPane.setPrefWidth(400);
-            dialogPane.setPrefHeight(100);
-
-            ButtonBar buttonBar = (ButtonBar) dialogPane.lookup(".button-bar");
-            buttonBar.setStyle("-fx-background-color: #85553c;");
-            buttonBar.setPrefHeight(40);
-
-            alert.showAndWait();
+            userAlreadyBorrowErrorLabel.setText("This user has already borrowed this book!");
             validation = true;
         }
 
@@ -165,73 +160,64 @@ public class CreateBorrowController implements Initializable {
         }
     }
 
-        private void hideErrorLabels () {
-            emailErrorLabel.setText("");
-            dueDateErrorLabel.setText("");
-            bookIsbnErrorLabel.setText("");
-        }
 
-        @FXML
-        private void back () {
-            closeStage();
-        }
-
-        private void addListeners () {
-
-            // Email validation
-            emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-                System.out.println(newValue);
-                if (newValue.trim().isEmpty()) {
-                    emailErrorLabel.setText("Email is required!");
-                } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-                    emailErrorLabel.setText("Invalid email format!");
-                } else if (!isEmailExists(newValue)) {
-                    emailErrorLabel.setText("Email not exists!");
-                } else {
-                    User user = getUserByEmail(newValue);
-                    if (user == null || user.getRole() == Role.LIBRARIAN) {
-                        emailErrorLabel.setText("LIBRARIAN cannot borrow books!");
-                        nameTextField.setText("");
-                    } else {
-                        emailErrorLabel.setText("");
-                        nameTextField.setText(user.getName());
-                    }
-                }
-            });
-
-            bookIsbnTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue.trim().isEmpty()) {
-                    bookIsbnErrorLabel.setText("ISBN must not be empty!");
-                } else if (!newValue.matches("\\d{10}|\\d{13}")) {
-                    bookIsbnErrorLabel.setText("ISBN must have 10 or 13 digits!");
-                } else if (getBookByIsbn(newValue) == null) {
-                    bookIsbnErrorLabel.setText("Book not exists!");
-                } else {
-                    bookIsbnErrorLabel.setText("");
-                    Book book = getBookByIsbn(newValue);
-                    if (book != null) {
-                        bookTitleTextField.setText(book.getTitle());
-                    } else {
-                        bookTitleTextField.setText("");
-                    }
-                }
-            });
-
-            dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue == null) {
-                    dueDateErrorLabel.setText("Due date is required!");
-                    dueDatePicker.setValue(LocalDate.now().plusDays(14));
-                } else if (newValue.isBefore(LocalDate.now())) {
-                    dueDateErrorLabel.setText("Due date must not be before current date!");
-                } else {
-                    dueDateErrorLabel.setText("");
-                }
-            });
-
-        }
-
-        private void closeStage () {
-            Stage stage = (Stage) createButton.getScene().getWindow();
-            stage.close();
-        }
+    @FXML
+    private void back() {
+        closeStage();
     }
+
+    private void addListeners() {
+        emailTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        bookIsbnTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        borrowDateTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        nameTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        dueDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
+
+        // Email validation
+        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.trim().isEmpty() &&
+                    newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$") &&
+                    isEmailExists(newValue)) {
+                User user = getUserByEmail(newValue);
+                nameTextField.setText(user.getName());
+            }else{
+                nameTextField.setText("");
+            }
+        });
+
+
+        bookIsbnTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            Book book = getBookByIsbn(newValue);
+            if (!newValue.trim().isEmpty() && newValue.matches("\\d{10}|\\d{13}") && book != null) {
+                bookTitleTextField.setText(book.getTitle());
+
+                String projectDir = System.getProperty("user.dir");
+                String booksDir = projectDir + "/src/main/resources/images/book/";
+                String path = booksDir + book.getImagePath();
+                File file = new File(path);
+                if (file.exists()) {
+                    Image image = new Image(file.toURI().toString());
+                    DesignUtil.cropToAspectRatio(image, bookImageView, 194, 280);
+                } else {
+                    DesignUtil.loadDefaultBookImage(bookImageView);
+                }
+            }else{
+                bookTitleTextField.setText("");
+            }
+        });
+
+
+    }
+
+    private void closeStage() {
+        Stage stage = (Stage) createButton.getScene().getWindow();
+        stage.close();
+    }
+
+    private void hideErrorLabels() {
+        emailErrorLabel.setText("");
+        bookIsbnErrorLabel.setText("");
+        dueDateErrorLabel.setText("");
+        userAlreadyBorrowErrorLabel.setText("");
+    }
+}

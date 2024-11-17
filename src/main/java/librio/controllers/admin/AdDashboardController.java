@@ -75,9 +75,9 @@ public class AdDashboardController implements Initializable {
     }
 
     public void addDataToDashboardCardAndChart(){
-        int totalCopyBooks = DatabaseUtil.getTotalBorrowedBooks() + DatabaseUtil.getAvailableBooks();
         int borrowedBooks = DatabaseUtil.getTotalBorrowedBooks();
         int availableBooks = DatabaseUtil.getAvailableBooks();
+        int totalCopyBooks = borrowedBooks + availableBooks;
         int totalBooks = DatabaseUtil.getTotalBooks();
         int totalUsers = DatabaseUtil.getTotalUsers();
 
