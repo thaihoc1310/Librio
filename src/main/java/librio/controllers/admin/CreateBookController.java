@@ -494,7 +494,7 @@ public class CreateBookController implements Initializable {
         LANGUAGE_MAP.put("ro", "Romanian");
         LANGUAGE_MAP.put("ru", "Russian");
         LANGUAGE_MAP.put("sr", "Serbian");
-        LANGUAGE_MAP.put("si", "Sinhala");
+        LANGUAGE_MAP.put("si", "Sinhalese");
         LANGUAGE_MAP.put("es", "Spanish");
         LANGUAGE_MAP.put("su", "Sundanese");
         LANGUAGE_MAP.put("sw", "Swahili");
