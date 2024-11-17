@@ -10,7 +10,7 @@
 /* TextField style for search */
 .text-field {
     -fx-background-color: #FFFFFF;
-    -fx-border-color: #E0E0E0;
+    -fx-border-color: transparent;
     -fx-border-radius: 4;
     -fx-padding: 8;
     -fx-font-size: 14px;
@@ -19,12 +19,26 @@
 
 .combo-box {
     -fx-background-color: #FFFFFF;
-    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
 }
 
-.combo-box:hover {
-    -fx-cursor: hand;
+.combo-box, .combo-box .list-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+}
 
+.combo-box .list-cell:hover {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+    -fx-cursor: hand;
+}
+
+.combo-box:hover, .combo-box:focused {
+    -fx-text-fill: #4C2113;
+    -fx-cursor: hand;
 }
 
 .image-view {

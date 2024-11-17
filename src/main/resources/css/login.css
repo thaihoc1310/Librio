@@ -56,6 +56,13 @@
     -fx-font-family: 'System';
 }
 
+.combo-box .list-cell:hover {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+    -fx-cursor: hand;
+}
+
 .combo-box:hover, .combo-box:focused {
     -fx-background-color: #F1DEBC;
     -fx-text-fill: #4C2113;
@@ -119,6 +126,7 @@
 
 .date-picker .day-cell:hover {
     -fx-background-color: #F1DEBC; /* Màu nền khi hover vào các ô ngày */
+    -fx-cursor: hand;
 }
 
 /* Thay đổi màu nền và màu chữ cho ngày được chọn */

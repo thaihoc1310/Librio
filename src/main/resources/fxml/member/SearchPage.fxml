@@ -26,13 +26,13 @@
                <children>
                   <AnchorPane prefHeight="139.0" prefWidth="1387.0" style="-fx-background-color: #F1DEBC;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TextField fx:id="searchTextField" layoutX="437.0" layoutY="22.0" prefHeight="38.0" prefWidth="648.0">
+                        <TextField fx:id="searchTextField" layoutX="437.0" layoutY="22.0" prefHeight="37.0" prefWidth="648.0">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
                         <ComboBox fx:id="filterBox" layoutX="317.0" layoutY="22.0" prefHeight="37.0" prefWidth="120.0" promptText="All" />
-                        <ImageView fx:id="searchButton" fitHeight="27.0" fitWidth="27.0" layoutX="1040.0" layoutY="27.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="searchButton" fitHeight="27.0" fitWidth="27.0" layoutX="1041.0" layoutY="28.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                            </image>
@@ -131,12 +131,12 @@
                                              <content>
                                                 <VBox prefHeight="369.0" prefWidth="219.0" spacing="10.0">
                                                    <children>
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="5 stars" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="4 stars and up" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="3 stars and up" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="2 stars and up" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="1 star and up" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="No ratings" />
+                                                      <Label fx:id="fiveStarsLabel" prefHeight="26.0" prefWidth="185.0" text="5 stars" />
+                                                      <Label fx:id="fourStarsLabel" prefHeight="26.0" prefWidth="185.0" text="4 stars and up" />
+                                                      <Label fx:id="threeStarsLabel" prefHeight="26.0" prefWidth="185.0" text="3 stars and up" />
+                                                      <Label fx:id="twoStarsLabel" prefHeight="26.0" prefWidth="185.0" text="2 stars and up" />
+                                                      <Label fx:id="oneStarLabel" prefHeight="26.0" prefWidth="185.0" text="1 star and up" />
+                                                      <Label fx:id="noRatingsLabel" prefHeight="26.0" prefWidth="185.0" text="No ratings" />
                                                    </children>
                                                 </VBox>
                                              </content>
@@ -186,14 +186,24 @@
                               <AnchorPane prefHeight="598.0" prefWidth="1157.0">
                                  <children>
                                     <Separator layoutX="14.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="37.0" />
-                                    <ComboBox fx:id="limitBox" layoutX="752.0" layoutY="30.0" prefHeight="29.0" prefWidth="110.0" promptText="Show : 20" />
-                                    <ComboBox fx:id="sortBox" layoutX="886.0" layoutY="30.0" prefHeight="29.0" prefWidth="203.0" promptText="Sort by : Top rated" />
+                                    <ComboBox fx:id="limitBox" layoutX="797.0" layoutY="30.0" prefHeight="30.0" prefWidth="69.0" promptText="20" />
+                                    <ComboBox fx:id="sortBox" layoutX="958.0" layoutY="30.0" prefHeight="29.0" prefWidth="145.0" promptText="Most Borrowed" />
                                     <VBox layoutX="62.0" layoutY="93.0" prefHeight="507.0" prefWidth="1081.0" spacing="30.0">
                                        <children>
                                           <FlowPane fx:id="flowPane" prefHeight="456.0" prefWidth="1081.0" />
                                           <Pagination fx:id="pagination" prefHeight="49.0" prefWidth="1175.0" />
                                        </children>
                                     </VBox>
+                                    <Label layoutX="752.0" layoutY="30.0" prefHeight="29.0" prefWidth="45.0" text="Show  :">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="886.0" layoutY="30.0" prefHeight="29.0" prefWidth="71.0" text="Sorted by  :">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </AnchorPane>
                            </children>

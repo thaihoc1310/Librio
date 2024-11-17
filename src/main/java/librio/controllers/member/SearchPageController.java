@@ -70,10 +70,31 @@ public class SearchPageController implements Initializable {
     @FXML
     private ProgressIndicator loadingIndicator;
 
+    @FXML
+    private Label fiveStarsLabel;
+
+    @FXML
+    private Label fourStarsLabel;
+
+    @FXML
+    private Label threeStarsLabel;
+
+    @FXML
+    private Label twoStarsLabel;
+
+    @FXML
+    private Label oneStarLabel;
+
+    @FXML
+    private Label noRatingsLabel;
+
 
     private List<Book> bookList = new ArrayList<>();
     private String keyword;
     private ExecutorService executor;
+    private boolean isNoRatingFilter = false;
+    private double currentRatingFilter = 0.0;
+    private Label selectedRateLabel = null;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadingIndicator.setVisible(false);
@@ -82,15 +103,22 @@ public class SearchPageController implements Initializable {
         setupAnimatedPane(categoryPane, 454);
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
+        limitBox.getItems().addAll("100", "50", "20", "10");
+        limitBox.getSelectionModel().select(2);
+        sortBox.getItems().addAll("Top rated", "Most borrowed", "Newest");
+        sortBox.getSelectionModel().selectFirst();
         pagination.setPageFactory(this::createPage);
+        setupComboBoxListeners();
+        setupRatePaneListeners();
     }
 
     private void loadBooksAsync(int pageIndex) {
-            flowPane.getChildren().clear();
-            loadingIndicator.setVisible(true);
+        loadingIndicator.setVisible(true);
+        flowPane.getChildren().clear();
         Task<List<Book>> loadTask = new Task<>() {
             @Override
             protected List<Book> call() throws Exception {
+                Thread.sleep(100);
                 return loadBooksFromDatabase(pageIndex);
             }
 
@@ -135,23 +163,39 @@ public class SearchPageController implements Initializable {
 
     private List<Book> loadBooksFromDatabase(int pageIndex) {
         List<Book> fetchedBooks = new ArrayList<>();
-        int offsetIndex = pageIndex * 20;
+        int offsetIndex = pageIndex * Integer.parseInt(limitBox.getValue());
+        String sortBy = sortBox.getValue();
+        String orderByClause = getOrderByClause(sortBy);
+        String limitClause = getLimitClause();
         try (Connection connection = DatabaseConnection.getConnection()) {
             String selectedFilter = filterBox.getValue();
             String query;
             PreparedStatement preparedStatement;
 
-            if (keyword == null || keyword.isEmpty()) {
-                query = "SELECT id, title, author, isbn, category, publisher, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image FROM books LIMIT ? OFFSET ?";
-                preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setInt(1, 20);
-                preparedStatement.setInt(2, offsetIndex);
+            if (isNoRatingFilter) {
+                if (keyword == null || keyword.isEmpty()) {
+                    query = "SELECT * FROM books WHERE (average_of_rating IS NULL OR average_of_rating = 0) " + orderByClause + limitClause + " OFFSET ?";
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setInt(1, offsetIndex);
+                } else {
+                    query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? AND (average_of_rating IS NULL OR average_of_rating = 0) " + orderByClause + limitClause + " OFFSET ?";
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setString(1, "%" + keyword + "%");
+                    preparedStatement.setInt(2, offsetIndex);
+                }
             } else {
-                query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? LIMIT ? OFFSET ?";
-                preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setString(1, "%" + keyword + "%");
-                preparedStatement.setInt(2, 20);
-                preparedStatement.setInt(3, offsetIndex);
+                if (keyword == null || keyword.isEmpty()) {
+                    query = "SELECT * FROM books WHERE average_of_rating >= ? " + orderByClause + limitClause + " OFFSET ?";
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setDouble(1, currentRatingFilter);
+                    preparedStatement.setInt(2, offsetIndex);
+                } else {
+                    query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? AND average_of_rating >= ? " + orderByClause + limitClause + " OFFSET ?";
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setString(1, "%" + keyword + "%");
+                    preparedStatement.setDouble(2, currentRatingFilter);
+                    preparedStatement.setInt(3, offsetIndex);
+                }
             }
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -204,16 +248,88 @@ public class SearchPageController implements Initializable {
         };
     }
 
-    @FXML
-    private void handleSearch() {
-        bookList.clear();
-        keyword = searchTextField.getText().trim();
+    private String getOrderByClause(String sortBy) {
+        return switch (sortBy) {
+            case "Top rated" -> "ORDER BY average_of_rating DESC";
+            case "Most borrowed" -> "ORDER BY quantity_copy DESC";
+            case "Newest" -> "ORDER BY year_published DESC";
+            default -> "";
+        };
+    }
+
+    private String getLimitClause() {
+        int limit = Integer.parseInt(limitBox.getValue());
+        return " LIMIT " + limit;
+    }
+
+
+    private void reloadData() {
         loadBooksAsync(0);
         pagination.setCurrentPageIndex(0);
     }
 
+    @FXML
+    private void handleSearch() {
+        bookList.clear();
+        keyword = searchTextField.getText().trim();
+        reloadData();
+    }
+
+    private void setupComboBoxListeners() {
+        sortBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            reloadData();
+        });
+
+        limitBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            reloadData();
+        });
+    }
+
+    private void setupRatePaneListeners() {
+        setLabelClickListener(fiveStarsLabel, 5.0);
+        setLabelClickListener(fourStarsLabel, 4.0);
+        setLabelClickListener(threeStarsLabel, 3.0);
+        setLabelClickListener(twoStarsLabel, 2.0);
+        setLabelClickListener(oneStarLabel, 1.0);
+        setLabelClickListener(noRatingsLabel, 0.0);
+    }
+
+    private void setLabelClickListener(Label label, double rating) {
+        label.setOnMouseClicked(event -> {
+            if (selectedRateLabel == label) {
+                selectedRateLabel = null;
+                resetLabelStyle(label);
+                currentRatingFilter = 0.0;
+                isNoRatingFilter = false;
+            } else {
+                if (selectedRateLabel != null) {
+                    resetLabelStyle(selectedRateLabel);
+                }
+                selectedRateLabel = label;
+                applySelectedStyle(label);
+                if (label == noRatingsLabel) {
+                    isNoRatingFilter = true;
+                    currentRatingFilter = 0.0;
+                } else {
+                    isNoRatingFilter = false;
+                    currentRatingFilter = rating;
+                }
+            }
+            reloadData();
+        });
+    }
+
+    private void applySelectedStyle(Label label) {
+        label.setStyle("-fx-font-size: 14px; -fx-text-fill: #4C2113;"); // Màu được chọn
+    }
+
+    private void resetLabelStyle(Label label) {
+        label.setStyle("-fx-font-size: 14px; -fx-text-fill: #B38B60;"); // Màu mặc định
+    }
+
     private void displayBooks(List<Book> bookList) {
         flowPane.getChildren().clear();
+        flowPane.setAlignment(Pos.TOP_LEFT);
         if (bookList.isEmpty()) {
             Label noBooksLabel = new Label("No books found");
             noBooksLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #B38B60; -fx-font-weight: bold;");
