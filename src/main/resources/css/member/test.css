@@ -1,0 +1,31 @@
+
+.pagination .number-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #B38B60;
+    -fx-font-size: 14px;
+}
+
+.pagination .number-button:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #4C2113;
+    -fx-underline: true;
+}
+
+.pagination .number-button:selected {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4C2113;
+}
+
+.pagination .page-information {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+}
+
+
+.button {
+    -fx-background-color: #fff;
+    -fx-text-fill: #4C21130;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
