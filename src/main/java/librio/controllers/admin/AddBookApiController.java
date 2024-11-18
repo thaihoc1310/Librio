@@ -179,7 +179,6 @@ public class AddBookApiController implements Initializable {
         startIndex = 0;
         totalItems = 0;
         bookList.clear();
-        displayBooks(bookList);
         loadBooksAsync(keyword);
         bookListScrollPane.setVvalue(0);
     }
@@ -317,7 +316,6 @@ public class AddBookApiController implements Initializable {
     @FXML
     private void openCreateBookScene(Book book) {
         try {
-            System.out.println(book.getIsbn());
             if(!book.getIsbn().contains("ISBN") || book.getIsbn().equals("Unknown ISBN")){
                 openIsbnNotAvailable();
                 return;

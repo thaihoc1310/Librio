@@ -394,7 +394,7 @@ public class BookDetailController implements Initializable {
 
     @FXML
     private void openBorrowConfirmationPane() {
-        if (isBorrowConfirmationPaneVisible == false) {
+        if (!isBorrowConfirmationPaneVisible) {
             borrowConfirmationPane.toFront();
             isBorrowConfirmationPaneVisible = true;
             bookDetailsPane.setMouseTransparent(true);
@@ -406,7 +406,7 @@ public class BookDetailController implements Initializable {
 
     @FXML
     private void closeBorrowConfirmationPane() {
-        if (isBorrowConfirmationPaneVisible == true) {
+        if (isBorrowConfirmationPaneVisible) {
             borrowConfirmationPane.toBack();
             isBorrowConfirmationPaneVisible = false;
             bookDetailsPane.setMouseTransparent(false);

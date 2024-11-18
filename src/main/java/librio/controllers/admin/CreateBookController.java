@@ -30,6 +30,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.*;
@@ -151,7 +153,7 @@ public class CreateBookController implements Initializable {
             authorTextField.setText(apiBook.getAuthor());
             publisherTextField.setText(apiBook.getPublisher());
             categoryTextField.setText(apiBook.getCategory());
-            languageTextField.setText(apiBook.getLanguage());
+            languageTextField.setText(getFullLanguageName(apiBook.getLanguage()));
             yearPublishedTextField.setText(apiBook.getYearPublished().contains("Unknown") ? "Unknown" : apiBook.getYearPublished().substring(0,4));
             descriptionTextArea.setText(apiBook.getDescription());
             numberOfPagesTextField.setText(apiBook.getNumberOfPages());
@@ -380,4 +382,65 @@ public class CreateBookController implements Initializable {
         yearPublishedTextField.clear();
         descriptionTextArea.clear();
     }
+
+    private String getFullLanguageName(String isoCode) {
+        return LANGUAGE_MAP.getOrDefault(isoCode, isoCode);
+    }
+
+    private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();
+
+    static {
+        LANGUAGE_MAP.put("ar", "Arabic");
+        LANGUAGE_MAP.put("bn", "Bengali");
+        LANGUAGE_MAP.put("bg", "Bulgarian");
+        LANGUAGE_MAP.put("ca", "Catalan");
+        LANGUAGE_MAP.put("zh", "Chinese");
+        LANGUAGE_MAP.put("hr", "Croatian");
+        LANGUAGE_MAP.put("cs", "Czech");
+        LANGUAGE_MAP.put("da", "Danish");
+        LANGUAGE_MAP.put("nl", "Dutch");
+        LANGUAGE_MAP.put("en", "English");
+        LANGUAGE_MAP.put("eo", "Esperanto");
+        LANGUAGE_MAP.put("tl", "Filipino");
+        LANGUAGE_MAP.put("fi", "Finnish");
+        LANGUAGE_MAP.put("fr", "French");
+        LANGUAGE_MAP.put("de", "German");
+        LANGUAGE_MAP.put("el", "Greek");
+        LANGUAGE_MAP.put("hi", "Hindi");
+        LANGUAGE_MAP.put("hu", "Hungarian");
+        LANGUAGE_MAP.put("id", "Indonesian");
+        LANGUAGE_MAP.put("it", "Italian");
+        LANGUAGE_MAP.put("ja", "Japanese");
+        LANGUAGE_MAP.put("jw", "Javanese");
+        LANGUAGE_MAP.put("km", "Khmer");
+        LANGUAGE_MAP.put("ko", "Korean");
+        LANGUAGE_MAP.put("la", "Latin");
+        LANGUAGE_MAP.put("mk", "Macedonian");
+        LANGUAGE_MAP.put("ml", "Malayalam");
+        LANGUAGE_MAP.put("mr", "Marathi");
+        LANGUAGE_MAP.put("ne", "Nepali");
+        LANGUAGE_MAP.put("no", "Norwegian");
+        LANGUAGE_MAP.put("pl", "Polish");
+        LANGUAGE_MAP.put("pt", "Portuguese");
+        LANGUAGE_MAP.put("ro", "Romanian");
+        LANGUAGE_MAP.put("ru", "Russian");
+        LANGUAGE_MAP.put("sr", "Serbian");
+        LANGUAGE_MAP.put("si", "Sinhalese");
+        LANGUAGE_MAP.put("es", "Spanish");
+        LANGUAGE_MAP.put("su", "Sundanese");
+        LANGUAGE_MAP.put("sw", "Swahili");
+        LANGUAGE_MAP.put("sv", "Swedish");
+        LANGUAGE_MAP.put("ta", "Tamil");
+        LANGUAGE_MAP.put("te", "Telugu");
+        LANGUAGE_MAP.put("th", "Thai");
+        LANGUAGE_MAP.put("tr", "Turkish");
+        LANGUAGE_MAP.put("uk", "Ukrainian");
+        LANGUAGE_MAP.put("vi", "Vietnamese");
+        LANGUAGE_MAP.put("cy", "Welsh");
+        LANGUAGE_MAP.put("xh", "Xhosa");
+        LANGUAGE_MAP.put("yi", "Yiddish");
+        LANGUAGE_MAP.put("zu", "Zulu");
+    }
+
+
 }
