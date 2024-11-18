@@ -81,8 +81,6 @@ public class BookController implements Initializable {
         setAvatarAndUserName();
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
-        overlayPane.setVisible(false);
-//        overlayPane.setOnMouseClicked(event -> cancelBookDetail());
         loadBooksFromDatabase();
 
     }
@@ -374,7 +372,6 @@ public class BookController implements Initializable {
     void logOut() throws IOException {
         Stage currenStage = (Stage) searchTextField.getScene().getWindow();
         Stage stage = new Stage();
-        stage.setTitle("Librio");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
         Parent loginRoot  = loader.load();
         stage.setScene(new Scene(loginRoot));
