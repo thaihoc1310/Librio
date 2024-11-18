@@ -192,7 +192,7 @@
                                 <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
                             </image>
                         </ImageView>
-                        <Label fx:id="userNameUser" layoutX="65.0" layoutY="99.0" text="User name" />
+                        <Label fx:id="userNameUser" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="99.0" prefWidth="180.0" text="User name" textAlignment="CENTER" />
                     </children></AnchorPane>
             </children>
         </AnchorPane>

@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
 import librio.models.Status;
@@ -114,7 +115,7 @@ public class UpdateBorrowController implements Initializable {
         if (validation) {
             return;
         }
-        String query = "UPDATE borrows SET borrow_date = ?, due_date = ?, return_date = ?, status = ?, fine = ? WHERE id = ?";
+        String query = "UPDATE borrows SET borrow_date = ?, due_date = ?, return_date = ?, status = ?, fine = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDate(1, Date.valueOf(borrowDate));
@@ -122,7 +123,8 @@ public class UpdateBorrowController implements Initializable {
             statement.setDate(3, returnDate != null ? Date.valueOf(returnDate) : null);
             statement.setString(4,status.name());
             statement.setString(5,String.valueOf(fine));
-            statement.setInt(6, borrow.getId());
+            statement.setString(6, Session.getInstance().getLoggedInUser().getEmail());
+            statement.setInt(7, borrow.getId());
 
 
             int rowsAffected = statement.executeUpdate();

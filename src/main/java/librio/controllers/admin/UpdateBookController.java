@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.models.User;
@@ -178,7 +179,8 @@ public class UpdateBookController implements Initializable {
             return;
         }
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "UPDATE books SET title = ?, author = ?, isbn = ?, publisher = ?, category = ?, quantity_copy = ?, year_published = ?, language = ?, number_of_pages = ?, description = ?, book_image = ? WHERE id = ?";
+            String query = "UPDATE books SET title = ?, author = ?, isbn = ?, publisher = ?, category = ?, quantity_copy = ?, year_published = ?, " +
+                            "language = ?, number_of_pages = ?, description = ?, book_image = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, bookTitle);
             statement.setString(2, author);
@@ -195,7 +197,9 @@ public class UpdateBookController implements Initializable {
                 statement.setString(10, description);
             }
             statement.setString(11, bookImageFilePath != null ? bookImageFilePath : book.getImagePath());
-            statement.setInt(12, book.getId());
+            statement.setString(12, Session.getInstance().getLoggedInUser().getEmail());
+            statement.setInt(13, book.getId());
+
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 if (previousBookFilePath != null && bookImageFilePath != null) {

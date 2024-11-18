@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.models.Role;
@@ -131,7 +132,8 @@ public class CreateBorrowController implements Initializable {
 
         String memberId = getUserByEmail(email).getId();
 
-        String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_by, created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
         String updateBookQuery = "UPDATE books SET quantity_copy = quantity_copy - 1 WHERE isbn = ? AND quantity_copy > 0";
         try (Connection connection = DatabaseConnection.getConnection()) {
 
@@ -144,6 +146,7 @@ public class CreateBorrowController implements Initializable {
                 statement.setString(5, null);
                 statement.setString(6, "BORROWING");
                 statement.setString(7, String.valueOf(0));
+                statement.setString(8, Session.getInstance().getLoggedInUser().getEmail());
 
                 int rowsInserted = statement.executeUpdate();
 

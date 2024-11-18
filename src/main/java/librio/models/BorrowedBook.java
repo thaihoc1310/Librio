@@ -8,14 +8,16 @@ import java.time.LocalDate;
 public class BorrowedBook extends Book {
     private ObjectProperty<LocalDate> borrowDate;
     private ObjectProperty<LocalDate> dueDate;
+    private ObjectProperty<LocalDate> returnDate;
     private Status status;
     private Double fine;
 
 
-    public BorrowedBook(Book book, LocalDate borrowDate, LocalDate dueDate, Status status, Double fine) {
+    public BorrowedBook(Book book, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, Status status, Double fine) {
         super(book.getId(), book.getTitle(), book.getAuthor(), book.getIsbn(), book.getImagePath());
         this.dueDate = new SimpleObjectProperty<>(dueDate);
         this.borrowDate = new SimpleObjectProperty<>(borrowDate);
+        this.returnDate = new SimpleObjectProperty<>(returnDate);
         this.status = status;
         this.fine = fine;
     }
@@ -30,6 +32,14 @@ public class BorrowedBook extends Book {
 
     public LocalDate getBorrowDate() {
         return borrowDate.get();
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate.get();
+    }
+
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate.set(returnDate);
     }
 
     public void setborrowDate(LocalDate borrowDate) {

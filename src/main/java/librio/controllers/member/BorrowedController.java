@@ -83,12 +83,12 @@ public class BorrowedController implements Initializable {
 
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query;
-            String borrowUser = Session.getInstance().getLoggedInUser().getId();
+            String borrowUserId = Session.getInstance().getLoggedInUser().getId();
             PreparedStatement preparedStatement;
             query = "SELECT b.id, b.title, b.author, b.isbn," +
-                    " b.book_image,br.borrow_date, br.due_date, br.status, br.fine FROM books b " +
+                    " b.book_image,br.borrow_date, br.due_date, br.return_date, br.status, br.fine FROM books b " +
                     " JOIN borrows br on b.isbn = br.book_isbn" +
-                    " WHERE br.member_id= " + borrowUser;
+                    " WHERE br.member_id= " + borrowUserId;
             preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -102,6 +102,10 @@ public class BorrowedController implements Initializable {
                 Double fine = resultSet.getDouble("fine");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
+                LocalDate returnDate = null;
+                if (resultSet.getDate("return_date") != null) {
+                    returnDate = resultSet.getDate("return_date").toLocalDate();
+                }
 
                 if (imageBook == null) {
                     imageBook = "defaultBook.jpg";
@@ -109,10 +113,10 @@ public class BorrowedController implements Initializable {
 
                 if (status == BORROWING || status == OVERDUE) {
                     Book book = new Book(id, title, author, isbn, imageBook);
-                    borrowBookList.add(new BorrowedBook(book, borrowDate, dueDate, status, fine));
+                    borrowBookList.add(new BorrowedBook(book, borrowDate, dueDate, null,  status, fine));
                 } else {
                     Book returnedBook = new Book(id, title, author, isbn, imageBook);
-                    returnedBookList.add(new BorrowedBook(returnedBook, borrowDate, dueDate, status, fine));
+                    returnedBookList.add(new BorrowedBook(returnedBook, borrowDate, dueDate, returnDate, status, fine));
                 }
             }
         } catch (Exception e) {
@@ -317,18 +321,18 @@ public class BorrowedController implements Initializable {
             GridPane gridPane = new GridPane();
             gridPane.setLayoutX(179);
             gridPane.setLayoutY(114);
-            gridPane.setPrefWidth(230);
+            gridPane.setPrefWidth(250);
 
             ColumnConstraints col1 = new ColumnConstraints();
             col1.setHgrow(Priority.SOMETIMES);
             col1.setPrefWidth(100);
             ColumnConstraints col2 = new ColumnConstraints();
             col2.setHgrow(Priority.SOMETIMES);
-            col2.setPrefWidth(100);
+            col2.setPrefWidth(150);
 
             gridPane.getColumnConstraints().addAll(col1, col2);
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 5; i++) {
                 RowConstraints row = new RowConstraints();
                 row.setVgrow(Priority.SOMETIMES);
                 row.setPrefHeight(30);
@@ -356,30 +360,38 @@ public class BorrowedController implements Initializable {
             dueDate.setFont(Font.font("System", 16));
             gridPane.add(dueDate, 1, 1);
 
+            Label returnDateLabel = new Label("Return date:");
+            returnDateLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
+            gridPane.add(returnDateLabel, 0, 2);
+
+            LocalDate returnDateTime = book.getReturnDate();
+            String returnDateText = returnDateTime != null ? returnDateTime.format(formatter) : "N/A";
+            Label returnDate = new Label("   " + returnDateText);
+            returnDate.setFont(Font.font("System", 16));
+            gridPane.add(returnDate, 1, 2);
+
             Label statusLabel = new Label("Status:");
             statusLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
-            gridPane.add(statusLabel, 0, 2);
+            gridPane.add(statusLabel, 0, 3);
 
             String statusString = book.getStatus().toString();
             Label status = new Label("   " + statusString);
             status.setFont(Font.font("System", 16));
-            gridPane.add(status, 1, 2);
+            gridPane.add(status, 1, 3);
 
             Label fineLabel = new Label("Fine:");
             fineLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
-            gridPane.add(fineLabel, 0, 3);
+            gridPane.add(fineLabel, 0, 4);
 
             String fineString = book.getFine().toString();
             Label fine = new Label("   " + fineString + " VND");
             fine.setFont(Font.font("System", 16));
-            gridPane.add(fine, 1, 3);
+            gridPane.add(fine, 1, 4);
 
             anchorPane.getChildren().addAll(bookImageView, titleLabel, authorText, isbnLabel, separator, gridPane);
 
             tilePane.getChildren().add(anchorPane);
-
         }
-
     }
 
 
@@ -461,16 +473,19 @@ public class BorrowedController implements Initializable {
         Status newStatus = (today.isAfter(dueDate)) ? Status.RETURNED_LATE : Status.RETURNED;
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "UPDATE borrows SET status = ? WHERE book_isbn = ? AND member_id = ?";
+            String query = "UPDATE borrows SET status = ?, return_date = ? WHERE book_isbn = ? AND member_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, newStatus.toString());
-            preparedStatement.setString(2, borrowedBook.getIsbn());
-            preparedStatement.setString(3, Session.getInstance().getLoggedInUser().getId());
+            preparedStatement.setString(2, today.toString());
+            preparedStatement.setString(3, borrowedBook.getIsbn());
+            preparedStatement.setString(4, Session.getInstance().getLoggedInUser().getId());
+
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 borrowBookList.remove(borrowedBook);
                 borrowedBook.setStatus(newStatus);
+                borrowedBook.setReturnDate(today);
                 returnedBookList.add(borrowedBook);
 
                 displayBorrowingBooks(borrowBookList);

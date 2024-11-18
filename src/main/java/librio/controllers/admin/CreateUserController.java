@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Gender;
 import librio.models.Role;
@@ -142,7 +143,8 @@ public class CreateUserController implements Initializable {
         if(validation) {
             return;
         }
-        String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar, birth_of_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar, birth_of_date, created_by, created_at) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -156,6 +158,7 @@ public class CreateUserController implements Initializable {
             statement.setString(8, avatarFilePath);
             assert birthOfDate != null;
             statement.setDate(9, Date.valueOf(birthOfDate));
+            statement.setString(10, Session.getInstance().getLoggedInUser().getEmail());
 
             int rowsInserted = statement.executeUpdate();
             ResultSet generatedKeys = statement.getGeneratedKeys();

@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -268,7 +269,8 @@ public class CreateBookController implements Initializable {
             return;
         }
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO books (title, author, isbn, publisher, category, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO books (title, author, isbn, publisher, category, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image, created_by, created_at)" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, bookTitle);
             statement.setString(2, author);
@@ -291,6 +293,8 @@ public class CreateBookController implements Initializable {
             }
 
             statement.setString(12, (bookImageFilePath == null || bookImageFilePath.equals("defaultBook.jpg")) ? null : bookImageFilePath);
+            statement.setString(13, Session.getInstance().getLoggedInUser().getEmail());
+
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 String projectDir = System.getProperty("user.dir");

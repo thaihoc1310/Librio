@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -89,6 +91,9 @@ public class ChangePasswordController implements Initializable {
     @FXML
     private ImageView confirmPasswordCloseEyeImage;
 
+    @FXML
+    private StackPane stackPaneRoot;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -156,12 +161,13 @@ public class ChangePasswordController implements Initializable {
         }
         loggedInUser.setPassword(newPassword);
 
-        String query = "UPDATE users SET password = ? WHERE id = ?";
+        String query = "UPDATE users SET password = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, newPassword);
-            statement.setString(2, loggedInUser.getId());
+            statement.setString(2, loggedInUser.getEmail());
+            statement.setString(3, loggedInUser.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -256,19 +262,31 @@ public class ChangePasswordController implements Initializable {
             // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
             Parent root = loader.load();
-
+            stackPaneRoot.setOpacity(0.45);
             Stage currentStage = (Stage) saveButton.getScene().getWindow();
 
             LogoutController logoutController = loader.getController();
             logoutController.setOwnerStage(currentStage);
+            logoutController.setStackPaneRoot(stackPaneRoot);
             // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Logout");
             stage.setScene(new Scene(root));
+            Rectangle clip = new Rectangle();
+            clip.setWidth(424);
+            clip.setHeight(204);
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            root.setClip(clip);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(currentStage);
             stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
             // Hiển thị scene
             stage.showAndWait();
         } catch (IOException e) {

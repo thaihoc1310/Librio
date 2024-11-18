@@ -164,7 +164,7 @@ public class EditProfileController implements Initializable {
             loggedInUser.setAvatar(avatarFilePath);
         }
 
-        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, avatar = ?, birth_of_date = ? WHERE id = ?";
+        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, avatar = ?, birth_of_date = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -176,7 +176,8 @@ public class EditProfileController implements Initializable {
             statement.setString(6, avatarFilePath != null ? avatarFilePath : loggedInUser.getAvatar());
             assert birthOfDate != null;
             statement.setDate(7, Date.valueOf(birthOfDate));
-            statement.setString(8, loggedInUser.getId());
+            statement.setString(8, loggedInUser.getEmail());
+            statement.setString(9, loggedInUser.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -254,42 +255,6 @@ public class EditProfileController implements Initializable {
         genderComboBox.setOnMouseClicked(event -> notification.setText(""));
         birthOfDatePicker.setOnMouseClicked(event -> notification.setText(""));
         addressTextArea.setOnMouseClicked(event -> notification.setText(""));
-
-//        nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-//            if(newValue.trim().isEmpty()) {
-//                nameErrorLabel.setText("Name must not be empty!");
-//            }else{
-//                nameErrorLabel.setText("");
-//            }
-//        });
-//
-//        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue.trim().isEmpty()) {
-//                emailErrorLabel.setText("Email cannot be empty");
-//            } else if (!newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-//                emailErrorLabel.setText("Invalid email format");
-//            }  else {
-//                emailErrorLabel.setText("");
-//            }
-//        });
-//
-//        phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue.trim().isEmpty()) {
-//                phoneNumberErrorLabel.setText("Phone number cannot be empty");
-//            } else if (!newValue.matches("\\d{10}")) {
-//                phoneNumberErrorLabel.setText("Phone number must be 10 digits");
-//            } else {
-//                phoneNumberErrorLabel.setText("");
-//            }
-//        });
-//
-//        birthOfDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-//            if(newValue.isAfter(LocalDate.now())) {
-//                dateOfBirthErrorLabel.setText("Date of birth must not be after today!");
-//            }else{
-//                dateOfBirthErrorLabel.setText("");
-//            }
-//        });
     }
 
     private void hideErrorLabels() {

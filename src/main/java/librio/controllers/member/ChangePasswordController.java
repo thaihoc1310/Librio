@@ -146,12 +146,13 @@ public class ChangePasswordController implements Initializable {
         }
         loggedInUser.setPassword(newPassword);
 
-        String query = "UPDATE users SET password = ? WHERE id = ?";
+        String query = "UPDATE users SET password = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, newPassword);
-            statement.setString(2, loggedInUser.getId());
+            statement.setString(2, loggedInUser.getEmail());
+            statement.setString(3, loggedInUser.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if(rowsUpdated > 0){

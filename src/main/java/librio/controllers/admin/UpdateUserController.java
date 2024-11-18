@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import librio.auth.Session;
 import librio.models.Gender;
 import librio.models.Role;
 import librio.models.User;
@@ -160,7 +161,8 @@ public class UpdateUserController implements Initializable {
         if(validation) {
             return;
         }
-        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, role = ?, avatar = ?, birth_of_date = ? WHERE id = ?";
+        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, " +
+                        "gender = ?, role = ?, avatar = ?, birth_of_date = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -173,7 +175,8 @@ public class UpdateUserController implements Initializable {
             statement.setString(7, avatarFilePath != null ? avatarFilePath : user.getAvatar());
             assert birthOfDate != null;
             statement.setDate(8, Date.valueOf(birthOfDate));
-            statement.setString(9, user.getId());
+            statement.setString(9, Session.getInstance().getLoggedInUser().getEmail());
+            statement.setString(10, user.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -268,7 +271,7 @@ public class UpdateUserController implements Initializable {
         if (selectedFile != null) {
             avatarFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
             Image avatarImage = new Image(selectedFile.toURI().toString());
-            cropAndClipToCircle(avatarImage, avatarImageView, 75);
+            cropAndClipToCircle(avatarImage, avatarImageView, 55);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
     }
