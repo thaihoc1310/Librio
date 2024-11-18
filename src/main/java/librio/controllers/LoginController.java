@@ -228,8 +228,8 @@ public class LoginController {
         String name = userNameTextField.getText();
         String email = emailTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
-        String signUpPassword = signUpPasswordField.isVisible() == true ?  signUpPasswordField.getText() : signUpPasswordTextVisible.getText();
-        String signUpConfirmPassword = signUpConfirmPasswordField.isVisible() == true ? signUpConfirmPasswordField.getText() : signUpConfirmPasswordTextVisible.getText();
+        String signUpPassword = signUpPasswordField.isVisible() ?  signUpPasswordField.getText() : signUpPasswordTextVisible.getText();
+        String signUpConfirmPassword = signUpConfirmPasswordField.isVisible() ? signUpConfirmPasswordField.getText() : signUpConfirmPasswordTextVisible.getText();
         Gender gender = genderComboBox.getValue();
         LocalDate birthDate = birthDatePicker.getValue();
 
@@ -295,7 +295,6 @@ public class LoginController {
             statement.setString(3, signUpPassword);
             statement.setString(4, phoneNumber);
             statement.setString(5, gender.name());
-            assert birthDate != null;
             statement.setDate(6, Date.valueOf(birthDate));
             statement.setString(7, email);
 
@@ -329,7 +328,7 @@ public class LoginController {
             Parent adminDashboardRoot = loader.load();
             stage.setScene(new Scene(adminDashboardRoot));
         } else if (userRole.equals(Role.MEMBER)) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Book.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
             Parent adminDashboardRoot = loader.load();
             stage.setScene(new Scene(adminDashboardRoot));
         }
