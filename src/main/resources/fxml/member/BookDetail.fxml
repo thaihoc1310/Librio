@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1082.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1082.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
    <children>
       <AnchorPane fx:id="borrowConfirmationPane" layoutX="250.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="612.0" styleClass="background_pane">
          <children>
@@ -40,7 +40,7 @@
                </font>
             </Button>
             <DatePicker fx:id="dueDatePicker" layoutX="14.0" layoutY="303.0" prefHeight="26.0" prefWidth="152.0" />
-            <AnchorPane layoutX="204.0" layoutY="60.0" prefHeight="269.0" prefWidth="366.0" styleClass="background-wrapper">
+            <AnchorPane layoutX="204.0" layoutY="60.0" prefHeight="269.0" prefWidth="366.0">
                <children>
                   <Label fx:id="titleLabel" layoutX="14.0" layoutY="27.0" prefHeight="40.0" prefWidth="324.0" text="Title">
                      <font>

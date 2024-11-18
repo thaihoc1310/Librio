@@ -1,13 +1,14 @@
 package librio.controllers.member;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-
-
-import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -16,6 +17,16 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
+import librio.auth.Session;
+import librio.database.DatabaseConnection;
+import librio.models.Book;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,108 +40,83 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import librio.database.DatabaseConnection;
-import librio.models.Book;
+import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class SearchPageController implements Initializable {
     @FXML
-    private ImageView avatar;
-
-    @FXML
-    private TitledPane categoryPane;
-
-    @FXML
-    private ComboBox<String> filterBox;
-
-    @FXML
-    private FlowPane flowPane;
-
-    @FXML
-    private ComboBox<String> limitBox;
-
-    @FXML
-    private ScrollPane mainScroll;
-
-    @FXML
-    private Pagination pagination;
-
-    @FXML
-    private TitledPane ratePane;
-
-    @FXML
-    private ImageView searchButton;
-
-    @FXML
-    private TextField searchTextField;
-
-    @FXML
-    private ComboBox<String> sortBox;
-
-    @FXML
-    private ProgressIndicator loadingIndicator;
-
-    @FXML
-    private Label fiveStarsLabel;
-
-    @FXML
-    private Label fourStarsLabel;
-
-    @FXML
-    private Label threeStarsLabel;
-
-    @FXML
-    private Label twoStarsLabel;
-
-    @FXML
-    private Label oneStarLabel;
-
-    @FXML
-    private Label noRatingsLabel;
-
-    @FXML
     public Label englishLabel;
-
     @FXML
     public Label vietnameseLabel;
-
     @FXML
     public Label frenchLabel;
-
     @FXML
     public Label germanLabel;
-
     @FXML
     public Label spanishLabel;
-
     @FXML
     public Label italianLabel;
-
     @FXML
     public Label russianLabel;
-
     @FXML
     public Label dutchLabel;
-
     @FXML
     public Label japaneseLabel;
-
     @FXML
     public Label koreanLabel;
-
     @FXML
     public Label danishLabel;
-
     @FXML
     public Label thaiLabel;
-
     @FXML
     public Label chineseLabel;
+    @FXML
+    private ImageView clickAvatar;
+    @FXML
+    private ImageView avatarUser;
+    @FXML
+    private Pane backPane;
+    @FXML
+    private TitledPane categoryPane;
+    @FXML
+    private ComboBox<String> filterBox;
+    @FXML
+    private FlowPane flowPane;
+    @FXML
+    private ComboBox<String> limitBox;
+    @FXML
+    private ScrollPane mainScroll;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private TitledPane ratePane;
+    @FXML
+    private Label userNameUser;
+    @FXML
+    private Label userNameUser2;
+    @FXML
+    private ImageView searchButton;
+    @FXML
+    private TextField searchTextField;
+    @FXML
+    private ComboBox<String> sortBox;
+    @FXML
+    private Circle moreIcon;
+    @FXML
+    private ProgressIndicator loadingIndicator;
+    @FXML
+    private Label fiveStarsLabel;
+    @FXML
+    private Label fourStarsLabel;
+    @FXML
+    private Label threeStarsLabel;
+    @FXML
+    private Label twoStarsLabel;
+    @FXML
+    private Label oneStarLabel;
+    @FXML
+    private Label noRatingsLabel;
+    @FXML
+    private AnchorPane menuPane;
     private List<Book> bookList = new ArrayList<>();
     private String keyword;
     private ExecutorService executor;
@@ -139,8 +125,13 @@ public class SearchPageController implements Initializable {
     private Label selectedRateLabel = null;
     private Label selectedLanguageLabel = null;
     private String currentLanguageFilter = null;
+    private boolean isAnchorPaneVisible = false;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
+        moreIcon.setFill(new ImagePattern(image));
+        setAvatarAndUserName();
         loadingIndicator.setVisible(false);
         executor = Executors.newFixedThreadPool(2);
         setupAnimatedPane(ratePane, 255);
@@ -174,6 +165,7 @@ public class SearchPageController implements Initializable {
                 }
                 Platform.runLater(() -> loadingIndicator.setVisible(false));
             }
+
             @Override
             protected void failed() {
                 Platform.runLater(() -> loadingIndicator.setVisible(false));
@@ -189,7 +181,26 @@ public class SearchPageController implements Initializable {
         filterBox.getSelectionModel().select(filter);
         handleSearch();
     }
+    public void setAvatarAndUserName() {
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
+        File file = new File(path);
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 23);
+            cropAndClipToCircle(image, clickAvatar, 23);
+        } else {
+            String defaultImage = avatarsDir + "Male User.png";
+            File defaultImageFile = new File(defaultImage);
+            Image image = new Image(defaultImageFile.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 23);
+            cropAndClipToCircle(image, clickAvatar, 23);
+        }
+        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
+        userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
+    }
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
         pane.setExpanded(false);
         pane.expandedProperty().addListener((observable, oldValue, newValue) -> {
@@ -469,7 +480,7 @@ public class SearchPageController implements Initializable {
             bookPane.setPrefSize(183, 325);
 
             AnchorPane bookImagePane = new AnchorPane();
-            bookImagePane.setPrefSize(183,226);
+            bookImagePane.setPrefSize(183, 226);
             bookImagePane.setLayoutX(0);
 
             AnchorPane infoPane = new AnchorPane();
@@ -514,7 +525,7 @@ public class SearchPageController implements Initializable {
             returnButton.setLayoutY(5);
             buttonPane.getChildren().add(returnButton);
 
-            bookImagePane.getChildren().addAll(bookImage,buttonPane);
+            bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
                 TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
                 slideUp.setFromY(0);
@@ -568,8 +579,8 @@ public class SearchPageController implements Initializable {
 
                 @Override
                 protected void succeeded() {
-                        HBox starBox = getValue();
-                        Platform.runLater(() -> {
+                    HBox starBox = getValue();
+                    Platform.runLater(() -> {
                         starBox.setLayoutX(42);
                         starBox.setLayoutY(80);
                         infoPane.getChildren().add(starBox);
@@ -583,12 +594,78 @@ public class SearchPageController implements Initializable {
                 }
             };
             executor.execute(ratingTask);
-            bookPane.getChildren().addAll(bookImagePane,infoPane);
+            bookPane.getChildren().addAll(bookImagePane, infoPane);
             flowPane.getChildren().add(bookPane);
             flowPane.setHgap(40);
             flowPane.setVgap(20);
         }
     }
 
+    @FXML
+    private void handleAvatarClick() {
+        if (!isAnchorPaneVisible) {
+            menuPane.toFront();
+            isAnchorPaneVisible = true;
+            backPane.setVisible(true);
+
+        } else {
+            menuPane.toBack();
+            isAnchorPaneVisible = false;
+            backPane.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void cancelMenuButton() {
+        if (isAnchorPaneVisible) {
+            menuPane.toBack();
+            isAnchorPaneVisible = false;
+            backPane.setVisible(false);
+        }
+    }
+    @FXML
+    void logOut() throws IOException {
+        Stage currenStage = (Stage) searchTextField.getScene().getWindow();
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
+        Parent loginRoot  = loader.load();
+        stage.setScene(new Scene(loginRoot));
+        stage.show();
+        Session.getInstance().logout();
+        currenStage.close();
+    }
+    @FXML
+    private void openBorrowed() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
+            Parent manageUserRoot  = loader.load();
+            Stage currentStage = (Stage) avatarUser.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageUserRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openEditProfileScene(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Profile");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(searchTextField.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            setAvatarAndUserName();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
