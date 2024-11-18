@@ -179,7 +179,6 @@ public class AddBookApiController implements Initializable {
         startIndex = 0;
         totalItems = 0;
         bookList.clear();
-        displayBooks(bookList);
         loadBooksAsync(keyword);
         bookListScrollPane.setVvalue(0);
     }

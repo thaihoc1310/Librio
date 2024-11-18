@@ -164,17 +164,19 @@
                                              <content>
                                                 <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                                    <children>
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="English" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="Vietnamese" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="French" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="German" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="Spanish" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="Italian" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="Russian" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="Dutch" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="Japanese" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="Korean" />
-                                                      <Label prefHeight="26.0" prefWidth="185.0" text="Arabic" />
+                                                      <Label fx:id="englishLabel" prefHeight="26.0" prefWidth="185.0" text="English" />
+                                                      <Label fx:id="vietnameseLabel" prefHeight="26.0" prefWidth="185.0" text="Vietnamese" />
+                                                      <Label fx:id="frenchLabel" prefHeight="26.0" prefWidth="185.0" text="French" />
+                                                      <Label fx:id="germanLabel" prefHeight="26.0" prefWidth="185.0" text="German" />
+                                                      <Label fx:id="spanishLabel" prefHeight="26.0" prefWidth="185.0" text="Spanish" />
+                                                      <Label fx:id="italianLabel" prefHeight="26.0" prefWidth="185.0" text="Italian" />
+                                                      <Label fx:id="russianLabel" prefHeight="26.0" prefWidth="185.0" text="Russian" />
+                                                      <Label fx:id="dutchLabel" prefHeight="26.0" prefWidth="185.0" text="Dutch" />
+                                                      <Label fx:id="japaneseLabel" prefHeight="26.0" prefWidth="185.0" text="Japanese" />
+                                                      <Label fx:id="koreanLabel" prefHeight="26.0" prefWidth="185.0" text="Korean" />
+                                                      <Label fx:id="danishLabel" prefHeight="26.0" prefWidth="185.0" text="Danish" />
+                                                      <Label fx:id="thaiLabel" prefHeight="26.0" prefWidth="185.0" text="Thai" />
+                                                      <Label fx:id="chineseLabel" prefHeight="26.0" prefWidth="185.0" text="Chinese" />
                                                    </children>
                                                 </VBox>
                                              </content>

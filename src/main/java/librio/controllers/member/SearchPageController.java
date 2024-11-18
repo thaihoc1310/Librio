@@ -88,13 +88,52 @@ public class SearchPageController implements Initializable {
     @FXML
     private Label noRatingsLabel;
 
+    @FXML
+    public Label englishLabel;
 
+    @FXML
+    public Label vietnameseLabel;
+
+    @FXML
+    public Label frenchLabel;
+
+    @FXML
+    public Label germanLabel;
+
+    @FXML
+    public Label spanishLabel;
+
+    @FXML
+    public Label italianLabel;
+
+    @FXML
+    public Label russianLabel;
+
+    @FXML
+    public Label dutchLabel;
+
+    @FXML
+    public Label japaneseLabel;
+
+    @FXML
+    public Label koreanLabel;
+
+    @FXML
+    public Label danishLabel;
+
+    @FXML
+    public Label thaiLabel;
+
+    @FXML
+    public Label chineseLabel;
     private List<Book> bookList = new ArrayList<>();
     private String keyword;
     private ExecutorService executor;
     private boolean isNoRatingFilter = false;
     private double currentRatingFilter = 0.0;
     private Label selectedRateLabel = null;
+    private Label selectedLanguageLabel = null;
+    private String currentLanguageFilter = null;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadingIndicator.setVisible(false);
@@ -109,7 +148,7 @@ public class SearchPageController implements Initializable {
         sortBox.getSelectionModel().selectFirst();
         pagination.setPageFactory(this::createPage);
         setupComboBoxListeners();
-        setupRatePaneListeners();
+        setupPaneListeners();
     }
 
     private void loadBooksAsync(int pageIndex) {
@@ -169,34 +208,21 @@ public class SearchPageController implements Initializable {
         String limitClause = getLimitClause();
         try (Connection connection = DatabaseConnection.getConnection()) {
             String selectedFilter = filterBox.getValue();
-            String query;
-            PreparedStatement preparedStatement;
+            String query = buildQuery(selectedFilter, orderByClause, limitClause);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            if (isNoRatingFilter) {
-                if (keyword == null || keyword.isEmpty()) {
-                    query = "SELECT * FROM books WHERE (average_of_rating IS NULL OR average_of_rating = 0) " + orderByClause + limitClause + " OFFSET ?";
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setInt(1, offsetIndex);
-                } else {
-                    query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? AND (average_of_rating IS NULL OR average_of_rating = 0) " + orderByClause + limitClause + " OFFSET ?";
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setString(1, "%" + keyword + "%");
-                    preparedStatement.setInt(2, offsetIndex);
-                }
-            } else {
-                if (keyword == null || keyword.isEmpty()) {
-                    query = "SELECT * FROM books WHERE average_of_rating >= ? " + orderByClause + limitClause + " OFFSET ?";
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setDouble(1, currentRatingFilter);
-                    preparedStatement.setInt(2, offsetIndex);
-                } else {
-                    query = "SELECT * FROM books WHERE " + getFilter(selectedFilter) + " LIKE ? AND average_of_rating >= ? " + orderByClause + limitClause + " OFFSET ?";
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setString(1, "%" + keyword + "%");
-                    preparedStatement.setDouble(2, currentRatingFilter);
-                    preparedStatement.setInt(3, offsetIndex);
-                }
+            int paramIndex = 1;
+            if (currentLanguageFilter != null) {
+                preparedStatement.setString(paramIndex++, currentLanguageFilter);
             }
+            if (keyword != null && !keyword.isEmpty()) {
+                preparedStatement.setString(paramIndex++, "%" + keyword + "%");
+            }
+            if (!isNoRatingFilter) {
+                preparedStatement.setDouble(paramIndex++, currentRatingFilter);
+            }
+            preparedStatement.setInt(paramIndex, offsetIndex);
+
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -228,6 +254,32 @@ public class SearchPageController implements Initializable {
             e.printStackTrace();
         }
         return fetchedBooks;
+    }
+
+    private String buildQuery(String selectedFilter, String orderByClause, String limitClause) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM books ");
+        List<String> conditions = new ArrayList<>();
+
+        if (currentLanguageFilter != null) {
+            conditions.add("language = ?");
+        }
+
+        if (keyword != null && !keyword.isEmpty()) {
+            conditions.add(getFilter(selectedFilter) + " LIKE ?");
+        }
+
+        if (!isNoRatingFilter) {
+            conditions.add("average_of_rating >= ?");
+        } else {
+            conditions.add("(average_of_rating IS NULL OR average_of_rating = 0)");
+        }
+
+        queryBuilder.append("WHERE ");
+        queryBuilder.append(String.join(" AND ", conditions));
+
+        queryBuilder.append(" ").append(orderByClause).append(" ").append(limitClause).append(" OFFSET ?");
+
+        return queryBuilder.toString();
     }
 
     private Node createPage(int pageIndex) {
@@ -285,16 +337,47 @@ public class SearchPageController implements Initializable {
         });
     }
 
-    private void setupRatePaneListeners() {
-        setLabelClickListener(fiveStarsLabel, 5.0);
-        setLabelClickListener(fourStarsLabel, 4.0);
-        setLabelClickListener(threeStarsLabel, 3.0);
-        setLabelClickListener(twoStarsLabel, 2.0);
-        setLabelClickListener(oneStarLabel, 1.0);
-        setLabelClickListener(noRatingsLabel, 0.0);
+    private void setupPaneListeners() {
+        setRateLabelClickListener(fiveStarsLabel, 5.0);
+        setRateLabelClickListener(fourStarsLabel, 4.0);
+        setRateLabelClickListener(threeStarsLabel, 3.0);
+        setRateLabelClickListener(twoStarsLabel, 2.0);
+        setRateLabelClickListener(oneStarLabel, 1.0);
+        setRateLabelClickListener(noRatingsLabel, 0.0);
+        setLanguageLabelClickListener(englishLabel, "English");
+        setLanguageLabelClickListener(vietnameseLabel, "Vietnamese");
+        setLanguageLabelClickListener(frenchLabel, "French");
+        setLanguageLabelClickListener(germanLabel, "German");
+        setLanguageLabelClickListener(spanishLabel, "Spanish");
+        setLanguageLabelClickListener(italianLabel, "Italian");
+        setLanguageLabelClickListener(russianLabel, "Russian");
+        setLanguageLabelClickListener(dutchLabel, "Dutch");
+        setLanguageLabelClickListener(japaneseLabel, "Japanese");
+        setLanguageLabelClickListener(koreanLabel, "Korean");
+        setLanguageLabelClickListener(danishLabel, "Danish");
+        setLanguageLabelClickListener(thaiLabel, "Thai");
+        setLanguageLabelClickListener(chineseLabel, "Chinese");
     }
 
-    private void setLabelClickListener(Label label, double rating) {
+    private void setLanguageLabelClickListener(Label label, String language) {
+        label.setOnMouseClicked(event -> {
+            if (selectedLanguageLabel == label) {
+                selectedLanguageLabel = null;
+                resetLabelStyle(label);
+                currentLanguageFilter = null;
+            } else {
+                if (selectedLanguageLabel != null) {
+                    resetLabelStyle(selectedLanguageLabel);
+                }
+                selectedLanguageLabel = label;
+                applySelectedStyle(label);
+                currentLanguageFilter = language;
+            }
+            reloadData();
+        });
+    }
+
+    private void setRateLabelClickListener(Label label, double rating) {
         label.setOnMouseClicked(event -> {
             if (selectedRateLabel == label) {
                 selectedRateLabel = null;
@@ -320,11 +403,11 @@ public class SearchPageController implements Initializable {
     }
 
     private void applySelectedStyle(Label label) {
-        label.setStyle("-fx-font-size: 14px; -fx-text-fill: #4C2113;"); // Màu được chọn
+        label.setStyle("-fx-text-fill: #4C2113;");
     }
 
     private void resetLabelStyle(Label label) {
-        label.setStyle("-fx-font-size: 14px; -fx-text-fill: #B38B60;"); // Màu mặc định
+        label.setStyle("-fx-text-fill: #B38B60;");
     }
 
     private void displayBooks(List<Book> bookList) {
