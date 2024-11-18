@@ -23,9 +23,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class HomePageController implements Initializable {
 
@@ -45,16 +44,7 @@ public class HomePageController implements Initializable {
     private Button leftToprateButton;
 
     @FXML
-    private Button leftScrollButton2;
-
-    @FXML
-    private ImageView mainBanner0;
-
-    @FXML
-    private ImageView mainBanner1;
-
-    @FXML
-    private ImageView mainBanner2;
+    private Button leftMostborrowedButton;
 
     @FXML
     private ScrollPane mainBannerScroll;
@@ -69,7 +59,7 @@ public class HomePageController implements Initializable {
     private Button rightToprateButton;
 
     @FXML
-    private Button rightScrollButton2;
+    private Button rightMostborrowedButton;
 
     @FXML
     private ImageView searchButton;
@@ -83,24 +73,46 @@ public class HomePageController implements Initializable {
     @FXML
     private ScrollPane topRateScroll;
 
+    @FXML
+    private HBox mostBorrowedContainer;
+
+    @FXML
+    private ScrollPane mostBorrowedScroll;
+
     private Timeline autoScrollTimeline;
 
     private List<Book> topRateList = new ArrayList<>();
+    private final Map<String, Integer> currentIndexes = new HashMap<>();
 
-    private int currentRatingBookIndex = 0;
+    private List<Book> mostBorrowedList = new ArrayList<>();
+
     private static final int TOTAL_BOOKS = 18;
     private static final int BOOKS_PER_PAGE = 6;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        currentIndexes.put("TopRate", 0);
+        currentIndexes.put("MostBorrowed", 0);
         leftMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(-1));
         rightMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(1));
-        leftToprateButton.setOnMouseClicked(event -> scrollTopRate(-1));
-        rightToprateButton.setOnMouseClicked(event -> scrollTopRate(1));
+        leftToprateButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("TopRate"), topRateScroll, index -> currentIndexes.put("TopRate", index))
+        );
+        rightToprateButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("TopRate"), topRateScroll, index -> currentIndexes.put("TopRate", index))
+        );
+
+        leftMostborrowedButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("MostBorrowed"), mostBorrowedScroll, index -> currentIndexes.put("MostBorrowed", index))
+        );
+        rightMostborrowedButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("MostBorrowed"), mostBorrowedScroll, index -> currentIndexes.put("MostBorrowed", index))
+        );
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         startAutoScroll();
         loadTopRatedBooks();
+        loadMostBorrowedBooks();
     }
 
     private void scrollMainBanner(int direction) {
@@ -167,17 +179,28 @@ public class HomePageController implements Initializable {
     }
 
     private void loadTopRatedBooks() {
-        topRateList.clear();
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String  query = "SELECT id, title, author, isbn, category, publisher, quantity_copy," +
-                    " average_of_rating, year_published, language, number_of_pages, description," +
-                    " book_image FROM books ORDER BY average_of_rating DESC LIMIT ?";
-            PreparedStatement  preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, TOTAL_BOOKS);
+        String query = "SELECT * FROM books ORDER BY average_of_rating DESC LIMIT ?";
+        List<Book> topRatedBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(topRatedBooks, topRateContainer);
+    }
 
+
+    private void loadMostBorrowedBooks() {
+        String query = "SELECT b.* FROM books b JOIN borrows br ON b.isbn = br.book_isbn GROUP BY b.id ORDER BY COUNT(*) DESC LIMIT ?";
+        List<Book> mostBorrowedBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(mostBorrowedBooks, mostBorrowedContainer);
+    }
+
+    private List<Book> loadBooks(String query, Object... params) {
+        List<Book> bookList = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i + 1, params[i]);
+            }
 
             ResultSet resultSet = preparedStatement.executeQuery();
-
             while (resultSet.next()) {
                 Integer id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
@@ -198,15 +221,14 @@ public class HomePageController implements Initializable {
                 }
 
                 Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
-
-                topRateList.add(book);
+                bookList.add(book);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        displayTopRatedBooks();
+        return bookList;
     }
+
 
     @FXML
     private void handleSearch() {
@@ -226,13 +248,14 @@ public class HomePageController implements Initializable {
         }
     }
 
-    private void displayTopRatedBooks() {
-        for (Book book : topRateList) {
+    private void displayBooks(List<Book> books, HBox container) {
+        container.getChildren().clear();
+        for (Book book : books) {
             AnchorPane bookPane = new AnchorPane();
             bookPane.setPrefSize(183, 325);
 
             AnchorPane bookImagePane = new AnchorPane();
-            bookImagePane.setPrefSize(183,226);
+            bookImagePane.setPrefSize(183, 226);
             bookImagePane.setLayoutX(0);
 
             AnchorPane infoPane = new AnchorPane();
@@ -270,14 +293,13 @@ public class HomePageController implements Initializable {
             buttonPane.setLayoutY(225);
             buttonPane.setLayoutX(11);
 
-
             Button returnButton = new Button("QUICK BORROW");
             returnButton.getStyleClass().add("quick-borrow-button");
             returnButton.setLayoutX(6);
             returnButton.setLayoutY(5);
             buttonPane.getChildren().add(returnButton);
 
-            bookImagePane.getChildren().addAll(bookImage,buttonPane);
+            bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
                 TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
                 slideUp.setFromY(0);
@@ -293,55 +315,24 @@ public class HomePageController implements Initializable {
             });
 
             bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
-
-            HBox starBox = new HBox(5);
-            double rating = book.getAverageOfRating();
-            int fullStars = (int) rating;
-            double decimalPart = rating - fullStars;
-
-            for (int i = 1; i <= 5; i++) {
-                StackPane starPane = new StackPane();
-
-                ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
-                fullStar.setFitHeight(15);
-                fullStar.setFitWidth(15);
-
-                ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
-                emptyStar.setFitHeight(15);
-                emptyStar.setFitWidth(15);
-
-                if (i <= fullStars) {
-                    starPane.getChildren().add(fullStar);
-                } else if (i == fullStars + 1 && decimalPart > 0) {
-                    starPane.getChildren().addAll(emptyStar, fullStar);
-                    Rectangle clip = new Rectangle(15 * decimalPart, 15);
-                    fullStar.setClip(clip);
-                } else {
-                    starPane.getChildren().add(emptyStar);
-                }
-                starBox.getChildren().add(starPane);
-            }
-
-            starBox.setLayoutX(42);
-            starBox.setLayoutY(80);
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
-            infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
-            bookPane.getChildren().addAll(bookImagePane,infoPane);
-            topRateContainer.getChildren().add(bookPane);
+            infoPane.getChildren().addAll(titleLabel, authorLabel);
+            bookPane.getChildren().addAll(bookImagePane, infoPane);
+            container.getChildren().add(bookPane);
         }
-        topRateContainer.setSpacing(10);
+        container.setSpacing(10);
     }
 
-    private void scrollTopRate(int direction) {
-        int newBookIndex = currentRatingBookIndex + (direction * BOOKS_PER_PAGE);
-        if (newBookIndex >= 0 && newBookIndex <= TOTAL_BOOKS - BOOKS_PER_PAGE) {
-            currentRatingBookIndex = newBookIndex;
-            double targetHValue = (double) currentRatingBookIndex / (TOTAL_BOOKS - BOOKS_PER_PAGE);
+    private void scrollBooks(int direction, int currentIndex, ScrollPane scrollPane, Consumer<Integer> updateIndex) {
+        int newBookIndex = currentIndex + (direction * BOOKS_PER_PAGE);
+        if (newBookIndex >= 0 && newBookIndex <= TOTAL_BOOKS  - BOOKS_PER_PAGE) {
+            updateIndex.accept(newBookIndex);
+            double targetHValue = (double) newBookIndex / (TOTAL_BOOKS - BOOKS_PER_PAGE);
             Timeline timeline = new Timeline();
             KeyFrame keyFrame = new KeyFrame(
                     Duration.seconds(0.4),
                     new javafx.animation.KeyValue(
-                            topRateScroll.hvalueProperty(),
+                            scrollPane.hvalueProperty(),
                             targetHValue,
                             Interpolator.EASE_BOTH
                     )
@@ -350,5 +341,6 @@ public class HomePageController implements Initializable {
             timeline.play();
         }
     }
+
 }
 

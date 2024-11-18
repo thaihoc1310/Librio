@@ -217,12 +217,12 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ScrollPane fx:id="topRateScroll1" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                        <ScrollPane fx:id="mostBorrowedScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
                            <content>
-                              <HBox fx:id="topRateContainer1" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                              <HBox fx:id="mostBorrowedContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" styleClass="white-pane" />
                            </content>
                         </ScrollPane>
-                        <Button fx:id="leftToprateButton1" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                        <Button fx:id="leftMostborrowedButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
                            <graphic>
                               <ImageView fitHeight="20" fitWidth="20">
                                  <image>
@@ -231,7 +231,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="rightToprateButton1" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                        <Button fx:id="rightMostborrowedButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
                            <graphic>
                               <ImageView fitHeight="20" fitWidth="20">
                                  <image>
