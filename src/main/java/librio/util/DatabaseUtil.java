@@ -457,6 +457,9 @@ public class DatabaseUtil {
     }
 
     public static void startAutoUpdate() {
+        if (scheduler.isShutdown() || scheduler.isTerminated()) {
+            scheduler = Executors.newScheduledThreadPool(1);
+        }
         updateBookStatus();
         scheduler.scheduleAtFixedRate(DatabaseUtil::updateBookStatus, 1, 1, TimeUnit.HOURS);
     }

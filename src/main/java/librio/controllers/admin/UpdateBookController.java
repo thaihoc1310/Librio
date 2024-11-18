@@ -124,54 +124,54 @@ public class UpdateBookController implements Initializable {
         boolean validation = false;
 
         if(bookTitle.isEmpty()){
-            bookTitleErrorLabel.setText("Title cannot be empty");
+            bookTitleErrorLabel.setText("Title cannot be empty!");
             validation = true;
         } else if(isBookTitleExists(bookTitle) && !bookTitle.equals(book.getTitle())){
-            bookTitleErrorLabel.setText("Title already exists");
+            bookTitleErrorLabel.setText("Title already exists!");
             validation = true;
         }
 
         if(isbn.isEmpty()){
-            isbnErrorLabel.setText("isbn cannot be empty");
+            isbnErrorLabel.setText("isbn cannot be empty!");
             validation = true;
         }else if (!isbn.matches("\\d{10}|\\d{13}")) {
-            isbnErrorLabel.setText("isbn must be 10 or 13 digits");
+            isbnErrorLabel.setText("isbn must be 10 or 13 digits!");
             validation = true;
         }
 
         if(author.isEmpty()){
-            authorErrorLabel.setText("Password cannot be empty");
+            authorErrorLabel.setText("Author cannot be empty!");
             validation = true;
         }
 
         if(publisher.isEmpty()){
-            publisherErrorLabel.setText("Password cannot be empty");
+            publisherErrorLabel.setText("Publisher cannot be empty!");
             validation = true;
         }
 
         if(category.isEmpty()){
-            categoryErrorLabel.setText("Password cannot be empty");
+            categoryErrorLabel.setText("Category cannot be empty!");
             validation = true;
         }
 
         if (numberOfPages.isEmpty()) {
-            numberOfPagesErrorLabel.setText("Number of pages cannot be empty");
+            numberOfPagesErrorLabel.setText("Number of pages cannot be empty!");
             validation = true;
         } else if (!numberOfPages.matches("\\d+")) {
-            numberOfPagesErrorLabel.setText("Number of pages must be a number");
+            numberOfPagesErrorLabel.setText("Number of pages must be a number!");
             validation = true;
         }
 
         if(quantityOfCopy.isEmpty()){
-            quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty");
+            quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty!");
             validation = true;
         } else if (!quantityOfCopy.matches("\\d+")) {
-            quantityOfCopyErrorLabel.setText("Quantity of copy must be a non-negative number");
+            quantityOfCopyErrorLabel.setText("Quantity of copy must be a non-negative number!");
             validation = true;
         }
 
         if(language.isEmpty()){
-            languageErrorLabel.setText("Password cannot be empty");
+            languageErrorLabel.setText("Password cannot be empty!");
             validation = true;
         }
 
