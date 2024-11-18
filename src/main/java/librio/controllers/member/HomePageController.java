@@ -2,18 +2,23 @@ package librio.controllers.member;
 
 import javafx.animation.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,7 +36,7 @@ public class HomePageController implements Initializable {
     private ImageView avatar;
 
     @FXML
-    private ComboBox<?> filterBox;
+    private ComboBox<String> filterBox;
 
     @FXML
     private Button leftMainBannerButton;
@@ -92,6 +97,8 @@ public class HomePageController implements Initializable {
         rightMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(1));
         leftToprateButton.setOnMouseClicked(event -> scrollTopRate(-1));
         rightToprateButton.setOnMouseClicked(event -> scrollTopRate(1));
+        filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
+        filterBox.getSelectionModel().selectFirst();
         startAutoScroll();
         loadTopRatedBooks();
     }
@@ -152,6 +159,7 @@ public class HomePageController implements Initializable {
         autoScrollTimeline.setCycleCount(Timeline.INDEFINITE);
         autoScrollTimeline.play();
     }
+
     private void stopAutoScroll() {
         if (autoScrollTimeline != null) {
             autoScrollTimeline.stop();
@@ -198,6 +206,24 @@ public class HomePageController implements Initializable {
             e.printStackTrace();
         }
         displayTopRatedBooks();
+    }
+
+    @FXML
+    private void handleSearch() {
+        String keyword = searchTextField.getText().trim();
+        String selectedFilter = filterBox.getValue();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            SearchPageController searchController = loader.getController();
+            searchController.setSearchParameters(keyword, selectedFilter);
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void displayTopRatedBooks() {

@@ -3,18 +3,22 @@ package librio.controllers.member;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,6 +33,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
@@ -179,6 +184,12 @@ public class SearchPageController implements Initializable {
         executor.submit(loadTask);
     }
 
+    public void setSearchParameters(String keyword, String filter) {
+        searchTextField.setText(keyword);
+        filterBox.getSelectionModel().select(filter);
+        handleSearch();
+    }
+
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
         pane.setExpanded(false);
         pane.expandedProperty().addListener((observable, oldValue, newValue) -> {
@@ -312,6 +323,37 @@ public class SearchPageController implements Initializable {
     private String getLimitClause() {
         int limit = Integer.parseInt(limitBox.getValue());
         return " LIMIT " + limit;
+    }
+
+    @FXML
+    private void returnHomepage() {
+        loadingIndicator.setVisible(true);
+        Task<Parent> loadHomePageTask = new Task<>() {
+            @Override
+            protected Parent call() throws Exception {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
+                return loader.load();
+            }
+
+            @Override
+            protected void succeeded() {
+                Parent homepageRoot = getValue();
+                Platform.runLater(() -> {
+                    Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+                    Scene currentScene = currentStage.getScene();
+                    currentScene.setRoot(homepageRoot);
+                    loadingIndicator.setVisible(false);
+                });
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> loadingIndicator.setVisible(false));
+                getException().printStackTrace();
+            }
+        };
+
+        executor.submit(loadHomePageTask);
     }
 
 
