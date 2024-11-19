@@ -17,7 +17,7 @@
    <children>
       <AnchorPane layoutX="47.0" layoutY="42.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1026.0" styleClass="background-wrapper" stylesheets="@../../css/admin/CRUDUser.css">
          <children>
-            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="49.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-faint-focus-color: transparent;" stylesheets="@../../css/DesignUI.css">
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="49.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-faint-focus-color: transparent;" stylesheets="@../../css/member/DesignUI.css">
                <content>
                   <AnchorPane fx:id="bookDetailsPane" maxHeight="554.0" minHeight="553.0" prefHeight="554.0" prefWidth="1026.0" style="-fx-background-radius: 0em; -fx-focus-color: cccccc;" styleClass="background-wrapper2">
                      <children>

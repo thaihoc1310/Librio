@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="borrowConfirmationPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="264.0" prefWidth="588.0" styleClass="whitePane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.ConfirmBorrow">
+   <children>
+      <ImageView fitHeight="26.0" fitWidth="28.0" layoutX="556.0" layoutY="14.0" onMouseClicked="#closeBorrowConfirmationPane" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+         <image>
+            <Image url="@../../icons/MemberIcon/cancel.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="bookImage" fitHeight="191.0" fitWidth="137.0" layoutX="26.0" layoutY="40.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../css/background_tile_pane.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="confirmButton" defaultButton="true" layoutX="306.0" layoutY="215.0" onAction="#confirmAction" prefHeight="30.0" prefWidth="82.0" styleClass="btn-2" text="Confirm">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <AnchorPane layoutX="205.0" layoutY="40.0" prefHeight="161.0" prefWidth="351.0">
+         <children>
+            <Label fx:id="titleLabel" layoutX="14.0" layoutY="27.0" prefHeight="81.0" prefWidth="324.0" text="Title" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="authorNameLabel" layoutX="14.0" layoutY="1.0" prefHeight="25.0" prefWidth="324.0" text="Author">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+            </Label>
+            <Line endX="223.20001220703125" layoutX="114.0" layoutY="113.0" startX="-100.0" strokeWidth="0.2" />
+            <Text fx:id="dueDateLabel" layoutX="14.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Due Date:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </children>
+   <stylesheets>
+      <URL value="@../../css/admin/CRUDUser.css" />
+      <URL value="@../../css/member/BookDetail.css" />
+   </stylesheets>
+</AnchorPane>

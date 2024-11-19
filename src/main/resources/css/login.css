@@ -157,3 +157,8 @@
 
 .right-pane {
 }
+
+.progress-indicator {
+    -fx-stroke: #A45C23;
+    -fx-accent: #A45C23;
+}

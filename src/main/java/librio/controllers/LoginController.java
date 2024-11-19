@@ -4,7 +4,9 @@ import javafx.animation.FadeTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.animation.ParallelTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +26,8 @@ import librio.util.DatabaseUtil;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static librio.util.DatabaseUtil.authenticate;
 import static librio.util.DatabaseUtil.isEmailExists;
@@ -94,7 +98,12 @@ public class LoginController {
     private Label switchSignIn;
 
     @FXML
+    private ProgressIndicator loadingIndicator;
+
+    private ExecutorService executor;
+    @FXML
     private void initialize() {
+        executor = Executors.newFixedThreadPool(2);
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
 
         passwordTextVisible.setVisible(false);
@@ -323,17 +332,49 @@ public class LoginController {
         Stage currentStage = (Stage) loginButton.getScene().getWindow();
         Stage stage = new Stage();
         stage.setTitle("Librio");
-        if (userRole.equals(Role.LIBRARIAN)) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot = loader.load();
-            stage.setScene(new Scene(adminDashboardRoot));
-        } else if (userRole.equals(Role.MEMBER)) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
-            Parent adminDashboardRoot = loader.load();
-            stage.setScene(new Scene(adminDashboardRoot));
-        }
-        stage.show();
-        currentStage.close();
+//        if (userRole.equals(Role.LIBRARIAN)) {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
+//            Parent adminDashboardRoot = loader.load();
+//            stage.setScene(new Scene(adminDashboardRoot));
+//        } else if (userRole.equals(Role.MEMBER)) {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
+//            Parent adminDashboardRoot = loader.load();
+//            stage.setScene(new Scene(adminDashboardRoot));
+//        }
+//        stage.show();
+//        currentStage.close();
+
+        loadingIndicator.setVisible(true);
+        Task<Parent> loadHomePageTask = new Task<>() {
+            @Override
+            protected Parent call() throws Exception {
+                if (userRole.equals(Role.LIBRARIAN)) {
+                    return new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml")).load();
+                } else if (userRole.equals(Role.MEMBER)) {
+                    return new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml")).load();
+                }
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                Parent homepageRoot = getValue();
+                Platform.runLater(() -> {
+                    stage.setScene(new Scene(homepageRoot));
+                    stage.show();
+                    loadingIndicator.setVisible(false);
+                    currentStage.close();
+                });
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> loadingIndicator.setVisible(false));
+                getException().printStackTrace();
+            }
+        };
+
+        executor.submit(loadHomePageTask);
     }
 
     private void addHideErrorListenersToSignUpFields() {

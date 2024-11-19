@@ -384,7 +384,7 @@ public class CreateBookController implements Initializable {
     }
 
     private String getFullLanguageName(String isoCode) {
-        return LANGUAGE_MAP.getOrDefault(isoCode, isoCode);
+        return LANGUAGE_MAP.getOrDefault(isoCode, "Other");
     }
 
     private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();

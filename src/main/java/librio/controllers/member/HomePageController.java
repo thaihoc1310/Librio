@@ -8,11 +8,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
@@ -298,7 +302,7 @@ public class HomePageController implements Initializable {
             returnButton.setLayoutX(6);
             returnButton.setLayoutY(5);
             buttonPane.getChildren().add(returnButton);
-
+            returnButton.setOnAction(e -> openBorrowConfirmationPane(book));
             bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
                 TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
@@ -315,9 +319,40 @@ public class HomePageController implements Initializable {
             });
 
             bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
+            HBox starBox = new HBox(5);
+            double rating = book.getAverageOfRating();
+            int fullStars = (int) rating;
+            double decimalPart = rating - fullStars;
+
+            for (int i = 1; i <= 5; i++) {
+                StackPane starPane = new StackPane();
+
+                ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+
+                ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
+                emptyStar.setFitHeight(15);
+                emptyStar.setFitWidth(15);
+
+                if (i <= fullStars) {
+                    starPane.getChildren().add(fullStar);
+                } else if (i == fullStars + 1 && decimalPart > 0) {
+                    starPane.getChildren().addAll(emptyStar, fullStar);
+                    Rectangle clip = new Rectangle(15 * decimalPart, 15);
+                    fullStar.setClip(clip);
+                } else {
+                    starPane.getChildren().add(emptyStar);
+                }
+                starBox.getChildren().add(starPane);
+            }
+
+            starBox.setLayoutX(42);
+            starBox.setLayoutY(80);
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
-            infoPane.getChildren().addAll(titleLabel, authorLabel);
+            infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
             bookPane.getChildren().addAll(bookImagePane, infoPane);
+            bookPane.setOnMouseClicked(event -> openBookDetailScene(book));
             container.getChildren().add(bookPane);
         }
         container.setSpacing(10);
@@ -342,5 +377,75 @@ public class HomePageController implements Initializable {
         }
     }
 
+
+    private void openBookDetailScene(Book book) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
+            Parent rootContent = loader.load();
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
+            BookDetailController bookDetailController = loader.getController();
+            bookDetailController.setBook(book);
+
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(rootContent);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initOwner(currentStage);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openBorrowConfirmationPane(Book book) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            ConfirmBorrow confirmBorrow = loader.getController();
+            confirmBorrow.setBook(book);
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initOwner(currentStage);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
