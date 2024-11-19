@@ -10,10 +10,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -26,71 +32,70 @@ import java.sql.ResultSet;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static librio.util.DesignUtil.cropAndClipToCircle;
+
 public class HomePageController implements Initializable {
-
-    @FXML
-    private ScrollPane mainScroll;
-
-    @FXML
-    private ImageView avatar;
-
-    @FXML
-    private ComboBox<String> filterBox;
-
-    @FXML
-    private Button leftMainBannerButton;
-
-    @FXML
-    private Button leftToprateButton;
-
-    @FXML
-    private Button leftMostborrowedButton;
-
-    @FXML
-    private ScrollPane mainBannerScroll;
-
-    @FXML
-    private HBox mainBannerContainer;
-
-    @FXML
-    private Button rightMainBannerButton;
-
-    @FXML
-    private Button rightToprateButton;
-
-    @FXML
-    private Button rightMostborrowedButton;
-
-    @FXML
-    private ImageView searchButton;
-
-    @FXML
-    private TextField searchTextField;
-
-    @FXML
-    private HBox topRateContainer;
-
-    @FXML
-    private ScrollPane topRateScroll;
-
-    @FXML
-    private HBox mostBorrowedContainer;
-
-    @FXML
-    private ScrollPane mostBorrowedScroll;
-
-    private Timeline autoScrollTimeline;
-
-    private List<Book> topRateList = new ArrayList<>();
-    private final Map<String, Integer> currentIndexes = new HashMap<>();
-
-    private List<Book> mostBorrowedList = new ArrayList<>();
 
     private static final int TOTAL_BOOKS = 18;
     private static final int BOOKS_PER_PAGE = 6;
+    private final Map<String, Integer> currentIndexes = new HashMap<>();
+    @FXML
+    private ScrollPane mainScroll;
+    @FXML
+    private ImageView avatarUser;
+    @FXML
+    private ImageView clickAvatar;
+    @FXML
+    private ComboBox<String> filterBox;
+    @FXML
+    private Button leftMainBannerButton;
+    @FXML
+    private Button leftToprateButton;
+    @FXML
+    private Button leftMostborrowedButton;
+    @FXML
+    private ScrollPane mainBannerScroll;
+    @FXML
+    private HBox mainBannerContainer;
+    @FXML
+    private Button rightMainBannerButton;
+    @FXML
+    private Button rightToprateButton;
+    @FXML
+    private Button rightMostborrowedButton;
+    @FXML
+    private ImageView searchButton;
+    @FXML
+    private TextField searchTextField;
+    @FXML
+    private HBox topRateContainer;
+    @FXML
+    private ScrollPane topRateScroll;
+    @FXML
+    private HBox mostBorrowedContainer;
+    @FXML
+    private ScrollPane mostBorrowedScroll;
+    @FXML
+    private Label userNameUser;
+    @FXML
+    private Label userNameUser2;
+    @FXML
+    private AnchorPane menuPane;
+    @FXML
+    private Pane backPane;
+    @FXML
+    private Circle moreIcon;
+
+    private boolean isAnchorPaneVisible = false;
+    private Timeline autoScrollTimeline;
+    private List<Book> topRateList = new ArrayList<>();
+    private List<Book> mostBorrowedList = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
+        moreIcon.setFill(new ImagePattern(image));
+        setAvatarAndUserName();
         currentIndexes.put("TopRate", 0);
         currentIndexes.put("MostBorrowed", 0);
         leftMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(-1));
@@ -113,6 +118,27 @@ public class HomePageController implements Initializable {
         startAutoScroll();
         loadTopRatedBooks();
         loadMostBorrowedBooks();
+    }
+
+    public void setAvatarAndUserName() {
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+
+        File file = new File(path);
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 23);
+            cropAndClipToCircle(image, clickAvatar, 23);
+        } else {
+            String defaultImage = avatarsDir + "Male User.png";
+            File defaultImageFile = new File(defaultImage);
+            Image image = new Image(defaultImageFile.toURI().toString());
+            cropAndClipToCircle(image, avatarUser, 23);
+            cropAndClipToCircle(image, clickAvatar, 23);
+        }
+        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
+        userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
     private void scrollMainBanner(int direction) {
@@ -325,7 +351,7 @@ public class HomePageController implements Initializable {
 
     private void scrollBooks(int direction, int currentIndex, ScrollPane scrollPane, Consumer<Integer> updateIndex) {
         int newBookIndex = currentIndex + (direction * BOOKS_PER_PAGE);
-        if (newBookIndex >= 0 && newBookIndex <= TOTAL_BOOKS  - BOOKS_PER_PAGE) {
+        if (newBookIndex >= 0 && newBookIndex <= TOTAL_BOOKS - BOOKS_PER_PAGE) {
             updateIndex.accept(newBookIndex);
             double targetHValue = (double) newBookIndex / (TOTAL_BOOKS - BOOKS_PER_PAGE);
             Timeline timeline = new Timeline();
@@ -339,6 +365,75 @@ public class HomePageController implements Initializable {
             );
             timeline.getKeyFrames().add(keyFrame);
             timeline.play();
+        }
+    }
+
+    @FXML
+    private void handleAvatarClick() {
+        if (!isAnchorPaneVisible) {
+            menuPane.toFront();
+            isAnchorPaneVisible = true;
+            backPane.setVisible(true);
+
+        } else {
+            menuPane.toBack();
+            isAnchorPaneVisible = false;
+            backPane.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void cancelMenuButton() {
+        if (isAnchorPaneVisible) {
+            menuPane.toBack();
+            isAnchorPaneVisible = false;
+            backPane.setVisible(false);
+        }
+    }
+
+    @FXML
+    void logOut() throws IOException {
+        Stage currenStage = (Stage) searchTextField.getScene().getWindow();
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
+        Parent loginRoot = loader.load();
+        stage.setScene(new Scene(loginRoot));
+        stage.show();
+        Session.getInstance().logout();
+        currenStage.close();
+    }
+
+    @FXML
+    private void openBorrowed() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
+            Parent manageUserRoot = loader.load();
+            Stage currentStage = (Stage) avatarUser.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageUserRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openEditProfileScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Profile");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initOwner(searchTextField.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            // Hiển thị scene
+            stage.showAndWait();
+            setAvatarAndUserName();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
