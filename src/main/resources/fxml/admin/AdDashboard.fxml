@@ -239,7 +239,7 @@
                                                 <NumberAxis side="LEFT" />
                                             </yAxis>
                                         </BarChart>
-                                        <PieChart fx:id="pieChart" layoutX="14.0" prefHeight="398.0" prefWidth="615.0" stylesheets="@../../css/admin/AdminDashBoard.css" title="Library Book Usage Overview" />
+                                        <PieChart fx:id="pieChart" layoutX="14.0" prefHeight="374.0" prefWidth="615.0" stylesheets="@../../css/admin/AdminDashBoard.css" title="Library Book Usage Overview" />
                                     </children>
                                 </AnchorPane>
                             </children>

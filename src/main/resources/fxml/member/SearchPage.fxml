@@ -216,22 +216,26 @@
                                                    <content>
                                                       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                                          <children>
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Fiction" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Education" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Technology" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Science" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Health" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="History" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Music" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Computer" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Computer" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Computer" />
-                                                            <Label prefHeight="26.0" prefWidth="185.0" text="Computer" />
+                                                            <Label fx:id="fictionLabel" prefHeight="26.0" prefWidth="185.0" text="Fiction" />
+                                                            <Label fx:id="economicsLabel" prefHeight="26.0" prefWidth="185.0" text="Economics" />
+                                                            <Label fx:id="computersLabel" prefHeight="26.0" prefWidth="185.0" text="Computers" />
+                                                            <Label fx:id="historyLabel" prefHeight="26.0" prefWidth="185.0" text="History" />
+                                                            <Label fx:id="scieneLabel" prefHeight="26.0" prefWidth="185.0" text="Sciene" />
+                                                            <Label fx:id="healthLabel" prefHeight="26.0" prefWidth="185.0" text="Health" />
+                                                            <Label fx:id="lawLabel" prefHeight="26.0" prefWidth="185.0" text="Law" />
+                                                            <Label fx:id="socialScienceLabel" prefHeight="26.0" prefWidth="185.0" text="Social Science" />
+                                                            <Label fx:id="technologyLabel" prefHeight="26.0" prefWidth="185.0" text="Technology" />
+                                                            <Label fx:id="artLabel" prefHeight="26.0" prefWidth="185.0" text="Art" />
+                                                            <Label fx:id="educationLabel" prefHeight="26.0" prefWidth="185.0" text="Education" />
+                                                            <Label fx:id="sportsLabel" prefHeight="26.0" prefWidth="185.0" text="Sports" />
+                                                            <Label fx:id="travelLabel" prefHeight="26.0" prefWidth="185.0" text="Travel" />
+                                                            <Label fx:id="musicLabel" prefHeight="26.0" prefWidth="185.0" text="Music" />
+                                                            <Label fx:id="othersLabel" prefHeight="26.0" prefWidth="185.0" text="Others" />
                                                          </children>
                                                       </VBox>
                                                    </content>
                                                 </TitledPane>
-                                                <TitledPane fx:id="categoryPane1" expanded="false" prefHeight="27.0" prefWidth="222.0" styleClass="title-pane" text="LANGUAGE">
+                                                <TitledPane fx:id="languagePane" expanded="false" prefHeight="27.0" prefWidth="222.0" styleClass="title-pane" text="LANGUAGE">
                                                    <content>
                                                       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                                          <children>

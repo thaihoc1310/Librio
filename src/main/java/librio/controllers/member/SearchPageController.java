@@ -116,6 +116,37 @@ public class SearchPageController implements Initializable {
     @FXML
     private Label noRatingsLabel;
     @FXML
+    private Label fictionLabel;
+    @FXML
+    private Label economicsLabel;
+    @FXML
+    private Label computersLabel;
+    @FXML
+    private Label historyLabel;
+    @FXML
+    private Label scieneLabel;
+    @FXML
+    private Label healthLabel;
+    @FXML
+    private Label lawLabel;
+    @FXML
+    private Label socialScienceLabel;
+    @FXML
+    private Label technologyLabel;
+    @FXML
+    private Label artLabel;
+    @FXML
+    private Label educationLabel;
+    @FXML
+    private Label sportsLabel;
+    @FXML
+    private Label travelLabel;
+    @FXML
+    private Label musicLabel;
+    @FXML
+    private Label othersLabel;
+
+    @FXML
     private AnchorPane menuPane;
     private List<Book> bookList = new ArrayList<>();
     private String keyword;
@@ -124,7 +155,9 @@ public class SearchPageController implements Initializable {
     private double currentRatingFilter = 0.0;
     private Label selectedRateLabel = null;
     private Label selectedLanguageLabel = null;
+    private Label selectedCategoryLabel = null;
     private String currentLanguageFilter = null;
+    private String currentCategoryFilter = null;
     private boolean isAnchorPaneVisible = false;
 
     @Override
@@ -237,6 +270,9 @@ public class SearchPageController implements Initializable {
             if (currentLanguageFilter != null) {
                 preparedStatement.setString(paramIndex++, currentLanguageFilter);
             }
+            if(currentCategoryFilter != null) {
+                preparedStatement.setString(paramIndex++, currentCategoryFilter);
+            }
             if (keyword != null && !keyword.isEmpty()) {
                 preparedStatement.setString(paramIndex++, "%" + keyword + "%");
             }
@@ -284,6 +320,10 @@ public class SearchPageController implements Initializable {
 
         if (currentLanguageFilter != null) {
             conditions.add("language = ?");
+        }
+
+        if(currentCategoryFilter != null) {
+            conditions.add("category = ?");
         }
 
         if (keyword != null && !keyword.isEmpty()) {
@@ -397,6 +437,7 @@ public class SearchPageController implements Initializable {
         setRateLabelClickListener(twoStarsLabel, 2.0);
         setRateLabelClickListener(oneStarLabel, 1.0);
         setRateLabelClickListener(noRatingsLabel, 0.0);
+
         setLanguageLabelClickListener(englishLabel, "English");
         setLanguageLabelClickListener(vietnameseLabel, "Vietnamese");
         setLanguageLabelClickListener(frenchLabel, "French");
@@ -410,6 +451,23 @@ public class SearchPageController implements Initializable {
         setLanguageLabelClickListener(danishLabel, "Danish");
         setLanguageLabelClickListener(thaiLabel, "Thai");
         setLanguageLabelClickListener(chineseLabel, "Chinese");
+
+        setCategoryLabelClickListener(fictionLabel, "Fiction");
+        setCategoryLabelClickListener(economicsLabel, "Economics");
+        setCategoryLabelClickListener(computersLabel, "Computers");
+        setCategoryLabelClickListener(historyLabel, "History");
+        setCategoryLabelClickListener(scieneLabel, "Science");
+        setCategoryLabelClickListener(healthLabel, "Health");
+        setCategoryLabelClickListener(lawLabel, "Law");
+        setCategoryLabelClickListener(socialScienceLabel, "Social Science");
+        setCategoryLabelClickListener(technologyLabel, "Technology");
+        setCategoryLabelClickListener(artLabel, "Art");
+        setCategoryLabelClickListener(educationLabel, "Education");
+        setCategoryLabelClickListener(sportsLabel, "Sports");
+        setCategoryLabelClickListener(travelLabel, "Travel");
+        setCategoryLabelClickListener(musicLabel, "Music");
+        setCategoryLabelClickListener(othersLabel, "Others");
+
     }
 
     private void setLanguageLabelClickListener(Label label, String language) {
@@ -450,6 +508,24 @@ public class SearchPageController implements Initializable {
                     isNoRatingFilter = false;
                     currentRatingFilter = rating;
                 }
+            }
+            reloadData();
+        });
+    }
+
+    private void setCategoryLabelClickListener(Label label, String category) {
+        label.setOnMouseClicked(event -> {
+            if (selectedCategoryLabel == label) {
+                selectedCategoryLabel = null;
+                resetLabelStyle(label);
+                currentCategoryFilter = null;
+            } else {
+                if (selectedCategoryLabel != null) {
+                    resetLabelStyle(selectedCategoryLabel);
+                }
+                selectedCategoryLabel = label;
+                applySelectedStyle(label);
+                currentCategoryFilter = category;
             }
             reloadData();
         });

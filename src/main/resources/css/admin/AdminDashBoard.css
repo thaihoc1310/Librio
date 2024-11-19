@@ -120,24 +120,7 @@
 }
 
 .chart-pie-label {
-    -fx-font-size: 14px;
+    -fx-font-size: 12.5px;
     -fx-font-weight: bold;
     -fx-fill: #333333;
-}
-
-.default-color0.chart-pie {
-    -fx-pie-color: #ff7043;
-}
-.default-color1.chart-pie {
-    -fx-pie-color: #ffa726;
-}
-
-.chart-legend-item-symbol {
-    -fx-background-radius: 5px;
-    -fx-padding: 5px;
-}
-
-.chart-legend-item {
-    -fx-font-size: 14px;
-    -fx-text-fill: #333333;
 }
