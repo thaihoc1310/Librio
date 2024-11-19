@@ -74,6 +74,35 @@ public class AdDashboardController implements Initializable {
         addDataToDashboardCardAndChart();
     }
 
+    private List<PieChart.Data> getCategoryData() {
+        List<PieChart.Data> categoryData = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String sql = "SELECT category, SUM(quantity_copy) AS quantity FROM books GROUP BY category";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            int totalQuantity = 0;
+            Map<String, Integer> categoryQuantities = new HashMap<>();
+
+            while (resultSet.next()) {
+                String category = resultSet.getString("category");
+                int quantity = resultSet.getInt("quantity");
+                categoryQuantities.put(category, quantity);
+                totalQuantity += quantity;
+            }
+
+            for (Map.Entry<String, Integer> entry : categoryQuantities.entrySet()) {
+                String category = entry.getKey();
+                int quantity = entry.getValue();
+                double percentage = ((double) quantity / totalQuantity) * 100;
+                categoryData.add(new PieChart.Data(category + ": " + String.format("%.2f", percentage) + "%", quantity));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryData;
+    }
+
     public void addDataToDashboardCardAndChart(){
         int borrowedBooks = DatabaseUtil.getTotalBorrowedBooks();
         int availableBooks = DatabaseUtil.getAvailableBooks();
@@ -88,15 +117,10 @@ public class AdDashboardController implements Initializable {
         totalBorrowsLabel.setText(String.valueOf(borrowedBooks));
 
         //Add data to Pie Chart
-        pieChart.getStylesheets().add(getClass().getResource("/css/admin/AdminDashBoard.css").toExternalForm());
-
-        double borrowedPercentage = ((double) borrowedBooks / totalCopyBooks) * 100;
-        double availablePercentage = ((double) availableBooks / totalCopyBooks) * 100;
-
-        PieChart.Data slice1 = new PieChart.Data("Available : " + String.format("%.2f", availablePercentage) + "%", availablePercentage);
-        PieChart.Data slice2 = new PieChart.Data("Borrowed : " + String.format("%.2f", borrowedPercentage) + "%", borrowedPercentage);
-
-        pieChart.getData().addAll(slice1, slice2);
+        pieChart.getData().clear();
+        List<PieChart.Data> categoryData = getCategoryData();
+        pieChart.getData().addAll(categoryData);
+        pieChart.setLegendVisible(false);
 
         //Add data to bar Chart
         CategoryAxis xAxis = new CategoryAxis();
@@ -107,7 +131,7 @@ public class AdDashboardController implements Initializable {
         barChart.setTitle("Books Borrowed in Last 12 Months");
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Books Borrowed");
+        barChart.setLegendVisible(false);
 
         List<String> monthYearLabels = getMonthYearLabels();
         List<Integer> borrowCounts = getBorrowCounts();

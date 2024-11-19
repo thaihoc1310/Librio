@@ -152,7 +152,10 @@ public class CreateBookController implements Initializable {
             isbnTextField.setText(apiBook.getIsbn().equals("Unknown ISBN") ? "Unknown ISBN" : apiBook.getIsbn().substring(7));
             authorTextField.setText(apiBook.getAuthor());
             publisherTextField.setText(apiBook.getPublisher());
-            categoryTextField.setText(apiBook.getCategory());
+
+            String broadCategory = mapCategoryToBroadCategory(apiBook.getCategory());
+            categoryTextField.setText(broadCategory);
+
             languageTextField.setText(getFullLanguageName(apiBook.getLanguage()));
             yearPublishedTextField.setText(apiBook.getYearPublished().contains("Unknown") ? "Unknown" : apiBook.getYearPublished().substring(0,4));
             descriptionTextArea.setText(apiBook.getDescription());
@@ -384,10 +387,15 @@ public class CreateBookController implements Initializable {
     }
 
     private String getFullLanguageName(String isoCode) {
-        return LANGUAGE_MAP.getOrDefault(isoCode, "Other");
+        return LANGUAGE_MAP.getOrDefault(isoCode, "Others");
+    }
+
+    private String mapCategoryToBroadCategory(String category) {
+        return CATEGORY_MAP.getOrDefault(category, "Others");
     }
 
     private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();
+    private static final Map<String, String> CATEGORY_MAP = new HashMap<>();
 
     static {
         LANGUAGE_MAP.put("ar", "Arabic");
@@ -442,5 +450,47 @@ public class CreateBookController implements Initializable {
         LANGUAGE_MAP.put("zu", "Zulu");
     }
 
+    static {
+        CATEGORY_MAP.put("Nature", "Science");
+        CATEGORY_MAP.put("Mathematics", "Science");
+        CATEGORY_MAP.put("Science", "Science");
+        CATEGORY_MAP.put("Fiction", "Fiction");
+        CATEGORY_MAP.put("Juvenile Fiction", "Fiction");
+        CATEGORY_MAP.put("Education", "Education");
+        CATEGORY_MAP.put("Games & Activities", "Education");
+        CATEGORY_MAP.put("Family & Relationships", "Education");
+        CATEGORY_MAP.put("Computers", "Computers");
+        CATEGORY_MAP.put("Artificial intelligence", "Computers");
+        CATEGORY_MAP.put("Bodybuilding", "Health");
+        CATEGORY_MAP.put("Medical", "Health");
+        CATEGORY_MAP.put("Health", "Health");
+        CATEGORY_MAP.put("Health & Fitness", "Health");
+        CATEGORY_MAP.put("Cooking", "Health");
+        CATEGORY_MAP.put("Psychology", "Health");
+        CATEGORY_MAP.put("Enzymes", "Health");
+        CATEGORY_MAP.put("Social Science", "Social Science");
+        CATEGORY_MAP.put("Political Science", "Social Science");
+        CATEGORY_MAP.put("Philosophy", "Social Science");
+        CATEGORY_MAP.put("Religion", "Social Science");
+        CATEGORY_MAP.put("Business & Economics", "Economics");
+        CATEGORY_MAP.put("History", "History");
+        CATEGORY_MAP.put("Biography & Autobiography", "History");
+        CATEGORY_MAP.put("Art", "Art");
+        CATEGORY_MAP.put("Crafts & Hobbies", "Art");
+        //CATEGORY_MAP.put("Handicraft", "Art");
+        CATEGORY_MAP.put("Antiques & Collectibles", "Art");
+        CATEGORY_MAP.put("Design", "Art");
+        CATEGORY_MAP.put("Travel", "Travel");
+        CATEGORY_MAP.put("Technology & Engineering", "Technology");
+        CATEGORY_MAP.put("Engineering", "Technology");
+        CATEGORY_MAP.put("Technology", "Technology");
+        CATEGORY_MAP.put("Music", "Music");
+        CATEGORY_MAP.put("Rock musicians", "Music");
+        CATEGORY_MAP.put("Sports medicine", "Sports");
+        CATEGORY_MAP.put("Sports", "Sports");
+        CATEGORY_MAP.put("Law", "Law");
+        CATEGORY_MAP.put("Administrative courts", "Law");
+        //CATEGORY_MAP.put("Administrative Law", "Law");
+    }
 
 }
