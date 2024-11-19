@@ -125,31 +125,31 @@
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="18.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="       Fiction" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="Fiction" />
                                     <AnchorPane prefHeight="61.0" prefWidth="18.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="      Non-fiction" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="Computers" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="      Science" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="Science" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="     Technology" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="Health" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="      Education" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="Sciene" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
@@ -161,19 +161,19 @@
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="     History" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="Law" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="96.0" styleClass="label-button" text="      Music" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="96.0" styleClass="label-button" text="Social Science" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="      Computer" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="Technology" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
