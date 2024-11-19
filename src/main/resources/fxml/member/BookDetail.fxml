@@ -128,7 +128,7 @@
                               <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
                            </image>
                         </ImageView>
-                        <Button layoutX="57.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmationPane" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
+                        <Button fx:id="confirmButton" layoutX="60.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmationPane" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
                      </children>
                   </AnchorPane>
                   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="228.0" prefWidth="1026.0" styleClass="whitePane">

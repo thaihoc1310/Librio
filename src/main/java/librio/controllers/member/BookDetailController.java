@@ -112,7 +112,6 @@ public class BookDetailController implements Initializable {
     private boolean isExpanded = false;
     private String fullDescription;
     private static final int DESCRIPTION_LIMIT = 500;
-    private boolean isBorrowConfirmationPaneVisible = false;
 
     private Book book;
 
@@ -197,7 +196,6 @@ public class BookDetailController implements Initializable {
         File file = new File(path);
         Image image;
 
-
         if (file.exists()) {
             image = new Image(file.toURI().toString());
         } else {
@@ -205,7 +203,45 @@ public class BookDetailController implements Initializable {
         }
 
         DesignUtil.cropToAspectRatio(image, bookCoverImage, 217, 315);
+
+        setConfirmButton();
     }
+
+    private void setConfirmButton(){
+        int quantityOfCopy = book.getQuantityCopy();
+        boolean isAlreadyBorrowed = checkIfUserBorrowedBook();
+        if (quantityOfCopy == 0) {
+            updateBorrowButton("Out of stock", "#9e4b3e", false);
+        } else if (isAlreadyBorrowed) {
+            updateBorrowButton("Already borrowed", "#b57a3e", false);
+        } else {
+            confirmButton.setText("Borrow");
+        }
+    }
+
+    private boolean checkIfUserBorrowedBook() {
+        String query = "SELECT COUNT(*) FROM borrows WHERE member_id = ? AND book_isbn = ? AND (status = 'BORROWING' OR status = 'OVERDUE')";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, Session.getInstance().getLoggedInUser().getId());
+            statement.setString(2, book.getIsbn());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void updateBorrowButton(String text, String color, boolean isEnabled) {
+        confirmButton.setText(text);
+        confirmButton.setStyle("-fx-background-color: " + color);
+        confirmButton.setDisable(!isEnabled);
+        confirmButton.setCursor(isEnabled ? Cursor.HAND : Cursor.DEFAULT);
+    }
+
 
     private void toggleDescription() {
         if (isExpanded) {
@@ -241,6 +277,7 @@ public class BookDetailController implements Initializable {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime localDateTime = LocalDateTime.parse(createdAt, formatter);
                 Instant createdAtInstant = localDateTime.toInstant(ZoneOffset.UTC);
+
 
                 Feedback feedback1 = new Feedback(id, String.valueOf(book.getId()), memberId, rating, about, createdAtInstant);
                 feedbackList.add(feedback1);
@@ -334,100 +371,6 @@ public class BookDetailController implements Initializable {
         return total;
     }
 
-//    private void loadBookDetails() {
-//        authorNameLabel.setText(book.getAuthor());
-//        titleLabel.setText(book.getTitle());
-////        publisherLabel.setText("Publisher:   " + book.getPublisher());
-////        languageLabel.setText("Language:   " + book.getLanguage());
-////        borrowDateLabel.setText("Borrow Date:    " + LocalDate.now());
-//
-////        averageRatingBox.getChildren().clear();
-//
-//        double rating = book.getAverageOfRating();
-//        int fullStars = (int) rating;
-//        double decimalPart = rating - fullStars;
-//
-//        for (int i = 1; i <= 5; i++) {
-//            StackPane starPane = new StackPane();
-//
-//            ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
-//            fullStar.setFitHeight(15);
-//            fullStar.setFitWidth(15);
-//
-//            ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
-//            emptyStar.setFitHeight(15);
-//            emptyStar.setFitWidth(15);
-//
-//            if (i <= fullStars) {
-//                starPane.getChildren().add(fullStar);
-//            } else if (i == fullStars + 1 && decimalPart > 0) {
-//                starPane.getChildren().addAll(emptyStar, fullStar);
-//                Rectangle clip = new Rectangle(15 * decimalPart, 15);
-//                fullStar.setClip(clip);
-//            } else {
-//                starPane.getChildren().add(emptyStar);
-//            }
-//
-//            averageRatingBox.getChildren().add(starPane);
-//
-//            String projectDir = System.getProperty("user.dir");
-//            String booksDir = projectDir + "/src/main/resources/images/book/";
-//            String path = booksDir + book.getImagePath();
-//            File file = new File(path);
-//            Image image;
-//
-//
-//            if (file.exists()) {
-//                image = new Image(file.toURI().toString());
-//            } else {
-//                image = new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm());
-//            }
-//
-//            DesignUtil.cropToAspectRatio(image, bookImage, 137, 182);
-//        }
-//    }
-
-
-    @FXML
-    private void confirmAction() {
-        LocalDate dueDate = dueDatePicker.getValue();
-
-        boolean validation = false;
-
-        if (dueDate == null) {
-            dueDateErrorLabel.setText("Please choose your expected return date!");
-            validation = true;
-        } else if (ChronoUnit.DAYS.between(LocalDate.now(), dueDate) > 60) {
-            dueDateErrorLabel.setText("The borrowing period cannot exceed 60 days!");
-            validation = true;
-        } else if (dueDate.isBefore(LocalDate.now())) {
-            dueDateErrorLabel.setText("Expected return date must be after today!");
-            validation = true;
-        } else {
-            dueDateErrorLabel.setText("");
-        }
-
-        if (validation) {
-            return;
-        }
-
-        String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, Session.getInstance().getLoggedInUser().getId());
-            statement.setString(2, book.getIsbn());
-            statement.setString(3, LocalDate.now().toString());
-            statement.setString(4, dueDate.toString());
-            statement.setString(5, null);
-            statement.setString(6, "BORROWING");
-            statement.setString(7, String.valueOf(0));
-            statement.setString(8, LocalDateTime.now().toString());
-            closeStage();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     private void openBorrowConfirmationPane() {
         try {
@@ -458,7 +401,7 @@ public class BookDetailController implements Initializable {
                 currentStage.getScene().getRoot().setEffect(null);
             });
             stage.showAndWait();
-
+            setConfirmButton();
         } catch (IOException e) {
             e.printStackTrace();
         }
