@@ -441,9 +441,9 @@ public class BorrowedController implements Initializable {
     }
 
     @FXML
-    private void openBorrowed() {
+    private void openHomepage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Book.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
             Parent manageUserRoot = loader.load();
             Stage currentStage = (Stage) avatarUser.getScene().getWindow();
             Scene currentScene = currentStage.getScene();

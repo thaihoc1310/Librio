@@ -9,483 +9,547 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
    <children>
       <ScrollPane fx:id="mainScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" styleClass="main-scroll" vbarPolicy="ALWAYS">
          <content>
-            <AnchorPane prefHeight="2027.0" prefWidth="1385.0" styleClass="white-pane">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <AnchorPane prefHeight="137.0" prefWidth="1397.0" style="-fx-background-color: #F1DEBC;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="370.0" styleClass="Pane-avatar" stylesheets="@../../css/DesignUI.css" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
                      <children>
-                        <TextField fx:id="searchTextField" layoutX="437.0" layoutY="22.0" prefHeight="38.0" prefWidth="648.0">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <ComboBox fx:id="filterBox" layoutX="317.0" layoutY="22.0" prefHeight="37.0" prefWidth="120.0" promptText="All" />
-                        <ImageView fx:id="searchButton" fitHeight="27.0" fitWidth="27.0" layoutX="1040.0" layoutY="27.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="71.0" fitWidth="173.0" layoutX="42.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../icons/MemberIcon/Librio.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="avatar" fitHeight="46.0" fitWidth="46.0" layoutX="1319.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar">
-                           <image>
-                              <Image url="@../../icons/MemberIcon/MaleUser.png" />
-                           </image>
-                        </ImageView>
-                        <HBox layoutX="70.0" layoutY="78.0" prefHeight="61.0" prefWidth="1257.0">
+                        <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="128.0" prefWidth="342.0" styleClass="Pane-avatar">
                            <children>
-                              <Label prefHeight="61.0" prefWidth="61.0" text="Books">
+                              <ImageView fx:id="avatarUser" fitHeight="46.0" fitWidth="46.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="userNameUser" layoutX="78.0" layoutY="14.0" prefHeight="38.0" prefWidth="217.0" text="User">
                                  <font>
-                                    <Font size="15.0" />
+                                    <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="24.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="18.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="       Fiction">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="18.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="      Non-fiction">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="19.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="      Science">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="19.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="     Technology">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="19.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="      Education">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="19.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="      Health">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="20.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="     History">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="19.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="96.0" styleClass="label-button" text="      Music">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="19.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="      Computer">
-                              </Label>
-                              <AnchorPane prefHeight="61.0" prefWidth="19.0">
-                                 <children>
-                                    <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
-                                 </children>
-                              </AnchorPane>
-                              <Label prefHeight="61.0" prefWidth="46.0" styleClass="label-button" text="   Art">
-                              </Label>
+                              <Line endX="174.79998779296875" endY="-7.62939453125E-6" layoutX="147.0" layoutY="65.0" startX="-128.40000915527344" strokeWidth="0.25" />
+                              <Button graphicTextGap="5.0" layoutX="18.0" layoutY="79.0" mnemonicParsing="false" onAction="#openEditProfileScene" prefHeight="38.0" prefWidth="305.0" styleClass="button-settings" text="Edit profile">
+                                 <graphic>
+                                    <ImageView fitHeight="19.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/Registration.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
                            </children>
-                        </HBox>
+                        </AnchorPane>
+                        <VBox layoutX="6.0" layoutY="158.0" prefHeight="171.0" prefWidth="355.0" spacing="5.0">
+                           <children>
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" onAction="#openBorrowed" prefHeight="46.0" prefWidth="355.0" styleClass="button-ctrl" text="Borrowed books">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/borrow_book.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="376.0" styleClass="button-ctrl" text="Borrowing Dashboard">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/dashboard.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" onAction="#logOut" prefHeight="55.0" prefWidth="355.0" styleClass="button-ctrl" text="Log Out">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/logout.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutY="139.0" prefHeight="305.0" prefWidth="1396.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <AnchorPane prefHeight="2027.0" prefWidth="1385.0" styleClass="white-pane">
                      <children>
-                        <ScrollPane fx:id="mainBannerScroll" hbarPolicy="NEVER" layoutX="-1.0" prefHeight="305.0" prefWidth="1400.0" vbarPolicy="NEVER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                           <content>
-                              <HBox fx:id="mainBannerContainer" prefHeight="302.0" prefWidth="1397.0">
+                        <AnchorPane prefHeight="140.0" prefWidth="1400.0" style="-fx-background-color: #F1DEBC;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-11.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <TextField fx:id="searchTextField" layoutX="437.0" layoutY="22.0" prefHeight="38.0" prefWidth="648.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <ComboBox fx:id="filterBox" layoutX="317.0" layoutY="22.0" prefHeight="37.0" prefWidth="120.0" promptText="All" />
+                              <ImageView fx:id="searchButton" fitHeight="27.0" fitWidth="27.0" layoutX="1040.0" layoutY="27.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="71.0" fitWidth="173.0" layoutX="42.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../icons/MemberIcon/Librio.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="clickAvatar" fitHeight="46.0" fitWidth="46.0" layoutX="1319.0" layoutY="18.0" onMouseClicked="#handleAvatarClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="18.0">
+                                 <image>
+                                    <Image url="@../../icons/MemberIcon/MaleUser.png" />
+                                 </image>
+                              </ImageView>
+                              <HBox layoutX="70.0" layoutY="78.0" prefHeight="61.0" prefWidth="1257.0">
                                  <children>
-                                    <ImageView fx:id="mainBanner0" fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../../images/banner/banner0.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="mainBanner1" fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../../images/banner/banner1.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="mainBanner2" fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../../images/banner/banner2.png" />
-                                       </image></ImageView>
+                                    <Label prefHeight="61.0" prefWidth="61.0" text="Books">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <AnchorPane prefHeight="61.0" prefWidth="24.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="18.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="       Fiction" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="18.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="      Non-fiction" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="      Science" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="     Technology" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="      Education" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="      Health" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="20.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="     History" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="96.0" styleClass="label-button" text="      Music" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="      Computer" />
+                                    <AnchorPane prefHeight="61.0" prefWidth="19.0">
+                                       <children>
+                                          <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Label prefHeight="61.0" prefWidth="46.0" styleClass="label-button" text="   Art" />
                                  </children>
                               </HBox>
-                           </content>
-                        </ScrollPane>
-                        <Button fx:id="leftMainBannerButton" layoutX="1.0" layoutY="120.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="40.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/left-arrow-w.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="rightMainBannerButton" layoutX="1346.0" layoutY="120.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="40.0" styleClass="scroll">
-                        <graphic>
-                           <ImageView fitHeight="20" fitWidth="20">
-                              <image>
-                                 <Image url="@../../icons/MemberIcon/right-arrow-w.png" />
-                              </image>
-                           </ImageView>
-                        </graphic>
-                     </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="77.0" layoutY="496.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0" styleClass="white-pane">
-                     <children>
-                        <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane fx:id="topRateScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
-                           <content>
-                              <HBox fx:id="topRateContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" styleClass="white-pane" />
-                           </content>
-                        </ScrollPane>
-                        <Button fx:id="leftToprateButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="rightToprateButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/right-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="77.0" layoutY="904.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
-                     <children>
-                        <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Most-borrowed">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane fx:id="mostBorrowedScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
-                           <content>
-                              <HBox fx:id="mostBorrowedContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" styleClass="white-pane" />
-                           </content>
-                        </ScrollPane>
-                        <Button fx:id="leftMostborrowedButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="rightMostborrowedButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/right-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="44.0" layoutY="1312.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="1311.0">
-                     <children>
-                        <HBox layoutX="146.0" prefHeight="235.0" prefWidth="200.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <Circle fx:id="moreIcon" fill="#1f93ff" layoutX="1356.0" layoutY="52.0" onMouseClicked="#handleAvatarClick" radius="9.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="43.0" />
+                              <Label fx:id="userNameUser2" alignment="CENTER_RIGHT" layoutX="1121.0" layoutY="30.0" prefHeight="22.0" prefWidth="206.0" text="Đinh Viết Huy" textFill="#481f10" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="30.0">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="139.0" prefHeight="305.0" prefWidth="1396.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                              <ScrollPane fx:id="mainBannerScroll" hbarPolicy="NEVER" layoutX="-1.0" prefHeight="305.0" prefWidth="1400.0" vbarPolicy="NEVER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <content>
+                                    <HBox fx:id="mainBannerContainer" prefHeight="302.0" prefWidth="1397.0">
+                                       <children>
+                                          <ImageView fx:id="mainBanner0" fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true">
+                                             <image>
+                                                <Image url="@../../images/banner/banner0.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fx:id="mainBanner1" fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true">
+                                             <image>
+                                                <Image url="@../../images/banner/banner1.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fx:id="mainBanner2" fitHeight="302.0" fitWidth="1397.0" pickOnBounds="true">
+                                             <image>
+                                                <Image url="@../../images/banner/banner2.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="leftMainBannerButton" layoutX="1.0" layoutY="120.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="40.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/left-arrow-w.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="rightMainBannerButton" layoutX="1346.0" layoutY="120.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="40.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/right-arrow-w.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="77.0" layoutY="496.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0" styleClass="white-pane">
+                           <children>
+                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
+                                 <font>
+                                    <Font name="System Bold Italic" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="topRateScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
+                                 <content>
+                                    <HBox fx:id="topRateContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" styleClass="white-pane" />
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="leftToprateButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/left-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="rightToprateButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/right-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="77.0" layoutY="904.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
+                           <children>
+                              <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Most-borrowed">
+                                 <font>
+                                    <Font name="System Bold Italic" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="mostBorrowedScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
+                                 <content>
+                                    <HBox fx:id="mostBorrowedContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" styleClass="white-pane" />
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="leftMostborrowedButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/left-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="rightMostborrowedButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/right-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="44.0" layoutY="1312.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="1311.0">
+                           <children>
+                              <HBox layoutX="146.0" prefHeight="235.0" prefWidth="200.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner4.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner5.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner6.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="37.0" layoutY="1663.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="1321.0">
+                           <children>
+                              <ImageView fitHeight="233.0" fitWidth="1321.0" layoutX="127.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
-                                    <Image url="@../../images/banner/banner4.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../images/banner/banner5.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../images/banner/banner6.png" />
+                                    <Image url="@../../images/banner/banner3.png" />
                                  </image>
                               </ImageView>
                            </children>
-                        </HBox>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="37.0" layoutY="1663.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="1321.0">
-                     <children>
-                        <ImageView fitHeight="233.0" fitWidth="1321.0" layoutX="127.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <image>
-                              <Image url="@../../images/banner/banner3.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="77.0" layoutY="1932.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
-                     <children>
-                        <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Most-borrowed">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane fx:id="topRateScroll11" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
-                           <content>
-                              <HBox fx:id="topRateContainer11" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
-                           </content>
-                        </ScrollPane>
-                        <Button fx:id="leftToprateButton11" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="rightToprateButton11" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/right-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="77.0" layoutY="2340.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
-                     <children>
-                        <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Most-borrowed">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane fx:id="topRateScroll111" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
-                           <content>
-                              <HBox fx:id="topRateContainer111" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
-                           </content>
-                        </ScrollPane>
-                        <Button fx:id="leftToprateButton111" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="rightToprateButton111" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/right-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="44.0" layoutY="2748.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="1311.0">
-                     <children>
-                        <HBox layoutX="146.0" prefHeight="235.0" prefWidth="200.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        </AnchorPane>
+                        <AnchorPane layoutX="77.0" layoutY="1932.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                            <children>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                              <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Most-borrowed">
+                                 <font>
+                                    <Font name="System Bold Italic" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="topRateScroll11" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                                 <content>
+                                    <HBox fx:id="topRateContainer11" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="leftToprateButton11" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/left-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="rightToprateButton11" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/right-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="77.0" layoutY="2340.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
+                           <children>
+                              <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Most-borrowed">
+                                 <font>
+                                    <Font name="System Bold Italic" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="topRateScroll111" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                                 <content>
+                                    <HBox fx:id="topRateContainer111" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="leftToprateButton111" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/left-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="rightToprateButton111" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/right-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="44.0" layoutY="2748.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="1311.0">
+                           <children>
+                              <HBox layoutX="146.0" prefHeight="235.0" prefWidth="200.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner7.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner8.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner9.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="37.0" layoutY="3101.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="1321.0">
+                           <children>
+                              <ImageView fitHeight="233.0" fitWidth="1321.0" layoutX="127.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
-                                    <Image url="@../../images/banner/banner7.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../images/banner/banner8.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../images/banner/banner9.png" />
+                                    <Image url="@../../images/banner/banner10.png" />
                                  </image>
                               </ImageView>
                            </children>
-                        </HBox>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="37.0" layoutY="3101.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="1321.0">
-                     <children>
-                        <ImageView fitHeight="233.0" fitWidth="1321.0" layoutX="127.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <image>
-                              <Image url="@../../images/banner/banner10.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="77.0" layoutY="3354.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
-                     <children>
-                        <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane fx:id="topRateScroll2" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
-                           <content>
-                              <HBox fx:id="topRateContainer2" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
-                           </content>
-                        </ScrollPane>
-                        <Button fx:id="leftToprateButton2" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="rightToprateButton2" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/right-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="77.0" layoutY="3764.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
-                     <children>
-                        <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane fx:id="topRateScroll3" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
-                           <content>
-                              <HBox fx:id="topRateContainer3" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
-                           </content>
-                        </ScrollPane>
-                        <Button fx:id="leftToprateButton3" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="rightToprateButton3" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
-                           <graphic>
-                              <ImageView fitHeight="20" fitWidth="20">
-                                 <image>
-                                    <Image url="@../../icons/MemberIcon/right-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="44.0" layoutY="4174.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="1311.0">
-                     <children>
-                        <HBox layoutX="146.0" prefHeight="240.0" prefWidth="1311.0" spacing="15.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        </AnchorPane>
+                        <AnchorPane layoutX="77.0" layoutY="3354.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                            <children>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
+                                 <font>
+                                    <Font name="System Bold Italic" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="topRateScroll2" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                                 <content>
+                                    <HBox fx:id="topRateContainer2" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="leftToprateButton2" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/left-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="rightToprateButton2" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/right-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="77.0" layoutY="3764.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
+                           <children>
+                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
+                                 <font>
+                                    <Font name="System Bold Italic" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="topRateScroll3" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                                 <content>
+                                    <HBox fx:id="topRateContainer3" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                                 </content>
+                              </ScrollPane>
+                              <Button fx:id="leftToprateButton3" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/left-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="rightToprateButton3" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                                 <graphic>
+                                    <ImageView fitHeight="20" fitWidth="20">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/right-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="44.0" layoutY="4174.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="1311.0">
+                           <children>
+                              <HBox layoutX="146.0" prefHeight="240.0" prefWidth="1311.0" spacing="15.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner12.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner13.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/banner/banner14.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="-15.0" layoutY="4444.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="216.0" prefWidth="1385.0">
+                           <children>
+                              <ImageView fitHeight="400.0" fitWidth="1397.0" layoutX="115.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
-                                    <Image url="@../../images/banner/banner12.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../images/banner/banner13.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../images/banner/banner14.png" />
+                                    <Image url="@../../images/banner/banner11.png" />
                                  </image>
                               </ImageView>
                            </children>
-                        </HBox>
+                        </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="-15.0" layoutY="4444.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="216.0" prefWidth="1385.0">
-                     <children>
-                        <ImageView fitHeight="400.0" fitWidth="1397.0" layoutX="115.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <image>
-                              <Image url="@../../images/banner/banner11.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
+                  <Pane fx:id="backPane" onMouseClicked="#cancelMenuButton" prefHeight="741.0" prefWidth="1390.0" visible="false" />
                </children>
             </AnchorPane>
          </content>

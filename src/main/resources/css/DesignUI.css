@@ -3,10 +3,39 @@
     -fx-background-repeat: no-repeat;
      -fx-background-size: 100% auto;
 }
-
 .combo-box {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
 }
+
+.combo-box, .combo-box .list-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+    -fx-cursor: hand;
+}
+
+.combo-box:hover, .combo-box:focused {
+    -fx-text-fill: #4C2113;
+    -fx-cursor: hand;
+}
+
+.text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+    -fx-padding: 8;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
 .tilePane-book {
     -fx-background-color: #ffffff;
     -fx-background-radius: 5px;
