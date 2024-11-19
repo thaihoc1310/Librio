@@ -473,16 +473,27 @@ public class BorrowedController implements Initializable {
         Status newStatus = (today.isAfter(dueDate)) ? Status.RETURNED_LATE : Status.RETURNED;
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "UPDATE borrows SET status = ?, return_date = ? WHERE book_isbn = ? AND member_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, newStatus.toString());
-            preparedStatement.setString(2, today.toString());
-            preparedStatement.setString(3, borrowedBook.getIsbn());
-            preparedStatement.setString(4, Session.getInstance().getLoggedInUser().getId());
+            String updateBorrowQuery = "UPDATE borrows SET status = ?, return_date = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE book_isbn = ? AND member_id = ?";
+            PreparedStatement borrowStatement = connection.prepareStatement(updateBorrowQuery);
+            borrowStatement.setString(1, newStatus.toString());
+            borrowStatement.setString(2, today.toString());
+            borrowStatement.setString(3, Session.getInstance().getLoggedInUser().getEmail());
+            borrowStatement.setString(4, borrowedBook.getIsbn());
+            borrowStatement.setString(5, Session.getInstance().getLoggedInUser().getId());
 
-
-            int rowsAffected = preparedStatement.executeUpdate();
+            int rowsAffected = borrowStatement.executeUpdate();
             if (rowsAffected > 0) {
+                String updateBookQuery = "UPDATE books SET quantity_copy = quantity_copy + 1 WHERE isbn = ?";
+                PreparedStatement bookStatement = connection.prepareStatement(updateBookQuery);
+                bookStatement.setString(1, borrowedBook.getIsbn());
+
+                int bookRowsAffected = bookStatement.executeUpdate();
+                if (bookRowsAffected > 0) {
+                    System.out.println("Cập nhật số lượng sách thành công!");
+                } else {
+                    System.out.println("Cập nhật số lượng sách thất bại!");
+                }
+
                 borrowBookList.remove(borrowedBook);
                 borrowedBook.setStatus(newStatus);
                 borrowedBook.setReturnDate(today);
@@ -490,13 +501,10 @@ public class BorrowedController implements Initializable {
 
                 displayBorrowingBooks(borrowBookList);
                 displayReturnedBooks(returnedBookList);
-            } else {
-                System.out.println("Trả sách thất bại!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
 }

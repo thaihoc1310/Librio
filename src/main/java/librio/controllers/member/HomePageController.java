@@ -323,12 +323,12 @@ public class HomePageController implements Initializable {
             buttonPane.setLayoutY(225);
             buttonPane.setLayoutX(11);
 
-            Button returnButton = new Button("QUICK BORROW");
-            returnButton.getStyleClass().add("quick-borrow-button");
-            returnButton.setLayoutX(6);
-            returnButton.setLayoutY(5);
-            buttonPane.getChildren().add(returnButton);
-            returnButton.setOnAction(e -> openBorrowConfirmationPane(book));
+            Button borrowButton = new Button("QUICK BORROW");
+            borrowButton.getStyleClass().add("quick-borrow-button");
+            borrowButton.setLayoutX(6);
+            borrowButton.setLayoutY(5);
+            buttonPane.getChildren().add(borrowButton);
+            borrowButton.setOnAction(e -> openBorrowConfirmationPane(book));
             bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
                 TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);

@@ -391,7 +391,7 @@ public class CreateBookController implements Initializable {
     }
 
     private String mapCategoryToBroadCategory(String category) {
-        return CATEGORY_MAP.getOrDefault(category, "Others");
+        return CATEGORY_MAP.getOrDefault(category, category);
     }
 
     private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();
@@ -477,6 +477,7 @@ public class CreateBookController implements Initializable {
         CATEGORY_MAP.put("Biography & Autobiography", "History");
         CATEGORY_MAP.put("Art", "Art");
         CATEGORY_MAP.put("Crafts & Hobbies", "Art");
+        CATEGORY_MAP.put("Architecture", "Art");
         //CATEGORY_MAP.put("Handicraft", "Art");
         CATEGORY_MAP.put("Antiques & Collectibles", "Art");
         CATEGORY_MAP.put("Design", "Art");
@@ -488,6 +489,7 @@ public class CreateBookController implements Initializable {
         CATEGORY_MAP.put("Rock musicians", "Music");
         CATEGORY_MAP.put("Sports medicine", "Sports");
         CATEGORY_MAP.put("Sports", "Sports");
+        CATEGORY_MAP.put("Exercise", "Sports");
         CATEGORY_MAP.put("Law", "Law");
         CATEGORY_MAP.put("Administrative courts", "Law");
         //CATEGORY_MAP.put("Administrative Law", "Law");

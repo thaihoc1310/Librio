@@ -164,7 +164,7 @@ public class ProfileSettingsController implements Initializable {
             loggedInUser.setAvatar(avatarFilePath);
         }
 
-        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, avatar = ?, birth_of_date = ? WHERE id = ?";
+        String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, gender = ?, avatar = ?, birth_of_date = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -176,6 +176,7 @@ public class ProfileSettingsController implements Initializable {
             statement.setString(6, avatarFilePath != null ? avatarFilePath : loggedInUser.getAvatar());
             assert birthOfDate != null;
             statement.setDate(7, Date.valueOf(birthOfDate));
+            statement.setString(8, loggedInUser.getEmail());
             statement.setString(8, loggedInUser.getId());
 
             int rowsUpdated = statement.executeUpdate();
