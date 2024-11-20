@@ -333,7 +333,6 @@ public class HomePageController implements Initializable {
             setConfirmButton(returnButton, book);
 
             buttonPane.getChildren().add(returnButton);
-            returnButton.setOnAction(e -> openBorrowConfirmationPane(book));
             bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
                 TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
@@ -383,7 +382,8 @@ public class HomePageController implements Initializable {
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
             infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
             bookPane.getChildren().addAll(bookImagePane, infoPane);
-            bookPane.setOnMouseClicked(event -> openBookDetailScene(book));
+            bookPane.setOnMouseClicked(e -> openBookDetailScene(book,returnButton));
+            returnButton.setOnAction(e -> openBorrowConfirmationPane(book,returnButton));
             container.getChildren().add(bookPane);
         }
         container.setSpacing(10);
@@ -409,7 +409,7 @@ public class HomePageController implements Initializable {
     }
 
 
-    private void openBookDetailScene(Book book) {
+    private void openBookDetailScene(Book book, Button confirmButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
             Parent rootContent = loader.load();
@@ -436,20 +436,12 @@ public class HomePageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                updateAllContainers(book);
+                setConfirmButton(confirmButton,book);
             });
 
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void updateAllContainers(Book book) {
-        List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer);
-        for (HBox container : containers) {
-            updateButtonInContainer(container, book);
-            container.layout();
         }
     }
 
@@ -502,7 +494,7 @@ public class HomePageController implements Initializable {
         }
     }
 
-    private void openBorrowConfirmationPane(Book book) {
+    private void openBorrowConfirmationPane(Book book, Button confirmButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
             Parent root = loader.load();
@@ -530,7 +522,7 @@ public class HomePageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                updateAllContainers(book);
+                setConfirmButton(confirmButton,book);
 
             });
             stage.showAndWait();

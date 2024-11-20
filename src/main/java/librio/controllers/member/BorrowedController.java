@@ -422,7 +422,7 @@ public class BorrowedController implements Initializable {
             setRatingButton(rateButton, book);
 
 
-            rateButton.setOnAction(e -> openRating(book));
+            rateButton.setOnAction(e -> openRating(book, rateButton));
 
             anchorPane.getChildren().addAll(bookImageView, titleLabel, authorText, isbnLabel, separator, gridPane, rateButton);
 
@@ -553,7 +553,7 @@ public class BorrowedController implements Initializable {
     }
 
     @FXML
-    private void openRating(Book book) {
+    private void openRating(Book book, Button rateButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/RatingPage.fxml"));
             Parent root = loader.load();
@@ -580,6 +580,7 @@ public class BorrowedController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
+                setRatingButton(rateButton, book);
             });
             stage.showAndWait();
 //            setConfirmButton();
