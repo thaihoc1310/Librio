@@ -436,7 +436,7 @@ public class HomePageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                setConfirmButton(confirmButton,book);
+                updateAllContainers(book);
             });
 
             stage.showAndWait();
@@ -522,7 +522,7 @@ public class HomePageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                setConfirmButton(confirmButton,book);
+                updateAllContainers(book);
 
             });
             stage.showAndWait();
@@ -550,6 +550,14 @@ public class HomePageController implements Initializable {
             setAvatarAndUserName();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void updateAllContainers(Book book) {
+        List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer);
+        for (HBox container : containers) {
+            updateButtonInContainer(container, book);
+            container.layout();
         }
     }
 }

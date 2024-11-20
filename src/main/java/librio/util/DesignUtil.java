@@ -116,4 +116,18 @@ public class DesignUtil {
         button.setOnMouseExited(e -> button.setStyle("-fx-text-fill: #6e2f18;"));
     }
 
+    public static void updateButtonInContainer(HBox container, Book book) {
+        for (Node node : container.getChildren()) {
+            if (node instanceof AnchorPane) {
+                AnchorPane bookPane = (AnchorPane) node;
+                Button returnButton = (Button) bookPane.lookup(".quick-borrow-button");
+                if (returnButton != null) {
+                    if (returnButton.getUserData() != null && book.getId() == (int) returnButton.getUserData()) {
+                        setConfirmButton(returnButton, book);
+                    }
+                }
+            }
+        }
+    }
+
 }
