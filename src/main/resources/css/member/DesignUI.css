@@ -225,3 +225,19 @@
     -fx-border-color: lightgray;
     -fx-padding: 5;
  }
+
+ .rate-button {
+     -fx-background-color: white;
+     -fx-border-color: #FFA500;
+     -fx-border-radius: 8;
+     -fx-background-radius: 8;
+     -fx-text-fill: rgba(255, 165, 0, 1);
+     -fx-font-weight: bold;
+    -fx-font-size: 16px;
+ }
+
+ .rate-button:hover {
+     -fx-text-fill: rgba(255, 165, 0, 0.7);
+         -fx-cursor: hand;
+ }
+

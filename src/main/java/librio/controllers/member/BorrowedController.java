@@ -3,22 +3,27 @@ package librio.controllers.member;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TabPane;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
@@ -41,7 +46,10 @@ import java.util.ResourceBundle;
 
 import static librio.models.Status.BORROWING;
 import static librio.models.Status.OVERDUE;
+import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
+import static librio.util.DatabaseUtil.checkIfUserRatedBook;
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setConfirmButton;
 
 public class BorrowedController implements Initializable {
     @FXML
@@ -320,25 +328,42 @@ public class BorrowedController implements Initializable {
 
             GridPane gridPane = new GridPane();
             gridPane.setLayoutX(179);
-            gridPane.setLayoutY(114);
-            gridPane.setPrefWidth(250);
+            gridPane.setLayoutY(100);
+            gridPane.setPrefHeight(136);
+            gridPane.setPrefWidth(414);
 
+// Cấu hình các cột
             ColumnConstraints col1 = new ColumnConstraints();
             col1.setHgrow(Priority.SOMETIMES);
             col1.setPrefWidth(100);
+
             ColumnConstraints col2 = new ColumnConstraints();
             col2.setHgrow(Priority.SOMETIMES);
-            col2.setPrefWidth(150);
+            col2.setPrefWidth(123.33);
+            col2.setMaxWidth(128.67);
 
-            gridPane.getColumnConstraints().addAll(col1, col2);
+            ColumnConstraints col3 = new ColumnConstraints();
+            col3.setHgrow(Priority.SOMETIMES);
+            col3.setPrefWidth(51.33);
+            col3.setMaxWidth(98.33);
 
-            for (int i = 0; i < 5; i++) {
+            ColumnConstraints col4 = new ColumnConstraints();
+            col4.setHgrow(Priority.SOMETIMES);
+            col4.setPrefWidth(139.33);
+            col4.setMaxWidth(145.67);
+
+            gridPane.getColumnConstraints().addAll(col1, col2, col3, col4);
+
+// Cấu hình các hàng
+            for (int i = 0; i < 3; i++) {
                 RowConstraints row = new RowConstraints();
                 row.setVgrow(Priority.SOMETIMES);
-                row.setPrefHeight(30);
+                row.setPrefHeight(47);
+                row.setMaxHeight(47);
                 gridPane.getRowConstraints().add(row);
             }
 
+// Thêm các Label và dữ liệu vào GridPane
             Label borrowDateLabel = new Label("Borrow date:");
             borrowDateLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
             gridPane.add(borrowDateLabel, 0, 0);
@@ -372,28 +397,57 @@ public class BorrowedController implements Initializable {
 
             Label statusLabel = new Label("Status:");
             statusLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
-            gridPane.add(statusLabel, 0, 3);
+            gridPane.add(statusLabel, 2, 0);
 
             String statusString = book.getStatus().toString();
             Label status = new Label("   " + statusString);
             status.setFont(Font.font("System", 16));
-            gridPane.add(status, 1, 3);
+            gridPane.add(status, 3, 0);
 
             Label fineLabel = new Label("Fine:");
             fineLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
-            gridPane.add(fineLabel, 0, 4);
+            gridPane.add(fineLabel, 2, 1);
 
             String fineString = book.getFine().toString();
             Label fine = new Label("   " + fineString + " VND");
             fine.setFont(Font.font("System", 16));
-            gridPane.add(fine, 1, 4);
+            gridPane.add(fine, 3, 1);
 
-            anchorPane.getChildren().addAll(bookImageView, titleLabel, authorText, isbnLabel, separator, gridPane);
+
+            Button rateButton = new Button();
+            rateButton.setLayoutX(500);
+            rateButton.setLayoutY(210);
+            rateButton.setPrefSize(100, 40);
+            rateButton.getStyleClass().add("rate-button");
+            setRatingButton(rateButton, book);
+
+
+            rateButton.setOnAction(e -> openRating(book, rateButton));
+
+            anchorPane.getChildren().addAll(bookImageView, titleLabel, authorText, isbnLabel, separator, gridPane, rateButton);
 
             tilePane.getChildren().add(anchorPane);
         }
     }
 
+    public static void setRatingButton(Button ratingButton, Book book) {
+        boolean isAlreadyRated = checkIfUserRatedBook(Session.getInstance().getLoggedInUser(), book);
+        ratingButton.setUserData(book.getId());
+        if (isAlreadyRated) {
+            updateRatingButton(ratingButton, "RATED", "#A0A0A0", false);
+        } else {
+            updateRatingButton(ratingButton, "RATING", "#FFA500", true);
+        }
+    }
+
+    public static void updateRatingButton(Button button, String text, String color, boolean isEnabled) {
+        button.setText(text);
+        button.setStyle("-fx-border-color: " + color + "; -fx-text-fill: " + color);
+        button.setDisable(!isEnabled);
+        button.setCursor(isEnabled ? Cursor.HAND : Cursor.DEFAULT);
+        button.setOnMouseEntered(e -> button.setStyle("-fx-text-fill: rgba(255, 165, 0, 0.7);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-text-fill: #FFA500;"));
+    }
 
     @FXML
     private void handleAvatarClick() {
@@ -473,27 +527,16 @@ public class BorrowedController implements Initializable {
         Status newStatus = (today.isAfter(dueDate)) ? Status.RETURNED_LATE : Status.RETURNED;
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String updateBorrowQuery = "UPDATE borrows SET status = ?, return_date = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE book_isbn = ? AND member_id = ?";
-            PreparedStatement borrowStatement = connection.prepareStatement(updateBorrowQuery);
-            borrowStatement.setString(1, newStatus.toString());
-            borrowStatement.setString(2, today.toString());
-            borrowStatement.setString(3, Session.getInstance().getLoggedInUser().getEmail());
-            borrowStatement.setString(4, borrowedBook.getIsbn());
-            borrowStatement.setString(5, Session.getInstance().getLoggedInUser().getId());
+            String query = "UPDATE borrows SET status = ?, return_date = ? WHERE book_isbn = ? AND member_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, newStatus.toString());
+            preparedStatement.setString(2, today.toString());
+            preparedStatement.setString(3, borrowedBook.getIsbn());
+            preparedStatement.setString(4, Session.getInstance().getLoggedInUser().getId());
 
-            int rowsAffected = borrowStatement.executeUpdate();
+
+            int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                String updateBookQuery = "UPDATE books SET quantity_copy = quantity_copy + 1 WHERE isbn = ?";
-                PreparedStatement bookStatement = connection.prepareStatement(updateBookQuery);
-                bookStatement.setString(1, borrowedBook.getIsbn());
-
-                int bookRowsAffected = bookStatement.executeUpdate();
-                if (bookRowsAffected > 0) {
-                    System.out.println("Cập nhật số lượng sách thành công!");
-                } else {
-                    System.out.println("Cập nhật số lượng sách thất bại!");
-                }
-
                 borrowBookList.remove(borrowedBook);
                 borrowedBook.setStatus(newStatus);
                 borrowedBook.setReturnDate(today);
@@ -501,10 +544,48 @@ public class BorrowedController implements Initializable {
 
                 displayBorrowingBooks(borrowBookList);
                 displayReturnedBooks(returnedBookList);
+            } else {
+                System.out.println("Trả sách thất bại!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @FXML
+    private void openRating(Book book, Button rateButton) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/RatingPage.fxml"));
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage) tabPane.getScene().getWindow();
+            RatingPageController ratingPageController = loader.getController();
+            ratingPageController.setBook(book);
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initOwner(currentStage);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+                setRatingButton(rateButton, book);
+            });
+            stage.showAndWait();
+//            setConfirmButton();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

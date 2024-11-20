@@ -576,5 +576,55 @@ public class DatabaseUtil {
         return 0;
     }
 
+    public static boolean checkIfUserBorrowedBook(User user, Book book) {
+        return countUserBorrowingBook(user,book) > 0;
+    }
 
+    private static int countUserBorrowingBook(User user, Book book) {
+        String query = "SELECT COUNT(*) FROM borrows WHERE member_id = ? AND book_isbn = ? AND (status = 'BORROWING' OR status = 'OVERDUE')";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getId());
+            statement.setString(2, book.getIsbn());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private static int countUserBorrowedBook(User user, Book book) {
+        String query = "SELECT COUNT(*) FROM borrows WHERE member_id = ? AND book_isbn = ? AND (status = 'RETURNED' OR status = 'RETURNED_LATE')";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getId());
+            statement.setString(2, book.getIsbn());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static boolean checkIfUserRatedBook(User user, Book book) {
+        String query = "SELECT COUNT(*) FROM feedbacks WHERE member_id = ? AND book_id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getId());
+            statement.setInt(2, book.getId());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return countUserBorrowedBook(user, book) <= resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

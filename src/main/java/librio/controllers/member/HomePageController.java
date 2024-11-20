@@ -1,9 +1,11 @@
 package librio.controllers.member;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,7 +38,8 @@ import java.sql.ResultSet;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
+import static librio.util.DesignUtil.*;
 
 public class HomePageController implements Initializable {
 
@@ -323,12 +326,13 @@ public class HomePageController implements Initializable {
             buttonPane.setLayoutY(225);
             buttonPane.setLayoutX(11);
 
-            Button borrowButton = new Button("QUICK BORROW");
-            borrowButton.getStyleClass().add("quick-borrow-button");
-            borrowButton.setLayoutX(6);
-            borrowButton.setLayoutY(5);
-            buttonPane.getChildren().add(borrowButton);
-            borrowButton.setOnAction(e -> openBorrowConfirmationPane(book));
+            Button returnButton = new Button();
+            returnButton.getStyleClass().add("quick-borrow-button");
+            returnButton.setLayoutX(6);
+            returnButton.setLayoutY(5);
+            setConfirmButton(returnButton, book);
+
+            buttonPane.getChildren().add(returnButton);
             bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
                 TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
@@ -378,7 +382,8 @@ public class HomePageController implements Initializable {
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
             infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
             bookPane.getChildren().addAll(bookImagePane, infoPane);
-            bookPane.setOnMouseClicked(event -> openBookDetailScene(book));
+            bookPane.setOnMouseClicked(e -> openBookDetailScene(book,returnButton));
+            returnButton.setOnAction(e -> openBorrowConfirmationPane(book,returnButton));
             container.getChildren().add(bookPane);
         }
         container.setSpacing(10);
@@ -404,7 +409,7 @@ public class HomePageController implements Initializable {
     }
 
 
-    private void openBookDetailScene(Book book) {
+    private void openBookDetailScene(Book book, Button confirmButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
             Parent rootContent = loader.load();
@@ -431,6 +436,7 @@ public class HomePageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
+                setConfirmButton(confirmButton,book);
             });
 
             stage.showAndWait();
@@ -438,6 +444,8 @@ public class HomePageController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
     @FXML
     private void handleAvatarClick() {
         if (!isAnchorPaneVisible) {
@@ -486,14 +494,15 @@ public class HomePageController implements Initializable {
         }
     }
 
-    private void openBorrowConfirmationPane(Book book) {
+    private void openBorrowConfirmationPane(Book book, Button confirmButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
             Parent root = loader.load();
 
-            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
             ConfirmBorrow confirmBorrow = loader.getController();
             confirmBorrow.setBook(book);
+
             ColorAdjust colorAdjust = new ColorAdjust();
             colorAdjust.setBrightness(-0.25);
             currentStage.getScene().getRoot().setEffect(colorAdjust);
@@ -509,16 +518,20 @@ public class HomePageController implements Initializable {
                 stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
             });
 
-            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initModality(Modality.WINDOW_MODAL);
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
+                setConfirmButton(confirmButton,book);
+
             });
             stage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void openEditProfileScene() {
         try {

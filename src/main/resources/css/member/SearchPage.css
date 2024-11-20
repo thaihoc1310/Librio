@@ -157,10 +157,10 @@
 
 .quick-borrow-button {
     -fx-background-color: #ffffff;
-    -fx-text-fill: #3d6bb5;
+    -fx-text-fill: #6e2f18;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
-    -fx-border-color: #3d6bb5;
+    -fx-border-color: #6e2f18;
     -fx-border-width: 2px;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
@@ -173,7 +173,7 @@
     -fx-padding: 0;
 }
 .quick-borrow-button:hover {
-    -fx-text-fill: #5a85cc;
+    -fx-text-fill:#943f20;
 }
 
 .title-label {

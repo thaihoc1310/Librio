@@ -14,11 +14,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -43,6 +41,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setConfirmButton;
 
 public class SearchPageController implements Initializable {
     @FXML
@@ -236,7 +235,6 @@ public class SearchPageController implements Initializable {
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
-
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
         pane.setExpanded(false);
         pane.expandedProperty().addListener((observable, oldValue, newValue) -> {
@@ -598,12 +596,12 @@ public class SearchPageController implements Initializable {
             buttonPane.setLayoutX(11);
 
 
-            Button borrowButton = new Button("QUICK BORROW");
-            borrowButton.getStyleClass().add("quick-borrow-button");
-            borrowButton.setLayoutX(6);
-            borrowButton.setLayoutY(5);
-            buttonPane.getChildren().add(borrowButton);
-            borrowButton.setOnAction(e -> openBorrowConfirmationPane(book));
+            Button returnButton = new Button();
+            returnButton.getStyleClass().add("quick-borrow-button");
+            returnButton.setLayoutX(6);
+            returnButton.setLayoutY(5);
+            setConfirmButton(returnButton, book);
+            buttonPane.getChildren().add(returnButton);
 
             bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
@@ -621,10 +619,8 @@ public class SearchPageController implements Initializable {
             });
 
             bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
-            bookPane.setOnMouseClicked(event -> openBookDetailScene(book));
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
             infoPane.getChildren().addAll(titleLabel, authorLabel);
-
             Task<HBox> ratingTask = new Task<>() {
                 @Override
                 protected HBox call() {
@@ -745,75 +741,6 @@ public class SearchPageController implements Initializable {
             // Hiển thị scene
             stage.showAndWait();
             setAvatarAndUserName();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void openBookDetailScene(Book book) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
-            Parent rootContent = loader.load();
-            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
-            BookDetailController bookDetailController = loader.getController();
-            bookDetailController.setBook(book);
-
-            ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setBrightness(-0.25);
-            currentStage.getScene().getRoot().setEffect(colorAdjust);
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.TRANSPARENT);
-            Scene scene = new Scene(rootContent);
-            scene.setFill(Color.TRANSPARENT);
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.initOwner(currentStage);
-            stage.setOnShown(event -> {
-                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
-                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
-            });
-
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.setOnHidden(event -> {
-                colorAdjust.setBrightness(0);
-                currentStage.getScene().getRoot().setEffect(null);
-            });
-
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void openBorrowConfirmationPane(Book book) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
-            Parent root = loader.load();
-
-            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-            ConfirmBorrow confirmBorrow = loader.getController();
-            confirmBorrow.setBook(book);
-            ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setBrightness(-0.25);
-            currentStage.getScene().getRoot().setEffect(colorAdjust);
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.TRANSPARENT);
-            Scene scene = new Scene(root);
-            scene.setFill(Color.TRANSPARENT);
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.initOwner(currentStage);
-            stage.setOnShown(event -> {
-                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
-                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
-            });
-
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setOnHidden(event -> {
-                colorAdjust.setBrightness(0);
-                currentStage.getScene().getRoot().setEffect(null);
-            });
-            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }

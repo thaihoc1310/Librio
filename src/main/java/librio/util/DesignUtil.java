@@ -1,13 +1,22 @@
 package librio.util;
 
+import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import librio.auth.Session;
+import librio.models.Book;
 
 import java.io.File;
+
+import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 
 public class DesignUtil {
     public static void cropAndClipToCircle(Image avatarImage, ImageView avatarImageView, double radius) {
@@ -85,5 +94,26 @@ public class DesignUtil {
         }
     }
 
+    public static void setConfirmButton(Button confirmButton, Book book) {
+        int quantityOfCopy = book.getQuantityCopy();
+        boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
+        confirmButton.setUserData(book.getId());
+        if (quantityOfCopy == 0) {
+            updateBorrowButton(confirmButton, "OUT OF STOCK", "#9e4b3e", false);
+        } else if (isAlreadyBorrowed) {
+            updateBorrowButton(confirmButton, "BORROWING", "#b57a3e", false);
+        } else {
+            updateBorrowButton(confirmButton, "QUICK BORROW", "#6e2f18", true);
+        }
+    }
+
+    public static void updateBorrowButton(Button button, String text, String color, boolean isEnabled) {
+        button.setText(text);
+        button.setStyle("-fx-border-color: " + color + "; -fx-text-fill: " + color);
+        button.setDisable(!isEnabled);
+        button.setCursor(isEnabled ? Cursor.HAND : Cursor.DEFAULT);
+        button.setOnMouseEntered(e -> button.setStyle("-fx-text-fill: #943f20;"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-text-fill: #6e2f18;"));
+    }
 
 }
