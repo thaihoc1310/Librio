@@ -576,5 +576,20 @@ public class DatabaseUtil {
         return 0;
     }
 
+    public static boolean checkIfUserBorrowedBook(User user, Book book) {
+        String query = "SELECT COUNT(*) FROM borrows WHERE member_id = ? AND book_isbn = ? AND (status = 'BORROWING' OR status = 'OVERDUE')";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getId());
+            statement.setString(2, book.getIsbn());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }

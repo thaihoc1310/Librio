@@ -1,9 +1,11 @@
 package librio.controllers.member;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,7 +38,8 @@ import java.sql.ResultSet;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
+import static librio.util.DesignUtil.*;
 
 public class HomePageController implements Initializable {
 
@@ -323,10 +326,12 @@ public class HomePageController implements Initializable {
             buttonPane.setLayoutY(225);
             buttonPane.setLayoutX(11);
 
-            Button returnButton = new Button("QUICK BORROW");
+            Button returnButton = new Button();
             returnButton.getStyleClass().add("quick-borrow-button");
             returnButton.setLayoutX(6);
             returnButton.setLayoutY(5);
+            setConfirmButton(returnButton, book);
+
             buttonPane.getChildren().add(returnButton);
             returnButton.setOnAction(e -> openBorrowConfirmationPane(book));
             bookImagePane.getChildren().addAll(bookImage, buttonPane);
@@ -431,6 +436,7 @@ public class HomePageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
+                updateAllContainers(book);
             });
 
             stage.showAndWait();
@@ -438,6 +444,16 @@ public class HomePageController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    private void updateAllContainers(Book book) {
+        List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer);
+        for (HBox container : containers) {
+            updateButtonInContainer(container, book);
+            container.layout();
+        }
+    }
+
+
     @FXML
     private void handleAvatarClick() {
         if (!isAnchorPaneVisible) {
@@ -491,9 +507,10 @@ public class HomePageController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
             Parent root = loader.load();
 
-            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
             ConfirmBorrow confirmBorrow = loader.getController();
             confirmBorrow.setBook(book);
+
             ColorAdjust colorAdjust = new ColorAdjust();
             colorAdjust.setBrightness(-0.25);
             currentStage.getScene().getRoot().setEffect(colorAdjust);
@@ -509,16 +526,20 @@ public class HomePageController implements Initializable {
                 stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
             });
 
-            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initModality(Modality.WINDOW_MODAL);
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
+                updateAllContainers(book);
+
             });
             stage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void openEditProfileScene() {
         try {

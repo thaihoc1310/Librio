@@ -41,6 +41,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setConfirmButton;
 
 public class SearchPageController implements Initializable {
     @FXML
@@ -595,10 +596,11 @@ public class SearchPageController implements Initializable {
             buttonPane.setLayoutX(11);
 
 
-            Button returnButton = new Button("QUICK BORROW");
+            Button returnButton = new Button();
             returnButton.getStyleClass().add("quick-borrow-button");
             returnButton.setLayoutX(6);
             returnButton.setLayoutY(5);
+            setConfirmButton(returnButton, book);
             buttonPane.getChildren().add(returnButton);
 
             bookImagePane.getChildren().addAll(bookImage, buttonPane);

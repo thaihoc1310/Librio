@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class BookDetailController implements Initializable {
@@ -209,30 +210,14 @@ public class BookDetailController implements Initializable {
 
     private void setConfirmButton(){
         int quantityOfCopy = book.getQuantityCopy();
-        boolean isAlreadyBorrowed = checkIfUserBorrowedBook();
+        boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(),book);
         if (quantityOfCopy == 0) {
             updateBorrowButton("Out of stock", "#9e4b3e", false);
         } else if (isAlreadyBorrowed) {
-            updateBorrowButton("Already borrowed", "#b57a3e", false);
+            updateBorrowButton("Borrowing", "#b57a3e", false);
         } else {
             confirmButton.setText("Borrow");
         }
-    }
-
-    private boolean checkIfUserBorrowedBook() {
-        String query = "SELECT COUNT(*) FROM borrows WHERE member_id = ? AND book_isbn = ? AND (status = 'BORROWING' OR status = 'OVERDUE')";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, Session.getInstance().getLoggedInUser().getId());
-            statement.setString(2, book.getIsbn());
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     private void updateBorrowButton(String text, String color, boolean isEnabled) {
