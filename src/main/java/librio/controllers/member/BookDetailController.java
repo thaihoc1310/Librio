@@ -182,8 +182,6 @@ public class BookDetailController implements Initializable {
 
         fullDescription = book.getDescription();
         if (fullDescription.length() > DESCRIPTION_LIMIT) {
-            bookDetailsPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
-            bookDetailsPane.setMinHeight(Region.USE_COMPUTED_SIZE);
             descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
             moreLessLabel.setVisible(true);
         } else {
@@ -226,7 +224,7 @@ public class BookDetailController implements Initializable {
     private void loadFeedbacksFromDatabase() {
         feedbackList.clear();
         feedbackContainer.setSpacing(15);
-        feedbackContainer.setStyle("-fx-padding: 10");
+        feedbackContainer.setStyle("-fx-padding: 10 10 10 10");
         String query = "SELECT id, book_id, member_id, rating, about, created_at FROM feedbacks WHERE book_id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

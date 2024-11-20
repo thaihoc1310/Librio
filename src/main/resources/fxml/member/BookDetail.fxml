@@ -14,140 +14,147 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1082.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1133.0" style="-fx-background-color: transparent;" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
    <children>
-      <ScrollPane fx:id="bookDetailsPane" hbarPolicy="NEVER" layoutX="28.0" layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-faint-focus-color: transparent;" styleClass="whitePane2" stylesheets="@../../css/member/BookDetail.css" vbarPolicy="NEVER">
-         <content>
-            <VBox prefHeight="621.0" prefWidth="1026.0" spacing="20.0" styleClass="whitePane2">
-               <children>
-                  <AnchorPane prefHeight="537.0" prefWidth="1026.0" style="-fx-focus-color: cccccc;" styleClass="whitePane">
+      <AnchorPane layoutX="40.0" layoutY="74.0" prefHeight="550.0" prefWidth="1036.0" styleClass="whitePane2">
+         <children>
+            <ScrollPane fx:id="bookDetailsPane" hbarPolicy="NEVER" layoutX="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-faint-focus-color: transparent; -fx-background-radius: 0; -fx-background-color: transparent;" stylesheets="@../../css/member/BookDetail.css" vbarPolicy="NEVER">
+               <content>
+                  <VBox prefHeight="621.0" prefWidth="1026.0" style="-fx-background-color: ffffff;">
                      <children>
-                        <VBox layoutX="324.0" layoutY="43.0" prefHeight="507.0" prefWidth="636.0" spacing="30.0">
+                        <AnchorPane prefHeight="537.0" prefWidth="1026.0" style="-fx-focus-color: cccccc; -fx-background-radius: 0; -fx-background-color: ffffff;">
                            <children>
-                              <AnchorPane prefHeight="255.0" prefWidth="635.0" styleClass="whitePane">
+                              <VBox layoutX="324.0" layoutY="43.0" prefHeight="507.0" prefWidth="645.0" spacing="30.0">
                                  <children>
-                                    <VBox layoutX="20.0" layoutY="14.0" prefHeight="225.0" prefWidth="596.0" spacing="15.0">
+                                    <AnchorPane prefHeight="255.0" prefWidth="635.0" styleClass="whitePane">
                                        <children>
-                                          <VBox prefHeight="84.0" prefWidth="596.0">
+                                          <VBox layoutX="20.0" layoutY="14.0" prefHeight="225.0" prefWidth="596.0" spacing="15.0">
                                              <children>
-                                                <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="frffsfsdfs" wrappingWidth="590.5567016601562">
-                                                   <font>
-                                                      <Font name="System Bold" size="24.0" />
-                                                   </font>
-                                                </Text>
-                                                <Label fx:id="author" minHeight="40.0" prefHeight="40.0" prefWidth="634.0" text="Đinh Viết Huy">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label fx:id="author1" minHeight="9.0" prefHeight="9.0" prefWidth="598.0">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </Label>
-                                                <HBox fx:id="starBox" prefHeight="0.0" prefWidth="598.0" spacing="5.0" />
+                                                <VBox prefHeight="84.0" prefWidth="596.0">
+                                                   <children>
+                                                      <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="frffsfsdfs" wrappingWidth="590.5567016601562">
+                                                         <font>
+                                                            <Font name="System Bold" size="24.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <Label fx:id="author" minHeight="40.0" prefHeight="40.0" prefWidth="634.0" text="Đinh Viết Huy">
+                                                         <font>
+                                                            <Font size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="author1" minHeight="9.0" prefHeight="9.0" prefWidth="598.0">
+                                                         <font>
+                                                            <Font size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <HBox fx:id="starBox" prefHeight="0.0" prefWidth="598.0" spacing="5.0" />
+                                                   </children>
+                                                </VBox>
+                                                <AnchorPane prefHeight="146.0" prefWidth="596.0">
+                                                   <children>
+                                                      <VBox layoutX="14.0" layoutY="30.0" prefHeight="104.0" prefWidth="289.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="294.6666666666667" AnchorPane.topAnchor="30.000000000000014">
+                                                         <children>
+                                                            <Label fx:id="isbnLabel" prefHeight="25.0" prefWidth="301.0" text="ISBN:     2983012830">
+                                                               <font>
+                                                                  <Font size="15.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="categoryLabel" prefHeight="25.0" prefWidth="298.0" text="Category:     Sex">
+                                                               <font>
+                                                                  <Font size="15.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="languageLabel" prefHeight="25.0" prefWidth="299.0" text="Language:     English">
+                                                               <font>
+                                                                  <Font size="15.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox layoutX="310.0" layoutY="30.0" prefHeight="102.0" prefWidth="281.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="6.666666666666686" AnchorPane.topAnchor="30.0">
+                                                         <children>
+                                                            <Label fx:id="publisherLabel" prefHeight="25.0" text="Publisher:     abc">
+                                                               <font>
+                                                                  <Font size="15.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="publishedLabel" prefHeight="25.0" text="Published:     2005">
+                                                               <font>
+                                                                  <Font size="15.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label fx:id="pageCountLabel" prefHeight="25.0" text="Page count:     329">
+                                                               <font>
+                                                                  <Font size="15.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </VBox>
+                                                      <Line endX="483.66668701171875" endY="-1.52587890625E-5" startX="-113.00003051757812" startY="-1.52587890625E-5" strokeWidth="0.25" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.333251953125" AnchorPane.topAnchor="0.0" />
+                                                   </children>
+                                                </AnchorPane>
                                              </children>
                                           </VBox>
-                                          <AnchorPane prefHeight="146.0" prefWidth="596.0">
-                                             <children>
-                                                <VBox layoutX="14.0" layoutY="30.0" prefHeight="104.0" prefWidth="289.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="294.6666666666667" AnchorPane.topAnchor="30.000000000000014">
-                                                   <children>
-                                                      <Label fx:id="isbnLabel" prefHeight="25.0" prefWidth="301.0" text="ISBN:     2983012830">
-                                                         <font>
-                                                            <Font size="15.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label fx:id="categoryLabel" prefHeight="25.0" prefWidth="298.0" text="Category:     Sex">
-                                                         <font>
-                                                            <Font size="15.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label fx:id="languageLabel" prefHeight="25.0" prefWidth="299.0" text="Language:     English">
-                                                         <font>
-                                                            <Font size="15.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </VBox>
-                                                <VBox layoutX="310.0" layoutY="30.0" prefHeight="102.0" prefWidth="281.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="6.666666666666686" AnchorPane.topAnchor="30.0">
-                                                   <children>
-                                                      <Label fx:id="publisherLabel" prefHeight="25.0" text="Publisher:     abc">
-                                                         <font>
-                                                            <Font size="15.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label fx:id="publishedLabel" prefHeight="25.0" text="Published:     2005">
-                                                         <font>
-                                                            <Font size="15.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label fx:id="pageCountLabel" prefHeight="25.0" text="Page count:     329">
-                                                         <font>
-                                                            <Font size="15.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </VBox>
-                                                <Line endX="483.66668701171875" endY="-1.52587890625E-5" startX="-113.00003051757812" startY="-1.52587890625E-5" strokeWidth="0.25" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.333251953125" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
                                        </children>
-                                    </VBox>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane prefHeight="175.0" prefWidth="636.0" styleClass="whitePane">
-                                 <children>
-                                    <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="141.8619384765625">
-                                       <font>
-                                          <Font size="23.0" />
-                                       </font>
-                                    </Text>
-                                    <TextFlow fx:id="descriptionFlow" layoutX="14.0" layoutY="52.0" prefHeight="119.0" prefWidth="567.0" textAlignment="JUSTIFY">
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="175.0" prefWidth="636.0" styleClass="whitePane">
                                        <children>
-                                          <Text fx:id="descriptionText" textAlignment="JUSTIFY">
+                                          <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="141.8619384765625">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font size="23.0" />
                                              </font>
                                           </Text>
-                                          <Text fx:id="moreLessLabel" style="-fx-fill: #A45C23; -fx-cursor: hand;" text=" More" textAlignment="JUSTIFY">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
+                                          <TextFlow fx:id="descriptionFlow" layoutX="14.0" layoutY="52.0" prefHeight="119.0" prefWidth="567.0" textAlignment="JUSTIFY">
+                                             <children>
+                                                <Text fx:id="descriptionText" textAlignment="JUSTIFY">
+                                                   <font>
+                                                      <Font size="15.0" />
+                                                   </font>
+                                                </Text>
+                                                <Text fx:id="moreLessLabel" style="-fx-fill: #A45C23; -fx-cursor: hand;" text=" More" textAlignment="JUSTIFY">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                          </TextFlow>
                                        </children>
-                                    </TextFlow>
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" />
+                                       </VBox.margin>
+                                    </AnchorPane>
                                  </children>
-                                 <VBox.margin>
-                                    <Insets bottom="20.0" />
-                                 </VBox.margin>
-                              </AnchorPane>
+                              </VBox>
+                              <ImageView fx:id="bookCoverImage" fitHeight="315.0" fitWidth="217.0" layoutX="57.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar-view">
+                                 <image>
+                                    <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
+                                 </image>
+                              </ImageView>
+                              <Button layoutX="57.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmationPane" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
                            </children>
+                        </AnchorPane>
+                        <VBox fx:id="feedbackContainer" prefHeight="281.0" prefWidth="1026.0" spacing="10" style="-fx-background-color: ffffff;" styleClass="whitePane">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Feedback" wrappingWidth="141.8619384765625">
+                                 <font>
+                                    <Font name="System Bold Italic" size="23.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="57.0" left="57.0" right="57.0" />
+                           </VBox.margin>
                         </VBox>
-                        <ImageView fx:id="bookCoverImage" fitHeight="315.0" fitWidth="217.0" layoutX="57.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar-view">
-                           <image>
-                              <Image url="@../../../../../../../image/9781408855676-8af2e6bfda55400fb7a77a8eedfb7ab8.jpg" />
-                           </image>
-                        </ImageView>
-                        <Button layoutX="57.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmationPane" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
-                     </children>
-                  </AnchorPane>
-                  <VBox fx:id="feedbackContainer" prefHeight="281.0" prefWidth="1026.0" spacing="10" styleClass="whitePane">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Feedback" wrappingWidth="141.8619384765625">
-                           <font>
-                              <Font name="System Bold Italic" size="23.0" />
-                           </font>
-                        </Text>
                      </children>
                   </VBox>
-               </children>
-            </VBox>
-         </content>
-      </ScrollPane>
-      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="1005.0" layoutY="45.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-         <image>
-            <Image url="@../../icons/MemberIcon/cancel.png" />
-         </image>
-      </ImageView>
+               </content>
+            </ScrollPane>
+            <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="990.0" layoutY="5.0" onMouseClicked="#cancelBookDetail" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@../../icons/MemberIcon/cancel.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
