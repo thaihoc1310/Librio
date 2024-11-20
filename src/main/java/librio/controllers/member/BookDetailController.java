@@ -128,7 +128,6 @@ public class BookDetailController implements Initializable {
     public void setBook(Book book) {
         this.book = book;
         setBookDetails();
-//        loadBookDetails();
         loadFeedbacksFromDatabase();
         displayRating();
     }
@@ -355,7 +354,6 @@ public class BookDetailController implements Initializable {
         }
         return total;
     }
-
     @FXML
     private void openBorrowConfirmationPane() {
         try {
