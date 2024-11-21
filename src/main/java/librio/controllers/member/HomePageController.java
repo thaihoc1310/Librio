@@ -385,11 +385,14 @@ public class HomePageController implements Initializable {
             bookPane.getChildren().addAll(bookImagePane, infoPane);
 
             bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
-            quickBorrowButton.setOnAction(e -> {
-                openBorrowConfirmationPane(book, quickBorrowButton);
-            });
-            container.getChildren().add(bookPane);
 
+            boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
+            if (!isAlreadyBorrowed && book.getQuantityCopy() > 0) {
+                quickBorrowButton.setOnAction(e -> {
+                    openBorrowConfirmationPane(book, quickBorrowButton);
+                });
+            }
+            container.getChildren().add(bookPane);
         }
         container.setSpacing(10);
     }
@@ -569,7 +572,5 @@ public class HomePageController implements Initializable {
             updateButtonInContainer(container, book);
         }
     }
-
-
 }
 

@@ -110,14 +110,18 @@ public class DesignUtil {
     public static void updateBorrowButton(Button button, String text, String color, boolean isEnabled) {
         button.setText(text);
         button.setStyle("-fx-border-color: " + color + "; -fx-text-fill: " + color);
-//        button.setDisable(!isEnabled);
-        if(!isEnabled) {
-            button.setOnAction(null);
-        }
-
         button.setCursor(isEnabled ? Cursor.HAND : Cursor.DEFAULT);
-        button.setOnMouseEntered(e -> button.setStyle("-fx-text-fill: #943f20;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-text-fill: #6e2f18;"));
+
+        if (!isEnabled) {
+            button.setOnAction(null);
+            button.setOpacity(0.5);
+            button.setOnMouseEntered(null);
+            button.setOnMouseExited(null);
+        } else {
+            button.setOpacity(1.0); // Đảm bảo nút rõ ràng khi khả dụng
+            button.setOnMouseEntered(e -> button.setStyle("-fx-text-fill: #943f20;"));
+            button.setOnMouseExited(e -> button.setStyle("-fx-text-fill: " + color + ";"));
+        }
     }
 
     public static void updateButtonInContainer(HBox container, Book book) {
@@ -133,5 +137,4 @@ public class DesignUtil {
             }
         }
     }
-
 }
