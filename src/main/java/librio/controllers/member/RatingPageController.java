@@ -21,6 +21,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 
+import static librio.util.DatabaseUtil.updateBookAverageRating;
+
 public class RatingPageController {
 
     @FXML
@@ -42,9 +44,11 @@ public class RatingPageController {
     private Label titleLabel;
 
     private Book book;
+    private int borrowId;
 
-    public void setBook (Book book) {
+    public void setBookAndBorrowId (Book book, int borrowId) {
         this.book = book;
+        this.borrowId = borrowId;
 
         titleLabel.setText(book.getTitle());
         authorNameLabel.setText(book.getAuthor());
@@ -120,21 +124,28 @@ public class RatingPageController {
 
     @FXML
     private void confirmAction() {
-        String query = "INSERT INTO feedbacks (member_id, book_id, rating, about, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO feedbacks (member_id, book_id, borrow_id, rating, about, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
             statement.setString(1, Session.getInstance().getLoggedInUser().getId());
             statement.setInt(2, book.getId());
-            statement.setInt(3, selectedStars);
-            statement.setString(4, commentBox.getText());
-            statement.setString(5,  Session.getInstance().getLoggedInUser().getEmail());
-            statement.setString(6, LocalDateTime.now().toString());
+            statement.setInt(3, borrowId);
+            statement.setInt(4, selectedStars);
+            statement.setString(5, commentBox.getText());
+            statement.setString(6, Session.getInstance().getLoggedInUser().getEmail());
+            statement.setString(7, LocalDateTime.now().toString());
+
             int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                updateBookAverageRating(book.getIsbn());
+            }
             closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void closeStage() {

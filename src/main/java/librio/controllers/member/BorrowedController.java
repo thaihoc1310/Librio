@@ -34,9 +34,7 @@ import librio.util.DesignUtil;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -46,8 +44,7 @@ import java.util.ResourceBundle;
 
 import static librio.models.Status.BORROWING;
 import static librio.models.Status.OVERDUE;
-import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
-import static librio.util.DatabaseUtil.checkIfUserRatedBook;
+import static librio.util.DatabaseUtil.*;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.setConfirmButton;
 
@@ -69,14 +66,20 @@ public class BorrowedController implements Initializable {
     @FXML
     private AnchorPane confirmPane;
     @FXML
-    private Button returnBookButton;
-    @FXML
     private VBox bookBorrowVBox;
+    @FXML
+    private Button confirmReturnButton;
+    @FXML
+    private Button cancelReturnButton;
     @FXML
     private TilePane tilePane;
     private List<BorrowedBook> borrowBookList = new ArrayList<>();
     private List<BorrowedBook> returnedBookList = new ArrayList<>();
     private boolean isAnchorPaneVisible = false;
+
+    private BorrowedBook selectedBook;
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -93,14 +96,17 @@ public class BorrowedController implements Initializable {
             String query;
             String borrowUserId = Session.getInstance().getLoggedInUser().getId();
             PreparedStatement preparedStatement;
-            query = "SELECT b.id, b.title, b.author, b.isbn," +
-                    " b.book_image,br.borrow_date, br.due_date, br.return_date, br.status, br.fine FROM books b " +
-                    " JOIN borrows br on b.isbn = br.book_isbn" +
-                    " WHERE br.member_id= " + borrowUserId;
+            query = "SELECT br.id AS borrow_id, b.id AS book_id, b.title, b.author, b.isbn, " +
+                    "b.book_image, br.borrow_date, br.due_date, br.return_date, br.status, br.fine " +
+                    "FROM books b " +
+                    "JOIN borrows br ON b.isbn = br.book_isbn " +
+                    "WHERE br.member_id = ?";
             preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, borrowUserId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Integer id = resultSet.getInt("id");
+                int borrowId = resultSet.getInt("borrow_id"); // Lấy borrowId
+                int bookId = resultSet.getInt("book_id");
                 String title = resultSet.getString("title");
                 String author = resultSet.getString("author");
                 String isbn = resultSet.getString("isbn");
@@ -110,21 +116,21 @@ public class BorrowedController implements Initializable {
                 Double fine = resultSet.getDouble("fine");
                 LocalDate borrowDate = resultSet.getDate("borrow_date").toLocalDate();
                 LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
-                LocalDate returnDate = null;
-                if (resultSet.getDate("return_date") != null) {
-                    returnDate = resultSet.getDate("return_date").toLocalDate();
-                }
+                LocalDate returnDate = resultSet.getDate("return_date") != null
+                        ? resultSet.getDate("return_date").toLocalDate()
+                        : null;
 
                 if (imageBook == null) {
                     imageBook = "defaultBook.jpg";
                 }
 
+                Book book = new Book(bookId, title, author, isbn, imageBook);
+                BorrowedBook borrowedBook = new BorrowedBook(book, borrowDate, dueDate, returnDate, status, fine, borrowId);
+
                 if (status == BORROWING || status == OVERDUE) {
-                    Book book = new Book(id, title, author, isbn, imageBook);
-                    borrowBookList.add(new BorrowedBook(book, borrowDate, dueDate, null,  status, fine));
+                    borrowBookList.add(borrowedBook);
                 } else {
-                    Book returnedBook = new Book(id, title, author, isbn, imageBook);
-                    returnedBookList.add(new BorrowedBook(returnedBook, borrowDate, dueDate, returnDate, status, fine));
+                    returnedBookList.add(borrowedBook);
                 }
             }
         } catch (Exception e) {
@@ -133,6 +139,7 @@ public class BorrowedController implements Initializable {
         displayBorrowingBooks(borrowBookList);
         displayReturnedBooks(returnedBookList);
     }
+
 
     private void displayBorrowingBooks(List<BorrowedBook> booksToDisplay) {
         bookBorrowVBox.getChildren().clear();
@@ -187,12 +194,10 @@ public class BorrowedController implements Initializable {
             returnButton.setLayoutY(323);
             returnButton.setPrefSize(200, 31);
             returnButton.getStyleClass().add("button-borrow");
+
             returnButton.setOnAction(event -> {
+                selectedBook = book;
                 confirmPane.toFront();
-            });
-            returnBookButton.setOnAction(event -> {
-                returnBook(book);
-                confirmPane.toBack();
             });
 
             GridPane gridPane = new GridPane();
@@ -281,7 +286,7 @@ public class BorrowedController implements Initializable {
 
     private void displayReturnedBooks(List<BorrowedBook> booksToDisplay) {
         tilePane.getChildren().clear();
-        for (BorrowedBook book : booksToDisplay) {
+        for (BorrowedBook borrowedBook : booksToDisplay) {
             AnchorPane anchorPane = new AnchorPane();
             anchorPane.setMinHeight(278);
             anchorPane.setPrefHeight(278);
@@ -293,14 +298,14 @@ public class BorrowedController implements Initializable {
             bookImageView.getStyleClass().add("avatar-view");
             String projectDir = System.getProperty("user.dir");
             String booksDir = projectDir + "/src/main/resources/images/book/";
-            String path = booksDir + book.getImagePath();
+            String path = booksDir + borrowedBook.getImagePath();
             File file = new File(path);
             Image image = new Image(file.toURI().toString());
             DesignUtil.cropToAspectRatio(image, bookImageView, 134, 208);
             bookImageView.setLayoutX(28);
             bookImageView.setLayoutY(20);
 
-            Label titleLabel = new Label(book.getTitle());
+            Label titleLabel = new Label(borrowedBook.getTitle());
             titleLabel.setLayoutX(179);
             titleLabel.setLayoutY(19);
             titleLabel.setPrefWidth(450);
@@ -309,14 +314,14 @@ public class BorrowedController implements Initializable {
             titleLabel.setWrapText(true);
 
 
-            Text authorText = new Text(book.getAuthor());
+            Text authorText = new Text(borrowedBook.getAuthor());
             authorText.setLayoutX(179);
             authorText.setLayoutY(59);
             authorText.setOpacity(0.59);
             authorText.setWrappingWidth(300);
             authorText.setFont(Font.font(14));
 
-            Label isbnLabel = new Label("ISBN: " + book.getIsbn());
+            Label isbnLabel = new Label("ISBN: " + borrowedBook.getIsbn());
             isbnLabel.setLayoutX(179);
             isbnLabel.setLayoutY(64);
             isbnLabel.setFont(Font.font("System", FontPosture.ITALIC, 11));
@@ -368,7 +373,7 @@ public class BorrowedController implements Initializable {
             borrowDateLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
             gridPane.add(borrowDateLabel, 0, 0);
 
-            LocalDate borrowDateTime = book.getBorrowDate();
+            LocalDate borrowDateTime = borrowedBook.getBorrowDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String borrowDateText = borrowDateTime.format(formatter);
             Label borrowDate = new Label("   " + borrowDateText);
@@ -379,7 +384,7 @@ public class BorrowedController implements Initializable {
             dueDateLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
             gridPane.add(dueDateLabel, 0, 1);
 
-            LocalDate dueDateTime = book.getDueDate();
+            LocalDate dueDateTime = borrowedBook.getDueDate();
             String dueDateText = dueDateTime.format(formatter);
             Label dueDate = new Label("   " + dueDateText);
             dueDate.setFont(Font.font("System", 16));
@@ -389,7 +394,7 @@ public class BorrowedController implements Initializable {
             returnDateLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
             gridPane.add(returnDateLabel, 0, 2);
 
-            LocalDate returnDateTime = book.getReturnDate();
+            LocalDate returnDateTime = borrowedBook.getReturnDate();
             String returnDateText = returnDateTime != null ? returnDateTime.format(formatter) : "N/A";
             Label returnDate = new Label("   " + returnDateText);
             returnDate.setFont(Font.font("System", 16));
@@ -399,7 +404,7 @@ public class BorrowedController implements Initializable {
             statusLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
             gridPane.add(statusLabel, 2, 0);
 
-            String statusString = book.getStatus().toString();
+            String statusString = borrowedBook.getStatus().toString();
             Label status = new Label("   " + statusString);
             status.setFont(Font.font("System", 16));
             gridPane.add(status, 3, 0);
@@ -408,7 +413,7 @@ public class BorrowedController implements Initializable {
             fineLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
             gridPane.add(fineLabel, 2, 1);
 
-            String fineString = book.getFine().toString();
+            String fineString = borrowedBook.getFine().toString();
             Label fine = new Label("   " + fineString + " VND");
             fine.setFont(Font.font("System", 16));
             gridPane.add(fine, 3, 1);
@@ -419,10 +424,10 @@ public class BorrowedController implements Initializable {
             rateButton.setLayoutY(210);
             rateButton.setPrefSize(100, 40);
             rateButton.getStyleClass().add("rate-button");
-            setRatingButton(rateButton, book);
+            setRatingButton(rateButton, borrowedBook);
 
 
-            rateButton.setOnAction(e -> openRating(book, rateButton));
+            rateButton.setOnAction(e -> openRating(borrowedBook, rateButton));
 
             anchorPane.getChildren().addAll(bookImageView, titleLabel, authorText, isbnLabel, separator, gridPane, rateButton);
 
@@ -430,7 +435,7 @@ public class BorrowedController implements Initializable {
         }
     }
 
-    public static void setRatingButton(Button ratingButton, Book book) {
+    public static void setRatingButton(Button ratingButton, BorrowedBook book) {
         boolean isAlreadyRated = checkIfUserRatedBook(Session.getInstance().getLoggedInUser(), book);
         ratingButton.setUserData(book.getId());
         if (isAlreadyRated) {
@@ -537,11 +542,11 @@ public class BorrowedController implements Initializable {
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
+                updateQuantityBook(borrowedBook.getId());
                 borrowBookList.remove(borrowedBook);
                 borrowedBook.setStatus(newStatus);
                 borrowedBook.setReturnDate(today);
                 returnedBookList.add(borrowedBook);
-
                 displayBorrowingBooks(borrowBookList);
                 displayReturnedBooks(returnedBookList);
             } else {
@@ -552,15 +557,26 @@ public class BorrowedController implements Initializable {
         }
     }
 
+    private void updateQuantityBook(int bookId) {
+        String query = "UPDATE books SET quantity_copy = quantity_copy + 1 WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, bookId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
-    private void openRating(Book book, Button rateButton) {
+    private void openRating(BorrowedBook borrowedBook, Button rateButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/RatingPage.fxml"));
             Parent root = loader.load();
 
             Stage currentStage = (Stage) tabPane.getScene().getWindow();
             RatingPageController ratingPageController = loader.getController();
-            ratingPageController.setBook(book);
+            ratingPageController.setBookAndBorrowId(borrowedBook, borrowedBook.getBorrowId());
             ColorAdjust colorAdjust = new ColorAdjust();
             colorAdjust.setBrightness(-0.25);
             currentStage.getScene().getRoot().setEffect(colorAdjust);
@@ -580,12 +596,26 @@ public class BorrowedController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                setRatingButton(rateButton, book);
+                setRatingButton(rateButton, borrowedBook);
             });
             stage.showAndWait();
-//            setConfirmButton();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void confirmReturnAction() {
+        if (selectedBook != null) {
+            returnBook(selectedBook);
+            confirmPane.toBack();
+        }
+    }
+
+    @FXML
+    private void cancelReturnAction() {
+        confirmPane.toBack();
+        selectedBook = null;
+    }
+
 }

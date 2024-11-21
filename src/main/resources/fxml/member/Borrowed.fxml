@@ -24,7 +24,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="stackPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BorrowedController">
+<StackPane fx:id="stackPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BorrowedController">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>
@@ -131,8 +131,8 @@
                                                    <children>
                                                       <AnchorPane fx:id="confirmPane" layoutX="488.0" layoutY="180.0" prefHeight="204.0" prefWidth="424.0" styleClass="background_pane" stylesheets="@../../css/admin/CRUDUser.css">
                                                          <children>
-                                                            <Button layoutX="212.0" layoutY="152.0" mnemonicParsing="false" onAction="#cancel" prefHeight="38.0" prefWidth="68.0" styleClass="btn-3" text="Cancel" />
-                                                            <Button fx:id="returnBookButton" layoutX="286.0" layoutY="152.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" styleClass="btn-2" text="Yes, Return" />
+                                                            <Button layoutX="212.0" layoutY="152.0" mnemonicParsing="false" onAction="#cancelReturnAction" prefHeight="38.0" prefWidth="68.0" styleClass="btn-3" text="Cancel" />
+                                                            <Button fx:id="returnBookButton" layoutX="286.0" layoutY="152.0" mnemonicParsing="false" onAction="#confirmReturnAction" prefHeight="38.0" prefWidth="114.0" styleClass="btn-2" text="Yes, Return" />
                                                             <Label layoutX="14.0" layoutY="56.0" text="Are you sure you want to return book?">
                                                                <font>
                                                                   <Font name="System Bold" size="20.0" />

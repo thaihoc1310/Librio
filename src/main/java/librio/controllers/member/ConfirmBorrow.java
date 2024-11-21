@@ -77,7 +77,7 @@ public class ConfirmBorrow {
 
     @FXML
     private void confirmAction() {
-        String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, Session.getInstance().getLoggedInUser().getId());
@@ -87,8 +87,7 @@ public class ConfirmBorrow {
             statement.setString(5, null);
             statement.setString(6, "BORROWING");
             statement.setString(7, String.valueOf(0));
-            statement.setString(8, LocalDateTime.now().toString());
-            statement.setString(9,  Session.getInstance().getLoggedInUser().getEmail());
+            statement.setString(8,  Session.getInstance().getLoggedInUser().getEmail());
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 updateQuantityBook();

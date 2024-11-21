@@ -80,10 +80,13 @@ public class DatabaseInitializer {
                     "FOREIGN KEY (member_id) REFERENCES Members(id)" +
                     ");";
 
+
+
             String createFeedbackTable = "CREATE TABLE IF NOT EXISTS Feedbacks (" +
                     "id INT PRIMARY KEY AUTO_INCREMENT," +
                     "book_id INT," +
                     "member_id INT," +
+                    "borrow_id INT," + // Thêm borrow_id
                     "rating INT," +
                     "about VARCHAR(255)," +
                     "created_by VARCHAR(255)," +
@@ -91,7 +94,8 @@ public class DatabaseInitializer {
                     "updated_by VARCHAR(255)," +
                     "updated_at TIMESTAMP," +
                     "FOREIGN KEY (book_id) REFERENCES Books(id)," +
-                    "FOREIGN KEY (member_id) REFERENCES Members(id)" +
+                    "FOREIGN KEY (member_id) REFERENCES Members(id)," +
+                    "FOREIGN KEY (borrow_id) REFERENCES Borrows(id)" +
                     ");";
 
 
@@ -117,9 +121,9 @@ public class DatabaseInitializer {
                 String resetAutoIncrementBook = "ALTER TABLE Books AUTO_INCREMENT = 1";
                 statement.execute(resetAutoIncrementBook);
                 String insertBooks = "INSERT INTO Books (title, author, isbn, publisher, category, quantity_copy, average_of_rating, created_by, created_at, year_published, language, number_of_pages, book_image, description) VALUES " +
-                        "('Effective Java', 'Joshua Bloch', '9780134685991', 'Addison-Wesley', 'Technology', 5, 5, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 416, NULL, 'A comprehensive guide to best practices in Java programming. This book covers in-depth principles for writing effective Java code. It includes multiple chapters on best practices for designing robust and maintainable systems.')," +
-                        "('Clean Code', 'Robert C. Martin', '9780132350884', 'Prentice Hall', 'Technology', 3, 4, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 464, NULL, 'A handbook of agile software craftsmanship. The book emphasizes the importance of writing clean, readable code. Through practical examples, readers learn how to refactor messy code into clean and understandable designs.')," +
-                        "('The Pragmatic Programmer', 'Andrew Hunt', '9780201616224', 'Addison-Wesley', 'Technology', 5, 4, 'admin@example.com', CURRENT_TIMESTAMP, 1999, 'English', 352, NULL, 'From Journeyman to Master - a practical guide for programmers. This book provides practical advice on software development, covering a range of topics from debugging techniques to project management. It’s an essential read for any aspiring software engineer.')," +
+                        "('Effective Java', 'Joshua Bloch', '9780134685991', 'Addison-Wesley', 'Technology', 5, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 416, NULL, 'A comprehensive guide to best practices in Java programming. This book covers in-depth principles for writing effective Java code. It includes multiple chapters on best practices for designing robust and maintainable systems.')," +
+                        "('Clean Code', 'Robert C. Martin', '9780132350884', 'Prentice Hall', 'Technology', 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 464, NULL, 'A handbook of agile software craftsmanship. The book emphasizes the importance of writing clean, readable code. Through practical examples, readers learn how to refactor messy code into clean and understandable designs.')," +
+                        "('The Pragmatic Programmer', 'Andrew Hunt', '9780201616224', 'Addison-Wesley', 'Technology', 5, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1999, 'English', 352, NULL, 'From Journeyman to Master - a practical guide for programmers. This book provides practical advice on software development, covering a range of topics from debugging techniques to project management. It’s an essential read for any aspiring software engineer.')," +
                         "('Design Patterns', 'Erich Gamma', '9780201633610', 'Addison-Wesley', 'Computers', 2, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1994, 'English', 395, NULL, 'Elements of Reusable Object-Oriented Software. This book introduces classic design patterns that are widely used in software development. It helps developers understand how to apply reusable solutions to common design problems.')," +
                         "('Refactoring', 'Martin Fowler', '9780201485677', 'Addison-Wesley', 'Computers', 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1999, 'English', 464, NULL, 'Improving the design of existing code. Refactoring helps developers clean up messy codebases and make them more maintainable. The book emphasizes best practices for enhancing code quality.')," +
                         "('Code Complete', 'Steve McConnell', '9780735619678', 'Microsoft Press', 'Computers', 4, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2004, 'English', 960, NULL, 'A practical handbook of software construction. This extensive guide provides detailed insight into coding best practices. Topics such as debugging, testing, and performance optimization are thoroughly covered.')," +
@@ -133,60 +137,60 @@ public class DatabaseInitializer {
 
 
                 String insertMembers = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES " +
-                        "(1, 0, 4)," +
-                        "(2,  0, 3)," +
-                        "(3, 50000, 2)," +
-                        "(4,  0, 1);";
+                        "(1, 0, 0)," +
+                        "(2,  0, 0)," +
+                        "(3, 0, 0)," +
+                        "(4,  0, 0);";
                 statement.execute(insertMembers);
 
                 String insertLibrarians = "INSERT INTO Librarians (id) VALUES (5);";
                 statement.execute(insertLibrarians);
 
-                String insertBorrows = "INSERT INTO Borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_by, created_at) VALUES " +
-                        "(1, 9780134685991, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 9780132350884, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 9780201616224, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED_LATE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 9780201633610, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 9780201485677, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 9780735619678, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY , NULL, 'OVERDUE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 9780262033848, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(4, 9780321349606, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 9780201835953, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY , NULL, 'OVERDUE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 9781491904244, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED_LATE', 5000, 'admin@example.com', CURRENT_TIMESTAMP);";
-                statement.execute(insertBorrows);
+//                String insertBorrows = "INSERT INTO Borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_by, created_at) VALUES " +
+//                        "(1, 9780134685991, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 9780132350884, CURRENT_TIMESTAMP - INTERVAL 10 DAY, CURRENT_TIMESTAMP + INTERVAL 4 DAY, CURRENT_TIMESTAMP, 'RETURNED', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 9780201616224, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED_LATE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 9780201633610, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 9780201485677, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 9780735619678, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY , NULL, 'OVERDUE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 9780262033848, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(4, 9780321349606, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 14 DAY, NULL, 'BORROWING', 0, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 9780201835953, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY , NULL, 'OVERDUE', 5000, 'admin@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 9781491904244, CURRENT_TIMESTAMP - INTERVAL 15 DAY, CURRENT_TIMESTAMP - INTERVAL 1 DAY, CURRENT_TIMESTAMP, 'RETURNED_LATE', 5000, 'admin@example.com', CURRENT_TIMESTAMP);";
+//                statement.execute(insertBorrows);
 
-                String insertFeedbacks = "INSERT INTO Feedbacks (book_id, member_id, rating, about, created_by, created_at) VALUES " +
-                        "(1, 1, 5, 'Excellent introduction to Java!', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 2, 4, 'Very useful for beginners in clean coding.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 3, 5, 'Amazing book, highly recommend it!', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 4, 3, 'Good overview, but some topics could be more detailed.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 1, 4, 'Comprehensive guide to algorithms.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 2, 5, 'The best book for understanding algorithms.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 3, 4, 'Useful for both study and reference.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 4, 3, 'A bit too theoretical in some parts.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 1, 5, 'Fantastic explanations on data structures.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 2, 4, 'Clear and concise writing, very helpful.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 3, 5, 'A must-read for computer science students.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 4, 4, 'Covers everything you need to know.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
-                        "(4, 1, 5, 'Great guide for advanced Java concepts.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(4, 2, 4, 'Deep insights into memory management.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                        "(4, 3, 5, 'Excellent for experienced Java developers.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
-                        "(4, 4, 3, 'A bit too complex for beginners.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 1, 5, 'Perfect for getting a good foundation in programming.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 2, 4, 'A comprehensive guide with many examples.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 3, 5, 'Best book I have read on Java so far!', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
-                        "(1, 4, 4, 'Useful for both beginners and experienced programmers.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 1, 5, 'In-depth analysis of algorithms.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 2, 3, 'Some sections are hard to understand.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 3, 5, 'Highly detailed and practical.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
-                        "(2, 4, 4, 'Good book for learning complex algorithms.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 1, 5, 'Best data structures book available.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 2, 4, 'Excellent coverage of all main topics.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 3, 5, 'Very informative and easy to read.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
-                        "(3, 4, 3, 'Lacks advanced data structure topics.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
-                        "(4, 1, 4, 'Good content, but could use more examples.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
-                        "(4, 2, 5, 'Comprehensive and in-depth for Java professionals.', 'jane.smith@example.com', CURRENT_TIMESTAMP);";
-                statement.execute(insertFeedbacks);
+//                String insertFeedbacks = "INSERT INTO Feedbacks (book_id, member_id, rating, about, created_by, created_at) VALUES " +
+//                        "(1, 1, 5, 'Excellent introduction to Java!', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 2, 4, 'Very useful for beginners in clean coding.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 3, 5, 'Amazing book, highly recommend it!', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 4, 3, 'Good overview, but some topics could be more detailed.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 1, 4, 'Comprehensive guide to algorithms.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 2, 5, 'The best book for understanding algorithms.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 3, 4, 'Useful for both study and reference.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 4, 3, 'A bit too theoretical in some parts.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 1, 5, 'Fantastic explanations on data structures.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 2, 4, 'Clear and concise writing, very helpful.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 3, 5, 'A must-read for computer science students.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 4, 4, 'Covers everything you need to know.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+//                        "(4, 1, 5, 'Great guide for advanced Java concepts.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+//                        "(4, 2, 4, 'Deep insights into memory management.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+//                        "(4, 3, 5, 'Excellent for experienced Java developers.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+//                        "(4, 4, 3, 'A bit too complex for beginners.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 1, 5, 'Perfect for getting a good foundation in programming.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 2, 4, 'A comprehensive guide with many examples.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 3, 5, 'Best book I have read on Java so far!', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+//                        "(1, 4, 4, 'Useful for both beginners and experienced programmers.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 1, 5, 'In-depth analysis of algorithms.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 2, 3, 'Some sections are hard to understand.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 3, 5, 'Highly detailed and practical.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+//                        "(2, 4, 4, 'Good book for learning complex algorithms.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 1, 5, 'Best data structures book available.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 2, 4, 'Excellent coverage of all main topics.', 'jane.smith@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 3, 5, 'Very informative and easy to read.', 'alice.johnson@example.com', CURRENT_TIMESTAMP)," +
+//                        "(3, 4, 3, 'Lacks advanced data structure topics.', 'bob.brown@example.com', CURRENT_TIMESTAMP)," +
+//                        "(4, 1, 4, 'Good content, but could use more examples.', 'john.doe@example.com', CURRENT_TIMESTAMP)," +
+//                        "(4, 2, 5, 'Comprehensive and in-depth for Java professionals.', 'jane.smith@example.com', CURRENT_TIMESTAMP);";
+//                statement.execute(insertFeedbacks);
 
 
 

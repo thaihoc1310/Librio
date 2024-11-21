@@ -1,5 +1,6 @@
 package librio.models;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -11,15 +12,17 @@ public class BorrowedBook extends Book {
     private ObjectProperty<LocalDate> returnDate;
     private Status status;
     private Double fine;
+    private Integer borrowId;
 
 
-    public BorrowedBook(Book book, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, Status status, Double fine) {
+    public BorrowedBook(Book book, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate, Status status, Double fine, Integer borrowerId) {
         super(book.getId(), book.getTitle(), book.getAuthor(), book.getIsbn(), book.getImagePath());
         this.dueDate = new SimpleObjectProperty<>(dueDate);
         this.borrowDate = new SimpleObjectProperty<>(borrowDate);
         this.returnDate = new SimpleObjectProperty<>(returnDate);
         this.status = status;
         this.fine = fine;
+        this.borrowId = borrowerId;
     }
 
     public LocalDate getDueDate() {
@@ -57,5 +60,15 @@ public class BorrowedBook extends Book {
     public Double getFine() {
         return fine;
     }
+
+    public Integer getBorrowId() {
+        return borrowId;
+    }
+
+    public void setBorrowId(Integer borrowerId) {
+        this.borrowId = borrowerId;
+    }
+
+
 }
 

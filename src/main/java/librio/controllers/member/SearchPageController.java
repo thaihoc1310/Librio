@@ -14,9 +14,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -596,12 +598,12 @@ public class SearchPageController implements Initializable {
             buttonPane.setLayoutX(11);
 
 
-            Button returnButton = new Button();
-            returnButton.getStyleClass().add("quick-borrow-button");
-            returnButton.setLayoutX(6);
-            returnButton.setLayoutY(5);
-            setConfirmButton(returnButton, book);
-            buttonPane.getChildren().add(returnButton);
+            Button quickBorrowButton = new Button();
+            quickBorrowButton.getStyleClass().add("quick-borrow-button");
+            quickBorrowButton.setLayoutX(6);
+            quickBorrowButton.setLayoutY(5);
+            setConfirmButton(quickBorrowButton, book);
+            buttonPane.getChildren().add(quickBorrowButton);
 
             bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
@@ -621,6 +623,10 @@ public class SearchPageController implements Initializable {
             bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
             infoPane.getChildren().addAll(titleLabel, authorLabel);
+            bookPane.getChildren().addAll(bookImagePane, infoPane);
+            bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
+            quickBorrowButton.setOnAction(e -> openBorrowConfirmationPane(book,quickBorrowButton));
+
             Task<HBox> ratingTask = new Task<>() {
                 @Override
                 protected HBox call() {
@@ -672,7 +678,6 @@ public class SearchPageController implements Initializable {
                 }
             };
             executor.execute(ratingTask);
-            bookPane.getChildren().addAll(bookImagePane, infoPane);
             flowPane.getChildren().add(bookPane);
             flowPane.setHgap(40);
             flowPane.setVgap(20);
@@ -741,6 +746,80 @@ public class SearchPageController implements Initializable {
             // Hiển thị scene
             stage.showAndWait();
             setAvatarAndUserName();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openBookDetailScene(Book book, Button confirmButton) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
+            Parent rootContent = loader.load();
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
+            BookDetailController bookDetailController = loader.getController();
+            bookDetailController.setBook(book);
+
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(rootContent);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initOwner(currentStage);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+                setConfirmButton(confirmButton,book);
+            });
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openBorrowConfirmationPane(Book book, Button confirmButton) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
+            ConfirmBorrow confirmBorrow = loader.getController();
+            confirmBorrow.setBook(book);
+
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initOwner(currentStage);
+            stage.setOnShown(event -> {
+                stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
+            });
+
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+                setConfirmButton(confirmButton,book);
+
+            });
+            stage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

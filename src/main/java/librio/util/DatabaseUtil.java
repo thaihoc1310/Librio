@@ -460,8 +460,8 @@ public class DatabaseUtil {
         if (scheduler.isShutdown() || scheduler.isTerminated()) {
             scheduler = Executors.newScheduledThreadPool(1);
         }
-        updateBookStatus();
-        scheduler.scheduleAtFixedRate(DatabaseUtil::updateBookStatus, 1, 1, TimeUnit.HOURS);
+        updateBookBorrowedStatus();
+        scheduler.scheduleAtFixedRate(DatabaseUtil::updateBookBorrowedStatus, 1, 1, TimeUnit.HOURS);
     }
 
 
@@ -469,7 +469,7 @@ public class DatabaseUtil {
         scheduler.shutdown();
     }
 
-    public static void updateBookStatus() {
+    public static void updateBookBorrowedStatus() {
         try {
             String query = "SELECT id, due_date, return_date FROM borrows WHERE status in ('BORROWING', 'OVERDUE')";
             try (Connection connection = DatabaseConnection.getConnection();
@@ -509,6 +509,25 @@ public class DatabaseUtil {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateBookAverageRating(String bookIsbn) {
+        String updateAverageRatingQuery = "UPDATE Books " +
+                "SET average_of_rating = ( " +
+                "    SELECT COALESCE(AVG(rating), 0) " +
+                "    FROM Feedbacks " +
+                "    WHERE book_id = Books.id " +
+                ") " +
+                "WHERE isbn = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement updateStatement = connection.prepareStatement(updateAverageRatingQuery)) {
+
+            updateStatement.setString(1, bookIsbn);
+            updateStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -612,19 +631,19 @@ public class DatabaseUtil {
         return 0;
     }
 
-    public static boolean checkIfUserRatedBook(User user, Book book) {
-        String query = "SELECT COUNT(*) FROM feedbacks WHERE member_id = ? AND book_id = ?";
+    public static boolean checkIfUserRatedBook(User user, BorrowedBook book) {
+        String query = "SELECT 1 FROM feedbacks WHERE member_id = ? AND book_id = ? AND borrow_id = ? LIMIT 1";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getId());
             statement.setInt(2, book.getId());
+            statement.setInt(3, book.getBorrowId());
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return countUserBorrowedBook(user, book) <= resultSet.getInt(1);
-            }
+            return resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 }

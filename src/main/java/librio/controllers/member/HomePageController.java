@@ -326,13 +326,14 @@ public class HomePageController implements Initializable {
             buttonPane.setLayoutY(225);
             buttonPane.setLayoutX(11);
 
-            Button returnButton = new Button();
-            returnButton.getStyleClass().add("quick-borrow-button");
-            returnButton.setLayoutX(6);
-            returnButton.setLayoutY(5);
-            setConfirmButton(returnButton, book);
+            Button quickBorrowButton = new Button();
+            quickBorrowButton.getStyleClass().add("quick-borrow-button");
+            quickBorrowButton.setLayoutX(6);
+            quickBorrowButton.setLayoutY(5);
 
-            buttonPane.getChildren().add(returnButton);
+            setConfirmButton(quickBorrowButton, book);
+            buttonPane.getChildren().add(quickBorrowButton);
+
             bookImagePane.getChildren().addAll(bookImage, buttonPane);
             bookImagePane.setOnMouseEntered(e -> {
                 TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
@@ -382,8 +383,10 @@ public class HomePageController implements Initializable {
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
             infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
             bookPane.getChildren().addAll(bookImagePane, infoPane);
-            bookPane.setOnMouseClicked(e -> openBookDetailScene(book,returnButton));
-            returnButton.setOnAction(e -> openBorrowConfirmationPane(book,returnButton));
+            bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
+            quickBorrowButton.setOnAction(e -> {
+                openBorrowConfirmationPane(book, quickBorrowButton);
+            });
             container.getChildren().add(bookPane);
         }
         container.setSpacing(10);
@@ -433,6 +436,7 @@ public class HomePageController implements Initializable {
             });
 
             stage.initModality(Modality.WINDOW_MODAL);
+
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
