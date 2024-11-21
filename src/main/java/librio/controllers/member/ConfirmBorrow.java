@@ -41,7 +41,7 @@ public class ConfirmBorrow {
     private Text dueDateLabel;
 
     @FXML
-    private Label titleLabel;
+    private Text titleText;
 
     private Book book;
 
@@ -50,7 +50,7 @@ public class ConfirmBorrow {
     public void setBook (Book book) {
         this.book = book;
 
-        titleLabel.setText(book.getTitle());
+        titleText.setText(book.getTitle());
         authorNameLabel.setText(book.getAuthor());
         dueDate = LocalDate.now().plusDays(90);
         dueDateLabel.setText("Due Date:  " + dueDate);

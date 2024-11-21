@@ -1,11 +1,9 @@
 package librio.controllers.member;
 
 import javafx.animation.*;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,14 +11,14 @@ import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -125,6 +123,7 @@ public class HomePageController implements Initializable {
         startAutoScroll();
         loadTopRatedBooks();
         loadMostBorrowedBooks();
+
     }
 
     public void setAvatarAndUserName() {
@@ -200,6 +199,7 @@ public class HomePageController implements Initializable {
     }
 
     private void startAutoScroll() {
+        stopAutoScroll();
         autoScrollTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> scrollMainBanner(1)));
         autoScrollTimeline.setCycleCount(Timeline.INDEFINITE);
         autoScrollTimeline.play();
@@ -382,9 +382,13 @@ public class HomePageController implements Initializable {
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
             infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
             bookPane.getChildren().addAll(bookImagePane, infoPane);
-            bookPane.setOnMouseClicked(e -> openBookDetailScene(book,returnButton));
-            returnButton.setOnAction(e -> openBorrowConfirmationPane(book,returnButton));
+            bookPane.setOnMouseClicked(e -> openBookDetailScene(book, returnButton));
+            boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
+            if (!isAlreadyBorrowed && book.getQuantityCopy() > 0) {
+                returnButton.setOnAction(e -> openBorrowConfirmationPane(book, returnButton));
+            }
             container.getChildren().add(bookPane);
+
         }
         container.setSpacing(10);
     }
@@ -405,6 +409,7 @@ public class HomePageController implements Initializable {
             );
             timeline.getKeyFrames().add(keyFrame);
             timeline.play();
+
         }
     }
 
@@ -436,10 +441,12 @@ public class HomePageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                updateAllContainers(book);
+
             });
 
             stage.showAndWait();
+
+            updateAllContainers(book);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -471,7 +478,7 @@ public class HomePageController implements Initializable {
 
     @FXML
     void logOut() throws IOException {
-        Stage currenStage = (Stage) searchTextField.getScene().getWindow();
+        Stage currenStage = (Stage) avatarUser.getScene().getWindow();
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
         Parent loginRoot = loader.load();
@@ -498,11 +505,9 @@ public class HomePageController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/ConfirmBorrow.fxml"));
             Parent root = loader.load();
-
             Stage currentStage = (Stage) searchTextField.getScene().getWindow();
             ConfirmBorrow confirmBorrow = loader.getController();
             confirmBorrow.setBook(book);
-
             ColorAdjust colorAdjust = new ColorAdjust();
             colorAdjust.setBrightness(-0.25);
             currentStage.getScene().getRoot().setEffect(colorAdjust);
@@ -522,10 +527,14 @@ public class HomePageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                updateAllContainers(book);
+
 
             });
+
             stage.showAndWait();
+            updateAllContainers(book);
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -545,7 +554,6 @@ public class HomePageController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(searchTextField.getScene().getWindow());
             stage.initModality(Modality.APPLICATION_MODAL);
-            // Hiển thị scene
             stage.showAndWait();
             setAvatarAndUserName();
         } catch (IOException e) {
@@ -557,8 +565,11 @@ public class HomePageController implements Initializable {
         List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer);
         for (HBox container : containers) {
             updateButtonInContainer(container, book);
-            container.layout();
+
+
         }
     }
+
+
 }
 
