@@ -383,7 +383,7 @@ public class HomePageController implements Initializable {
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
             infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
             bookPane.getChildren().addAll(bookImagePane, infoPane);
-            
+
             bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
             quickBorrowButton.setOnAction(e -> {
                 openBorrowConfirmationPane(book, quickBorrowButton);
@@ -567,8 +567,6 @@ public class HomePageController implements Initializable {
         List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer);
         for (HBox container : containers) {
             updateButtonInContainer(container, book);
-
-
         }
     }
 
