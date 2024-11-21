@@ -110,10 +110,28 @@ public class DesignUtil {
     public static void updateBorrowButton(Button button, String text, String color, boolean isEnabled) {
         button.setText(text);
         button.setStyle("-fx-border-color: " + color + "; -fx-text-fill: " + color);
-        button.setDisable(!isEnabled);
+//        button.setDisable(!isEnabled);
+        if(!isEnabled) {
+            button.setOnAction(null);
+        }
+
         button.setCursor(isEnabled ? Cursor.HAND : Cursor.DEFAULT);
         button.setOnMouseEntered(e -> button.setStyle("-fx-text-fill: #943f20;"));
         button.setOnMouseExited(e -> button.setStyle("-fx-text-fill: #6e2f18;"));
+    }
+
+    public static void updateButtonInContainer(HBox container, Book book) {
+        for (Node node : container.getChildren()) {
+            if (node instanceof AnchorPane) {
+                AnchorPane bookPane = (AnchorPane) node;
+                Button returnButton = (Button) bookPane.lookup(".quick-borrow-button");
+                if (returnButton != null) {
+                    if (returnButton.getUserData() != null && book.getId() == (int) returnButton.getUserData()) {
+                        setConfirmButton(returnButton, book);
+                    }
+                }
+            }
+        }
     }
 
 }
