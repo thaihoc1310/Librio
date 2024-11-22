@@ -206,9 +206,9 @@ public class BookDetailController implements Initializable {
     }
 
     private void setConfirmButton(){
-        int quantityOfCopy = book.getQuantityCopy();
+        int availableCopy = book.getAvailableCopy();
         boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(),book);
-        if (quantityOfCopy == 0) {
+        if (availableCopy == 0) {
             updateBorrowButton("Out of stock", "#9e4b3e", false);
         } else if (isAlreadyBorrowed) {
             updateBorrowButton("Borrowing", "#b57a3e", false);

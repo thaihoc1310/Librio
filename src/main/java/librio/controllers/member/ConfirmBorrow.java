@@ -99,10 +99,10 @@ public class ConfirmBorrow {
     }
 
     private void updateQuantityBook() {
-        String query = "UPDATE books SET quantity_copy = ? WHERE id = ?";
+        String query = "UPDATE books SET available_copy = ? WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1,book.getQuantityCopy() - 1);
+            statement.setInt(1,book.getAvailableCopy() - 1);
             statement.setInt(2, book.getId());
             statement.executeUpdate();
         } catch (SQLException e) {

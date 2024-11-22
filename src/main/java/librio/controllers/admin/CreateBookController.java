@@ -274,8 +274,8 @@ public class CreateBookController implements Initializable {
             return;
         }
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO books (title, author, isbn, publisher, category, quantity_copy, average_of_rating, year_published, language, number_of_pages, description, book_image, created_by, created_at)" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+            String query = "INSERT INTO books (title, author, isbn, publisher, category, quantity_copy, available_copy, average_of_rating, year_published, language, number_of_pages, description, book_image, created_by, created_at)" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, bookTitle);
             statement.setString(2, author);
@@ -283,14 +283,15 @@ public class CreateBookController implements Initializable {
             statement.setString(4, publisher);
             statement.setString(5, category);
             statement.setString(6, quantityOfCopy);
-            statement.setString(7, averageOfRating);
+            statement.setString(7, quantityOfCopy);
+            statement.setString(8, averageOfRating);
             if (yearPublished == null || yearPublished.equals("Unknown")) {
-                statement.setNull(8, java.sql.Types.INTEGER);
+                statement.setNull(9, java.sql.Types.INTEGER);
             } else {
-                statement.setInt(8, Integer.parseInt(yearPublished));
+                statement.setInt(10, Integer.parseInt(yearPublished));
             }
-            statement.setString(9, language);
-            statement.setString(10, numberOfPages);
+            statement.setString(11, language);
+            statement.setString(12, numberOfPages);
             if (descriptionTextArea.getText().isEmpty()) {
                 statement.setString(11, "No description provided!");
             }else {
@@ -391,7 +392,7 @@ public class CreateBookController implements Initializable {
     }
 
     private String mapCategoryToBroadCategory(String category) {
-        return CATEGORY_MAP.getOrDefault(category, category);
+        return CATEGORY_MAP.getOrDefault(category, "Others");
     }
 
     private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();

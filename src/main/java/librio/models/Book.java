@@ -17,6 +17,7 @@ public class Book {
     private StringProperty imagePath;
     private StringProperty isbn;
     private IntegerProperty quantityCopy;
+    private IntegerProperty availableCopy;
     private DoubleProperty averageOfRating;
     private String created_by;
     private Instant created_at;
@@ -54,7 +55,7 @@ public class Book {
     }
 
 
-    public Book(Integer id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, Double averageOfRating, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
+    public Book(Integer id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, Integer availableCopy ,Double averageOfRating, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
@@ -62,6 +63,7 @@ public class Book {
         this.category = new SimpleStringProperty(category);
         this.publisher = new SimpleStringProperty(publisher);
         this.quantityCopy = new SimpleIntegerProperty(quantityCopy);
+        this.availableCopy = new SimpleIntegerProperty(availableCopy);
         this.averageOfRating = new SimpleDoubleProperty(averageOfRating);
         this.yearPublished = new SimpleStringProperty(yearPublished);
         this.language = new SimpleStringProperty(language);
@@ -267,5 +269,17 @@ public class Book {
 
     public StringProperty imagePathProperty() {
         return imagePath;
+    }
+
+    public int getAvailableCopy() {
+        return availableCopy.get();
+    }
+
+    public IntegerProperty availableCopyProperty() {
+        return availableCopy;
+    }
+
+    public void setAvailableCopy(int availableCopy) {
+        this.availableCopy.set(availableCopy);
     }
 }

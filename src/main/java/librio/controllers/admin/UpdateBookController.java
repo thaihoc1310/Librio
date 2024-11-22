@@ -27,7 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import static librio.util.DatabaseUtil.isBookTitleExists;
+import static librio.util.DatabaseUtil.*;
 
 public class UpdateBookController implements Initializable {
     private Book book;
@@ -121,6 +121,14 @@ public class UpdateBookController implements Initializable {
         String yearPublished = yearPublishedTextField.getText();
         String description = descriptionTextArea.getText();
 
+        Book book = getBookByIsbn(isbn);
+
+        if(book == null) {
+            return;
+        }
+
+        int totalBorrowedBooks = book.getQuantityCopy() - book.getAvailableCopy();
+
         boolean validation = false;
 
         if(bookTitle.isEmpty()){
@@ -168,6 +176,9 @@ public class UpdateBookController implements Initializable {
         } else if (!quantityOfCopy.matches("\\d+")) {
             quantityOfCopyErrorLabel.setText("Quantity of copy must be a non-negative number!");
             validation = true;
+        }else if(Integer.parseInt(quantityOfCopy) < totalBorrowedBooks){
+            quantityOfCopyErrorLabel.setText("Invalid quantity of copy!");
+            validation = true;
         }
 
         if(language.isEmpty()){
@@ -178,8 +189,11 @@ public class UpdateBookController implements Initializable {
         if(validation) {
             return;
         }
+
+        String availableCopy = String.valueOf(Integer.parseInt(quantityOfCopy) - totalBorrowedBooks);
+
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "UPDATE books SET title = ?, author = ?, isbn = ?, publisher = ?, category = ?, quantity_copy = ?, year_published = ?, " +
+            String query = "UPDATE books SET title = ?, author = ?, isbn = ?, publisher = ?, category = ?, quantity_copy = ?, available_copy = ? ,year_published = ?, " +
                             "language = ?, number_of_pages = ?, description = ?, book_image = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, bookTitle);
@@ -188,17 +202,18 @@ public class UpdateBookController implements Initializable {
             statement.setString(4, publisher);
             statement.setString(5, category);
             statement.setString(6, quantityOfCopy);
-            statement.setString(7, yearPublished);
-            statement.setString(8, language);
-            statement.setString(9, numberOfPages);
+            statement.setString(7, availableCopy);
+            statement.setString(8, yearPublished);
+            statement.setString(9, language);
+            statement.setString(10, numberOfPages);
             if (descriptionTextArea.getText().isEmpty()) {
-                statement.setString(10, "No description provided!");
+                statement.setString(11, "No description provided!");
             }else {
-                statement.setString(10, description);
+                statement.setString(11, description);
             }
-            statement.setString(11, bookImageFilePath != null ? bookImageFilePath : book.getImagePath());
-            statement.setString(12, Session.getInstance().getLoggedInUser().getEmail());
-            statement.setInt(13, book.getId());
+            statement.setString(12, bookImageFilePath != null ? bookImageFilePath : book.getImagePath());
+            statement.setString(13, Session.getInstance().getLoggedInUser().getEmail());
+            statement.setInt(14, book.getId());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {

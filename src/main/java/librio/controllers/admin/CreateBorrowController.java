@@ -134,7 +134,7 @@ public class CreateBorrowController implements Initializable {
 
         String query = "INSERT INTO borrows (member_id, book_isbn, borrow_date, due_date, return_date, status, fine, created_by, created_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
-        String updateBookQuery = "UPDATE books SET quantity_copy = quantity_copy - 1 WHERE isbn = ? AND quantity_copy > 0";
+        String updateBookQuery = "UPDATE books SET available_copy = available_copy - 1 WHERE isbn = ? AND available_copy > 0";
         try (Connection connection = DatabaseConnection.getConnection()) {
 
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);

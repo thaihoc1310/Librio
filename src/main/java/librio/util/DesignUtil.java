@@ -95,10 +95,10 @@ public class DesignUtil {
     }
 
     public static void setConfirmButton(Button confirmButton, Book book) {
-        int quantityOfCopy = book.getQuantityCopy();
+        int availableCopy = book.getAvailableCopy();
         boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
         confirmButton.setUserData(book.getId());
-        if (quantityOfCopy == 0) {
+        if (availableCopy == 0) {
             updateBorrowButton(confirmButton, "OUT OF STOCK", "#9e4b3e", false);
         } else if (isAlreadyBorrowed) {
             updateBorrowButton(confirmButton, "BORROWING", "#b57a3e", false);

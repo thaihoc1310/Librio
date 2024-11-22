@@ -125,7 +125,7 @@ public class AddBookApiController implements Initializable {
                     String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail") : "defaultBook.jpg";
                     Integer numberOfPages = volumeInfo.optInt("pageCount", 0);
                     if (isDigit(isbn.charAt(0))) isbn = "ISBN : " + isbn;
-                    Book book = new Book(0, title, author, isbn, category, publisher, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
+                    Book book = new Book(0, title, author, isbn, category, publisher, 0, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
                      fetchedBooks.add(book);
                 }
             }
