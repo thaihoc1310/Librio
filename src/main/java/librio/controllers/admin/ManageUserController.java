@@ -26,8 +26,8 @@ import javafx.util.Callback;
 import librio.controllers.LogoutController;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
-import librio.models.Gender;
-import librio.models.Role;
+import librio.enums.Gender;
+import librio.enums.Role;
 import librio.models.User;
 
 import java.io.File;

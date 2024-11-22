@@ -1,8 +1,8 @@
 package librio.models;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import librio.enums.Status;
 
 import java.time.LocalDate;
 

@@ -1,15 +1,14 @@
 package librio.util;
 
 import librio.database.DatabaseConnection;
+import librio.enums.Gender;
+import librio.enums.Role;
+import librio.enums.Status;
 import librio.models.*;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

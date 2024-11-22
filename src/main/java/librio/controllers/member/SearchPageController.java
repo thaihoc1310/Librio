@@ -207,7 +207,6 @@ public class SearchPageController implements Initializable {
                 getException().printStackTrace();
             }
         };
-
         executor.submit(loadTask);
     }
 
@@ -216,18 +215,20 @@ public class SearchPageController implements Initializable {
         filterBox.getSelectionModel().select(filter);
         handleSearch();
     }
+
     public void setAvatarAndUserName() {
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, clickAvatar, 23);
 
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
+
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
         pane.setExpanded(false);
         pane.expandedProperty().addListener((observable, oldValue, newValue) -> {
@@ -264,7 +265,7 @@ public class SearchPageController implements Initializable {
             if (currentLanguageFilter != null) {
                 preparedStatement.setString(paramIndex++, currentLanguageFilter);
             }
-            if(currentCategoryFilter != null) {
+            if (currentCategoryFilter != null) {
                 preparedStatement.setString(paramIndex++, currentCategoryFilter);
             }
             if (keyword != null && !keyword.isEmpty()) {
@@ -317,7 +318,7 @@ public class SearchPageController implements Initializable {
             conditions.add("language = ?");
         }
 
-        if(currentCategoryFilter != null) {
+        if (currentCategoryFilter != null) {
             conditions.add("category = ?");
         }
 
@@ -560,12 +561,10 @@ public class SearchPageController implements Initializable {
             @Override
             protected void succeeded() {
                 List<AnchorPane> panes = getValue();
-                Platform.runLater(() -> {
-                    flowPane.getChildren().addAll(panes);
-                    flowPane.setHgap(40);
-                    flowPane.setVgap(20);
-                    loadingIndicator.setVisible(false);
-                });
+                flowPane.getChildren().addAll(panes);
+                flowPane.setHgap(40);
+                flowPane.setVgap(20);
+                loadingIndicator.setVisible(false);
 
             }
 
@@ -600,7 +599,7 @@ public class SearchPageController implements Initializable {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
-        Image image = ImageCache.getInstance().getImage(path,booksDir + "defaultBook.jpg");
+        Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
         bookImage.setImage(image);
 
         Label titleLabel = new Label(book.getTitle());
@@ -649,7 +648,7 @@ public class SearchPageController implements Initializable {
         infoPane.getChildren().addAll(titleLabel, authorLabel);
         bookPane.getChildren().addAll(bookImagePane, infoPane);
 
-        bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
+        bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
 
         boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
         if (!isAlreadyBorrowed && book.getQuantityCopy() > 0) {
@@ -740,23 +739,25 @@ public class SearchPageController implements Initializable {
             backPane.setVisible(false);
         }
     }
+
     @FXML
     void logOut() throws IOException {
         Stage currenStage = (Stage) searchTextField.getScene().getWindow();
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-        Parent loginRoot  = loader.load();
+        Parent loginRoot = loader.load();
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
         ImageCache.getInstance().clearCache();
         currenStage.close();
     }
+
     @FXML
     private void openBorrowed() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
-            Parent manageUserRoot  = loader.load();
+            Parent manageUserRoot = loader.load();
             Stage currentStage = (Stage) avatarUser.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(manageUserRoot);
@@ -766,7 +767,7 @@ public class SearchPageController implements Initializable {
     }
 
     @FXML
-    private void openEditProfileScene(){
+    private void openEditProfileScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
             Parent root = loader.load();
@@ -813,7 +814,7 @@ public class SearchPageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                setConfirmButton(confirmButton,book);
+                setConfirmButton(confirmButton, book);
             });
 
             stage.showAndWait();
@@ -850,7 +851,7 @@ public class SearchPageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                setConfirmButton(confirmButton,book);
+                setConfirmButton(confirmButton, book);
 
             });
             stage.showAndWait();

@@ -10,8 +10,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
-import librio.models.Gender;
-import librio.models.Role;
+import librio.enums.Gender;
+import librio.enums.Role;
 
 import java.io.File;
 import java.io.IOException;

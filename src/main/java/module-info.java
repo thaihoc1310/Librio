@@ -21,4 +21,5 @@ module librio {
     exports librio.controllers.member;
     opens librio.controllers.admin to javafx.fxml;
     opens librio.controllers.member to javafx.fxml;
+    exports librio.enums;
 }

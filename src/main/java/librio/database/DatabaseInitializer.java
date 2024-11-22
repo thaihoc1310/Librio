@@ -100,6 +100,17 @@ public class DatabaseInitializer {
                     "FOREIGN KEY (borrow_id) REFERENCES Borrows(id)" +
                     ");";
 
+            String createNotificationTable = "CREATE TABLE IF NOT EXISTS Notifications (" +
+                    "id INT PRIMARY KEY AUTO_INCREMENT," +
+                    "member_id INT NOT NULL," +
+                    "borrow_id INT NOT NULL," +
+                    "notification_type ENUM('BORROW_SUCCESS', 'OVERDUE', 'RETURN_SUCCESS', 'ALMOST_DUE') NOT NULL," +
+                    "message TEXT NOT NULL," +
+                    "is_read BOOLEAN DEFAULT FALSE," +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                    "FOREIGN KEY (member_id) REFERENCES Members(id)," +
+                    "FOREIGN KEY (borrow_id) REFERENCES Borrows(id)" +
+                    ");";
 
             // Execute the SQL statements
             statement.execute(createUserTable);
@@ -108,6 +119,7 @@ public class DatabaseInitializer {
             statement.execute(createLibrarianTable);
             statement.execute(createBorrowTable);
             statement.execute(createFeedbackTable);
+            statement.execute(createNotificationTable);
 
             if (isTableEmpty("Users") && isTableEmpty("Books")) {
                 String resetAutoIncrementUser = "ALTER TABLE Users AUTO_INCREMENT = 1";

@@ -18,8 +18,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
-import librio.models.Gender;
-import librio.models.Role;
+import librio.enums.Gender;
+import librio.enums.Role;
 import librio.models.User;
 import librio.util.DatabaseUtil;
 

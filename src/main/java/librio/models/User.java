@@ -4,6 +4,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import librio.enums.Gender;
+import librio.enums.Role;
 
 import java.time.Instant;
 import java.time.LocalDate;

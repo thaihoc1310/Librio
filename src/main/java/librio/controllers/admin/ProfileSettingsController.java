@@ -18,7 +18,7 @@ import javafx.stage.StageStyle;
 import librio.controllers.LogoutController;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
-import librio.models.Gender;
+import librio.enums.Gender;
 import librio.models.User;
 
 import java.io.File;
