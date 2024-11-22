@@ -1,6 +1,5 @@
 package librio.controllers.admin;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,15 +9,12 @@ import javafx.stage.Stage;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
-import librio.models.Role;
+import librio.enums.Role;
 import librio.models.User;
 import librio.util.DesignUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

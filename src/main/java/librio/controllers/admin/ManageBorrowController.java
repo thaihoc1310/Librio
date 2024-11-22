@@ -28,7 +28,7 @@ import librio.controllers.LogoutController;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
-import librio.models.Status;
+import librio.enums.Status;
 
 import java.io.File;
 import java.io.IOException;

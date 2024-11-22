@@ -9,9 +9,8 @@ import javafx.stage.Stage;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
-import librio.models.Status;
+import librio.enums.Status;
 
-import java.awt.event.ActionListener;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;

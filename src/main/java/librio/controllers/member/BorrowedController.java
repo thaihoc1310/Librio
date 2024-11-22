@@ -29,7 +29,7 @@ import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.models.BorrowedBook;
-import librio.models.Status;
+import librio.enums.Status;
 import librio.util.DesignUtil;
 
 import java.io.File;
@@ -43,8 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static librio.models.Status.BORROWING;
-import static librio.models.Status.OVERDUE;
+import static librio.enums.Status.BORROWING;
+import static librio.enums.Status.OVERDUE;
 import static librio.util.DatabaseUtil.*;
 import static librio.util.DesignUtil.*;
 

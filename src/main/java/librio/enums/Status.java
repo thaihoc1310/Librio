@@ -1,4 +1,4 @@
-package librio.models;
+package librio.enums;
 
 public enum Status {
     RETURNED,

@@ -1,6 +1,6 @@
 package librio.auth;
 
-import librio.models.Role;
+import librio.enums.Role;
 import librio.models.User;
 
 public class Session {

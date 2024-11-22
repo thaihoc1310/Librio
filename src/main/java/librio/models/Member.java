@@ -1,6 +1,8 @@
 package librio.models;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.LongProperty;
+import librio.enums.Gender;
+import librio.enums.Role;
 
 import java.time.LocalDate;
 

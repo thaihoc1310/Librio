@@ -9,9 +9,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.auth.Session;
-import librio.cache.ImageCache;
-import librio.models.Gender;
-import librio.models.Role;
+import librio.enums.Gender;
+import librio.enums.Role;
+import librio.cache.ImageCache;5
 import librio.models.User;
 import librio.database.DatabaseConnection;
 import java.io.File;

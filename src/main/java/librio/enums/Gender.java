@@ -1,4 +1,4 @@
-package librio.models;
+package librio.enums;
 
 public enum Gender {
     MALE,

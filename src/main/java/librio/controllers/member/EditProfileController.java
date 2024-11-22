@@ -20,8 +20,7 @@ import librio.auth.Session;
 import librio.cache.ImageCache;
 import librio.controllers.admin.DeleteBookController;
 import librio.database.DatabaseConnection;
-import librio.models.Book;
-import librio.models.Gender;
+import librio.enums.Gender;
 import librio.models.User;
 
 import java.io.File;

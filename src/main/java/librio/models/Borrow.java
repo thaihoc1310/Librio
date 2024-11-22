@@ -2,6 +2,7 @@ package librio.models;
 
 
 import javafx.beans.property.*;
+import librio.enums.Status;
 
 import java.time.Instant;
 import java.time.LocalDate;
