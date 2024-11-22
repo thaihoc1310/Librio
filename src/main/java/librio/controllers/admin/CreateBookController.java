@@ -288,18 +288,18 @@ public class CreateBookController implements Initializable {
             if (yearPublished == null || yearPublished.equals("Unknown")) {
                 statement.setNull(9, java.sql.Types.INTEGER);
             } else {
-                statement.setInt(10, Integer.parseInt(yearPublished));
+                statement.setInt(9, Integer.parseInt(yearPublished));
             }
-            statement.setString(11, language);
-            statement.setString(12, numberOfPages);
+            statement.setString(10, language);
+            statement.setString(11, numberOfPages);
             if (descriptionTextArea.getText().isEmpty()) {
-                statement.setString(11, "No description provided!");
+                statement.setString(12, "No description provided!");
             }else {
-                statement.setString(11, description);
+                statement.setString(12, description);
             }
 
-            statement.setString(12, (bookImageFilePath == null || bookImageFilePath.equals("defaultBook.jpg")) ? null : bookImageFilePath);
-            statement.setString(13, Session.getInstance().getLoggedInUser().getEmail());
+            statement.setString(13, (bookImageFilePath == null || bookImageFilePath.equals("defaultBook.jpg")) ? null : bookImageFilePath);
+            statement.setString(14, Session.getInstance().getLoggedInUser().getEmail());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
