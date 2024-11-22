@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import librio.auth.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -131,18 +132,9 @@ public class HomePageController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 23);
-            cropAndClipToCircle(image, clickAvatar, 23);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 23);
-            cropAndClipToCircle(image, clickAvatar, 23);
-        }
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatarUser, 23);
+        cropAndClipToCircle(image, clickAvatar, 23);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
@@ -305,8 +297,8 @@ public class HomePageController implements Initializable {
             String projectDir = System.getProperty("user.dir");
             String booksDir = projectDir + "/src/main/resources/images/book/";
             String path = booksDir + book.getImagePath();
-            File file = new File(path);
-            bookImage.setImage(new Image(file.toURI().toString()));
+            Image image = ImageCache.getInstance().getImage(path,booksDir + "defaultBook.jpg");
+            bookImage.setImage(image);
 
             Label titleLabel = new Label(book.getTitle());
             titleLabel.setLayoutX(11);
@@ -490,6 +482,7 @@ public class HomePageController implements Initializable {
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
+        ImageCache.getInstance().clearCache();
         currenStage.close();
     }
 
