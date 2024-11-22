@@ -47,6 +47,10 @@ import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.setConfirmButton;
 
+/**
+ * Controller class for the search page of the application.
+ * Manages the UI elements and interactions within the search page.
+ */
 public class SearchPageController implements Initializable {
     @FXML
     public Label englishLabel;
@@ -185,8 +189,15 @@ public class SearchPageController implements Initializable {
         setupPaneListeners();
     }
 
+
+    /**
+     * Asynchronously loads a list of books for the specified page index and updates the UI components accordingly.
+     *
+     * @param pageIndex the index of the page to load books for
+     */
     private void loadBooksAsync(int pageIndex) {
         loadingIndicator.setVisible(true);
+
         flowPane.getChildren().clear();
         Task<List<Book>> loadTask = new Task<>() {
             @Override
@@ -210,6 +221,12 @@ public class SearchPageController implements Initializable {
         executor.submit(loadTask);
     }
 
+    /**
+     * Sets the search parameters and initiates a search.
+     *
+     * @param keyword the keyword to search for
+     * @param filter the filter criteria to apply
+     */
     public void setSearchParameters(String keyword, String filter) {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
