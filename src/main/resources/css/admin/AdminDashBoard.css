@@ -114,13 +114,13 @@
 }
 
 
-.pie-chart {
-    -fx-pie-padding: 5px;
-    -fx-legend-side: bottom;
-}
+/*.pie-chart {*/
+
+/*}*/
 
 .chart-pie-label {
-    -fx-font-size: 12.5px;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-fill: #333333;
+    -fx-pie-padding: 100px;
 }

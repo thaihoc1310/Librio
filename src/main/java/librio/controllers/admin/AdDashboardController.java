@@ -95,7 +95,11 @@ public class AdDashboardController implements Initializable {
                 String category = entry.getKey();
                 int quantity = entry.getValue();
                 double percentage = ((double) quantity / totalQuantity) * 100;
-                categoryData.add(new PieChart.Data(category + ": " + String.format("%.2f", percentage) + "%", quantity));
+
+
+                PieChart.Data data = new PieChart.Data(category + ": " + String.format("%.2f", percentage) + "%", quantity);
+                categoryData.add(data);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,7 +107,7 @@ public class AdDashboardController implements Initializable {
         return categoryData;
     }
 
-    public void addDataToDashboardCardAndChart(){
+    public void addDataToDashboardCardAndChart() {
         int borrowedBooks = DatabaseUtil.getTotalBorrowedBooks();
         int availableBooks = DatabaseUtil.getAvailableBooks();
         int totalCopyBooks = borrowedBooks + availableBooks;
@@ -118,6 +122,7 @@ public class AdDashboardController implements Initializable {
 
         //Add data to Pie Chart
         pieChart.getData().clear();
+        pieChart.setLabelLineLength(20);;
         List<PieChart.Data> categoryData = getCategoryData();
         pieChart.getData().addAll(categoryData);
         pieChart.setLegendVisible(false);
