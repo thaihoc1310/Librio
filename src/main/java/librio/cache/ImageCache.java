@@ -15,7 +15,7 @@ public class ImageCache {
         this.cache = new LinkedHashMap<>(1000, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<String, Image> eldest) {
-                return size() > 100;
+                return size() > 1000;
             }
         };
     }
@@ -27,7 +27,7 @@ public class ImageCache {
         return instance;
     }
 
-    public Image getImage(String path,String defaultImagePath) {
+    public Image getImage(String path, String defaultImagePath) {
         if (cache.containsKey(path)) {
             return cache.get(path);
         }

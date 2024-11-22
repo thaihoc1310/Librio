@@ -108,7 +108,7 @@ public class CreateBorrowController implements Initializable {
         } else if (book == null) {
             bookIsbnErrorLabel.setText("Book not exists!");
             validation = true;
-        } else if (book != null && book.getQuantityCopy() <= 0) {
+        } else if (book != null && book.getAvailableCopy() <= 0) {
             bookIsbnErrorLabel.setText("Out of stock!");
             validation = true;
         }

@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import librio.cache.ImageCache;
 import librio.models.Book;
 import librio.models.Borrow;
 import librio.models.User;
@@ -88,16 +89,11 @@ public class BorrowDetailController implements Initializable {
                 String projectDir = System.getProperty("user.dir");
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + borrowedBook.getImagePath();
-                File file = new File(path);
-                if (file.exists()) {
-                    Image image = new Image(file.toURI().toString());
-                    bookImageView.setImage(image);
-                } else {
-                    // Sử dụng ảnh mặc định nếu không tìm thấy file ảnh sách
-                    loadDefaultBookImage(bookImageView);
-                }
+
+                Image image = ImageCache.getInstance().getImage(path,booksDir + "defaultBook.jpg");
+                bookImageView.setImage(image);
             } else {
-                // Sử dụng ảnh mặc định nếu imagePath là null hoặc rỗng
+
                 loadDefaultBookImage(bookImageView);
             }
         }

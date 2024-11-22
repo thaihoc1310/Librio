@@ -38,6 +38,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
+import static librio.util.DatabaseUtil.getAvailableCopyByIsbn;
 import static librio.util.DesignUtil.*;
 
 public class HomePageController implements Initializable {
@@ -380,7 +381,7 @@ public class HomePageController implements Initializable {
             bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
 
             boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
-            if (!isAlreadyBorrowed && book.getQuantityCopy() > 0) {
+            if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
                 quickBorrowButton.setOnAction(e -> {
                     openBorrowConfirmationPane(book, quickBorrowButton);
                 });

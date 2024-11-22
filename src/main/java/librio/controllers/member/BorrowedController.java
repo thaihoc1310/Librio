@@ -25,6 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import librio.auth.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.models.BorrowedBook;
@@ -45,8 +46,7 @@ import java.util.ResourceBundle;
 import static librio.models.Status.BORROWING;
 import static librio.models.Status.OVERDUE;
 import static librio.util.DatabaseUtil.*;
-import static librio.util.DesignUtil.cropAndClipToCircle;
-import static librio.util.DesignUtil.setConfirmButton;
+import static librio.util.DesignUtil.*;
 
 public class BorrowedController implements Initializable {
     @FXML
@@ -159,7 +159,7 @@ public class BorrowedController implements Initializable {
             String path = booksDir + book.getImagePath();
             File file = new File(path);
             Image image = new Image(file.toURI().toString());
-            DesignUtil.cropToAspectRatio(image, bookImageView, 218, 325);
+            cropToAspectRatio(image, bookImageView, 218, 325);
             bookImageView.setLayoutX(38);
             bookImageView.setLayoutY(38);
 
@@ -299,9 +299,10 @@ public class BorrowedController implements Initializable {
             String projectDir = System.getProperty("user.dir");
             String booksDir = projectDir + "/src/main/resources/images/book/";
             String path = booksDir + borrowedBook.getImagePath();
-            File file = new File(path);
-            Image image = new Image(file.toURI().toString());
-            DesignUtil.cropToAspectRatio(image, bookImageView, 134, 208);
+
+            Image image = ImageCache.getInstance().getImage(path,bookImageView + "defaultBook.jpg");
+            cropToAspectRatio(image, bookImageView, 134, 208);
+
             bookImageView.setLayoutX(28);
             bookImageView.setLayoutY(20);
 
@@ -478,18 +479,10 @@ public class BorrowedController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 23);
-            cropAndClipToCircle(image, ClickAvatar, 23);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 23);
-            cropAndClipToCircle(image, ClickAvatar, 23);
-        }
+
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatarUser, 23);
+        cropAndClipToCircle(image, ClickAvatar, 23);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }

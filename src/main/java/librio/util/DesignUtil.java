@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import librio.auth.Session;
+import librio.cache.ImageCache;
 import librio.models.Book;
 
 import java.io.File;
@@ -72,12 +73,9 @@ public class DesignUtil {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String defaultImage = booksDir + "defaultBook.jpg";
-        File defaultImageFile = new File(defaultImage);
-        if (defaultImageFile.exists()) {
-            Image image = new Image(defaultImageFile.toURI().toString());
-            bookImageView.setImage(image);
-            bookImageView.setSmooth(true);
-        }
+
+        Image image = ImageCache.getInstance().getImage(defaultImage,booksDir + "defaultBook.jpg");
+        bookImageView.setImage(image);
     }
 
     public static void truncateTextToFit(Text textNode, double maxWidth, int maxLines) {

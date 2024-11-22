@@ -167,6 +167,8 @@ public class CreateBookController implements Initializable {
 //                bookImageView.setImage(new Image(apiBook.getImagePath()));
 //            }
 
+
+
             if (apiBook.getImagePath().equals("defaultBook.jpg")) {
                 bookImageView.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
                 bookImageFilePath = null;

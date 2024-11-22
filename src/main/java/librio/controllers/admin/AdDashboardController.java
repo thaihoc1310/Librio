@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import librio.cache.ImageCache;
 import librio.controllers.LogoutController;
 import librio.auth.Session;
 import librio.database.DatabaseConnection;
@@ -127,6 +128,8 @@ public class AdDashboardController implements Initializable {
         pieChart.getData().addAll(categoryData);
         pieChart.setLegendVisible(false);
 
+
+
         //Add data to bar Chart
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Month-Year");
@@ -221,16 +224,8 @@ public class AdDashboardController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        }
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        avatarUser.setImage(image);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
