@@ -648,19 +648,34 @@ public class SearchPageController implements Initializable {
         infoPane.getChildren().addAll(titleLabel, authorLabel);
         bookPane.getChildren().addAll(bookImagePane, infoPane);
 
-        HBox starBox = getStarBox(book);
-        starBox.setLayoutX(42);
-        starBox.setLayoutY(80);
-        infoPane.getChildren().add(starBox);
-
         bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
 
         boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
         if (!isAlreadyBorrowed && book.getQuantityCopy() > 0) {
-            quickBorrowButton.setOnAction(e -> {
-                openBorrowConfirmationPane(book, quickBorrowButton);
-            });
+            quickBorrowButton.setOnAction(e -> openBorrowConfirmationPane(book, quickBorrowButton));
         }
+
+        Task<HBox> ratingTask = new Task<>() {
+            @Override
+            protected HBox call() {
+                return getStarBox(book);
+            }
+
+            @Override
+            protected void succeeded() {
+                HBox starBox = getValue();
+                starBox.setLayoutX(42);
+                starBox.setLayoutY(80);
+                infoPane.getChildren().add(starBox);
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> {
+                });
+            }
+        };
+        executor.execute(ratingTask);
         return bookPane;
     }
 

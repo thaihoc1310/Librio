@@ -12,7 +12,7 @@ public class ImageCache {
     private final Map<String, Image> cache;
 
     private ImageCache() {
-        this.cache = new LinkedHashMap<>(100, 0.75f, true) {
+        this.cache = new LinkedHashMap<>(1000, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<String, Image> eldest) {
                 return size() > 100;
