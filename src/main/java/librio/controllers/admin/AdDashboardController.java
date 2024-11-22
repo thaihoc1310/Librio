@@ -122,7 +122,7 @@ public class AdDashboardController implements Initializable {
 
         //Add data to Pie Chart
         pieChart.getData().clear();
-        pieChart.setLabelLineLength(20);;
+        pieChart.setLabelLineLength(20);
         List<PieChart.Data> categoryData = getCategoryData();
         pieChart.getData().addAll(categoryData);
         pieChart.setLegendVisible(false);
