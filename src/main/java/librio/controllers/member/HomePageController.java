@@ -61,6 +61,14 @@ public class HomePageController implements Initializable {
     @FXML
     private Button leftMostborrowedButton;
     @FXML
+    private Button leftOurFictionButton;
+    @FXML
+    private Button leftNewestBooksButton;
+    @FXML
+    private Button leftOurEconomicsBooksButton;
+    @FXML
+    private Button leftTrendingNowButton;
+    @FXML
     private ScrollPane mainBannerScroll;
     @FXML
     private HBox mainBannerContainer;
@@ -70,6 +78,15 @@ public class HomePageController implements Initializable {
     private Button rightToprateButton;
     @FXML
     private Button rightMostborrowedButton;
+    @FXML
+    private Button rightOurFictionButton;
+    @FXML
+    private Button rightNewestBooksButton;
+    @FXML
+    private Button rightOurEconomicsBooksButton;
+    @FXML
+    private Button rightTrendingNowButton;
+
     @FXML
     private ImageView searchButton;
     @FXML
@@ -82,6 +99,22 @@ public class HomePageController implements Initializable {
     private HBox mostBorrowedContainer;
     @FXML
     private ScrollPane mostBorrowedScroll;
+    @FXML
+    private HBox ourFictionContainer;
+    @FXML
+    private ScrollPane ourFictionScroll;
+    @FXML
+    private HBox newestBooksContainer;
+    @FXML
+    private ScrollPane newestBooksScroll;
+    @FXML
+    private ScrollPane ourEconomicsBooksScroll;
+    @FXML
+    private HBox ourEconomicsBooksContainer;
+    @FXML
+    private ScrollPane trendingNowScroll;
+    @FXML
+    private HBox trendingNowContainer;
     @FXML
     private Label userNameUser;
     @FXML
@@ -105,8 +138,13 @@ public class HomePageController implements Initializable {
         setAvatarAndUserName();
         currentIndexes.put("TopRate", 0);
         currentIndexes.put("MostBorrowed", 0);
+        currentIndexes.put("NewestBooks", 0);
+        currentIndexes.put("OurFiction", 0);
+        currentIndexes.put("TrendingNow", 0);
+        currentIndexes.put("OurEconomicsBooks", 0);
         leftMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(-1));
         rightMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(1));
+
         leftToprateButton.setOnMouseClicked(event ->
                 scrollBooks(-1, currentIndexes.get("TopRate"), topRateScroll, index -> currentIndexes.put("TopRate", index))
         );
@@ -120,12 +158,50 @@ public class HomePageController implements Initializable {
         rightMostborrowedButton.setOnMouseClicked(event ->
                 scrollBooks(1, currentIndexes.get("MostBorrowed"), mostBorrowedScroll, index -> currentIndexes.put("MostBorrowed", index))
         );
+
+        leftNewestBooksButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("NewestBooks"), newestBooksScroll, index -> currentIndexes.put("NewestBooks", index))
+        );
+
+        rightNewestBooksButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("NewestBooks"), newestBooksScroll, index -> currentIndexes.put("NewestBooks", index))
+        );
+
+        leftOurFictionButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
+        );
+
+        rightOurFictionButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
+        );
+
+        leftTrendingNowButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("TrendingNow"), trendingNowScroll, index -> currentIndexes.put("TrendingNow", index))
+        );
+
+        rightTrendingNowButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("TrendingNow"), trendingNowScroll, index -> currentIndexes.put("TrendingNow", index))
+        );
+
+
+
+        leftOurEconomicsBooksButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
+        );
+
+        rightOurEconomicsBooksButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
+        );
+
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         startAutoScroll();
         loadTopRatedBooks();
         loadMostBorrowedBooks();
-
+        loadOurFictionBooks();
+        loadNewestBooks();
+        loadOurEconomicsBooks();
+        loadTrendingNowBooks();
     }
 
     public void setAvatarAndUserName() {
@@ -211,10 +287,42 @@ public class HomePageController implements Initializable {
     }
 
 
+
     private void loadMostBorrowedBooks() {
         String query = "SELECT b.* FROM books b JOIN borrows br ON b.isbn = br.book_isbn GROUP BY b.id ORDER BY COUNT(*) DESC LIMIT ?";
         List<Book> mostBorrowedBooks = loadBooks(query, TOTAL_BOOKS);
         displayBooks(mostBorrowedBooks, mostBorrowedContainer);
+    }
+
+    private void loadOurFictionBooks() {
+        String query = "SELECT * FROM books WHERE category = 'Fiction' ORDER BY average_of_rating DESC LIMIT ?";
+        List<Book> ourFictionBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(ourFictionBooks, ourFictionContainer);
+    }
+
+    private void loadNewestBooks() {
+        String query = "SELECT * FROM books ORDER BY id DESC LIMIT ?";
+        List<Book> newestBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(newestBooks, newestBooksContainer);
+    }
+
+    private void loadOurEconomicsBooks() {
+        String query = "SELECT * FROM books WHERE category = 'Economics' ORDER BY average_of_rating DESC LIMIT ?";
+        List<Book> ourEconomicsBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(ourEconomicsBooks, ourEconomicsBooksContainer);
+    }
+
+    private void loadTrendingNowBooks() {
+        String query = "SELECT b.*, COUNT(br.id) AS borrow_count " +
+                "FROM books b " +
+                "JOIN borrows br ON b.isbn = br.book_isbn " +
+                "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) " +
+                "GROUP BY b.isbn " +
+                "ORDER BY borrow_count DESC " +
+                "LIMIT ?";
+
+        List<Book> trendingNowBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(trendingNowBooks, trendingNowContainer);
     }
 
     private List<Book> loadBooks(String query, Object... params) {

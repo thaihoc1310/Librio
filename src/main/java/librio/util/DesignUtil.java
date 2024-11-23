@@ -74,7 +74,7 @@ public class DesignUtil {
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String defaultImage = booksDir + "defaultBook.jpg";
 
-        Image image = ImageCache.getInstance().getImage(defaultImage,booksDir + "defaultBook.jpg");
+        Image image = ImageCache.getInstance().getImage(defaultImage,defaultImage);
         bookImageView.setImage(image);
     }
 
