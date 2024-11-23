@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import librio.auth.Session;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
 import librio.enums.Status;

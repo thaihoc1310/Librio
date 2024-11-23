@@ -15,8 +15,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.controllers.LogoutController;
-import librio.auth.Session;
+import librio.controllers.auth.LogoutController;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.models.User;
@@ -177,7 +177,7 @@ public class ProfileSettingsController implements Initializable {
             assert birthOfDate != null;
             statement.setDate(7, Date.valueOf(birthOfDate));
             statement.setString(8, loggedInUser.getEmail());
-            statement.setString(8, loggedInUser.getId());
+            statement.setString(9, loggedInUser.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {

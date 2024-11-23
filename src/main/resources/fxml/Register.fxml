@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="right-pane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.auth.LoginController">
    <children>
       <Text layoutX="257.0" layoutY="53.0" styleClass="login-title" text="Sign up" wrappingWidth="85.2487564086914" />
       <Button fx:id="signUpButton" layoutX="262.0" layoutY="322.0" onAction="#handleSignUp" prefHeight="32.0" prefWidth="76.0" styleClass="login-button" text="Sign up" />

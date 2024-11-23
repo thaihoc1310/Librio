@@ -14,12 +14,12 @@ module librio {
     requires mysql.connector.j;
 
     exports librio;
-    exports librio.controllers;
     exports librio.models;
-    opens librio.controllers to javafx.fxml;
+    exports librio.enums;
     exports librio.controllers.admin;
     exports librio.controllers.member;
     opens librio.controllers.admin to javafx.fxml;
     opens librio.controllers.member to javafx.fxml;
-    exports librio.enums;
+    exports librio.controllers.auth;
+    opens librio.controllers.auth to javafx.fxml;
 }

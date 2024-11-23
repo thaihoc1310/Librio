@@ -13,8 +13,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.controllers.LogoutController;
-import librio.auth.Session;
+import librio.controllers.auth.LogoutController;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.User;
 

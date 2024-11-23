@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="204.0" prefWidth="424.0" styleClass="background_pane" stylesheets="@../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.LogoutController">
+<AnchorPane prefHeight="204.0" prefWidth="424.0" styleClass="background_pane" stylesheets="@../css/admin/CRUDUser.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.auth.LogoutController">
    <children>
       <Button fx:id="cancelButton" layoutX="212.0" layoutY="152.0" mnemonicParsing="false" onAction="#cancel" prefHeight="38.0" prefWidth="68.0" styleClass="btn-3" text="Cancel" />
       <Button fx:id="logOutButton" layoutX="286.0" layoutY="152.0" mnemonicParsing="false" onAction="#logOut" prefHeight="38.0" prefWidth="114.0" styleClass="btn-2" text="Yes, Log out" />

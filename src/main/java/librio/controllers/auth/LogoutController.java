@@ -1,4 +1,4 @@
-package librio.controllers;
+package librio.controllers.auth;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import librio.auth.Session;
+import librio.session.Session;
 import librio.util.DatabaseUtil;
 
 import java.io.IOException;

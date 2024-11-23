@@ -23,12 +23,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import librio.auth.Session;
+import librio.session.Session;
 import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
