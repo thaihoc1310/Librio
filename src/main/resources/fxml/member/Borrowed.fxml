@@ -158,11 +158,11 @@
                                                       </AnchorPane>
                                                       <AnchorPane layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1400.0" prefWidth="2000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
-                                                            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="638.0" prefWidth="1400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                            <ScrollPane fx:id="scrollBorrowPane" fitToHeight="true" fitToWidth="true" prefHeight="638.0" prefWidth="1400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                <content>
                                                                   <AnchorPane prefHeight="626.0" prefWidth="1332.0" style="-fx-background-color: f2f4f7;">
                                                                      <children>
-                                                                        <VBox fx:id="bookBorrowVBox" prefHeight="626.0" prefWidth="1378.0" spacing="80.0">
+                                                                        <VBox fx:id="bookBorrowVBox" prefHeight="626.0" prefWidth="1378.0" spacing="40.0">
                                                                            <children>
                                                                               <AnchorPane fx:id="anchor" prefHeight="405.0" prefWidth="1218.0" style="-fx-background-color: ffffff;" styleClass="whitePane">
                                                                                  <children>
@@ -230,7 +230,7 @@
                                                                               </AnchorPane>
                                                                            </children>
                                                                            <padding>
-                                                                              <Insets left="80.0" right="80.0" top="40.0" />
+                                                                              <Insets bottom="40.0" left="80.0" right="80.0" top="40.0" />
                                                                            </padding>
                                                                         </VBox>
                                                                      </children>
