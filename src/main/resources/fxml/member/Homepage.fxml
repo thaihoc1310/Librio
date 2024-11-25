@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
    <children>
       <ScrollPane fx:id="mainScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" styleClass="main-scroll" vbarPolicy="ALWAYS">
          <content>
@@ -119,11 +119,6 @@
                                  </children>
                               </HBox>
                               <Circle fx:id="moreIcon" fill="#1f93ff" layoutX="1356.0" layoutY="52.0" onMouseClicked="#handleAvatarClick" radius="9.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="43.0" />
-                              <Label fx:id="userNameUser2" alignment="CENTER_RIGHT" layoutX="1121.0" layoutY="31.2" prefHeight="22.0" prefWidth="130.0" text="Đinh Viết Huy" textFill="#481f10" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="31.0">
-                                 <font>
-                                    <Font name="Segoe UI Bold" size="16.0" />
-                                 </font>
-                              </Label>
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutY="139.0" prefHeight="305.0" prefWidth="1396.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -551,8 +546,8 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <fx:include fx:id="notificationPane" source="Notification.fxml" AnchorPane.rightAnchor="100.00000000000011" AnchorPane.topAnchor="70.0" />
-                  <Button layoutX="1118.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleOpenNotification" prefHeight="43.0" prefWidth="43.0" styleClass="circular-button">
+                  <fx:include fx:id="notificationPane" source="Notification.fxml" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+                  <Button layoutX="1270.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleOpenNotification" prefHeight="43.0" prefWidth="43.0" styleClass="circular-button">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -561,7 +556,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <AnchorPane fx:id="numberPane" layoutX="1145.0" layoutY="15.0" prefHeight="20.0" prefWidth="20.0" styleClass="bag-Pane" visible="false">
+                  <AnchorPane fx:id="numberPane" layoutX="1297.0" layoutY="17.0" prefHeight="20.0" prefWidth="20.0" styleClass="bag-Pane" visible="false">
                      <children>
                         <Text fx:id="numberText" fill="WHITE" layoutX="6.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.69765625">
                            <font>
