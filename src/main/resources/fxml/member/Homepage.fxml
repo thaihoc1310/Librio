@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
    <children>
       <ScrollPane fx:id="mainScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" styleClass="main-scroll" vbarPolicy="ALWAYS">
          <content>
@@ -178,7 +178,7 @@
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                              <Label layoutX="1184.0" layoutY="4.0" onMouseClicked="#seeAllTopRatedBooks" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -215,7 +215,7 @@
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                              <Label layoutX="1184.0" layoutY="4.0" onMouseClicked="#seeAllMostBorrowedBooks" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -284,7 +284,7 @@
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                              <Label layoutX="1184.0" layoutY="4.0" onMouseClicked="#seeAllNewestBooks" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -321,7 +321,7 @@
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                              <Label layoutX="1184.0" layoutY="4.0" onMouseClicked="#seeAllFictionBooks" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -390,7 +390,7 @@
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                              <Label layoutX="1184.0" layoutY="4.0" onMouseClicked="#seeAllTredingNowBooks" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -427,7 +427,7 @@
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="1184.0" layoutY="4.0" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                              <Label layoutX="1184.0" layoutY="4.0" onMouseClicked="#seeAllEconomicsBooks" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

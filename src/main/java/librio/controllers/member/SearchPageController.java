@@ -176,6 +176,8 @@ public class SearchPageController implements Initializable {
     private boolean isAnchorPaneVisible = false;
     private boolean isNotificationPane = false;
 
+    private String customQuery = null;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
@@ -245,9 +247,10 @@ public class SearchPageController implements Initializable {
      * @param keyword the keyword to search for
      * @param filter  the filter criteria to apply
      */
-    public void setSearchParameters(String keyword, String filter) {
+    public void setSearchParameters(String keyword, String filter, String customQuery) {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
+        this.customQuery = customQuery;
         handleSearch();
     }
 
@@ -288,29 +291,39 @@ public class SearchPageController implements Initializable {
     private List<Book> loadBooksFromDatabase(int pageIndex) {
         List<Book> fetchedBooks = new ArrayList<>();
         int offsetIndex = pageIndex * Integer.parseInt(limitBox.getValue());
-        String sortBy = sortBox.getValue();
-        String orderByClause = getOrderByClause(sortBy);
         String limitClause = getLimitClause();
+
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String selectedFilter = filterBox.getValue();
-            String query = buildQuery(selectedFilter, orderByClause, limitClause);
+            String query;
+
+            if (customQuery != null) {
+                query = customQuery + " " + limitClause + " OFFSET ?";
+            } else {
+                String selectedFilter = filterBox.getValue();
+                String orderByClause = getOrderByClause(sortBox.getValue());
+                query = buildQuery(selectedFilter, orderByClause, limitClause);
+            }
+
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             int paramIndex = 1;
-            if (currentLanguageFilter != null) {
-                preparedStatement.setString(paramIndex++, currentLanguageFilter);
-            }
-            if (currentCategoryFilter != null) {
-                preparedStatement.setString(paramIndex++, currentCategoryFilter);
-            }
-            if (keyword != null && !keyword.isEmpty()) {
-                preparedStatement.setString(paramIndex++, "%" + keyword + "%");
-            }
-            if (!isNoRatingFilter) {
-                preparedStatement.setDouble(paramIndex++, currentRatingFilter);
-            }
-            preparedStatement.setInt(paramIndex, offsetIndex);
 
+            if (customQuery == null) {
+                if (currentLanguageFilter != null) {
+                    preparedStatement.setString(paramIndex++, currentLanguageFilter);
+                }
+                if (currentCategoryFilter != null) {
+                    preparedStatement.setString(paramIndex++, currentCategoryFilter);
+                }
+                if (keyword != null && !keyword.isEmpty()) {
+                    preparedStatement.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (!isNoRatingFilter) {
+                    preparedStatement.setDouble(paramIndex++, currentRatingFilter);
+                }
+            }
+
+            preparedStatement.setInt(paramIndex, offsetIndex);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -335,45 +348,54 @@ public class SearchPageController implements Initializable {
                 }
 
                 Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, availableCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
-
                 fetchedBooks.add(book);
             }
+            customQuery = null;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return fetchedBooks;
     }
 
-    private String buildQuery(String selectedFilter, String orderByClause, String limitClause) {
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM books ");
-        List<String> conditions = new ArrayList<>();
 
+    private String buildQuery(String selectedFilter, String orderByClause, String limitClause) {
+        StringBuilder queryBuilder = new StringBuilder();
+        if (orderByClause.contains("GROUP BY")) {
+            queryBuilder.append("SELECT books.*, COUNT(br.id) AS borrow_count ");
+            queryBuilder.append("FROM books ");
+            queryBuilder.append("LEFT JOIN borrows br ON books.isbn = br.book_isbn ");
+        } else {
+            queryBuilder.append("SELECT * FROM books ");
+        }
+
+        List<String> conditions = new ArrayList<>();
         if (currentLanguageFilter != null) {
             conditions.add("language = ?");
         }
-
         if (currentCategoryFilter != null) {
             conditions.add("category = ?");
         }
-
         if (keyword != null && !keyword.isEmpty()) {
             conditions.add(getFilter(selectedFilter) + " LIKE ?");
         }
-
         if (!isNoRatingFilter) {
             conditions.add("average_of_rating >= ?");
         } else {
             conditions.add("(average_of_rating IS NULL OR average_of_rating = 0)");
         }
 
-        queryBuilder.append("WHERE ");
-        queryBuilder.append(String.join(" AND ", conditions));
+        if (!conditions.isEmpty()) {
+            queryBuilder.append("WHERE ").append(String.join(" AND ", conditions)).append(" ");
+        }
 
-        queryBuilder.append(" ").append(orderByClause).append(" ").append(limitClause).append(" OFFSET ?");
+        queryBuilder.append(orderByClause).append(" ");
+        queryBuilder.append(limitClause).append(" OFFSET ?");
 
         return queryBuilder.toString();
     }
+
 
     private Node createPage(int pageIndex) {
         loadBooksAsync(pageIndex);
@@ -396,11 +418,13 @@ public class SearchPageController implements Initializable {
     private String getOrderByClause(String sortBy) {
         return switch (sortBy) {
             case "Top rated" -> "ORDER BY average_of_rating DESC";
-            case "Most borrowed" -> "ORDER BY quantity_copy DESC";
+            case "Most borrowed" ->
+                    "GROUP BY books.id ORDER BY COUNT(br.id) DESC";
             case "Newest" -> "ORDER BY year_published DESC";
             default -> "";
         };
     }
+
 
     private String getLimitClause() {
         int limit = Integer.parseInt(limitBox.getValue());
@@ -437,6 +461,7 @@ public class SearchPageController implements Initializable {
 
         executor.submit(loadHomePageTask);
     }
+
 
 
     private void reloadData() {
@@ -595,6 +620,7 @@ public class SearchPageController implements Initializable {
 
             @Override
             protected void succeeded() {
+                flowPane.getChildren().clear();
                 List<AnchorPane> panes = getValue();
                 flowPane.getChildren().addAll(panes);
                 flowPane.setHgap(40);
@@ -922,5 +948,4 @@ public class SearchPageController implements Initializable {
             e.printStackTrace();
         }
     }
-
 }

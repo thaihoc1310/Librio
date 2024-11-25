@@ -134,6 +134,22 @@ public class HomePageController implements Initializable {
     private Label fictionLabel;
     @FXML
     private Label historyLabel;
+    @FXML
+    private Label scienceLabel;
+    @FXML
+    private Label technologyLabel;
+    @FXML
+    private Label computersLabel;
+    @FXML
+    private Label economicsLabel;
+    @FXML
+    private Label lawLabel;
+    @FXML
+    private Label socialScienceLabel;
+    @FXML
+    private Label educationLabel;
+    @FXML
+    private Label artLabel;
 
     @FXML
     private AnchorPane notificationPane;
@@ -144,9 +160,10 @@ public class HomePageController implements Initializable {
     private boolean isAnchorPaneVisible = false;
     private boolean isNotificationPane = false;
     private Timeline autoScrollTimeline;
-    private List<Book> topRateList = new ArrayList<>();
-    private List<Book> mostBorrowedList = new ArrayList<>();
-    private final ExecutorService executor = Executors.newFixedThreadPool(5);
+    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+    private static final Map<String, Image> imageCache = new HashMap<>();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -217,6 +234,17 @@ public class HomePageController implements Initializable {
 
         fictionLabel.setOnMouseClicked(event -> setKeywordAndCategory("Fiction"));
         historyLabel.setOnMouseClicked(event -> setKeywordAndCategory("History"));
+        scienceLabel.setOnMouseClicked(event -> setKeywordAndCategory("Science"));
+        technologyLabel.setOnMouseClicked(event -> setKeywordAndCategory("Technology"));
+        computersLabel.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
+        economicsLabel.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
+        computersLabel.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
+        economicsLabel.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
+        lawLabel.setOnMouseClicked(event -> setKeywordAndCategory("Law"));
+        socialScienceLabel.setOnMouseClicked(event -> setKeywordAndCategory("SocialScience"));
+        educationLabel.setOnMouseClicked(event -> setKeywordAndCategory("Education"));
+        artLabel.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
+
         notificationPane.setVisible(false);
         int totalBooks = Session.getInstance().getTotalBooks();
         if (totalBooks != 0) {
@@ -324,7 +352,7 @@ public class HomePageController implements Initializable {
         loadBooksByCategoryAsync(
                 "SELECT b.*, COUNT(br.id) AS borrow_count " +
                         "FROM books b JOIN borrows br ON b.isbn = br.book_isbn " +
-                        "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) " +
+                        "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
                         "GROUP BY b.isbn ORDER BY borrow_count DESC LIMIT 18",
                 trendingNowContainer
         );
@@ -407,12 +435,10 @@ public class HomePageController implements Initializable {
         try {
             Parent searchPageRoot = loader.load();
             SearchPageController searchController = loader.getController();
-            searchController.setSearchParameters(keyword, selectedFilter);
+            searchController.setSearchParameters(keyword, selectedFilter, null);
             Stage currentStage = (Stage) mainScroll.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(searchPageRoot);
-
-            Platform.runLater(() -> searchController.setSearchParameters(keyword, selectedFilter));
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -443,8 +469,7 @@ public class HomePageController implements Initializable {
             String projectDir = System.getProperty("user.dir");
             String booksDir = projectDir + "/src/main/resources/images/book/";
             String path = booksDir + book.getImagePath();
-            Image image = ImageCache.getInstance().getImage(path,booksDir + "defaultBook.jpg");
-            bookImage.setImage(image);
+            bookImage.setImage(loadImage(path, booksDir + "defaultBook.jpg"));
 
             Label titleLabel = new Label(book.getTitle());
             titleLabel.setLayoutX(11);
@@ -637,7 +662,6 @@ public class HomePageController implements Initializable {
             notificationPane.setVisible(false);
             isNotificationPane = false;
         }
-
         backPane.setVisible(false);
     }
 
@@ -699,9 +723,6 @@ public class HomePageController implements Initializable {
 
             stage.showAndWait();
             updateAllContainers(book);
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -770,11 +791,117 @@ public class HomePageController implements Initializable {
                 fullStar.setClip(clip);
                 starPane.getChildren().add(fullStar);
             }
-
             starBox.getChildren().add(starPane);
         }
 
         return starBox;
     }
+
+    @FXML
+    private void seeAllMostBorrowedBooks() {
+        String query = "SELECT b.* FROM books b " +
+                "JOIN borrows br ON b.isbn = br.book_isbn " +
+                "GROUP BY b.id " +
+                "ORDER BY COUNT(*) DESC";
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            SearchPageController searchController = loader.getController();
+
+            searchController.setSearchParameters("", "", query);
+
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    private void seeAllTopRatedBooks(){
+        String query = "SELECT * FROM books ORDER BY average_of_rating DESC";
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            SearchPageController searchController = loader.getController();
+
+            searchController.setSearchParameters("", "Title", query);
+
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void seeAllNewestBooks(){
+        String query = "SELECT * FROM books ORDER BY id DESC";
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            SearchPageController searchController = loader.getController();
+
+            searchController.setSearchParameters("", "Title", query);
+
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void seeAllEconomicsBooks(){
+        setKeywordAndCategory("Economics");
+    }
+
+    @FXML
+    private void seeAllFictionBooks(){
+        setKeywordAndCategory("Fiction");
+    }
+
+    @FXML
+    private void seeAllTredingNowBooks(){
+        String query = "SELECT b.*, COUNT(br.id) AS borrow_count " +
+                "FROM books b JOIN borrows br ON b.isbn = br.book_isbn " +
+                "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+                "GROUP BY b.isbn ORDER BY borrow_count DESC";
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            SearchPageController searchController = loader.getController();
+
+            searchController.setSearchParameters("", "Title", query);
+
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Image loadImage(String imagePath, String defaultPath) {
+        if (imageCache.containsKey(imagePath)) {
+            return imageCache.get(imagePath);
+        }
+
+        File file = new File(imagePath);
+        String pathToLoad = file.exists() ? imagePath : defaultPath;
+        Image image = new Image(new File(pathToLoad).toURI().toString());
+        imageCache.put(imagePath, image);
+        return image;
+    }
+
 }
 

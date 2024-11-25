@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1133.0" style="-fx-background-color: transparent;" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1133.0" style="-fx-background-color: transparent;" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
    <children>
       <AnchorPane layoutX="40.0" layoutY="74.0" prefHeight="550.0" prefWidth="1036.0" styleClass="whitePane2">
          <children>
@@ -117,6 +117,9 @@
                                                    </font>
                                                 </Text>
                                              </children>
+                                             <padding>
+                                                <Insets bottom="20.0" />
+                                             </padding>
                                           </TextFlow>
                                        </children>
                                        <VBox.margin>
