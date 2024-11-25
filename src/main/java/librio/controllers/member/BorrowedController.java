@@ -1,15 +1,15 @@
 package librio.controllers.member;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -73,6 +73,8 @@ public class BorrowedController implements Initializable {
     private Button cancelReturnButton;
     @FXML
     private TilePane tilePane;
+    @FXML
+    private ScrollPane scrollBorrowPane;
     private List<BorrowedBook> borrowBookList = new ArrayList<>();
     private List<BorrowedBook> returnedBookList = new ArrayList<>();
     private boolean isAnchorPaneVisible = false;
@@ -275,7 +277,10 @@ public class BorrowedController implements Initializable {
 
             daysRemainingLabel.setLayoutX(321);
             daysRemainingLabel.setLayoutY(285);
-
+            Label borrowIdLabel = new Label(String.valueOf(book.getBorrowId()));
+            borrowIdLabel.setId("borrowIdLabel");
+            borrowIdLabel.setVisible(false);
+            anchorPane.getChildren().add(borrowIdLabel);
             anchorPane.getChildren().addAll(bookImageView, titleLabel, authorText, isbnLabel, separator, returnButton, gridPane, daysRemainingLabel);
 
             bookBorrowVBox.getChildren().add(anchorPane);
@@ -610,5 +615,33 @@ public class BorrowedController implements Initializable {
         confirmPane.toBack();
         selectedBook = null;
     }
+
+    public void scrollToBook(String borrowId) {
+        Platform.runLater(() -> {
+            for (Node node : bookBorrowVBox.getChildren()) {
+                if (node instanceof AnchorPane) {
+                    AnchorPane pane = (AnchorPane) node;
+                    Label borrowIdLabel = (Label) pane.lookup("#borrowIdLabel");
+                    if (borrowIdLabel != null && borrowIdLabel.getText().equals(borrowId)) {
+                        Bounds paneBounds = pane.localToParent(pane.getBoundsInLocal());
+                        Bounds vboxBounds = bookBorrowVBox.getBoundsInParent();
+                        double contentHeight = bookBorrowVBox.getHeight();
+                        double viewportHeight = scrollBorrowPane.getViewportBounds().getHeight();
+
+                        double position = (paneBounds.getMinY() - vboxBounds.getMinY()) / (contentHeight - viewportHeight);
+                        position = Math.max(0, Math.min(1, position)); // Đảm bảo giá trị trong khoảng [0, 1]
+
+                        System.out.println("Calculated Position: " + position);
+                        System.out.println("ScrollPane Vmax: " + scrollBorrowPane.getVmax());
+
+                        scrollBorrowPane.setVvalue(position);
+                        pane.setStyle(" -fx-effect: dropshadow(gaussian, rgba(148, 63, 32, 0.5), 28, 0.5, 0, 0);");
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
 
 }

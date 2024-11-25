@@ -1,6 +1,8 @@
 package librio.controllers.member;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
@@ -10,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import librio.database.DatabaseConnection;
 import librio.enums.Status;
 import librio.models.BorrowedBook;
@@ -17,6 +20,7 @@ import librio.session.Session;
 import librio.util.DesignUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -93,7 +97,7 @@ public class NotificationController {
 
     private void displayDueBooks(List<BorrowedBook> overdueBooks) {
         if (!overdueBooks.isEmpty()) {
-            dueSoonBox.getChildren().clear();
+            dueBookBox.getChildren().clear();
             for (int i = 0; i < overdueBooks.size(); i++) {
                 BorrowedBook book = overdueBooks.get(i);
                 Separator separator = new Separator();
@@ -104,6 +108,7 @@ public class NotificationController {
                 bookPane.setMaxHeight(BOOK_PANE_HEIGHT);
                 bookPane.setMinHeight(BOOK_PANE_HEIGHT);
                 bookPane.getStyleClass().add("book-pane");
+                bookPane.setOnMouseClicked(event -> openBorrowedBooksPage(String.valueOf(book.getBorrowId())));
 
                 ImageView bookImageView = new ImageView();
                 String projectDir = System.getProperty("user.dir");
@@ -159,6 +164,7 @@ public class NotificationController {
                 bookPane.setMaxHeight(BOOK_PANE_HEIGHT);
                 bookPane.setMinHeight(BOOK_PANE_HEIGHT);
                 bookPane.getStyleClass().add("book-pane");
+                bookPane.setOnMouseClicked(event -> openBorrowedBooksPage(String.valueOf(book.getBorrowId())));
 
                 ImageView bookImageView = new ImageView();
                 String projectDir = System.getProperty("user.dir");
@@ -212,5 +218,19 @@ public class NotificationController {
     public int getTotalOverdueAndUpcomingBooks() {
         return overdueBooks.size() + upcomingDueBooks.size();
     }
+    private void openBorrowedBooksPage(String borrowId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
+            Parent root = loader.load();
+
+            BorrowedController controller = loader.getController();
+            controller.scrollToBook(borrowId);
+            Stage stage = (Stage) dueSoonBox.getScene().getWindow();
+            stage.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
