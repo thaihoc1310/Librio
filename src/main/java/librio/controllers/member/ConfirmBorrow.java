@@ -1,17 +1,19 @@
 package librio.controllers.member;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+<<<<<<< HEAD
 import librio.auth.Session;
 import librio.cache.ImageCache;
+=======
+import librio.session.Session;
+>>>>>>> e26191cd52e9659a17dd3363644cf605e2bd9187
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -21,8 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.function.Consumer;
 
 public class ConfirmBorrow {
 

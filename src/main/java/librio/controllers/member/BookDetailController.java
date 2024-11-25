@@ -3,7 +3,6 @@ package librio.controllers.member;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
@@ -16,14 +15,17 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+<<<<<<< HEAD
 import librio.auth.Session;
 import librio.cache.ImageCache;
 import librio.controllers.admin.BorrowDetailController;
 import librio.controllers.admin.CreateBookController;
+=======
+import librio.session.Session;
+>>>>>>> e26191cd52e9659a17dd3363644cf605e2bd9187
 import librio.database.DatabaseConnection;
 import librio.models.*;
 import librio.util.DatabaseUtil;
@@ -34,11 +36,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;

@@ -1,4 +1,4 @@
-package librio.controllers;
+package librio.controllers.auth;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.SequentialTransition;
@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import librio.auth.Session;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.enums.Role;

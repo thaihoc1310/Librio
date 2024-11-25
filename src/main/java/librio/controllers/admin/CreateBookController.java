@@ -1,12 +1,7 @@
 package librio.controllers.admin;
 
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -14,9 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import librio.auth.Session;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -111,21 +105,36 @@ public class CreateBookController implements Initializable {
 
     private Book apiBook;
 
+    /**
+     * Initializes the controller class. This method is automatically called after the FXML file has been loaded.
+     * It hides error labels and sets up necessary listeners for the GUI components.
+     *
+     * @param location The location used to resolve relative paths for the root object, or {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hideErrorLabels();
         addListeners();
     }
 
-    public interface BookAddedListener {
-        void onBookAdded();
-    }
-
+    /**
+     * Sets the book in the CreateBookController to the given Book object.
+     * This method updates the internal state and triggers a population of fields.
+     *
+     * @param book the Book object to be set
+     */
     public void setBook(Book book) {
         this.apiBook = book;
         populateFields();
     }
 
+    /**
+     * Downloads an image from the specified URL and saves it to the local file system.
+     *
+     * @param imageUrl the URL of the image to be downloaded.
+     * @return the relative path of the saved image file. Returns "defaultBook.jpg" if an error occurs.
+     */
     private String downloadImage(String imageUrl) {
         String savedImagePath = "defaultBook.jpg";
         try {
@@ -145,9 +154,31 @@ public class CreateBookController implements Initializable {
         return savedImagePath;
     }
 
+    /**
+     * Populates the UI fields of the CreateBookController with data from the apiBook object.
+     * <p>
+     * This method retrieves book details such as title, ISBN, author, publisher, category, language, year
+     * published, description, and number of pages from the apiBook object and sets them into the corresponding
+     * text fields and text area in the user interface. It also manages the display of the book's image.
+     * <p>
+     * If the apiBook does not specify an image, a default image is used. Additionally, all text fields are set
+     * to be non-editable after populating them with data.
+     * <p>
+     * The following fields are populated:
+     * - Book Title
+     * - ISBN (checks if it is "Unknown ISBN")
+     * - Author
+     * - Publisher
+     * - Broad Category (mapped from detailed category)
+     * - Language (full language name)
+     * - Year Published (checks if it is "Unknown")
+     * - Description
+     * - Number of Pages
+     * <p>
+     * If apiBook is null, no action is performed.
+     */
     public void populateFields() {
         if (apiBook != null) {
-            // Đặt giá trị của các trường từ đối tượng apiBook
             bookTitleTextField.setText(apiBook.getTitle());
             isbnTextField.setText(apiBook.getIsbn().equals("Unknown ISBN") ? "Unknown ISBN" : apiBook.getIsbn().substring(7));
             authorTextField.setText(apiBook.getAuthor());
@@ -161,13 +192,6 @@ public class CreateBookController implements Initializable {
             descriptionTextArea.setText(apiBook.getDescription());
             numberOfPagesTextField.setText(apiBook.getNumberOfPages());
             openedFromApi = true;
-
-
-//            if (apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()) {
-//                bookImageView.setImage(new Image(apiBook.getImagePath()));
-//            }
-
-
 
             if (apiBook.getImagePath().equals("defaultBook.jpg")) {
                 bookImageView.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
@@ -191,6 +215,19 @@ public class CreateBookController implements Initializable {
     }
 
 
+    /**
+     * Handles the creation of a new book entry by gathering input from various text fields, performing validation,
+     * and inserting the validated data into a database. If an image URL is provided through an API object, the image
+     * is downloaded and saved to a specific directory.
+     * <p>
+     * The method performs the following steps:
+     * 1. Retrieves input from the text fields.
+     * 2. Validates the input data (e.g., checks if required fields are non-empty, ISBN format is correct, etc.).
+     * 3. If validation fails, displays appropriate error messages.
+     * 4. If validation passes, inserts the book data into the database.
+     * 5. Downloads and saves the book image if provided through the API.
+     * 6. Clears input fields and closes the stage upon successful insertion.
+     */
     @FXML
     private void createBook() {
         String bookTitle = bookTitleTextField.getText();
@@ -319,6 +356,7 @@ public class CreateBookController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void hideErrorLabels() {
         bookTitleErrorLabel.setText("");
         isbnErrorLabel.setText("");
@@ -333,6 +371,12 @@ public class CreateBookController implements Initializable {
 
 
 
+    /**
+     * Adds event listeners to various text fields and text areas in the CreateBookController.
+     * <p>
+     * This method sets up mouse click event handlers for UI components such as text fields
+     * and text areas to trigger the hiding of error labels when they are clicked.
+     */
     private void addListeners() {
         bookTitleTextField.setOnMouseClicked(event -> {hideErrorLabels();});
         isbnTextField.setOnMouseClicked(event -> {hideErrorLabels();});
@@ -346,6 +390,16 @@ public class CreateBookController implements Initializable {
         yearPublishedTextField.setOnMouseClicked(event -> {hideErrorLabels();});
     }
 
+    /**
+     * Handles the action of uploading an image for the book being created or edited.
+     * <p>
+     * The method performs the following operations:
+     * 1. Hides all error labels associated with the book information form.
+     * 2. Opens a file chooser dialog to allow the user to select an image file.
+     * 3. Filters the file types to only allow image extensions such as .png, .jpg, and .jpeg.
+     * 4. If a file is selected, constructs a unique file path for the image using the current timestamp
+     *    and the file's original name, and updates the image view to display the chosen image.
+     */
     @FXML
     private void uploadImage() {
         hideErrorLabels();
@@ -364,11 +418,19 @@ public class CreateBookController implements Initializable {
         }
     }
 
+    /**
+     * Closes the current stage. This method retrieves the window associated with the cancel button
+     * and closes it. Typically used to exit the current view when a cancel operation is performed.
+     */
     private void closeStage() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Handles the cancellation of the create book operation.
+     * This method clears all input fields and closes the current stage.
+     */
     @FXML
     private void cancel() {
             clearInputFields();
@@ -376,6 +438,10 @@ public class CreateBookController implements Initializable {
     }
 
 
+    /**
+     * Clears the text fields and text area associated with the input fields in the CreateBookController.
+     * This method resets the user input by setting the text fields to an empty string.
+     */
     private void clearInputFields() {
         bookTitleTextField.clear();
         isbnTextField.clear();
@@ -389,10 +455,22 @@ public class CreateBookController implements Initializable {
         descriptionTextArea.clear();
     }
 
+    /**
+     * Returns the full language name corresponding to the given ISO code.
+     *
+     * @param isoCode The ISO code of the language for which the full name is required.
+     * @return The full language name mapped from the ISO code, or "Others" if the ISO code is not found in the map.
+     */
     private String getFullLanguageName(String isoCode) {
         return LANGUAGE_MAP.getOrDefault(isoCode, "Others");
     }
 
+    /**
+     * Maps a specific category to a broad category.
+     *
+     * @param category The specific category to be mapped.
+     * @return The broad category corresponding to the specific category, or "Others" if the category is not found.
+     */
     private String mapCategoryToBroadCategory(String category) {
         return CATEGORY_MAP.getOrDefault(category, "Others");
     }
