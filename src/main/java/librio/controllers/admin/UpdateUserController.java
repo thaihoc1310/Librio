@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import librio.session.Session;
 import librio.enums.Gender;
 import librio.enums.Role;
+import librio.cache.ImageCache;
 import librio.models.User;
 import librio.database.DatabaseConnection;
 import java.io.File;
@@ -86,22 +87,12 @@ public class UpdateUserController implements Initializable {
             roleComboBox.setValue(user.getRole());
             birthOfDatePicker.setValue(user.getBirthOfDate());
 
-            // Lấy đường dẫn ảnh từ project
             String projectDir = System.getProperty("user.dir");
             String avatarsDir = projectDir + "/src/main/resources/images/user/";
             String path = avatarsDir + user.getAvatar();
 
-            // Chuyển đổi đường dẫn thành URL
-            File file = new File(path);
-            if (file.exists()) {
-                Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-                cropAndClipToCircle(image, avatarImageView, 55);
-            } else {
-                String defaultImage = avatarsDir + "Male User.png";
-                File defaultImageFile = new File(defaultImage);
-                Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-                cropAndClipToCircle(image, avatarImageView, 55);
-            }
+            Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+            cropAndClipToCircle(image, avatarImageView, 55);
         }
     }
 

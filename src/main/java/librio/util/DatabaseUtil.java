@@ -645,4 +645,19 @@ public class DatabaseUtil {
         }
         return false;
     }
+
+    public static int getAvailableCopyByIsbn(String isbn) {
+        String query = "SELECT available_copy FROM books WHERE isbn = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, isbn);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("available_copy");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

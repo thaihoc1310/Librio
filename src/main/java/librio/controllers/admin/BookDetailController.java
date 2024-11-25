@@ -21,6 +21,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import librio.cache.ImageCache;
 import librio.models.Book;
 
 import java.io.File;
@@ -48,7 +49,7 @@ public class BookDetailController implements Initializable {
     @FXML
     private Label averageOfRatingLabel;
     @FXML
-    private Label quantityOfCopyLabel;
+    private Label quantityOfAvailableCopyLabel;
     @FXML
     private Label publisherLabel;
     @FXML
@@ -88,7 +89,7 @@ public class BookDetailController implements Initializable {
 
             bookIdLabel.setText("ID :   " + String.valueOf(book.getId()));
             categoryLabel.setText("Category :   " + book.getCategory());
-            quantityOfCopyLabel.setText("Quantity of copy :   " + String.valueOf(book.getQuantityCopy()));
+            quantityOfAvailableCopyLabel.setText("Quantity of available copy :   " + String.valueOf(book.getAvailableCopy()));
             averageOfRatingLabel.setText(String.valueOf("Average of rating :   " + book.getAverageOfRating()));
             publisherLabel.setText("Publisher :   " + book.getPublisher());
             yearPublishedLabel.setText("Year published :   " + book.getYearPublished());
@@ -109,14 +110,10 @@ public class BookDetailController implements Initializable {
                 String projectDir = System.getProperty("user.dir");
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + book.getImagePath();
-                File file = new File(path);
-                if (file.exists()) {
-                    Image image = new Image(file.toURI().toString());
-                    bookImageView.setImage(image);
-                } else {
-                    // Sử dụng ảnh mặc định nếu không tìm thấy file ảnh sách
-                    loadDefaultBookImage(bookImageView);
-                }
+
+                Image image = ImageCache.getInstance().getImage(path,booksDir + "defaultBook.jpg");
+                bookImageView.setImage(image);
+
             } else {
                 // Sử dụng ảnh mặc định nếu imagePath là null hoặc rỗng
                 loadDefaultBookImage(bookImageView);

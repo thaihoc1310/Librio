@@ -18,7 +18,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+<<<<<<< HEAD
 import librio.session.Session;
+=======
+import librio.auth.Session;
+import librio.cache.ImageCache;
+import librio.controllers.admin.BorrowDetailController;
+import librio.controllers.admin.CreateBookController;
+>>>>>>> a51587d5162db85c9387a7d90f67b5da45fb9183
 import librio.database.DatabaseConnection;
 import librio.models.*;
 import librio.util.DatabaseUtil;
@@ -38,6 +45,7 @@ import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.cropToAspectRatio;
 
 public class BookDetailController implements Initializable {
 
@@ -185,16 +193,9 @@ public class BookDetailController implements Initializable {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
-        File file = new File(path);
-        Image image;
 
-        if (file.exists()) {
-            image = new Image(file.toURI().toString());
-        } else {
-            image = new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm());
-        }
-
-        DesignUtil.cropToAspectRatio(image, bookCoverImage, 217, 315);
+        Image image = ImageCache.getInstance().getImage(path,projectDir + "defaultBook.jpg");
+        cropToAspectRatio(image, bookCoverImage, 217, 315);
 
         setConfirmButton();
     }
@@ -272,16 +273,8 @@ public class BookDetailController implements Initializable {
                 avatar.setFitWidth(50);
                 avatar.setFitHeight(50);
 
-                File file = new File(path);
-                if (file.exists()) {
-                    Image image = new Image(file.toURI().toString());
-                    cropAndClipToCircle(image, avatar, 25);
-                } else {
-                    String defaultImage = avatarsDir + "Male User.png";
-                    File defaultImageFile = new File(defaultImage);
-                    Image image = new Image(defaultImageFile.toURI().toString());
-                    cropAndClipToCircle(image, avatar, 25);
-                }
+                Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+                cropAndClipToCircle(image, avatar, 25);
 
 
                 VBox detailsBox = new VBox();

@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -24,6 +25,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.*;
+import static librio.util.DesignUtil.loadDefaultBookImage;
 
 public class UpdateBookController implements Initializable {
     private Book book;
@@ -265,31 +267,15 @@ public class UpdateBookController implements Initializable {
                 String projectDir = System.getProperty("user.dir");
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + book.getImagePath();
-                File file = new File(path);
-                if (file.exists()) {
-                    Image image = new Image(file.toURI().toString());
-                    bookImageView.setImage(image);
-                } else {
-                    // Sử dụng ảnh mặc định nếu không tìm thấy file ảnh sách
-                    loadDefaultBookImage();
-                }
+
+                Image image = ImageCache.getInstance().getImage(path,projectDir + "defaultBook.jpg");
+                bookImageView.setImage(image);
             } else {
-                // Sử dụng ảnh mặc định nếu imagePath là null hoặc rỗng
-                loadDefaultBookImage();
+                loadDefaultBookImage(bookImageView);
             }
         }
     }
 
-    private void loadDefaultBookImage() {
-        String projectDir = System.getProperty("user.dir");
-        String booksDir = projectDir + "/src/main/resources/images/book/";
-        String defaultImage = booksDir + "defaultBook.jpg";
-        File defaultImageFile = new File(defaultImage);
-        if (defaultImageFile.exists()) {
-            Image image = new Image(defaultImageFile.toURI().toString());
-            bookImageView.setImage(image);
-        }
-    }
 
     private void addListeners() {
 
