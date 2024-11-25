@@ -6,6 +6,7 @@ import librio.models.User;
 public class Session {
     private static Session instance;
     private User loggedInUser;
+    private int totalBooks;
 
     private Session() {}
 
@@ -38,5 +39,13 @@ public class Session {
 
     public void logout() {
         loggedInUser = null;
+    }
+
+    public void setTotalBooks(int totalBooks) {
+        this.totalBooks = totalBooks;
+    }
+
+    public int getTotalBooks() {
+        return totalBooks;
     }
 }
