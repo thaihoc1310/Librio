@@ -41,6 +41,12 @@ public class Book {
         this.imagePath = new SimpleStringProperty(imagePath);
     }
 
+    public Book(String title, String author, String imagePath) {
+        this.title = new SimpleStringProperty(title);
+        this.author = new SimpleStringProperty(author);
+        this.imagePath = new SimpleStringProperty(imagePath);
+    }
+
     public Book() {
         this.id = new SimpleIntegerProperty();
         this.title = new SimpleStringProperty();

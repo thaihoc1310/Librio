@@ -22,14 +22,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import librio.session.Session;
 import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import librio.session.Session;
 
 import java.io.IOException;
 import java.net.URL;
@@ -154,9 +155,14 @@ public class SearchPageController implements Initializable {
     private Label musicLabel;
     @FXML
     private Label othersLabel;
-
+    @FXML
+    private AnchorPane notificationPane;
     @FXML
     private AnchorPane menuPane;
+    @FXML
+    private AnchorPane numberPane;
+    @FXML
+    private Text numberText;
     private List<Book> bookList = new ArrayList<>();
     private String keyword;
     private ExecutorService executor;
@@ -168,6 +174,7 @@ public class SearchPageController implements Initializable {
     private String currentLanguageFilter = null;
     private String currentCategoryFilter = null;
     private boolean isAnchorPaneVisible = false;
+    private boolean isNotificationPane = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -187,6 +194,17 @@ public class SearchPageController implements Initializable {
         pagination.setPageFactory(this::createPage);
         setupComboBoxListeners();
         setupPaneListeners();
+        notificationPane.setVisible(false);
+        int totalBooks = Session.getInstance().getTotalBooks();
+        if (totalBooks != 0) {
+            numberPane.setVisible(true);
+            if (totalBooks < 100) {
+                numberText.setText(String.valueOf(totalBooks));
+            } else {
+                numberText.setText("99+");
+            }
+        }
+
     }
 
 
@@ -225,7 +243,7 @@ public class SearchPageController implements Initializable {
      * Sets the search parameters and initiates a search.
      *
      * @param keyword the keyword to search for
-     * @param filter the filter criteria to apply
+     * @param filter  the filter criteria to apply
      */
     public void setSearchParameters(String keyword, String filter) {
         searchTextField.setText(keyword);
@@ -737,13 +755,35 @@ public class SearchPageController implements Initializable {
     @FXML
     private void handleAvatarClick() {
         if (!isAnchorPaneVisible) {
-            menuPane.toFront();
+            menuPane.setVisible(true);
             isAnchorPaneVisible = true;
-            backPane.setVisible(true);
 
+            if (isNotificationPane) {
+                notificationPane.setVisible(false);
+                isNotificationPane = false;
+            }
+
+            backPane.setVisible(true);
         } else {
-            menuPane.toBack();
+            menuPane.setVisible(false);
             isAnchorPaneVisible = false;
+
+        }
+    }
+
+    @FXML
+    private void handleOpenNotification() {
+        if (!isNotificationPane) {
+            notificationPane.setVisible(true);
+            isNotificationPane = true;
+            if (isAnchorPaneVisible) {
+                menuPane.setVisible(false);
+                isAnchorPaneVisible = false;
+            }
+            backPane.setVisible(true);
+        } else {
+            notificationPane.setVisible(false);
+            isNotificationPane = false;
             backPane.setVisible(false);
         }
     }
@@ -751,10 +791,16 @@ public class SearchPageController implements Initializable {
     @FXML
     private void cancelMenuButton() {
         if (isAnchorPaneVisible) {
-            menuPane.toBack();
+            menuPane.setVisible(false);
             isAnchorPaneVisible = false;
-            backPane.setVisible(false);
         }
+
+        if (isNotificationPane) {
+            notificationPane.setVisible(false);
+            isNotificationPane = false;
+        }
+
+        backPane.setVisible(false);
     }
 
     @FXML

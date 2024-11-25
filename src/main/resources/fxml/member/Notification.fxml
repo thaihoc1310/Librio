@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="625.0" prefWidth="400.0" style="-fx-background-color: ffffff;" styleClass="whitePane3" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.NotificationController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Notifications">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <TabPane layoutY="61.0" prefHeight="559.0" prefWidth="400.0" style="-fx-background-color: #ffffff;" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab text="Soon due">
+               <content>
+                  <ScrollPane hbarPolicy="NEVER" prefHeight="510.0" prefWidth="378.0" style="-fx-background-color: #ffffff;" vbarPolicy="NEVER">
+                     <content>
+                        <VBox fx:id="dueSoonBox" prefHeight="538.0" prefWidth="400.0" style="-fx-background-color: ffffff;">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label alignment="CENTER" opacity="0.54" prefHeight="35.0" prefWidth="401.0" text="No books due soon">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
+            <Tab text="Overdue">
+               <content>
+                  <ScrollPane hbarPolicy="NEVER" prefHeight="510.0" prefWidth="378.0" style="-fx-background-color: #ffffff;" vbarPolicy="NEVER">
+                     <content>
+                        <VBox fx:id="dueBookBox" prefHeight="538.0" prefWidth="400.0" style="-fx-background-color: ffffff;">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label alignment="CENTER" opacity="0.54" prefHeight="35.0" prefWidth="401.0" text="No overdue books">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

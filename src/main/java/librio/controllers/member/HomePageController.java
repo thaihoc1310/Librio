@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -28,6 +29,7 @@ import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -124,8 +126,14 @@ public class HomePageController implements Initializable {
     private Pane backPane;
     @FXML
     private Circle moreIcon;
-
+    @FXML
+    private AnchorPane notificationPane;
+    @FXML
+    private Text numberText;
+    @FXML
+    private AnchorPane numberPane;
     private boolean isAnchorPaneVisible = false;
+    private boolean isNotificationPane = false;
     private Timeline autoScrollTimeline;
     private List<Book> topRateList = new ArrayList<>();
     private List<Book> mostBorrowedList = new ArrayList<>();
@@ -201,6 +209,18 @@ public class HomePageController implements Initializable {
         loadNewestBooks();
         loadOurEconomicsBooks();
         loadTrendingNowBooks();
+        notificationPane.setVisible(false);
+        int totalBooks = Session.getInstance().getTotalBooks();
+        if (totalBooks != 0) {
+            numberPane.setVisible(true);
+            if (totalBooks < 100) {
+                numberText.setText(String.valueOf(totalBooks));
+            } else {
+                numberText.setText("99+");
+            }
+        }
+
+
     }
 
     public void setAvatarAndUserName() {
@@ -284,7 +304,6 @@ public class HomePageController implements Initializable {
         List<Book> topRatedBooks = loadBooks(query, TOTAL_BOOKS);
         displayBooks(topRatedBooks, topRateContainer);
     }
-
 
 
     private void loadMostBorrowedBooks() {
@@ -485,7 +504,7 @@ public class HomePageController implements Initializable {
             infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
             bookPane.getChildren().addAll(bookImagePane, infoPane);
 
-            bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
+            bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
 
             boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
             if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
@@ -562,13 +581,35 @@ public class HomePageController implements Initializable {
     @FXML
     private void handleAvatarClick() {
         if (!isAnchorPaneVisible) {
-            menuPane.toFront();
+            menuPane.setVisible(true);
             isAnchorPaneVisible = true;
-            backPane.setVisible(true);
 
+            if (isNotificationPane) {
+                notificationPane.setVisible(false);
+                isNotificationPane = false;
+            }
+
+            backPane.setVisible(true);
         } else {
-            menuPane.toBack();
+            menuPane.setVisible(false);
             isAnchorPaneVisible = false;
+
+        }
+    }
+
+    @FXML
+    private void handleOpenNotification() {
+        if (!isNotificationPane) {
+            notificationPane.setVisible(true);
+            isNotificationPane = true;
+            if (isAnchorPaneVisible) {
+                menuPane.setVisible(false);
+                isAnchorPaneVisible = false;
+            }
+            backPane.setVisible(true);
+        } else {
+            notificationPane.setVisible(false);
+            isNotificationPane = false;
             backPane.setVisible(false);
         }
     }
@@ -576,10 +617,16 @@ public class HomePageController implements Initializable {
     @FXML
     private void cancelMenuButton() {
         if (isAnchorPaneVisible) {
-            menuPane.toBack();
+            menuPane.setVisible(false);
             isAnchorPaneVisible = false;
-            backPane.setVisible(false);
         }
+
+        if (isNotificationPane) {
+            notificationPane.setVisible(false);
+            isNotificationPane = false;
+        }
+
+        backPane.setVisible(false);
     }
 
     @FXML
