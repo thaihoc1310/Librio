@@ -581,8 +581,7 @@ public class SearchPageController implements Initializable {
                 flowPane.getChildren().addAll(panes);
                 flowPane.setHgap(40);
                 flowPane.setVgap(20);
-                loadingIndicator.setVisible(false);
-
+                loadingIndicator.setVisible(false);//
             }
 
             @Override

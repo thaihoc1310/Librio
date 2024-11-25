@@ -16,13 +16,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-<<<<<<< HEAD
-import librio.auth.Session;
 import librio.cache.ImageCache;
 import librio.controllers.admin.DeleteBookController;
-=======
 import librio.session.Session;
->>>>>>> e26191cd52e9659a17dd3363644cf605e2bd9187
 import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.models.User;
