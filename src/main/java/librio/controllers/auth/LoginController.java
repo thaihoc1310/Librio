@@ -144,6 +144,7 @@ public class LoginController {
         clearFieldData();
         hideForgotPasswordErrorLabels();
         clearForgotPasswordFieldData();
+        generatedCode = "0";
     }
 
     @FXML
@@ -325,9 +326,8 @@ public class LoginController {
 
     @FXML
     private void updatePassword() {
-        String newPassword = newPasswordField.getText().trim();
-        String confirmPassword = confirmNewPasswordField.getText().trim();
-
+        String newPassword = newPasswordField.isVisible() ? newPasswordField.getText() : newPasswordFieldVisible.getText();
+        String confirmPassword = confirmNewPasswordField.isVisible() ? confirmNewPasswordField.getText() : confirmNewPasswordFieldVisible.getText();
         if (newPassword.isEmpty()) {
             passwordErrorLabel1.setText("Password cannot be empty!");
             return;
@@ -341,6 +341,8 @@ public class LoginController {
         DatabaseUtil.updateUserPassword(user.getId(), newPassword);
 
         switchToSignIn(changePassWordPane);
+        hideForgotPasswordErrorLabels();
+        clearForgotPasswordFieldData();
     }
 
     private String generateResetCode() {
@@ -426,6 +428,8 @@ public class LoginController {
         resetCode.clear();
         confirmNewPasswordField.clear();
         newPasswordField.clear();
+        newPasswordFieldVisible.clear();
+        confirmNewPasswordFieldVisible.clear();
     }
 
     @FXML
