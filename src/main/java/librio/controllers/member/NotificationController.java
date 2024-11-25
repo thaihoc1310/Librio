@@ -10,10 +10,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import librio.auth.Session;
 import librio.database.DatabaseConnection;
+import librio.enums.Status;
 import librio.models.BorrowedBook;
-import librio.models.Status;
+import librio.session.Session;
 import librio.util.DesignUtil;
 
 import java.io.File;
