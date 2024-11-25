@@ -11,7 +11,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import librio.auth.Session;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.User;
 

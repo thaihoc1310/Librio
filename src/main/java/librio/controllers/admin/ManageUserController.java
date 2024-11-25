@@ -23,11 +23,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import librio.controllers.LogoutController;
-import librio.auth.Session;
+import librio.controllers.auth.LogoutController;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
-import librio.models.Gender;
-import librio.models.Role;
+import librio.enums.Gender;
+import librio.enums.Role;
 import librio.models.User;
 
 import java.io.File;
@@ -214,16 +215,8 @@ public class ManageUserController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        }
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatarUser, 38.5);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
     }
 

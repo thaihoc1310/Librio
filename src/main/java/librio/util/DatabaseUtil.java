@@ -1,15 +1,14 @@
 package librio.util;
 
 import librio.database.DatabaseConnection;
+import librio.enums.Gender;
+import librio.enums.Role;
+import librio.enums.Status;
 import librio.models.*;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -101,13 +100,14 @@ public class DatabaseUtil {
                 String publisher = resultSet.getString("publisher");
                 String category = resultSet.getString("category");
                 Integer quantityCopy = resultSet.getInt("quantity_copy");
+                Integer availableCopy = resultSet.getInt("available_copy");
                 Double averageOfRating = resultSet.getDouble("average_of_rating");
                 String yearPublished = resultSet.getString("year_published");
                 String language = resultSet.getString("language");
                 String numberOfPages = resultSet.getString("number_of_pages");
                 String description = resultSet.getString("description");
                 String bookImage = resultSet.getString("book_image");
-                return new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, bookImage);
+                return new Book(id, title, author, isbn, category, publisher, quantityCopy, availableCopy, averageOfRating, yearPublished, language, numberOfPages, description, bookImage);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -532,7 +532,7 @@ public class DatabaseUtil {
     }
 
     public static int getAvailableBooks() {
-        String query = "SELECT SUM(quantity_copy) FROM books";
+        String query = "SELECT SUM(available_copy) FROM books";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
@@ -646,4 +646,18 @@ public class DatabaseUtil {
         return false;
     }
 
+    public static int getAvailableCopyByIsbn(String isbn) {
+        String query = "SELECT available_copy FROM books WHERE isbn = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, isbn);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("available_copy");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

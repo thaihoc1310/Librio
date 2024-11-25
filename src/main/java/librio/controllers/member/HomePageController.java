@@ -24,7 +24,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import librio.auth.Session;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -38,6 +39,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
+import static librio.util.DatabaseUtil.getAvailableCopyByIsbn;
 import static librio.util.DesignUtil.*;
 
 public class HomePageController implements Initializable {
@@ -60,6 +62,14 @@ public class HomePageController implements Initializable {
     @FXML
     private Button leftMostborrowedButton;
     @FXML
+    private Button leftOurFictionButton;
+    @FXML
+    private Button leftNewestBooksButton;
+    @FXML
+    private Button leftOurEconomicsBooksButton;
+    @FXML
+    private Button leftTrendingNowButton;
+    @FXML
     private ScrollPane mainBannerScroll;
     @FXML
     private HBox mainBannerContainer;
@@ -69,6 +79,15 @@ public class HomePageController implements Initializable {
     private Button rightToprateButton;
     @FXML
     private Button rightMostborrowedButton;
+    @FXML
+    private Button rightOurFictionButton;
+    @FXML
+    private Button rightNewestBooksButton;
+    @FXML
+    private Button rightOurEconomicsBooksButton;
+    @FXML
+    private Button rightTrendingNowButton;
+
     @FXML
     private ImageView searchButton;
     @FXML
@@ -81,6 +100,22 @@ public class HomePageController implements Initializable {
     private HBox mostBorrowedContainer;
     @FXML
     private ScrollPane mostBorrowedScroll;
+    @FXML
+    private HBox ourFictionContainer;
+    @FXML
+    private ScrollPane ourFictionScroll;
+    @FXML
+    private HBox newestBooksContainer;
+    @FXML
+    private ScrollPane newestBooksScroll;
+    @FXML
+    private ScrollPane ourEconomicsBooksScroll;
+    @FXML
+    private HBox ourEconomicsBooksContainer;
+    @FXML
+    private ScrollPane trendingNowScroll;
+    @FXML
+    private HBox trendingNowContainer;
     @FXML
     private Label userNameUser;
     @FXML
@@ -110,8 +145,13 @@ public class HomePageController implements Initializable {
         setAvatarAndUserName();
         currentIndexes.put("TopRate", 0);
         currentIndexes.put("MostBorrowed", 0);
+        currentIndexes.put("NewestBooks", 0);
+        currentIndexes.put("OurFiction", 0);
+        currentIndexes.put("TrendingNow", 0);
+        currentIndexes.put("OurEconomicsBooks", 0);
         leftMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(-1));
         rightMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(1));
+
         leftToprateButton.setOnMouseClicked(event ->
                 scrollBooks(-1, currentIndexes.get("TopRate"), topRateScroll, index -> currentIndexes.put("TopRate", index))
         );
@@ -125,11 +165,50 @@ public class HomePageController implements Initializable {
         rightMostborrowedButton.setOnMouseClicked(event ->
                 scrollBooks(1, currentIndexes.get("MostBorrowed"), mostBorrowedScroll, index -> currentIndexes.put("MostBorrowed", index))
         );
+
+        leftNewestBooksButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("NewestBooks"), newestBooksScroll, index -> currentIndexes.put("NewestBooks", index))
+        );
+
+        rightNewestBooksButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("NewestBooks"), newestBooksScroll, index -> currentIndexes.put("NewestBooks", index))
+        );
+
+        leftOurFictionButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
+        );
+
+        rightOurFictionButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
+        );
+
+        leftTrendingNowButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("TrendingNow"), trendingNowScroll, index -> currentIndexes.put("TrendingNow", index))
+        );
+
+        rightTrendingNowButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("TrendingNow"), trendingNowScroll, index -> currentIndexes.put("TrendingNow", index))
+        );
+
+
+
+        leftOurEconomicsBooksButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
+        );
+
+        rightOurEconomicsBooksButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
+        );
+
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         startAutoScroll();
         loadTopRatedBooks();
         loadMostBorrowedBooks();
+        loadOurFictionBooks();
+        loadNewestBooks();
+        loadOurEconomicsBooks();
+        loadTrendingNowBooks();
         notificationPane.setVisible(false);
         int totalBooks = Session.getInstance().getTotalBooks();
         if (totalBooks != 0) {
@@ -149,18 +228,9 @@ public class HomePageController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 23);
-            cropAndClipToCircle(image, clickAvatar, 23);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 23);
-            cropAndClipToCircle(image, clickAvatar, 23);
-        }
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatarUser, 23);
+        cropAndClipToCircle(image, clickAvatar, 23);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
@@ -242,6 +312,37 @@ public class HomePageController implements Initializable {
         displayBooks(mostBorrowedBooks, mostBorrowedContainer);
     }
 
+    private void loadOurFictionBooks() {
+        String query = "SELECT * FROM books WHERE category = 'Fiction' ORDER BY average_of_rating DESC LIMIT ?";
+        List<Book> ourFictionBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(ourFictionBooks, ourFictionContainer);
+    }
+
+    private void loadNewestBooks() {
+        String query = "SELECT * FROM books ORDER BY id DESC LIMIT ?";
+        List<Book> newestBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(newestBooks, newestBooksContainer);
+    }
+
+    private void loadOurEconomicsBooks() {
+        String query = "SELECT * FROM books WHERE category = 'Economics' ORDER BY average_of_rating DESC LIMIT ?";
+        List<Book> ourEconomicsBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(ourEconomicsBooks, ourEconomicsBooksContainer);
+    }
+
+    private void loadTrendingNowBooks() {
+        String query = "SELECT b.*, COUNT(br.id) AS borrow_count " +
+                "FROM books b " +
+                "JOIN borrows br ON b.isbn = br.book_isbn " +
+                "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) " +
+                "GROUP BY b.isbn " +
+                "ORDER BY borrow_count DESC " +
+                "LIMIT ?";
+
+        List<Book> trendingNowBooks = loadBooks(query, TOTAL_BOOKS);
+        displayBooks(trendingNowBooks, trendingNowContainer);
+    }
+
     private List<Book> loadBooks(String query, Object... params) {
         List<Book> bookList = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
@@ -260,6 +361,7 @@ public class HomePageController implements Initializable {
                 String category = resultSet.getString("category");
                 String publisher = resultSet.getString("publisher");
                 Integer quantityCopy = resultSet.getInt("quantity_copy");
+                Integer availableCopy = resultSet.getInt("available_copy");
                 Double averageOfRating = resultSet.getDouble("average_of_rating");
                 String yearPublished = resultSet.getString("year_published");
                 String language = resultSet.getString("language");
@@ -271,7 +373,7 @@ public class HomePageController implements Initializable {
                     imageBook = "defaultBook.jpg";
                 }
 
-                Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
+                Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, availableCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
                 bookList.add(book);
             }
         } catch (Exception e) {
@@ -323,8 +425,8 @@ public class HomePageController implements Initializable {
             String projectDir = System.getProperty("user.dir");
             String booksDir = projectDir + "/src/main/resources/images/book/";
             String path = booksDir + book.getImagePath();
-            File file = new File(path);
-            bookImage.setImage(new Image(file.toURI().toString()));
+            Image image = ImageCache.getInstance().getImage(path,booksDir + "defaultBook.jpg");
+            bookImage.setImage(image);
 
             Label titleLabel = new Label(book.getTitle());
             titleLabel.setLayoutX(11);
@@ -405,7 +507,7 @@ public class HomePageController implements Initializable {
             bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
 
             boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
-            if (!isAlreadyBorrowed && book.getQuantityCopy() > 0) {
+            if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
                 quickBorrowButton.setOnAction(e -> {
                     openBorrowConfirmationPane(book, quickBorrowButton);
                 });
@@ -478,7 +580,6 @@ public class HomePageController implements Initializable {
 
     @FXML
     private void handleAvatarClick() {
-        System.out.println("xoi");
         if (!isAnchorPaneVisible) {
             menuPane.setVisible(true);
             isAnchorPaneVisible = true;
@@ -510,7 +611,6 @@ public class HomePageController implements Initializable {
             notificationPane.setVisible(false);
             isNotificationPane = false;
             backPane.setVisible(false);
-
         }
     }
 
@@ -538,6 +638,7 @@ public class HomePageController implements Initializable {
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
+        ImageCache.getInstance().clearCache();
         currenStage.close();
     }
 
@@ -588,6 +689,7 @@ public class HomePageController implements Initializable {
             updateAllContainers(book);
 
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -619,6 +721,5 @@ public class HomePageController implements Initializable {
             updateButtonInContainer(container, book);
         }
     }
-
 }
 

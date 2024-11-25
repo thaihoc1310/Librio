@@ -16,11 +16,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.auth.Session;
-import librio.controllers.admin.DeleteBookController;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
-import librio.models.Book;
-import librio.models.Gender;
+import librio.enums.Gender;
 import librio.models.User;
 
 import java.io.File;
@@ -223,17 +222,8 @@ public class EditProfileController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + loggedInUser.getAvatar();
 
-        // Chuyển đổi đường dẫn thành URL
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-            cropAndClipToCircle(image, avatar, 50);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-            cropAndClipToCircle(image, avatar, 50);
-        }
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatar, 50);
 
         nameTextField.setText(loggedInUser.getName());
         emailTextField.setText(loggedInUser.getEmail());

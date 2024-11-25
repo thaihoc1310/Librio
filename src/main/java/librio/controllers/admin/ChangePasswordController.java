@@ -13,8 +13,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.controllers.LogoutController;
-import librio.auth.Session;
+import librio.controllers.auth.LogoutController;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.User;
 
@@ -307,16 +308,8 @@ public class ChangePasswordController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + loggedInUser.getAvatar();
 
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        }
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatarUser, 38.5);
         userNameLabel.setText(loggedInUser.getName());
     }
 

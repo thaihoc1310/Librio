@@ -11,7 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import librio.auth.Session;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.models.Book;
 
 import java.io.File;
@@ -72,12 +73,9 @@ public class DesignUtil {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String defaultImage = booksDir + "defaultBook.jpg";
-        File defaultImageFile = new File(defaultImage);
-        if (defaultImageFile.exists()) {
-            Image image = new Image(defaultImageFile.toURI().toString());
-            bookImageView.setImage(image);
-            bookImageView.setSmooth(true);
-        }
+
+        Image image = ImageCache.getInstance().getImage(defaultImage,defaultImage);
+        bookImageView.setImage(image);
     }
 
     public static void truncateTextToFit(Text textNode, double maxWidth, int maxLines) {
@@ -95,10 +93,10 @@ public class DesignUtil {
     }
 
     public static void setConfirmButton(Button confirmButton, Book book) {
-        int quantityOfCopy = book.getQuantityCopy();
+        int availableCopy = book.getAvailableCopy();
         boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
         confirmButton.setUserData(book.getId());
-        if (quantityOfCopy == 0) {
+        if (availableCopy == 0) {
             updateBorrowButton(confirmButton, "OUT OF STOCK", "#9e4b3e", false);
         } else if (isAlreadyBorrowed) {
             updateBorrowButton(confirmButton, "BORROWING", "#b57a3e", false);

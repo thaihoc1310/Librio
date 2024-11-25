@@ -6,12 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import librio.auth.Session;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Borrow;
-import librio.models.Status;
+import librio.enums.Status;
 
-import java.awt.event.ActionListener;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;

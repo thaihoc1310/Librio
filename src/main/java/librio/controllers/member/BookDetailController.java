@@ -3,7 +3,6 @@ package librio.controllers.member;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
@@ -16,11 +15,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.auth.Session;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.controllers.admin.BorrowDetailController;
 import librio.controllers.admin.CreateBookController;
 import librio.database.DatabaseConnection;
@@ -33,17 +32,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.cropToAspectRatio;
 
 public class BookDetailController implements Initializable {
 
@@ -191,24 +189,17 @@ public class BookDetailController implements Initializable {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
-        File file = new File(path);
-        Image image;
 
-        if (file.exists()) {
-            image = new Image(file.toURI().toString());
-        } else {
-            image = new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm());
-        }
-
-        DesignUtil.cropToAspectRatio(image, bookCoverImage, 217, 315);
+        Image image = ImageCache.getInstance().getImage(path,projectDir + "defaultBook.jpg");
+        cropToAspectRatio(image, bookCoverImage, 217, 315);
 
         setConfirmButton();
     }
 
     private void setConfirmButton(){
-        int quantityOfCopy = book.getQuantityCopy();
+        int availableCopy = book.getAvailableCopy();
         boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(),book);
-        if (quantityOfCopy == 0) {
+        if (availableCopy == 0) {
             updateBorrowButton("Out of stock", "#9e4b3e", false);
         } else if (isAlreadyBorrowed) {
             updateBorrowButton("Borrowing", "#b57a3e", false);
@@ -278,16 +269,8 @@ public class BookDetailController implements Initializable {
                 avatar.setFitWidth(50);
                 avatar.setFitHeight(50);
 
-                File file = new File(path);
-                if (file.exists()) {
-                    Image image = new Image(file.toURI().toString());
-                    cropAndClipToCircle(image, avatar, 25);
-                } else {
-                    String defaultImage = avatarsDir + "Male User.png";
-                    File defaultImageFile = new File(defaultImage);
-                    Image image = new Image(defaultImageFile.toURI().toString());
-                    cropAndClipToCircle(image, avatar, 25);
-                }
+                Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+                cropAndClipToCircle(image, avatar, 25);
 
 
                 VBox detailsBox = new VBox();

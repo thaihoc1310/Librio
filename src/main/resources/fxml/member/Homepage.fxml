@@ -279,7 +279,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="77.0" layoutY="1932.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                            <children>
-                              <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Most-borrowed">
+                              <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Newest-Books">
                                  <font>
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
@@ -289,12 +289,12 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ScrollPane fx:id="topRateScroll11" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                              <ScrollPane fx:id="newestBooksScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
                                  <content>
-                                    <HBox fx:id="topRateContainer11" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                                    <HBox fx:id="newestBooksContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
                                  </content>
                               </ScrollPane>
-                              <Button fx:id="leftToprateButton11" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                              <Button fx:id="leftNewestBooksButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
@@ -303,7 +303,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="rightToprateButton11" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                              <Button fx:id="rightNewestBooksButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
@@ -316,7 +316,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="77.0" layoutY="2340.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                            <children>
-                              <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Most-borrowed">
+                              <Label layoutY="-4.0" prefHeight="35.0" prefWidth="180.0" text="Our-Fiction">
                                  <font>
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
@@ -326,12 +326,12 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ScrollPane fx:id="topRateScroll111" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                              <ScrollPane fx:id="ourFictionScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
                                  <content>
-                                    <HBox fx:id="topRateContainer111" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                                    <HBox fx:id="ourFictionContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
                                  </content>
                               </ScrollPane>
-                              <Button fx:id="leftToprateButton111" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                              <Button fx:id="leftOurFictionButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
@@ -340,7 +340,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="rightToprateButton111" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                              <Button fx:id="rightOurFictionButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
@@ -385,7 +385,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="77.0" layoutY="3354.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                            <children>
-                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
+                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="180.0" text="Trending-now">
                                  <font>
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
@@ -395,12 +395,12 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ScrollPane fx:id="topRateScroll2" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                              <ScrollPane fx:id="trendingNowScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
                                  <content>
-                                    <HBox fx:id="topRateContainer2" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                                    <HBox fx:id="trendingNowContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
                                  </content>
                               </ScrollPane>
-                              <Button fx:id="leftToprateButton2" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                              <Button fx:id="leftTrendingNowButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
@@ -409,7 +409,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="rightToprateButton2" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                              <Button fx:id="rightTrendingNowButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
@@ -422,7 +422,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="77.0" layoutY="3764.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                            <children>
-                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
+                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="200.0" text="Economics-Books">
                                  <font>
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
@@ -432,12 +432,12 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ScrollPane fx:id="topRateScroll3" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
+                              <ScrollPane fx:id="ourEconomicsBooksScroll" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0">
                                  <content>
-                                    <HBox fx:id="topRateContainer3" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
+                                    <HBox fx:id="ourEconomicsBooksContainer" prefHeight="325.0" prefWidth="1156.0" spacing="15.0" />
                                  </content>
                               </ScrollPane>
-                              <Button fx:id="leftToprateButton3" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                              <Button fx:id="leftOurEconomicsBooksButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
@@ -446,7 +446,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="rightToprateButton3" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                              <Button fx:id="rightOurEconomicsBooksButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>

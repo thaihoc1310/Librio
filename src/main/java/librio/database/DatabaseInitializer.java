@@ -39,6 +39,7 @@ public class DatabaseInitializer {
                     "publisher VARCHAR(255)," +
                     "category VARCHAR(255)," +
                     "quantity_copy INT," +
+                    "available_copy INT DEFAULT 0," +
                     "average_of_rating DOUBLE," +
                     "year_published INT," +
                     "language VARCHAR(50)," +
@@ -50,6 +51,7 @@ public class DatabaseInitializer {
                     "updated_by VARCHAR(255)," +
                     "updated_at TIMESTAMP" +
                     ");";
+
 
             String createMemberTable = "CREATE TABLE IF NOT EXISTS Members (" +
                     "id INT PRIMARY KEY," +
@@ -98,6 +100,17 @@ public class DatabaseInitializer {
                     "FOREIGN KEY (borrow_id) REFERENCES Borrows(id)" +
                     ");";
 
+            String createNotificationTable = "CREATE TABLE IF NOT EXISTS Notifications (" +
+                    "id INT PRIMARY KEY AUTO_INCREMENT," +
+                    "member_id INT NOT NULL," +
+                    "borrow_id INT NOT NULL," +
+                    "notification_type ENUM('BORROW_SUCCESS', 'OVERDUE', 'RETURN_SUCCESS', 'ALMOST_DUE') NOT NULL," +
+                    "message TEXT NOT NULL," +
+                    "is_read BOOLEAN DEFAULT FALSE," +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                    "FOREIGN KEY (member_id) REFERENCES Members(id)," +
+                    "FOREIGN KEY (borrow_id) REFERENCES Borrows(id)" +
+                    ");";
 
             // Execute the SQL statements
             statement.execute(createUserTable);
@@ -106,6 +119,7 @@ public class DatabaseInitializer {
             statement.execute(createLibrarianTable);
             statement.execute(createBorrowTable);
             statement.execute(createFeedbackTable);
+            statement.execute(createNotificationTable);
 
             if (isTableEmpty("Users") && isTableEmpty("Books")) {
                 String resetAutoIncrementUser = "ALTER TABLE Users AUTO_INCREMENT = 1";
@@ -120,19 +134,19 @@ public class DatabaseInitializer {
 
                 String resetAutoIncrementBook = "ALTER TABLE Books AUTO_INCREMENT = 1";
                 statement.execute(resetAutoIncrementBook);
-                String insertBooks = "INSERT INTO Books (title, author, isbn, publisher, category, quantity_copy, average_of_rating, created_by, created_at, year_published, language, number_of_pages, book_image, description) VALUES " +
-                        "('Effective Java', 'Joshua Bloch', '9780134685991', 'Addison-Wesley', 'Technology', 5, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 416, NULL, 'A comprehensive guide to best practices in Java programming. This book covers in-depth principles for writing effective Java code. It includes multiple chapters on best practices for designing robust and maintainable systems.')," +
-                        "('Clean Code', 'Robert C. Martin', '9780132350884', 'Prentice Hall', 'Technology', 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 464, NULL, 'A handbook of agile software craftsmanship. The book emphasizes the importance of writing clean, readable code. Through practical examples, readers learn how to refactor messy code into clean and understandable designs.')," +
-                        "('The Pragmatic Programmer', 'Andrew Hunt', '9780201616224', 'Addison-Wesley', 'Technology', 5, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1999, 'English', 352, NULL, 'From Journeyman to Master - a practical guide for programmers. This book provides practical advice on software development, covering a range of topics from debugging techniques to project management. It’s an essential read for any aspiring software engineer.')," +
-                        "('Design Patterns', 'Erich Gamma', '9780201633610', 'Addison-Wesley', 'Computers', 2, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1994, 'English', 395, NULL, 'Elements of Reusable Object-Oriented Software. This book introduces classic design patterns that are widely used in software development. It helps developers understand how to apply reusable solutions to common design problems.')," +
-                        "('Refactoring', 'Martin Fowler', '9780201485677', 'Addison-Wesley', 'Computers', 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1999, 'English', 464, NULL, 'Improving the design of existing code. Refactoring helps developers clean up messy codebases and make them more maintainable. The book emphasizes best practices for enhancing code quality.')," +
-                        "('Code Complete', 'Steve McConnell', '9780735619678', 'Microsoft Press', 'Computers', 4, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2004, 'English', 960, NULL, 'A practical handbook of software construction. This extensive guide provides detailed insight into coding best practices. Topics such as debugging, testing, and performance optimization are thoroughly covered.')," +
-                        "('Introduction to Algorithms', 'Thomas H. Cormen', '9780262033848', 'MIT Press', 'Education', 6, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2009, 'English', 1312, NULL, 'The most comprehensive introduction to algorithms. This book provides in-depth coverage of many important algorithms. It’s widely used in computer science courses and is known for its clarity and rigor.')," +
-                        "('Java Concurrency in Practice', 'Brian Goetz', '9780321349606', 'Addison-Wesley', 'Education', 2, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2006, 'English', 384, NULL, 'A definitive guide to concurrency in Java. The book explains the complexities of concurrent programming. Readers will learn practical techniques for writing thread-safe and efficient Java programs.')," +
-                        "('The Mythical Man-Month', 'Frederick P. Brooks Jr.', '9780201835953', 'Addison-Wesley', 'Social Science', 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1975, 'English', 322, NULL, 'Essays on software engineering. This book discusses the pitfalls of large-scale software project management. It emphasizes the challenges of coordination and communication in software teams.')," +
-                        "('You Don’t Know JS', 'Kyle Simpson', '9781491904244', 'O Reilly Media', 'Computers', 5, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2014, 'English', 278, NULL, 'A series on JavaScript programming. This book delves into the intricacies of JavaScript. It provides a deep understanding of how the language works, from the basics to advanced topics.')," +
-                        "('Domain-Driven Design', 'Eric Evans', '9780321125217', 'Addison-Wesley', 'Education', 2, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2003, 'English', 560, NULL, 'Tackling complexity in the heart of software. This book provides insight into designing complex software systems. It focuses on aligning business goals with technical implementation.')," +
-                        "('Clean Architecture', 'Robert C. Martin', '9780134494166', 'Prentice Hall', 'Technology', 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2017, 'English', 432, NULL, 'A guide to creating sustainable architecture for software systems. This book discusses the principles of building robust software architectures. It covers topics such as modularity, design patterns, and architectural practices.');";
+                String insertBooks = "INSERT INTO Books (title, author, isbn, publisher, category, quantity_copy, available_copy, average_of_rating, created_by, created_at, year_published, language, number_of_pages, book_image, description) VALUES " +
+                        "('Effective Java', 'Joshua Bloch', '9780134685991', 'Addison-Wesley', 'Technology', 5, 5, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 416, NULL, 'A comprehensive guide to best practices in Java programming. This book covers in-depth principles for writing effective Java code. It includes multiple chapters on best practices for designing robust and maintainable systems.')," +
+                        "('Clean Code', 'Robert C. Martin', '9780132350884', 'Prentice Hall', 'Technology', 3, 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2008, 'English', 464, NULL, 'A handbook of agile software craftsmanship. The book emphasizes the importance of writing clean, readable code. Through practical examples, readers learn how to refactor messy code into clean and understandable designs.')," +
+                        "('The Pragmatic Programmer', 'Andrew Hunt', '9780201616224', 'Addison-Wesley', 'Technology', 5, 5, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1999, 'English', 352, NULL, 'From Journeyman to Master - a practical guide for programmers. This book provides practical advice on software development, covering a range of topics from debugging techniques to project management. It’s an essential read for any aspiring software engineer.')," +
+                        "('Design Patterns', 'Erich Gamma', '9780201633610', 'Addison-Wesley', 'Computers', 2, 2, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1994, 'English', 395, NULL, 'Elements of Reusable Object-Oriented Software. This book introduces classic design patterns that are widely used in software development. It helps developers understand how to apply reusable solutions to common design problems.')," +
+                        "('Refactoring', 'Martin Fowler', '9780201485677', 'Addison-Wesley', 'Computers', 3, 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1999, 'English', 464, NULL, 'Improving the design of existing code. Refactoring helps developers clean up messy codebases and make them more maintainable. The book emphasizes best practices for enhancing code quality.')," +
+                        "('Code Complete', 'Steve McConnell', '9780735619678', 'Microsoft Press', 'Computers', 4, 4, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2004, 'English', 960, NULL, 'A practical handbook of software construction. This extensive guide provides detailed insight into coding best practices. Topics such as debugging, testing, and performance optimization are thoroughly covered.')," +
+                        "('Introduction to Algorithms', 'Thomas H. Cormen', '9780262033848', 'MIT Press', 'Education', 6, 6, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2009, 'English', 1312, NULL, 'The most comprehensive introduction to algorithms. This book provides in-depth coverage of many important algorithms. It’s widely used in computer science courses and is known for its clarity and rigor.')," +
+                        "('Java Concurrency in Practice', 'Brian Goetz', '9780321349606', 'Addison-Wesley', 'Education', 2, 2, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2006, 'English', 384, NULL, 'A definitive guide to concurrency in Java. The book explains the complexities of concurrent programming. Readers will learn practical techniques for writing thread-safe and efficient Java programs.')," +
+                        "('The Mythical Man-Month', 'Frederick P. Brooks Jr.', '9780201835953', 'Addison-Wesley', 'Social Science', 3, 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 1975, 'English', 322, NULL, 'Essays on software engineering. This book discusses the pitfalls of large-scale software project management. It emphasizes the challenges of coordination and communication in software teams.')," +
+                        "('You Don’t Know JS', 'Kyle Simpson', '9781491904244', 'O Reilly Media', 'Computers', 5, 5, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2014, 'English', 278, NULL, 'A series on JavaScript programming. This book delves into the intricacies of JavaScript. It provides a deep understanding of how the language works, from the basics to advanced topics.')," +
+                        "('Domain-Driven Design', 'Eric Evans', '9780321125217', 'Addison-Wesley', 'Education', 2, 2, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2003, 'English', 560, NULL, 'Tackling complexity in the heart of software. This book provides insight into designing complex software systems. It focuses on aligning business goals with technical implementation.')," +
+                        "('Clean Architecture', 'Robert C. Martin', '9780134494166', 'Prentice Hall', 'Technology', 3, 3, 0, 'admin@example.com', CURRENT_TIMESTAMP, 2017, 'English', 432, NULL, 'A guide to creating sustainable architecture for software systems. This book discusses the principles of building robust software architectures. It covers topics such as modularity, design patterns, and architectural practices.');";
                 statement.execute(insertBooks);
 
 

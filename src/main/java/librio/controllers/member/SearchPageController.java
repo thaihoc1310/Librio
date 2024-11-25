@@ -26,11 +26,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import librio.auth.Session;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -43,9 +43,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
+import static librio.util.DatabaseUtil.getAvailableCopyByIsbn;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.setConfirmButton;
 
+/**
+ * Controller class for the search page of the application.
+ * Manages the UI elements and interactions within the search page.
+ */
 public class SearchPageController implements Initializable {
     @FXML
     public Label englishLabel;
@@ -170,7 +175,7 @@ public class SearchPageController implements Initializable {
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
         loadingIndicator.setVisible(false);
-        executor = Executors.newFixedThreadPool(2);
+        executor = Executors.newFixedThreadPool(3);
         setupAnimatedPane(ratePane, 255);
         setupAnimatedPane(categoryPane, 454);
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
@@ -184,13 +189,19 @@ public class SearchPageController implements Initializable {
         setupPaneListeners();
     }
 
+
+    /**
+     * Asynchronously loads a list of books for the specified page index and updates the UI components accordingly.
+     *
+     * @param pageIndex the index of the page to load books for
+     */
     private void loadBooksAsync(int pageIndex) {
         loadingIndicator.setVisible(true);
+
         flowPane.getChildren().clear();
         Task<List<Book>> loadTask = new Task<>() {
             @Override
-            protected List<Book> call() throws Exception {
-                Thread.sleep(100);
+            protected List<Book> call() {
                 return loadBooksFromDatabase(pageIndex);
             }
 
@@ -200,44 +211,41 @@ public class SearchPageController implements Initializable {
                 if (fetchedBooks != null) {
                     displayBooks(fetchedBooks);
                 }
-                Platform.runLater(() -> loadingIndicator.setVisible(false));
             }
 
             @Override
             protected void failed() {
-                Platform.runLater(() -> loadingIndicator.setVisible(false));
                 getException().printStackTrace();
             }
         };
-
         executor.submit(loadTask);
     }
 
+    /**
+     * Sets the search parameters and initiates a search.
+     *
+     * @param keyword the keyword to search for
+     * @param filter the filter criteria to apply
+     */
     public void setSearchParameters(String keyword, String filter) {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
         handleSearch();
     }
+
     public void setAvatarAndUserName() {
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 23);
-            cropAndClipToCircle(image, clickAvatar, 23);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 23);
-            cropAndClipToCircle(image, clickAvatar, 23);
-        }
+        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatarUser, 23);
+        cropAndClipToCircle(image, clickAvatar, 23);
+
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
         userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
+
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
         pane.setExpanded(false);
         pane.expandedProperty().addListener((observable, oldValue, newValue) -> {
@@ -274,7 +282,7 @@ public class SearchPageController implements Initializable {
             if (currentLanguageFilter != null) {
                 preparedStatement.setString(paramIndex++, currentLanguageFilter);
             }
-            if(currentCategoryFilter != null) {
+            if (currentCategoryFilter != null) {
                 preparedStatement.setString(paramIndex++, currentCategoryFilter);
             }
             if (keyword != null && !keyword.isEmpty()) {
@@ -295,6 +303,7 @@ public class SearchPageController implements Initializable {
                 String isbn = resultSet.getString("isbn");
                 String category = resultSet.getString("category");
                 String publisher = resultSet.getString("publisher");
+                Integer availableCopy = resultSet.getInt("available_copy");
                 Integer quantityCopy = resultSet.getInt("quantity_copy");
                 Double averageOfRating = resultSet.getDouble("average_of_rating");
                 String yearPublished = resultSet.getString("year_published");
@@ -307,7 +316,7 @@ public class SearchPageController implements Initializable {
                     imageBook = "defaultBook.jpg";
                 }
 
-                Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
+                Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, availableCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
 
                 fetchedBooks.add(book);
             }
@@ -326,7 +335,7 @@ public class SearchPageController implements Initializable {
             conditions.add("language = ?");
         }
 
-        if(currentCategoryFilter != null) {
+        if (currentCategoryFilter != null) {
             conditions.add("category = ?");
         }
 
@@ -550,146 +559,180 @@ public class SearchPageController implements Initializable {
             Label noBooksLabel = new Label("No books found");
             noBooksLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #B38B60; -fx-font-weight: bold;");
             flowPane.getChildren().add(noBooksLabel);
-            flowPane.setHgap(0); // Không cần khoảng cách nếu không có sách
+            flowPane.setHgap(0);
             flowPane.setVgap(0);
             flowPane.setAlignment(Pos.CENTER);
+            loadingIndicator.setVisible(false);
             return;
         }
-        for (Book book : bookList) {
-            AnchorPane bookPane = new AnchorPane();
-            bookPane.setPrefSize(183, 325);
-
-            AnchorPane bookImagePane = new AnchorPane();
-            bookImagePane.setPrefSize(183, 226);
-            bookImagePane.setLayoutX(0);
-
-            AnchorPane infoPane = new AnchorPane();
-            infoPane.setPrefSize(183, 99);
-            infoPane.setLayoutY(226);
-
-            ImageView bookImage = new ImageView();
-            bookImage.setFitHeight(226);
-            bookImage.setFitWidth(160);
-            bookImage.setLayoutX(12);
-            bookImage.setPickOnBounds(true);
-            bookImage.setSmooth(true);
-            bookImage.setPreserveRatio(false);
-            String projectDir = System.getProperty("user.dir");
-            String booksDir = projectDir + "/src/main/resources/images/book/";
-            String path = booksDir + book.getImagePath();
-            File file = new File(path);
-            bookImage.setImage(new Image(file.toURI().toString()));
-
-            Label titleLabel = new Label(book.getTitle());
-            titleLabel.setLayoutX(11);
-            titleLabel.setLayoutY(8);
-            titleLabel.setPrefWidth(160);
-            titleLabel.getStyleClass().add("title-label");
-
-            Label authorLabel = new Label(book.getAuthor());
-            authorLabel.setLayoutX(11);
-            authorLabel.setLayoutY(55);
-            authorLabel.setPrefWidth(160);
-            authorLabel.getStyleClass().add("author-label");
-
-            AnchorPane buttonPane = new AnchorPane();
-            buttonPane.setStyle("-fx-background-color: #FFF;");
-            buttonPane.setPrefSize(162, 45);
-            buttonPane.setLayoutY(225);
-            buttonPane.setLayoutX(11);
-
-
-            Button quickBorrowButton = new Button();
-            quickBorrowButton.getStyleClass().add("quick-borrow-button");
-            quickBorrowButton.setLayoutX(6);
-            quickBorrowButton.setLayoutY(5);
-            setConfirmButton(quickBorrowButton, book);
-            buttonPane.getChildren().add(quickBorrowButton);
-
-            bookImagePane.getChildren().addAll(bookImage, buttonPane);
-            bookImagePane.setOnMouseEntered(e -> {
-                TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
-                slideUp.setFromY(0);
-                slideUp.setToY(-38);
-                slideUp.play();
-            });
-
-            bookImagePane.setOnMouseExited(e -> {
-                TranslateTransition slideDown = new TranslateTransition(Duration.millis(250), buttonPane);
-                slideDown.setFromY(-38);
-                slideDown.setToY(0);
-                slideDown.play();
-            });
-
-            bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
-            infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
-            infoPane.getChildren().addAll(titleLabel, authorLabel);
-            bookPane.getChildren().addAll(bookImagePane, infoPane);
-            bookPane.setOnMouseClicked(e -> openBookDetailScene(book,quickBorrowButton));
-
-            boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
-            if (!isAlreadyBorrowed && book.getQuantityCopy() > 0) {
-                quickBorrowButton.setOnAction(e -> {
-                    openBorrowConfirmationPane(book, quickBorrowButton);
-                });
+        Task<List<AnchorPane>> loadBooksTask = new Task<>() {
+            @Override
+            protected List<AnchorPane> call() {
+                List<AnchorPane> panes = new ArrayList<>();
+                for (Book book : bookList) {
+                    panes.add(createBookPane(book));
+                }
+                return panes;
             }
 
-            Task<HBox> ratingTask = new Task<>() {
-                @Override
-                protected HBox call() {
-                    HBox starBox = new HBox(5);
-                    double rating = book.getAverageOfRating();
-                    int fullStars = (int) rating;
-                    double decimalPart = rating - fullStars;
+            @Override
+            protected void succeeded() {
+                List<AnchorPane> panes = getValue();
+                flowPane.getChildren().addAll(panes);
+                flowPane.setHgap(40);
+                flowPane.setVgap(20);
+                loadingIndicator.setVisible(false);
 
-                    for (int i = 1; i <= 5; i++) {
-                        StackPane starPane = new StackPane();
+            }
 
-                        ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
-                        fullStar.setFitHeight(15);
-                        fullStar.setFitWidth(15);
+            @Override
+            protected void failed() {
+                getException().printStackTrace();
+            }
+        };
 
-                        ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
-                        emptyStar.setFitHeight(15);
-                        emptyStar.setFitWidth(15);
-
-                        if (i <= fullStars) {
-                            starPane.getChildren().add(fullStar);
-                        } else if (i == fullStars + 1 && decimalPart > 0) {
-                            starPane.getChildren().addAll(emptyStar, fullStar);
-                            Rectangle clip = new Rectangle(15 * decimalPart, 15);
-                            fullStar.setClip(clip);
-                        } else {
-                            starPane.getChildren().add(emptyStar);
-                        }
-                        starBox.getChildren().add(starPane);
-                    }
-
-                    return starBox;
-                }
-
-                @Override
-                protected void succeeded() {
-                    HBox starBox = getValue();
-                    Platform.runLater(() -> {
-                        starBox.setLayoutX(42);
-                        starBox.setLayoutY(80);
-                        infoPane.getChildren().add(starBox);
-                    });
-                }
-
-                @Override
-                protected void failed() {
-                    Platform.runLater(() -> {
-                    });
-                }
-            };
-            executor.execute(ratingTask);
-            flowPane.getChildren().add(bookPane);
-            flowPane.setHgap(40);
-            flowPane.setVgap(20);
-        }
+        executor.submit(loadBooksTask);
     }
+
+    private AnchorPane createBookPane(Book book) {
+        AnchorPane bookPane = new AnchorPane();
+        bookPane.setPrefSize(183, 325);
+
+        AnchorPane bookImagePane = new AnchorPane();
+        bookImagePane.setPrefSize(183, 226);
+        bookImagePane.setLayoutX(0);
+
+        AnchorPane infoPane = new AnchorPane();
+        infoPane.setPrefSize(183, 99);
+        infoPane.setLayoutY(226);
+
+        ImageView bookImage = new ImageView();
+        bookImage.setFitHeight(226);
+        bookImage.setFitWidth(160);
+        bookImage.setLayoutX(12);
+        bookImage.setPickOnBounds(true);
+        bookImage.setSmooth(true);
+        bookImage.setPreserveRatio(false);
+        String projectDir = System.getProperty("user.dir");
+        String booksDir = projectDir + "/src/main/resources/images/book/";
+        String path = booksDir + book.getImagePath();
+        Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
+        bookImage.setImage(image);
+
+        Label titleLabel = new Label(book.getTitle());
+        titleLabel.setLayoutX(11);
+        titleLabel.setLayoutY(8);
+        titleLabel.setPrefWidth(160);
+        titleLabel.getStyleClass().add("title-label");
+
+        Label authorLabel = new Label(book.getAuthor());
+        authorLabel.setLayoutX(11);
+        authorLabel.setLayoutY(55);
+        authorLabel.setPrefWidth(160);
+        authorLabel.getStyleClass().add("author-label");
+
+        AnchorPane buttonPane = new AnchorPane();
+        buttonPane.setStyle("-fx-background-color: #FFF;");
+        buttonPane.setPrefSize(162, 45);
+        buttonPane.setLayoutY(225);
+        buttonPane.setLayoutX(11);
+
+
+        Button quickBorrowButton = new Button();
+        quickBorrowButton.getStyleClass().add("quick-borrow-button");
+        quickBorrowButton.setLayoutX(6);
+        quickBorrowButton.setLayoutY(5);
+        setConfirmButton(quickBorrowButton, book);
+        buttonPane.getChildren().add(quickBorrowButton);
+
+        bookImagePane.getChildren().addAll(bookImage, buttonPane);
+        bookImagePane.setOnMouseEntered(e -> {
+            TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
+            slideUp.setFromY(0);
+            slideUp.setToY(-38);
+            slideUp.play();
+        });
+
+        bookImagePane.setOnMouseExited(e -> {
+            TranslateTransition slideDown = new TranslateTransition(Duration.millis(250), buttonPane);
+            slideDown.setFromY(-38);
+            slideDown.setToY(0);
+            slideDown.play();
+        });
+
+        bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
+        infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
+        infoPane.getChildren().addAll(titleLabel, authorLabel);
+        bookPane.getChildren().addAll(bookImagePane, infoPane);
+
+        bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
+
+        boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
+        if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
+            quickBorrowButton.setOnAction(e -> openBorrowConfirmationPane(book, quickBorrowButton));
+        }
+
+        Task<HBox> ratingTask = new Task<>() {
+            @Override
+            protected HBox call() {
+                return getStarBox(book);
+            }
+
+            @Override
+            protected void succeeded() {
+                HBox starBox = getValue();
+                starBox.setLayoutX(42);
+                starBox.setLayoutY(80);
+                infoPane.getChildren().add(starBox);
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> {
+                });
+            }
+        };
+        executor.execute(ratingTask);
+        return bookPane;
+    }
+
+    private HBox getStarBox(Book book) {
+        HBox starBox = new HBox(5);
+        double rating = book.getAverageOfRating();
+        int fullStars = (int) rating;
+        double decimalPart = rating - fullStars;
+        Image fullStarImage = new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm());
+        Image emptyStarImage = new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm());
+        for (int i = 1; i <= 5; i++) {
+            StackPane starPane = new StackPane();
+
+            ImageView emptyStar = new ImageView(emptyStarImage);
+            emptyStar.setFitHeight(15);
+            emptyStar.setFitWidth(15);
+
+            starPane.getChildren().add(emptyStar);
+
+            if (i <= fullStars) {
+                ImageView fullStar = new ImageView(fullStarImage);
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+                starPane.getChildren().add(fullStar);
+            } else if (i == fullStars + 1 && decimalPart > 0) {
+                ImageView fullStar = new ImageView(fullStarImage);
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+
+                Rectangle clip = new Rectangle(15 * decimalPart, 15);
+                fullStar.setClip(clip);
+                starPane.getChildren().add(fullStar);
+            }
+
+            starBox.getChildren().add(starPane);
+        }
+
+        return starBox;
+    }
+
 
     @FXML
     private void handleAvatarClick() {
@@ -713,22 +756,25 @@ public class SearchPageController implements Initializable {
             backPane.setVisible(false);
         }
     }
+
     @FXML
     void logOut() throws IOException {
         Stage currenStage = (Stage) searchTextField.getScene().getWindow();
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-        Parent loginRoot  = loader.load();
+        Parent loginRoot = loader.load();
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
+        ImageCache.getInstance().clearCache();
         currenStage.close();
     }
+
     @FXML
     private void openBorrowed() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
-            Parent manageUserRoot  = loader.load();
+            Parent manageUserRoot = loader.load();
             Stage currentStage = (Stage) avatarUser.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(manageUserRoot);
@@ -738,7 +784,7 @@ public class SearchPageController implements Initializable {
     }
 
     @FXML
-    private void openEditProfileScene(){
+    private void openEditProfileScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
             Parent root = loader.load();
@@ -785,7 +831,7 @@ public class SearchPageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                setConfirmButton(confirmButton,book);
+                setConfirmButton(confirmButton, book);
             });
 
             stage.showAndWait();
@@ -822,7 +868,7 @@ public class SearchPageController implements Initializable {
             stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-                setConfirmButton(confirmButton,book);
+                setConfirmButton(confirmButton, book);
 
             });
             stage.showAndWait();

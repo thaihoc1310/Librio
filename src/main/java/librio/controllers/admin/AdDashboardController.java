@@ -8,17 +8,16 @@ import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.controllers.LogoutController;
-import librio.auth.Session;
+import librio.controllers.auth.LogoutController;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.util.DatabaseUtil;
 
@@ -95,7 +94,11 @@ public class AdDashboardController implements Initializable {
                 String category = entry.getKey();
                 int quantity = entry.getValue();
                 double percentage = ((double) quantity / totalQuantity) * 100;
-                categoryData.add(new PieChart.Data(category + ": " + String.format("%.2f", percentage) + "%", quantity));
+
+
+                PieChart.Data data = new PieChart.Data(category + ": " + String.format("%.2f", percentage) + "%", quantity);
+                categoryData.add(data);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,7 +106,7 @@ public class AdDashboardController implements Initializable {
         return categoryData;
     }
 
-    public void addDataToDashboardCardAndChart(){
+    public void addDataToDashboardCardAndChart() {
         int borrowedBooks = DatabaseUtil.getTotalBorrowedBooks();
         int availableBooks = DatabaseUtil.getAvailableBooks();
         int totalCopyBooks = borrowedBooks + availableBooks;
@@ -118,9 +121,12 @@ public class AdDashboardController implements Initializable {
 
         //Add data to Pie Chart
         pieChart.getData().clear();
+        pieChart.setLabelLineLength(20);
         List<PieChart.Data> categoryData = getCategoryData();
         pieChart.getData().addAll(categoryData);
         pieChart.setLegendVisible(false);
+
+
 
         //Add data to bar Chart
         CategoryAxis xAxis = new CategoryAxis();
@@ -216,16 +222,8 @@ public class AdDashboardController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString());
-            cropAndClipToCircle(image, avatarUser, 38.5);
-        }
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        avatarUser.setImage(image);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
     }
 

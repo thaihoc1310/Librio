@@ -1,16 +1,15 @@
 package librio.controllers.member;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import librio.auth.Session;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -20,8 +19,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.function.Consumer;
 
 public class ConfirmBorrow {
 
@@ -58,14 +55,8 @@ public class ConfirmBorrow {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
-        File file = new File(path);
-        Image image;
 
-        if (file.exists()) {
-            image = new Image(file.toURI().toString());
-        } else {
-            image = new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm());
-        }
+        Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
         bookImage.setImage(image);
     }
 
@@ -99,10 +90,10 @@ public class ConfirmBorrow {
     }
 
     private void updateQuantityBook() {
-        String query = "UPDATE books SET quantity_copy = ? WHERE id = ?";
+        String query = "UPDATE books SET available_copy = ? WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1,book.getQuantityCopy() - 1);
+            statement.setInt(1,book.getAvailableCopy() - 1);
             statement.setInt(2, book.getId());
             statement.executeUpdate();
         } catch (SQLException e) {

@@ -1,5 +1,8 @@
 package librio.models;
 
+import librio.enums.Gender;
+import librio.enums.Role;
+
 import java.time.LocalDate;
 
 public class Librarian extends User {

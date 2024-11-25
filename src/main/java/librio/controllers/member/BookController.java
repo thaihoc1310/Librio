@@ -19,7 +19,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.auth.Session;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.util.DesignUtil;
@@ -118,6 +118,7 @@ public class BookController implements Initializable {
                 String category = resultSet.getString("category");
                 String publisher = resultSet.getString("publisher");
                 Integer quantityCopy = resultSet.getInt("quantity_copy");
+                Integer availableCopy = resultSet.getInt("available_copy");
                 Double averageOfRating = resultSet.getDouble("average_of_rating");
                 String yearPublished = resultSet.getString("year_published");
                 String language = resultSet.getString("language");
@@ -129,7 +130,7 @@ public class BookController implements Initializable {
                     imageBook = "defaultBook.jpg";
                 }
 
-                Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
+                Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, availableCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
 
                 bookList.add(book);
             }

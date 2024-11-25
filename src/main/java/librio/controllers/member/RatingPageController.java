@@ -10,7 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import librio.auth.Session;
+import librio.session.Session;
+import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
@@ -56,14 +57,7 @@ public class RatingPageController {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
-        File file = new File(path);
-        Image image;
-
-        if (file.exists()) {
-            image = new Image(file.toURI().toString());
-        } else {
-            image = new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm());
-        }
+        Image image = ImageCache.getInstance().getImage(path,booksDir + "Male User.png");
         bookImage.setImage(image);
     }
 

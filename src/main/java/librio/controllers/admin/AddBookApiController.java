@@ -14,30 +14,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.controllers.LogoutController;
-import librio.controllers.admin.CreateBookController;
-import librio.database.DatabaseConnection;
 import librio.models.Book;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -125,7 +114,7 @@ public class AddBookApiController implements Initializable {
                     String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail") : "defaultBook.jpg";
                     Integer numberOfPages = volumeInfo.optInt("pageCount", 0);
                     if (isDigit(isbn.charAt(0))) isbn = "ISBN : " + isbn;
-                    Book book = new Book(0, title, author, isbn, category, publisher, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
+                    Book book = new Book(0, title, author, isbn, category, publisher, 0, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
                      fetchedBooks.add(book);
                 }
             }
