@@ -72,7 +72,7 @@
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="Computers" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="History" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
@@ -84,19 +84,19 @@
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="Health" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="Technology" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="Sciene" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="Computers" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="      Health" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="Economics" />
                                     <AnchorPane prefHeight="61.0" prefWidth="20.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
@@ -114,13 +114,13 @@
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="Technology" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="Education" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label prefHeight="61.0" prefWidth="46.0" styleClass="label-button" text="   Art" />
+                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="46.0" styleClass="label-button" text="Art" />
                                  </children>
                               </HBox>
                               <Label fx:id="userNameUser2" alignment="CENTER_RIGHT" layoutX="1106.0" layoutY="26.0" prefHeight="22.0" prefWidth="206.0" text="Đinh Viết Huy" textFill="#481f10" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="30.0">
@@ -161,7 +161,7 @@
                                                             <Label fx:id="economicsLabel" prefHeight="26.0" prefWidth="185.0" text="Economics" />
                                                             <Label fx:id="computersLabel" prefHeight="26.0" prefWidth="185.0" text="Computers" />
                                                             <Label fx:id="historyLabel" prefHeight="26.0" prefWidth="185.0" text="History" />
-                                                            <Label fx:id="scieneLabel" prefHeight="26.0" prefWidth="185.0" text="Sciene" />
+                                                            <Label fx:id="scieneLabel" prefHeight="26.0" prefWidth="185.0" text="Science" />
                                                             <Label fx:id="healthLabel" prefHeight="26.0" prefWidth="185.0" text="Health" />
                                                             <Label fx:id="lawLabel" prefHeight="26.0" prefWidth="185.0" text="Law" />
                                                             <Label fx:id="socialScienceLabel" prefHeight="26.0" prefWidth="185.0" text="Social Science" />

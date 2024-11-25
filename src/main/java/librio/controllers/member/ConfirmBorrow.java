@@ -8,8 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import librio.session.Session;
 import librio.cache.ImageCache;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 

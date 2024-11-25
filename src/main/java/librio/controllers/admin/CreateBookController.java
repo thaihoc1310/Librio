@@ -192,6 +192,7 @@ public class CreateBookController implements Initializable {
             descriptionTextArea.setText(apiBook.getDescription());
             numberOfPagesTextField.setText(apiBook.getNumberOfPages());
             openedFromApi = true;
+
             if (apiBook.getImagePath().equals("defaultBook.jpg")) {
                 bookImageView.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
                 bookImageFilePath = null;

@@ -11,8 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import librio.session.Session;
 import librio.cache.ImageCache;
+import librio.session.Session;
 import librio.models.Book;
 
 import java.io.File;

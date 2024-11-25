@@ -1,6 +1,8 @@
 package librio.controllers.member;
 
 import javafx.animation.*;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,6 +38,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
@@ -127,6 +131,11 @@ public class HomePageController implements Initializable {
     @FXML
     private Circle moreIcon;
     @FXML
+    private Label fictionLabel;
+    @FXML
+    private Label historyLabel;
+
+    @FXML
     private AnchorPane notificationPane;
     @FXML
     private Text numberText;
@@ -137,9 +146,11 @@ public class HomePageController implements Initializable {
     private Timeline autoScrollTimeline;
     private List<Book> topRateList = new ArrayList<>();
     private List<Book> mostBorrowedList = new ArrayList<>();
+    private final ExecutorService executor = Executors.newFixedThreadPool(5);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadAllBooksAsync();
         Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
@@ -203,12 +214,9 @@ public class HomePageController implements Initializable {
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         startAutoScroll();
-        loadTopRatedBooks();
-        loadMostBorrowedBooks();
-        loadOurFictionBooks();
-        loadNewestBooks();
-        loadOurEconomicsBooks();
-        loadTrendingNowBooks();
+
+        fictionLabel.setOnMouseClicked(event -> setKeywordAndCategory("Fiction"));
+        historyLabel.setOnMouseClicked(event -> setKeywordAndCategory("History"));
         notificationPane.setVisible(false);
         int totalBooks = Session.getInstance().getTotalBooks();
         if (totalBooks != 0) {
@@ -219,8 +227,6 @@ public class HomePageController implements Initializable {
                 numberText.setText("99+");
             }
         }
-
-
     }
 
     public void setAvatarAndUserName() {
@@ -299,58 +305,65 @@ public class HomePageController implements Initializable {
         }
     }
 
-    private void loadTopRatedBooks() {
-        String query = "SELECT * FROM books ORDER BY average_of_rating DESC LIMIT ?";
-        List<Book> topRatedBooks = loadBooks(query, TOTAL_BOOKS);
-        displayBooks(topRatedBooks, topRateContainer);
+
+    private void loadAllBooksAsync() {
+        loadBooksByCategoryAsync("SELECT * FROM books ORDER BY average_of_rating DESC LIMIT 18", topRateContainer);
+        loadBooksByCategoryAsync(
+                "SELECT b.* FROM books b JOIN borrows br ON b.isbn = br.book_isbn GROUP BY b.id ORDER BY COUNT(*) DESC LIMIT 18",
+                mostBorrowedContainer
+        );
+        loadBooksByCategoryAsync("SELECT * FROM books ORDER BY id DESC LIMIT 18", newestBooksContainer);
+        loadBooksByCategoryAsync(
+                "SELECT * FROM books WHERE category = 'Fiction' ORDER BY average_of_rating DESC LIMIT 18",
+                ourFictionContainer
+        );
+        loadBooksByCategoryAsync(
+                "SELECT * FROM books WHERE category = 'Economics' ORDER BY average_of_rating DESC LIMIT 18",
+                ourEconomicsBooksContainer
+        );
+        loadBooksByCategoryAsync(
+                "SELECT b.*, COUNT(br.id) AS borrow_count " +
+                        "FROM books b JOIN borrows br ON b.isbn = br.book_isbn " +
+                        "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) " +
+                        "GROUP BY b.isbn ORDER BY borrow_count DESC LIMIT 18",
+                trendingNowContainer
+        );
     }
 
 
-    private void loadMostBorrowedBooks() {
-        String query = "SELECT b.* FROM books b JOIN borrows br ON b.isbn = br.book_isbn GROUP BY b.id ORDER BY COUNT(*) DESC LIMIT ?";
-        List<Book> mostBorrowedBooks = loadBooks(query, TOTAL_BOOKS);
-        displayBooks(mostBorrowedBooks, mostBorrowedContainer);
+    private void loadBooksByCategoryAsync(String query, HBox container) {
+
+        Task<List<Book>> loadTask = new Task<>() {
+            @Override
+            protected List<Book> call() {
+                return loadBooksFromDatabase(query);
+            }
+
+            @Override
+            protected void succeeded() {
+                List<Book> books = getValue();
+                Platform.runLater(() -> {
+                    container.getChildren().clear();
+                    displayBooks(books, container);
+                });
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> {
+                    container.getChildren().clear();
+                });
+                getException().printStackTrace();
+            }
+        };
+
+        executor.submit(loadTask);
     }
 
-    private void loadOurFictionBooks() {
-        String query = "SELECT * FROM books WHERE category = 'Fiction' ORDER BY average_of_rating DESC LIMIT ?";
-        List<Book> ourFictionBooks = loadBooks(query, TOTAL_BOOKS);
-        displayBooks(ourFictionBooks, ourFictionContainer);
-    }
-
-    private void loadNewestBooks() {
-        String query = "SELECT * FROM books ORDER BY id DESC LIMIT ?";
-        List<Book> newestBooks = loadBooks(query, TOTAL_BOOKS);
-        displayBooks(newestBooks, newestBooksContainer);
-    }
-
-    private void loadOurEconomicsBooks() {
-        String query = "SELECT * FROM books WHERE category = 'Economics' ORDER BY average_of_rating DESC LIMIT ?";
-        List<Book> ourEconomicsBooks = loadBooks(query, TOTAL_BOOKS);
-        displayBooks(ourEconomicsBooks, ourEconomicsBooksContainer);
-    }
-
-    private void loadTrendingNowBooks() {
-        String query = "SELECT b.*, COUNT(br.id) AS borrow_count " +
-                "FROM books b " +
-                "JOIN borrows br ON b.isbn = br.book_isbn " +
-                "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) " +
-                "GROUP BY b.isbn " +
-                "ORDER BY borrow_count DESC " +
-                "LIMIT ?";
-
-        List<Book> trendingNowBooks = loadBooks(query, TOTAL_BOOKS);
-        displayBooks(trendingNowBooks, trendingNowContainer);
-    }
-
-    private List<Book> loadBooks(String query, Object... params) {
-        List<Book> bookList = new ArrayList<>();
+    private List<Book> loadBooksFromDatabase(String query) {
+        List<Book> fetchedBooks = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            for (int i = 0; i < params.length; i++) {
-                preparedStatement.setObject(i + 1, params[i]);
-            }
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -360,8 +373,8 @@ public class HomePageController implements Initializable {
                 String isbn = resultSet.getString("isbn");
                 String category = resultSet.getString("category");
                 String publisher = resultSet.getString("publisher");
-                Integer quantityCopy = resultSet.getInt("quantity_copy");
                 Integer availableCopy = resultSet.getInt("available_copy");
+                Integer quantityCopy = resultSet.getInt("quantity_copy");
                 Double averageOfRating = resultSet.getDouble("average_of_rating");
                 String yearPublished = resultSet.getString("year_published");
                 String language = resultSet.getString("language");
@@ -374,13 +387,15 @@ public class HomePageController implements Initializable {
                 }
 
                 Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, availableCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
-                bookList.add(book);
+                fetchedBooks.add(book);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return bookList;
+        return fetchedBooks;
     }
+
+
 
 
     @FXML
@@ -396,7 +411,10 @@ public class HomePageController implements Initializable {
             Stage currentStage = (Stage) mainScroll.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(searchPageRoot);
-        } catch (IOException e) {
+
+            Platform.runLater(() -> searchController.setSearchParameters(keyword, selectedFilter));
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -470,38 +488,32 @@ public class HomePageController implements Initializable {
             });
 
             bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
-            HBox starBox = new HBox(5);
-            double rating = book.getAverageOfRating();
-            int fullStars = (int) rating;
-            double decimalPart = rating - fullStars;
 
-            for (int i = 1; i <= 5; i++) {
-                StackPane starPane = new StackPane();
-
-                ImageView fullStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm()));
-                fullStar.setFitHeight(15);
-                fullStar.setFitWidth(15);
-
-                ImageView emptyStar = new ImageView(new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm()));
-                emptyStar.setFitHeight(15);
-                emptyStar.setFitWidth(15);
-
-                if (i <= fullStars) {
-                    starPane.getChildren().add(fullStar);
-                } else if (i == fullStars + 1 && decimalPart > 0) {
-                    starPane.getChildren().addAll(emptyStar, fullStar);
-                    Rectangle clip = new Rectangle(15 * decimalPart, 15);
-                    fullStar.setClip(clip);
-                } else {
-                    starPane.getChildren().add(emptyStar);
+            Task<HBox> ratingTask = new Task<>() {
+                @Override
+                protected HBox call() {
+                    return getStarBox(book);
                 }
-                starBox.getChildren().add(starPane);
-            }
 
-            starBox.setLayoutX(42);
-            starBox.setLayoutY(80);
+                @Override
+                protected void succeeded() {
+                    HBox starBox = getValue();
+                    starBox.setLayoutX(42);
+                    starBox.setLayoutY(80);
+                    infoPane.getChildren().add(starBox);
+                }
+
+                @Override
+                protected void failed() {
+                    Platform.runLater(() -> {
+                    });
+                }
+            };
+            executor.execute(ratingTask);
+
+
             infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
-            infoPane.getChildren().addAll(titleLabel, authorLabel, starBox);
+            infoPane.getChildren().addAll(titleLabel, authorLabel);
             bookPane.getChildren().addAll(bookImagePane, infoPane);
 
             bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
@@ -720,6 +732,49 @@ public class HomePageController implements Initializable {
         for (HBox container : containers) {
             updateButtonInContainer(container, book);
         }
+    }
+
+    private void setKeywordAndCategory(String category){
+        this.searchTextField.setText(category);
+        filterBox.getSelectionModel().select(2);
+        handleSearch();
+    }
+
+    private HBox getStarBox(Book book) {
+        HBox starBox = new HBox(5);
+        double rating = book.getAverageOfRating();
+        int fullStars = (int) rating;
+        double decimalPart = rating - fullStars;
+        Image fullStarImage = new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm());
+        Image emptyStarImage = new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm());
+        for (int i = 1; i <= 5; i++) {
+            StackPane starPane = new StackPane();
+
+            ImageView emptyStar = new ImageView(emptyStarImage);
+            emptyStar.setFitHeight(15);
+            emptyStar.setFitWidth(15);
+
+            starPane.getChildren().add(emptyStar);
+
+            if (i <= fullStars) {
+                ImageView fullStar = new ImageView(fullStarImage);
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+                starPane.getChildren().add(fullStar);
+            } else if (i == fullStars + 1 && decimalPart > 0) {
+                ImageView fullStar = new ImageView(fullStarImage);
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+
+                Rectangle clip = new Rectangle(15 * decimalPart, 15);
+                fullStar.setClip(clip);
+                starPane.getChildren().add(fullStar);
+            }
+
+            starBox.getChildren().add(starPane);
+        }
+
+        return starBox;
     }
 }
 

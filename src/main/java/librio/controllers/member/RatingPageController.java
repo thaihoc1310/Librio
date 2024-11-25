@@ -10,8 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import librio.session.Session;
 import librio.cache.ImageCache;
+import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
