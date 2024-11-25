@@ -18,14 +18,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-<<<<<<< HEAD
 import librio.session.Session;
-=======
-import librio.auth.Session;
 import librio.cache.ImageCache;
 import librio.controllers.admin.BorrowDetailController;
 import librio.controllers.admin.CreateBookController;
->>>>>>> a51587d5162db85c9387a7d90f67b5da45fb9183
 import librio.database.DatabaseConnection;
 import librio.models.*;
 import librio.util.DatabaseUtil;

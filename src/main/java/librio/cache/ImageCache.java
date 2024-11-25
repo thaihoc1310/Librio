@@ -41,7 +41,6 @@ public class ImageCache {
         return instance;
     }
 
-<<<<<<< HEAD
     /**
      * Retrieves an image from the specified path. If the image is not found in the
      * cache or on the file system, a default image is returned.
@@ -51,9 +50,7 @@ public class ImageCache {
      * @return the image object corresponding to the specified path or the default image if the specified path is not available
      */
     public Image getImage(String path,String defaultImagePath) {
-=======
-    public Image getImage(String path, String defaultImagePath) {
->>>>>>> a51587d5162db85c9387a7d90f67b5da45fb9183
+
         if (cache.containsKey(path)) {
             return cache.get(path);
         }

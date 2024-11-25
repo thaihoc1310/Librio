@@ -11,12 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-<<<<<<< HEAD
 import librio.session.Session;
-=======
-import librio.auth.Session;
 import librio.cache.ImageCache;
->>>>>>> a51587d5162db85c9387a7d90f67b5da45fb9183
 import librio.models.Book;
 
 import java.io.File;
