@@ -660,4 +660,16 @@ public class DatabaseUtil {
         }
         return 0;
     }
+
+    public static void updateUserPassword(String userId, String newPassword) {
+        String query = "UPDATE users SET password = ? WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, newPassword);
+            statement.setString(2, userId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

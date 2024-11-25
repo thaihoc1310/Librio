@@ -350,6 +350,7 @@ public class AddBookApiController implements Initializable {
             stage.initOwner(searchButton.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
             stage.setOnHidden(event -> {
+
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
             });   stage.showAndWait();

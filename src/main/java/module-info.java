@@ -12,6 +12,7 @@ module librio {
     requires java.net.http;
     requires org.json;
     requires mysql.connector.j;
+    requires java.mail;
 
     exports librio;
     exports librio.models;

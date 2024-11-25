@@ -1,9 +1,9 @@
 package librio.controllers.auth;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
-import javafx.animation.ParallelTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -16,14 +16,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import librio.models.User;
+import librio.enums.Gender;
 import librio.session.Session;
 import librio.database.DatabaseConnection;
-import librio.enums.Gender;
 import librio.enums.Role;
-import librio.models.User;
 import librio.util.DatabaseUtil;
+import librio.util.EmailUtil;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
@@ -35,72 +37,32 @@ import static librio.util.DatabaseUtil.isEmailExists;
 public class LoginController {
 
     @FXML
-    private Button loginButton;
+    private Button loginButton, nextButton, submitButton, signUpButton;
     @FXML
-    private PasswordField passwordField;
+    private PasswordField passwordField, signUpPasswordField, signUpConfirmPasswordField, newPasswordField, confirmNewPasswordField;
     @FXML
-    private TextField usernameField;
+    private TextField usernameField, passwordTextVisible, resetCode, signUpPasswordTextVisible, signUpConfirmPasswordTextVisible;
     @FXML
-    private Label incorrectLoginInformation;
+    private TextField emailTextField, emailTextField1, userNameTextField, phoneNumberTextField, newPasswordFieldVisible, confirmNewPasswordFieldVisible;
     @FXML
-    private TextField passwordTextVisible;
+    private ImageView closeEyeImage1, openEyeImage1, closeEyeImage2, openEyeImage2, openEyeImage21, closeEyeImage21, openEyeImage11, closeEyeImage11;
     @FXML
-    private ImageView closeEyeImage1;
+    private ImageView openEyeImage, closeEyeImage;
     @FXML
-    private ImageView openEyeImage1;
+    private Label incorrectLoginInformation, switchSignUp, switchSignIn, forgotPassword, switchSignIn1, switchSignIn2, sentCodeButton, emailErrorLabel, resetCodeErrorLabel, confirmPasswordErrorLabel, passwordErrorLabel, nameErrorLabel, emailErrorLabel1, genderAndbirthDateErrorLabel, phoneNumberErrorLabel, confirmPasswordErrorLabel1, passwordErrorLabel1;
     @FXML
-    private ImageView closeEyeImage2;
-    @FXML
-    private ImageView openEyeImage2;
-    @FXML
-    private TextField userNameTextField;
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField phoneNumberTextField;
-    @FXML
-    private PasswordField signUpPasswordField;
-    @FXML
-    private TextField signUpPasswordTextVisible;
-    @FXML
-    private PasswordField signUpConfirmPasswordField;
-    @FXML
-    private TextField signUpConfirmPasswordTextVisible;
+    private AnchorPane leftPane, rightPane, centerPane, sendCodePane, changePassWordPane;
     @FXML
     private ComboBox<Gender> genderComboBox;
     @FXML
     private DatePicker birthDatePicker;
     @FXML
-    private ImageView openEyeImage;
-    @FXML
-    private ImageView closeEyeImage;
-    @FXML
-    private Label nameErrorLabel;
-    @FXML
-    private Label emailErrorLabel;
-    @FXML
-    private Label phoneNumberErrorLabel;
-    @FXML
-    private Label passwordErrorLabel;
-    @FXML
-    private Label confirmPasswordErrorLabel;
-    @FXML
-    private Label genderAndbirthDateErrorLabel;
-    @FXML
-    private AnchorPane leftPane;
-    @FXML
-    private AnchorPane rightPane;
-    @FXML
-    private AnchorPane centerPane;
-    @FXML
-    private Label switchSignUp;
-    @FXML
-    private Label switchSignIn;
-
-    @FXML
     private ProgressIndicator loadingIndicator;
 
     private ExecutorService executor;
+    private String generatedCode;
+    private User user;
+
     @FXML
     private void initialize() {
         executor = Executors.newFixedThreadPool(2);
@@ -109,32 +71,23 @@ public class LoginController {
         passwordTextVisible.setVisible(false);
         signUpPasswordTextVisible.setVisible(false);
         signUpConfirmPasswordTextVisible.setVisible(false);
-
-        openEyeImage1.toFront();
-        closeEyeImage1.toFront();
-        openEyeImage2.toFront();
-        closeEyeImage2.toFront();
-
-        openEyeImage.setOnMouseClicked(event -> showPassword(passwordField, passwordTextVisible, openEyeImage, closeEyeImage));
-        closeEyeImage.setOnMouseClicked(event -> hidePassword(passwordField, passwordTextVisible, openEyeImage, closeEyeImage));
-
-        openEyeImage1.setOnMouseClicked(event -> showPassword(signUpPasswordField, signUpPasswordTextVisible, openEyeImage1, closeEyeImage1));
-        closeEyeImage1.setOnMouseClicked(event -> hidePassword(signUpPasswordField, signUpPasswordTextVisible, openEyeImage1, closeEyeImage1));
-
-        openEyeImage2.setOnMouseClicked(event -> showPassword(signUpConfirmPasswordField, signUpConfirmPasswordTextVisible, openEyeImage2, closeEyeImage2));
-        closeEyeImage2.setOnMouseClicked(event -> hidePassword(signUpConfirmPasswordField, signUpConfirmPasswordTextVisible, openEyeImage2, closeEyeImage2));
+        newPasswordFieldVisible.setVisible(false);
+        confirmNewPasswordFieldVisible.setVisible(false);
 
 
         usernameField.setOnMouseClicked(event -> clearErrorMessage());
         passwordField.setOnMouseClicked(event -> clearErrorMessage());
         passwordTextVisible.setOnMouseClicked(event -> clearErrorMessage());
-        switchSignUp.setOnMouseClicked(event -> switchToSignUp());
-        switchSignIn.setOnMouseClicked(event -> switchToSignIn());
-        addHideErrorListenersToSignUpFields();
+        switchSignUp.setOnMouseClicked(event -> switchToSignUpAndForgotPassword(centerPane));
+        switchSignIn.setOnMouseClicked(event -> switchToSignIn(centerPane));
+        switchSignIn1.setOnMouseClicked(event -> switchToSignIn(sendCodePane));
+        switchSignIn2.setOnMouseClicked(event -> switchToSignIn(changePassWordPane));
+        forgotPassword.setOnMouseClicked(event -> switchToSignUpAndForgotPassword(sendCodePane));
+        setUpEyePassword();
     }
 
     @FXML
-    private void switchToSignUp() {
+    private void switchToSignUpAndForgotPassword(AnchorPane pane) {
         TranslateTransition leftPaneTranslate = new TranslateTransition(Duration.seconds(0.3), leftPane);
         leftPaneTranslate.setByX(-300);
 
@@ -142,15 +95,15 @@ public class LoginController {
         rightPaneFade.setFromValue(1.0);
         rightPaneFade.setToValue(0.0);
 
-        FadeTransition centerPaneFade = new FadeTransition(Duration.seconds(0.3), centerPane);
-        centerPaneFade.setFromValue(0.0);
-        centerPaneFade.setToValue(1.0);
+        FadeTransition paneFade = new FadeTransition(Duration.seconds(0.3), pane);
+        paneFade.setFromValue(0.0);
+        paneFade.setToValue(1.0);
 
-        centerPane.setVisible(true);
+        pane.setVisible(true);
 
         ParallelTransition parallelTransition = new ParallelTransition(leftPaneTranslate, rightPaneFade);
 
-        SequentialTransition transition = new SequentialTransition(parallelTransition, centerPaneFade);
+        SequentialTransition transition = new SequentialTransition(parallelTransition, paneFade);
 
         transition.setOnFinished(e -> {
             leftPane.setVisible(false);
@@ -163,7 +116,7 @@ public class LoginController {
     }
 
     @FXML
-    private void switchToSignIn() {
+    private void switchToSignIn(AnchorPane pane) {
         TranslateTransition leftPaneTranslate = new TranslateTransition(Duration.seconds(0.3), leftPane);
         leftPaneTranslate.setByX(300);
 
@@ -171,50 +124,26 @@ public class LoginController {
         rightPaneFade.setFromValue(0.0);
         rightPaneFade.setToValue(1.0);
 
-        FadeTransition centerPaneFade = new FadeTransition(Duration.seconds(0.3), centerPane);
-        centerPaneFade.setFromValue(1.0);
-        centerPaneFade.setToValue(0.0);
-
+        FadeTransition paneFade = new FadeTransition(Duration.seconds(0.3), pane);
+        paneFade.setFromValue(1.0);
+        paneFade.setToValue(0.0);
 
         ParallelTransition parallelTransition = new ParallelTransition(leftPaneTranslate, rightPaneFade);
 
-        SequentialTransition transition = new SequentialTransition(centerPaneFade, parallelTransition);
+        SequentialTransition transition = new SequentialTransition(paneFade, parallelTransition);
 
         leftPane.setVisible(true);
         rightPane.setVisible(true);
 
         transition.setOnFinished(e -> {
-            centerPane.setVisible(false);
+            pane.setVisible(false);
         });
 
         transition.play();
         hideSignUpErrorLabels();
         clearFieldData();
-    }
-
-
-    private void showPassword(PasswordField passField, TextField passTextVisible, ImageView openEye, ImageView closeEye) {
-        passTextVisible.setText(passField.getText());
-        passTextVisible.setVisible(true);
-        passField.setVisible(false);
-        openEye.setVisible(false);
-        closeEye.setVisible(true);
-        passTextVisible.requestFocus();
-        passTextVisible.positionCaret(passTextVisible.getText().length());
-    }
-
-    private void hidePassword(PasswordField passField, TextField passTextVisible, ImageView openEye, ImageView closeEye) {
-        passField.setText(passTextVisible.getText());
-        passField.setVisible(true);
-        passTextVisible.setVisible(false);
-        openEye.setVisible(true);
-        closeEye.setVisible(false);
-        passField.requestFocus();
-        passField.positionCaret(passField.getText().length());
-    }
-
-    private void clearErrorMessage() {
-        incorrectLoginInformation.setText("");
+        hideForgotPasswordErrorLabels();
+        clearForgotPasswordFieldData();
     }
 
     @FXML
@@ -319,7 +248,7 @@ public class LoginController {
                     memberStatement.setLong(3, 0); // Total books borrowed bắt đầu từ 0
                     memberStatement.executeUpdate();
                 }
-                switchToSignIn();
+                switchToSignIn(centerPane);
             }
 
         }catch (SQLException e) {
@@ -327,22 +256,128 @@ public class LoginController {
         }
     }
 
+    @FXML
+    private void openForgotPasswordScene() {
+        sendCodePane.setVisible(true);
+        FadeTransition sendCodePaneFade = new FadeTransition(Duration.seconds(0.3), sendCodePane);
+        sendCodePaneFade.setFromValue(0.0);
+        sendCodePaneFade.setToValue(1.0);
+        sendCodePaneFade.play();
+
+        rightPane.setVisible(false);
+        leftPane.setVisible(false);
+        centerPane.setVisible(false);
+    }
+
+    @FXML
+    private void sendResetCode() {
+        resetCode.clear();
+        resetCodeErrorLabel.setText("");
+        String email = emailTextField1.getText().trim();
+        if (email.isEmpty()) {
+            emailErrorLabel1.setText("Email cannot be empty!");
+            return;
+        } else if (!DatabaseUtil.isEmailExists(email)) {
+            emailErrorLabel1.setText("Email does not exist!");
+            return;
+        }
+        user = DatabaseUtil.getUserByEmail(email);
+        generatedCode = generateResetCode();
+        EmailUtil.sendResetCode(email, generatedCode);
+    }
+
+
+
+    @FXML
+    private void validateResetCode() {
+        String code = resetCode.getText().trim();
+        if (code.isEmpty()) {
+            resetCodeErrorLabel.setText("Reset code cannot be empty!");
+            return;
+        } else if (!code.equals(generatedCode)) {
+            resetCodeErrorLabel.setText("Invalid reset code!");
+            return;
+        }
+        switchToChangePassWord();
+        hideForgotPasswordErrorLabels();
+        clearForgotPasswordFieldData();
+    }
+
+    private void switchToChangePassWord() {
+        FadeTransition sendCodePaneFade = new FadeTransition(Duration.seconds(0.3), sendCodePane);
+        sendCodePaneFade.setFromValue(1.0);
+        sendCodePaneFade.setToValue(0.0);
+
+        FadeTransition changePassWordPaneFade = new FadeTransition(Duration.seconds(0.3), changePassWordPane);
+        changePassWordPaneFade.setFromValue(0.0);
+        changePassWordPaneFade.setToValue(1.0);
+
+        changePassWordPane.setVisible(true);
+
+        SequentialTransition transition = new SequentialTransition(sendCodePaneFade, changePassWordPaneFade);
+
+        transition.setOnFinished(e -> {
+            sendCodePane.setVisible(false);
+        });
+
+        transition.play();
+    }
+
+    @FXML
+    private void updatePassword() {
+        String newPassword = newPasswordField.getText().trim();
+        String confirmPassword = confirmNewPasswordField.getText().trim();
+
+        if (newPassword.isEmpty()) {
+            passwordErrorLabel1.setText("Password cannot be empty!");
+            return;
+        } else if (confirmPassword.isEmpty()) {
+            confirmPasswordErrorLabel1.setText("Confirm password cannot be empty!");
+            return;
+        } else if (!newPassword.equals(confirmPassword)) {
+            confirmPasswordErrorLabel1.setText("Passwords do not match!");
+            return;
+        }
+        DatabaseUtil.updateUserPassword(user.getId(), newPassword);
+
+        switchToSignIn(changePassWordPane);
+    }
+
+    private String generateResetCode() {
+        SecureRandom random = new SecureRandom();
+        int num = random.nextInt(999999);
+        return String.format("%06d", num);
+    }
+
+    private void showPassword(PasswordField passField, TextField passTextVisible, ImageView openEye, ImageView closeEye) {
+        passTextVisible.setText(passField.getText());
+        passTextVisible.setVisible(true);
+        passField.setVisible(false);
+        openEye.setVisible(false);
+        closeEye.setVisible(true);
+        passTextVisible.requestFocus();
+        passTextVisible.positionCaret(passTextVisible.getText().length());
+    }
+
+    private void hidePassword(PasswordField passField, TextField passTextVisible, ImageView openEye, ImageView closeEye) {
+        passField.setText(passTextVisible.getText());
+        passField.setVisible(true);
+        passTextVisible.setVisible(false);
+        openEye.setVisible(true);
+        closeEye.setVisible(false);
+        passField.requestFocus();
+        passField.positionCaret(passField.getText().length());
+    }
+
+    private void clearErrorMessage() {
+        incorrectLoginInformation.setText("");
+    }
+
     private void checkAuthorization(User loginUser) throws IOException {
         Role userRole = loginUser.getRole();
         Stage currentStage = (Stage) loginButton.getScene().getWindow();
         Stage stage = new Stage();
         stage.setTitle("Librio");
-//        if (userRole.equals(Role.LIBRARIAN)) {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-//            Parent adminDashboardRoot = loader.load();
-//            stage.setScene(new Scene(adminDashboardRoot));
-//        } else if (userRole.equals(Role.MEMBER)) {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
-//            Parent adminDashboardRoot = loader.load();
-//            stage.setScene(new Scene(adminDashboardRoot));
-//        }
-//        stage.show();
-//        currentStage.close();
 
         loadingIndicator.setVisible(true);
         Task<Parent> loadHomePageTask = new Task<>() {
@@ -377,18 +412,23 @@ public class LoginController {
         executor.submit(loadHomePageTask);
     }
 
-    private void addHideErrorListenersToSignUpFields() {
-        userNameTextField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
-        emailTextField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
-        phoneNumberTextField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
-        signUpPasswordField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
-        signUpPasswordTextVisible.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
-        signUpConfirmPasswordField.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
-        signUpConfirmPasswordTextVisible.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
-        genderComboBox.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
-        birthDatePicker.setOnMouseClicked (event -> {hideSignUpErrorLabels();});
+
+    @FXML
+    private void hideForgotPasswordErrorLabels() {
+        resetCodeErrorLabel.setText("");
+        emailErrorLabel1.setText("");
+        passwordErrorLabel1.setText("");
+        confirmPasswordErrorLabel1.setText("");
     }
 
+    private void clearForgotPasswordFieldData(){
+        emailTextField1.clear();
+        resetCode.clear();
+        confirmNewPasswordField.clear();
+        newPasswordField.clear();
+    }
+
+    @FXML
     private void hideSignUpErrorLabels() {
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");
@@ -411,6 +451,28 @@ public class LoginController {
         genderComboBox.getSelectionModel();
         birthDatePicker.getEditor().clear();
     }
+
+    private void setUpEyePassword() {
+        openEyeImage.toFront();
+        closeEyeImage.toFront();
+        openEyeImage1.toFront();
+        closeEyeImage1.toFront();
+        openEyeImage2.toFront();
+        closeEyeImage2.toFront();
+        openEyeImage21.toFront();
+        closeEyeImage21.toFront();
+        openEyeImage11.toFront();
+        closeEyeImage11.toFront();
+
+        openEyeImage.setOnMouseClicked(event -> showPassword(passwordField, passwordTextVisible, openEyeImage, closeEyeImage));
+        closeEyeImage.setOnMouseClicked(event -> hidePassword(passwordField, passwordTextVisible, openEyeImage, closeEyeImage));
+        openEyeImage1.setOnMouseClicked(event -> showPassword(signUpPasswordField, signUpPasswordTextVisible, openEyeImage1, closeEyeImage1));
+        closeEyeImage1.setOnMouseClicked(event -> hidePassword(signUpPasswordField, signUpPasswordTextVisible, openEyeImage1, closeEyeImage1));
+        openEyeImage2.setOnMouseClicked(event -> showPassword(signUpConfirmPasswordField, signUpConfirmPasswordTextVisible, openEyeImage2, closeEyeImage2));
+        closeEyeImage2.setOnMouseClicked(event -> hidePassword(signUpConfirmPasswordField, signUpConfirmPasswordTextVisible, openEyeImage2, closeEyeImage2));
+        openEyeImage21.setOnMouseClicked(event -> showPassword(confirmNewPasswordField, confirmNewPasswordFieldVisible, openEyeImage21, closeEyeImage21));
+        closeEyeImage21.setOnMouseClicked(event -> hidePassword(confirmNewPasswordField, confirmNewPasswordFieldVisible, openEyeImage21, closeEyeImage21));
+        openEyeImage11.setOnMouseClicked(event -> showPassword(newPasswordField, newPasswordFieldVisible, openEyeImage11, closeEyeImage11));
+        closeEyeImage11.setOnMouseClicked(event -> hidePassword(newPasswordField, newPasswordFieldVisible, openEyeImage11, closeEyeImage11));
+    }
 }
-
-
