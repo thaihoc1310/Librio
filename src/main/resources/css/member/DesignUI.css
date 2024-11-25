@@ -60,8 +60,13 @@
 .whitePane2 {
     -fx-background-radius: 10px;
     -fx-background-color: #ffffff;
-
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 40, 0.3, 0, 0);
+}
+
+.whitePane3 {
+    -fx-background-radius: 8px;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 0);
 }
 
 
@@ -98,7 +103,7 @@
     }
     .Pane-avatar {
         -fx-background-color: #ffffff; /* Màu nền */
-         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 20, 0.3, 0, 0);
+         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 0);
           -fx-background-radius: 6px;
     }
     .button-ctrl {
@@ -164,7 +169,7 @@
    -fx-font-weight: 700;
    -fx-background-radius: 4px;
    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
-                                                }
+  }
         .image-avatar: hover {
          -fx-cursor: hand;
         }
@@ -178,7 +183,8 @@
         .tab {
             -fx-background-color: #e0e0e0;
            -fx-background-radius: 10px 10px 10px 10px;
-             -fx-padding: 5px 10px;
+             -fx-padding: 5px 12px;
+             -fx-background-insets: 0 5px 0 0;
              -fx-focus-color: transparent;
               -fx-faint-focus-color: transparent;
         }
@@ -207,7 +213,10 @@
 
 
         .tab-header-background {
-            -fx-background-color: #f2f4f7;
+            -fx-background-color: #ffffff;
+        }
+        .tab-pane .tab-header-area {
+        -fx-padding: 0 0 0 12px;
         }
 
 
@@ -241,3 +250,12 @@
          -fx-cursor: hand;
  }
 
+.book-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+}
+
+.book-pane:hover {
+    -fx-background-color: #f2f2f2;
+
+}

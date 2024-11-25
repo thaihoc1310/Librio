@@ -530,6 +530,9 @@
                                              </content>
                                           </Tab>
                                        </tabs>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
                                     </TabPane>
                                  </children>
                                         </AnchorPane>

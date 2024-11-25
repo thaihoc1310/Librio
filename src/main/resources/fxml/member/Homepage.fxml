@@ -15,6 +15,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/Homepage.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.HomePageController">
    <children>
@@ -22,65 +23,6 @@
          <content>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <AnchorPane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="370.0" styleClass="Pane-avatar" stylesheets="@../../css/member/DesignUI.css" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
-                     <children>
-                        <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="128.0" prefWidth="342.0" styleClass="Pane-avatar">
-                           <children>
-                              <ImageView fx:id="avatarUser" fitHeight="46.0" fitWidth="46.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
-                                 </image>
-                              </ImageView>
-                              <Label fx:id="userNameUser" layoutX="78.0" layoutY="14.0" prefHeight="38.0" prefWidth="217.0" text="User">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </Label>
-                              <Line endX="174.79998779296875" endY="-7.62939453125E-6" layoutX="147.0" layoutY="65.0" startX="-128.40000915527344" strokeWidth="0.25" />
-                              <Button graphicTextGap="5.0" layoutX="18.0" layoutY="79.0" mnemonicParsing="false" onAction="#openEditProfileScene" prefHeight="38.0" prefWidth="305.0" styleClass="button-settings" text="Edit profile">
-                                 <graphic>
-                                    <ImageView fitHeight="19.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../icons/MemberIcon/Registration.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                        </AnchorPane>
-                        <VBox layoutX="6.0" layoutY="158.0" prefHeight="171.0" prefWidth="355.0" spacing="5.0">
-                           <children>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" onAction="#openBorrowed" prefHeight="46.0" prefWidth="355.0" styleClass="button-ctrl" text="Borrowed books">
-                                 <graphic>
-                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../icons/MemberIcon/borrow_book.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="376.0" styleClass="button-ctrl" text="Borrowing Dashboard">
-                                 <graphic>
-                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../icons/MemberIcon/dashboard.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" onAction="#logOut" prefHeight="55.0" prefWidth="355.0" styleClass="button-ctrl" text="Log Out">
-                                 <graphic>
-                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../icons/MemberIcon/logout.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
                   <AnchorPane prefHeight="2027.0" prefWidth="1385.0" styleClass="white-pane">
                      <children>
                         <AnchorPane prefHeight="140.0" prefWidth="1400.0" style="-fx-background-color: #F1DEBC;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-11.0" AnchorPane.topAnchor="0.0">
@@ -177,7 +119,7 @@
                                  </children>
                               </HBox>
                               <Circle fx:id="moreIcon" fill="#1f93ff" layoutX="1356.0" layoutY="52.0" onMouseClicked="#handleAvatarClick" radius="9.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="43.0" />
-                              <Label fx:id="userNameUser2" alignment="CENTER_RIGHT" layoutX="1121.0" layoutY="30.0" prefHeight="22.0" prefWidth="206.0" text="Đinh Viết Huy" textFill="#481f10" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="30.0">
+                              <Label fx:id="userNameUser2" alignment="CENTER_RIGHT" layoutX="1121.0" layoutY="31.2" prefHeight="22.0" prefWidth="130.0" text="Đinh Viết Huy" textFill="#481f10" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="31.0">
                                  <font>
                                     <Font name="Segoe UI Bold" size="16.0" />
                                  </font>
@@ -550,6 +492,84 @@
                      </children>
                   </AnchorPane>
                   <Pane fx:id="backPane" onMouseClicked="#cancelMenuButton" prefHeight="741.0" prefWidth="1390.0" visible="false" />
+                  <AnchorPane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="370.0" styleClass="Pane-avatar" stylesheets="@../../css/member/DesignUI.css" visible="false" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
+                     <children>
+                        <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="128.0" prefWidth="342.0" styleClass="Pane-avatar">
+                           <children>
+                              <ImageView fx:id="avatarUser" fitHeight="46.0" fitWidth="46.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="userNameUser" layoutX="78.0" layoutY="14.0" prefHeight="38.0" prefWidth="217.0" text="User">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Line endX="174.79998779296875" endY="-7.62939453125E-6" layoutX="147.0" layoutY="65.0" startX="-128.40000915527344" strokeWidth="0.25" />
+                              <Button graphicTextGap="5.0" layoutX="18.0" layoutY="79.0" mnemonicParsing="false" onAction="#openEditProfileScene" prefHeight="38.0" prefWidth="305.0" styleClass="button-settings" text="Edit profile">
+                                 <graphic>
+                                    <ImageView fitHeight="19.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/Registration.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <VBox layoutX="6.0" layoutY="158.0" prefHeight="171.0" prefWidth="355.0" spacing="5.0">
+                           <children>
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" onAction="#openBorrowed" prefHeight="46.0" prefWidth="355.0" styleClass="button-ctrl" text="Borrowed books">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/borrow_book.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="376.0" styleClass="button-ctrl" text="Borrowing Dashboard">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/dashboard.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" onAction="#logOut" prefHeight="55.0" prefWidth="355.0" styleClass="button-ctrl" text="Log Out">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/logout.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+                  <fx:include fx:id="notificationPane" source="Notification.fxml" AnchorPane.rightAnchor="100.00000000000011" AnchorPane.topAnchor="70.0" />
+                  <Button layoutX="1118.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleOpenNotification" prefHeight="43.0" prefWidth="43.0" styleClass="circular-button">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/MemberIcon/Notification.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <AnchorPane fx:id="numberPane" layoutX="1145.0" layoutY="15.0" prefHeight="20.0" prefWidth="20.0" styleClass="bag-Pane" visible="false">
+                     <children>
+                        <Text fx:id="numberText" fill="WHITE" layoutX="6.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.69765625">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </content>
