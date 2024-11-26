@@ -122,8 +122,7 @@ public class HomePageController implements Initializable {
     private HBox trendingNowContainer;
     @FXML
     private Label userNameUser;
-    @FXML
-    private Label userNameUser2;
+
     @FXML
     private AnchorPane menuPane;
     @FXML
@@ -262,11 +261,11 @@ public class HomePageController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "img.png");
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, clickAvatar, 23);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
-        userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
+
     }
 
     private void scrollMainBanner(int direction) {
@@ -370,10 +369,10 @@ public class HomePageController implements Initializable {
             @Override
             protected void succeeded() {
                 List<Book> books = getValue();
-                Platform.runLater(() -> {
-                    container.getChildren().clear();
-                    displayBooks(books, container);
-                });
+               if(books!=null) {
+                   container.getChildren().clear();
+                   displayBooks(books, container);
+               }
             }
 
             @Override
@@ -447,17 +446,41 @@ public class HomePageController implements Initializable {
 
     private void displayBooks(List<Book> books, HBox container) {
         container.getChildren().clear();
-        for (Book book : books) {
-            AnchorPane bookPane = new AnchorPane();
-            bookPane.setPrefSize(183, 325);
+        Task<List<AnchorPane>> loadBooksTask = new Task<>() {
+            @Override
+            protected List<AnchorPane> call() {
+                List<AnchorPane> panes = new ArrayList<>();
+                for (Book book : books) {
+                    panes.add(createBookPane(book));
+                }
+                return panes;
+            }
+            @Override
+            protected void succeeded() {
+                container.getChildren().clear();
+                List<AnchorPane> panes = getValue();
+                container.getChildren().addAll(panes);
+            }
+            @Override
+            protected void failed() {
+                getException().printStackTrace();
+            }
+        };
+        executor.submit(loadBooksTask);
 
-            AnchorPane bookImagePane = new AnchorPane();
-            bookImagePane.setPrefSize(183, 226);
-            bookImagePane.setLayoutX(0);
+    }
 
-            AnchorPane infoPane = new AnchorPane();
-            infoPane.setPrefSize(183, 99);
-            infoPane.setLayoutY(226);
+    private AnchorPane createBookPane(Book book) {
+        AnchorPane bookPane = new AnchorPane();
+        bookPane.setPrefSize(183, 325);
+
+        AnchorPane bookImagePane = new AnchorPane();
+        bookImagePane.setPrefSize(183, 226);
+        bookImagePane.setLayoutX(0);
+
+        AnchorPane infoPane = new AnchorPane();
+        infoPane.setPrefSize(183, 99);
+        infoPane.setLayoutY(226);
 
             ImageView bookImage = new ImageView();
             bookImage.setFitHeight(226);
@@ -471,87 +494,81 @@ public class HomePageController implements Initializable {
             String path = booksDir + book.getImagePath();
             bookImage.setImage(loadImage(path, booksDir + "defaultBook.jpg"));
 
-            Label titleLabel = new Label(book.getTitle());
-            titleLabel.setLayoutX(11);
-            titleLabel.setLayoutY(8);
-            titleLabel.setPrefWidth(160);
-            titleLabel.getStyleClass().add("title-label");
+        Label titleLabel = new Label(book.getTitle());
+        titleLabel.setLayoutX(11);
+        titleLabel.setLayoutY(8);
+        titleLabel.setPrefWidth(160);
+        titleLabel.getStyleClass().add("title-label");
 
-            Label authorLabel = new Label(book.getAuthor());
-            authorLabel.setLayoutX(11);
-            authorLabel.setLayoutY(55);
-            authorLabel.setPrefWidth(160);
-            authorLabel.getStyleClass().add("author-label");
+        Label authorLabel = new Label(book.getAuthor());
+        authorLabel.setLayoutX(11);
+        authorLabel.setLayoutY(55);
+        authorLabel.setPrefWidth(160);
+        authorLabel.getStyleClass().add("author-label");
 
-            AnchorPane buttonPane = new AnchorPane();
-            buttonPane.setStyle("-fx-background-color: #FFF;");
-            buttonPane.setPrefSize(162, 45);
-            buttonPane.setLayoutY(225);
-            buttonPane.setLayoutX(11);
-
-            Button quickBorrowButton = new Button();
-            quickBorrowButton.getStyleClass().add("quick-borrow-button");
-            quickBorrowButton.setLayoutX(6);
-            quickBorrowButton.setLayoutY(5);
-
-            setConfirmButton(quickBorrowButton, book);
-            buttonPane.getChildren().add(quickBorrowButton);
-
-            bookImagePane.getChildren().addAll(bookImage, buttonPane);
-            bookImagePane.setOnMouseEntered(e -> {
-                TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
-                slideUp.setFromY(0);
-                slideUp.setToY(-38);
-                slideUp.play();
-            });
-
-            bookImagePane.setOnMouseExited(e -> {
-                TranslateTransition slideDown = new TranslateTransition(Duration.millis(250), buttonPane);
-                slideDown.setFromY(-38);
-                slideDown.setToY(0);
-                slideDown.play();
-            });
-
-            bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
-
-            Task<HBox> ratingTask = new Task<>() {
-                @Override
-                protected HBox call() {
-                    return getStarBox(book);
-                }
-
-                @Override
-                protected void succeeded() {
-                    HBox starBox = getValue();
-                    starBox.setLayoutX(42);
-                    starBox.setLayoutY(80);
-                    infoPane.getChildren().add(starBox);
-                }
-
-                @Override
-                protected void failed() {
-                    Platform.runLater(() -> {
-                    });
-                }
-            };
-            executor.execute(ratingTask);
+        AnchorPane buttonPane = new AnchorPane();
+        buttonPane.setStyle("-fx-background-color: #FFF;");
+        buttonPane.setPrefSize(162, 45);
+        buttonPane.setLayoutY(225);
+        buttonPane.setLayoutX(11);
 
 
-            infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
-            infoPane.getChildren().addAll(titleLabel, authorLabel);
-            bookPane.getChildren().addAll(bookImagePane, infoPane);
+        Button quickBorrowButton = new Button();
+        quickBorrowButton.getStyleClass().add("quick-borrow-button");
+        quickBorrowButton.setLayoutX(6);
+        quickBorrowButton.setLayoutY(5);
+        setConfirmButton(quickBorrowButton, book);
+        buttonPane.getChildren().add(quickBorrowButton);
 
-            bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
+        bookImagePane.getChildren().addAll(bookImage, buttonPane);
+        bookImagePane.setOnMouseEntered(e -> {
+            TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
+            slideUp.setFromY(0);
+            slideUp.setToY(-38);
+            slideUp.play();
+        });
 
-            boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
-            if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
-                quickBorrowButton.setOnAction(e -> {
-                    openBorrowConfirmationPane(book, quickBorrowButton);
+        bookImagePane.setOnMouseExited(e -> {
+            TranslateTransition slideDown = new TranslateTransition(Duration.millis(250), buttonPane);
+            slideDown.setFromY(-38);
+            slideDown.setToY(0);
+            slideDown.play();
+        });
+
+        bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
+        infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
+        infoPane.getChildren().addAll(titleLabel, authorLabel);
+        bookPane.getChildren().addAll(bookImagePane, infoPane);
+
+        bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
+
+        boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
+        if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
+            quickBorrowButton.setOnAction(e -> openBorrowConfirmationPane(book, quickBorrowButton));
+        }
+
+        Task<HBox> ratingTask = new Task<>() {
+            @Override
+            protected HBox call() {
+                return getStarBox(book);
+            }
+
+            @Override
+            protected void succeeded() {
+                HBox starBox = getValue();
+                starBox.setLayoutX(42);
+                starBox.setLayoutY(80);
+                infoPane.getChildren().add(starBox);
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> {
                 });
             }
-            container.getChildren().add(bookPane);
-        }
-        container.setSpacing(10);
+        };
+        executor.execute(ratingTask);
+        return bookPane;
     }
 
     private void scrollBooks(int direction, int currentIndex, ScrollPane scrollPane, Consumer<Integer> updateIndex) {
@@ -662,6 +679,7 @@ public class HomePageController implements Initializable {
             notificationPane.setVisible(false);
             isNotificationPane = false;
         }
+
         backPane.setVisible(false);
     }
 
@@ -723,6 +741,9 @@ public class HomePageController implements Initializable {
 
             stage.showAndWait();
             updateAllContainers(book);
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -791,6 +812,7 @@ public class HomePageController implements Initializable {
                 fullStar.setClip(clip);
                 starPane.getChildren().add(fullStar);
             }
+
             starBox.getChildren().add(starPane);
         }
 

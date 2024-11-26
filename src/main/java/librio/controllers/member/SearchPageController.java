@@ -102,8 +102,6 @@ public class SearchPageController implements Initializable {
     @FXML
     private Label userNameUser;
     @FXML
-    private Label userNameUser2;
-    @FXML
     private ImageView searchButton;
     @FXML
     private TextField searchTextField;
@@ -217,7 +215,6 @@ public class SearchPageController implements Initializable {
      */
     private void loadBooksAsync(int pageIndex) {
         loadingIndicator.setVisible(true);
-
         flowPane.getChildren().clear();
         Task<List<Book>> loadTask = new Task<>() {
             @Override
@@ -228,6 +225,7 @@ public class SearchPageController implements Initializable {
             @Override
             protected void succeeded() {
                 List<Book> fetchedBooks = getValue();
+
                 if (fetchedBooks != null) {
                     displayBooks(fetchedBooks);
                 }
@@ -259,12 +257,11 @@ public class SearchPageController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
+        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "img.png");
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, clickAvatar, 23);
 
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
-        userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
@@ -430,36 +427,19 @@ public class SearchPageController implements Initializable {
         int limit = Integer.parseInt(limitBox.getValue());
         return " LIMIT " + limit;
     }
-
+    
     @FXML
     private void returnHomepage() {
-        loadingIndicator.setVisible(true);
-        Task<Parent> loadHomePageTask = new Task<>() {
-            @Override
-            protected Parent call() throws Exception {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
-                return loader.load();
-            }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
 
-            @Override
-            protected void succeeded() {
-                Parent homepageRoot = getValue();
-                Platform.runLater(() -> {
-                    Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-                    Scene currentScene = currentStage.getScene();
-                    currentScene.setRoot(homepageRoot);
-                    loadingIndicator.setVisible(false);
-                });
-            }
-
-            @Override
-            protected void failed() {
-                Platform.runLater(() -> loadingIndicator.setVisible(false));
-                getException().printStackTrace();
-            }
-        };
-
-        executor.submit(loadHomePageTask);
+        }
     }
 
 
