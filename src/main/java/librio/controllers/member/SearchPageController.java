@@ -201,14 +201,14 @@ public class SearchPageController implements Initializable {
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
         loadingIndicator.setVisible(false);
-        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newCachedThreadPool();
         setupAnimatedPane(ratePane, 255);
         setupAnimatedPane(categoryPane, 454);
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         limitBox.getItems().addAll("100", "50", "20", "10");
         limitBox.getSelectionModel().select(2);
-        sortBox.getItems().addAll("Top rated", "Most borrowed", "Newest");
+        sortBox.getItems().addAll("Top rated", "Most borrowed", "Newest to Oldest", "Oldest to Newest", "Title A-Z");
         sortBox.getSelectionModel().selectFirst();
         pagination.setPageFactory(this::createPage);
         setupComboBoxListeners();
@@ -274,9 +274,10 @@ public class SearchPageController implements Initializable {
      * @param keyword the keyword to search for
      * @param filter  the filter criteria to apply
      */
-    public void setSearchParameters(String keyword, String filter, String additionalCondition) {
+    public void setSearchParameters(String keyword, String filter, String additionalCondition, String sortCondition) {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
+        sortBox.getSelectionModel().select(sortCondition);
         this.additionalCondition = additionalCondition;
         if (additionalCondition != null && additionalCondition.contains("COUNT(*)")) {
             this.sortBox.getSelectionModel().select(1);
@@ -409,13 +410,9 @@ public class SearchPageController implements Initializable {
             conditions.add("(average_of_rating IS NULL OR average_of_rating = 0)");
         }
 
-        if (!conditions.isEmpty()) {
-            queryBuilder.append("WHERE ").append(String.join(" AND ", conditions));
-            if (additionalCondition != null) {
-                queryBuilder.append(" AND ").append(additionalCondition);
-            }
-        } else if (additionalCondition != null) {
-            queryBuilder.append("WHERE ").append(additionalCondition);
+        queryBuilder.append("WHERE ").append(String.join(" AND ", conditions));
+        if (additionalCondition != null) {
+            queryBuilder.append(" AND ").append(additionalCondition);
         }
 
         queryBuilder.append(orderByClause).append(" ");
@@ -447,7 +444,9 @@ public class SearchPageController implements Initializable {
         return switch (sortBy) {
             case "Top rated" -> " ORDER BY average_of_rating DESC";
             case "Most borrowed" -> " GROUP BY books.id ORDER BY COUNT(br.id) DESC";
-            case "Newest" -> " ORDER BY year_published DESC";
+            case "Newest to Oldest" -> " ORDER BY year_published DESC";
+            case "Oldest to Newest" -> " ORDER BY year_published";
+            case "Title A-Z" -> " ORDER BY title";
             default -> "";
         };
     }
@@ -460,16 +459,31 @@ public class SearchPageController implements Initializable {
 
     @FXML
     private void returnHomepage() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml"));
-        try {
-            Parent searchPageRoot = loader.load();
-            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(searchPageRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
+        loadingIndicator.setVisible(true);
 
-        }
+        Task<Parent> loadHomePageTask = new Task<>() {
+            @Override
+            protected Parent call() throws Exception {
+                return new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml")).load();
+            }
+
+            @Override
+            protected void succeeded() {
+                Parent homepageRoot = getValue();Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+                Scene currentScene = currentStage.getScene();
+                currentScene.setRoot(homepageRoot);
+                loadingIndicator.setVisible(false);
+                flowPane.getChildren().clear();
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> loadingIndicator.setVisible(false));
+                getException().printStackTrace();
+            }
+        };
+
+        executor.submit(loadHomePageTask);
     }
 
 
@@ -479,6 +493,11 @@ public class SearchPageController implements Initializable {
     }
 
     @FXML
+    private void handleSearchClick() {
+        additionalCondition = null;
+        handleSearch();
+    }
+
     private void handleSearch() {
         bookList.clear();
         keyword = searchTextField.getText().trim();
@@ -548,6 +567,7 @@ public class SearchPageController implements Initializable {
                 applySelectedStyle(label);
                 currentLanguageFilter = language;
             }
+            additionalCondition = null;
             reloadData();
         });
     }
@@ -573,6 +593,7 @@ public class SearchPageController implements Initializable {
                     currentRatingFilter = rating;
                 }
             }
+            additionalCondition = null;
             reloadData();
         });
     }
@@ -591,6 +612,7 @@ public class SearchPageController implements Initializable {
                 applySelectedStyle(label);
                 currentCategoryFilter = category;
             }
+            additionalCondition = null;
             reloadData();
         });
     }
