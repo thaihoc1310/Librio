@@ -29,7 +29,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
-import librio.enums.Role;
 import librio.models.Book;
 import librio.session.Session;
 
@@ -202,7 +201,7 @@ public class SearchPageController implements Initializable {
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
         loadingIndicator.setVisible(false);
-        executor = Executors.newCachedThreadPool();
+        executor = Executors.newFixedThreadPool(3);
         setupAnimatedPane(ratePane, 255);
         setupAnimatedPane(categoryPane, 454);
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
@@ -279,7 +278,7 @@ public class SearchPageController implements Initializable {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
         this.customQuery = customQuery;
-        if(customQuery != null && customQuery.contains("COUNT(*)")){
+        if (customQuery != null && customQuery.contains("COUNT(*)")) {
             this.sortBox.getSelectionModel().select(1);
         }
         handleSearch();
@@ -326,32 +325,29 @@ public class SearchPageController implements Initializable {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query;
 
-            if (customQuery != null) {
-                query = customQuery + " " + limitClause + " OFFSET ?";
-            } else {
-                String selectedFilter = filterBox.getValue();
-                String orderByClause = getOrderByClause(sortBox.getValue());
-                query = buildQuery(selectedFilter, orderByClause, limitClause);
-            }
 
+            String selectedFilter = filterBox.getValue();
+            String orderByClause = getOrderByClause(sortBox.getValue());
+            query = buildQuery(selectedFilter, orderByClause, limitClause);
+            System.out.println(query);
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             int paramIndex = 1;
 
-            if (customQuery == null) {
-                if (currentLanguageFilter != null) {
-                    preparedStatement.setString(paramIndex++, currentLanguageFilter);
-                }
-                if (currentCategoryFilter != null) {
-                    preparedStatement.setString(paramIndex++, currentCategoryFilter);
-                }
-                if (keyword != null && !keyword.isEmpty()) {
-                    preparedStatement.setString(paramIndex++, "%" + keyword + "%");
-                }
-                if (!isNoRatingFilter) {
-                    preparedStatement.setDouble(paramIndex++, currentRatingFilter);
-                }
+
+            if (currentLanguageFilter != null) {
+                preparedStatement.setString(paramIndex++, currentLanguageFilter);
             }
+            if (currentCategoryFilter != null) {
+                preparedStatement.setString(paramIndex++, currentCategoryFilter);
+            }
+            if (keyword != null && !keyword.isEmpty()) {
+                preparedStatement.setString(paramIndex++, "%" + keyword + "%");
+            }
+            if (!isNoRatingFilter) {
+                preparedStatement.setDouble(paramIndex++, currentRatingFilter);
+            }
+
 
             preparedStatement.setInt(paramIndex, offsetIndex);
 
@@ -418,7 +414,12 @@ public class SearchPageController implements Initializable {
 
         if (!conditions.isEmpty()) {
             queryBuilder.append("WHERE ").append(String.join(" AND ", conditions)).append(" ");
+            if (customQuery != null) {
+                queryBuilder.append(" AND").append(customQuery);
+            }
         }
+
+
 
         queryBuilder.append(orderByClause).append(" ");
         queryBuilder.append(limitClause).append(" OFFSET ?");
@@ -448,8 +449,7 @@ public class SearchPageController implements Initializable {
     private String getOrderByClause(String sortBy) {
         return switch (sortBy) {
             case "Top rated" -> "ORDER BY average_of_rating DESC";
-            case "Most borrowed" ->
-                    "GROUP BY books.id ORDER BY COUNT(br.id) DESC";
+            case "Most borrowed" -> "GROUP BY books.id ORDER BY COUNT(br.id) DESC";
             case "Newest" -> "ORDER BY year_published DESC";
             default -> "";
         };
@@ -460,36 +460,20 @@ public class SearchPageController implements Initializable {
         int limit = Integer.parseInt(limitBox.getValue());
         return " LIMIT " + limit;
     }
-    
+
     @FXML
     private void returnHomepage() {
-        loadingIndicator.setVisible(true);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
 
-        Task<Parent> loadHomePageTask = new Task<>() {
-            @Override
-            protected Parent call() throws Exception {
-                return new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml")).load();
-            }
-
-            @Override
-            protected void succeeded() {
-                Parent homepageRoot = getValue();Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-                Scene currentScene = currentStage.getScene();
-                currentScene.setRoot(homepageRoot);
-                loadingIndicator.setVisible(false);
-                flowPane.getChildren().clear();
-            }
-
-            @Override
-            protected void failed() {
-                Platform.runLater(() -> loadingIndicator.setVisible(false));
-                getException().printStackTrace();
-            }
-        };
-
-        executor.submit(loadHomePageTask);
+        }
     }
-
 
 
     private void reloadData() {
@@ -975,7 +959,7 @@ public class SearchPageController implements Initializable {
         }
     }
 
-    private void setKeywordAndCategory(String category){
+    private void setKeywordAndCategory(String category) {
         this.searchTextField.setText(category);
         filterBox.getSelectionModel().select(2);
         handleSearch();

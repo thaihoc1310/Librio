@@ -215,47 +215,39 @@ public class DatabaseUtil {
         Connection connection = null;
         try {
             connection = DatabaseConnection.getConnection();
-            connection.setAutoCommit(false); // Start a transaction
+            connection.setAutoCommit(false);
 
+            String deleteFeedbackQuery = "DELETE FROM Feedbacks WHERE borrow_id IN (SELECT id FROM Borrows WHERE book_isbn = ?)";
+            try (PreparedStatement deleteFeedbackStmt = connection.prepareStatement(deleteFeedbackQuery)) {
+                deleteFeedbackStmt.setString(1, book.getIsbn());
+                deleteFeedbackStmt.executeUpdate();
+            }
 
-            // Delete borrows associated with the book
             String deleteBorrowQuery = "DELETE FROM Borrows WHERE book_isbn = ?";
             try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
                 deleteBorrowStmt.setString(1, book.getIsbn());
                 deleteBorrowStmt.executeUpdate();
             }
 
-            // Delete feedbacks associated with the book
-            String deleteFeedBackQuery = "DELETE FROM Feedbacks WHERE book_id = ?";
-            try (PreparedStatement deleteFeedBackStmt = connection.prepareStatement(deleteFeedBackQuery)) {
-                deleteFeedBackStmt.setInt(1, book.getId());
-                deleteFeedBackStmt.executeUpdate();
-            }
-
-            // Finally, delete the book from the Books table
             String deleteBookQuery = "DELETE FROM Books WHERE id = ?";
             try (PreparedStatement deleteBookStmt = connection.prepareStatement(deleteBookQuery)) {
                 deleteBookStmt.setInt(1, book.getId());
-                int rowsAffected = deleteBookStmt.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("Deleted Book with ID: " + book.getId());
-                } else {
-                    System.out.println("Failed to delete Book with ID: " + book.getId());
-                }
+                deleteBookStmt.executeUpdate();
             }
 
-            connection.commit(); // Commit the transaction
+
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             try {
-                connection.rollback(); // Rollback in case of error
+                connection.rollback();
             } catch (SQLException rollbackEx) {
                 rollbackEx.printStackTrace();
             }
         } finally {
             if (connection != null) {
                 try {
-                    connection.close(); // Close the connection in the final block
+                    connection.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();
                 }
