@@ -29,7 +29,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
-import librio.enums.Role;
 import librio.models.Book;
 import librio.session.Session;
 
@@ -194,7 +193,7 @@ public class SearchPageController implements Initializable {
     private boolean isAnchorPaneVisible = false;
     private boolean isNotificationPane = false;
 
-    private String customQuery = null;
+    private String additionalCondition = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -202,7 +201,7 @@ public class SearchPageController implements Initializable {
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
         loadingIndicator.setVisible(false);
-        executor = Executors.newCachedThreadPool();
+        executor = Executors.newFixedThreadPool(3);
         setupAnimatedPane(ratePane, 255);
         setupAnimatedPane(categoryPane, 454);
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
@@ -275,11 +274,11 @@ public class SearchPageController implements Initializable {
      * @param keyword the keyword to search for
      * @param filter  the filter criteria to apply
      */
-    public void setSearchParameters(String keyword, String filter, String customQuery) {
+    public void setSearchParameters(String keyword, String filter, String additionalCondition) {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
-        this.customQuery = customQuery;
-        if(customQuery != null && customQuery.contains("COUNT(*)")){
+        this.additionalCondition = additionalCondition;
+        if (additionalCondition != null && additionalCondition.contains("COUNT(*)")) {
             this.sortBox.getSelectionModel().select(1);
         }
         handleSearch();
@@ -325,33 +324,29 @@ public class SearchPageController implements Initializable {
 
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query;
+            String selectedFilter = filterBox.getValue();
+            String orderByClause = getOrderByClause(sortBox.getValue());
+            query = buildQuery(selectedFilter, orderByClause, limitClause);
 
-            if (customQuery != null) {
-                query = customQuery + " " + limitClause + " OFFSET ?";
-            } else {
-                String selectedFilter = filterBox.getValue();
-                String orderByClause = getOrderByClause(sortBox.getValue());
-                query = buildQuery(selectedFilter, orderByClause, limitClause);
-            }
-
+            System.out.println(query);
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             int paramIndex = 1;
 
-            if (customQuery == null) {
-                if (currentLanguageFilter != null) {
-                    preparedStatement.setString(paramIndex++, currentLanguageFilter);
-                }
-                if (currentCategoryFilter != null) {
-                    preparedStatement.setString(paramIndex++, currentCategoryFilter);
-                }
-                if (keyword != null && !keyword.isEmpty()) {
-                    preparedStatement.setString(paramIndex++, "%" + keyword + "%");
-                }
-                if (!isNoRatingFilter) {
-                    preparedStatement.setDouble(paramIndex++, currentRatingFilter);
-                }
+
+            if (currentLanguageFilter != null) {
+                preparedStatement.setString(paramIndex++, currentLanguageFilter);
             }
+            if (currentCategoryFilter != null) {
+                preparedStatement.setString(paramIndex++, currentCategoryFilter);
+            }
+            if (keyword != null && !keyword.isEmpty()) {
+                preparedStatement.setString(paramIndex++, "%" + keyword + "%");
+            }
+            if (!isNoRatingFilter) {
+                preparedStatement.setDouble(paramIndex++, currentRatingFilter);
+            }
+
 
             preparedStatement.setInt(paramIndex, offsetIndex);
 
@@ -380,12 +375,10 @@ public class SearchPageController implements Initializable {
                 Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, availableCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
                 fetchedBooks.add(book);
             }
-            customQuery = null;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return fetchedBooks;
     }
 
@@ -417,7 +410,12 @@ public class SearchPageController implements Initializable {
         }
 
         if (!conditions.isEmpty()) {
-            queryBuilder.append("WHERE ").append(String.join(" AND ", conditions)).append(" ");
+            queryBuilder.append("WHERE ").append(String.join(" AND ", conditions));
+            if (additionalCondition != null) {
+                queryBuilder.append(" AND ").append(additionalCondition);
+            }
+        } else if (additionalCondition != null) {
+            queryBuilder.append("WHERE ").append(additionalCondition);
         }
 
         queryBuilder.append(orderByClause).append(" ");
@@ -448,8 +446,7 @@ public class SearchPageController implements Initializable {
     private String getOrderByClause(String sortBy) {
         return switch (sortBy) {
             case "Top rated" -> "ORDER BY average_of_rating DESC";
-            case "Most borrowed" ->
-                    "GROUP BY books.id ORDER BY COUNT(br.id) DESC";
+            case "Most borrowed" -> "GROUP BY books.id ORDER BY COUNT(br.id) DESC";
             case "Newest" -> "ORDER BY year_published DESC";
             default -> "";
         };
@@ -460,36 +457,20 @@ public class SearchPageController implements Initializable {
         int limit = Integer.parseInt(limitBox.getValue());
         return " LIMIT " + limit;
     }
-    
+
     @FXML
     private void returnHomepage() {
-        loadingIndicator.setVisible(true);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
 
-        Task<Parent> loadHomePageTask = new Task<>() {
-            @Override
-            protected Parent call() throws Exception {
-                return new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml")).load();
-            }
-
-            @Override
-            protected void succeeded() {
-                Parent homepageRoot = getValue();Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-                Scene currentScene = currentStage.getScene();
-                currentScene.setRoot(homepageRoot);
-                loadingIndicator.setVisible(false);
-                flowPane.getChildren().clear();
-            }
-
-            @Override
-            protected void failed() {
-                Platform.runLater(() -> loadingIndicator.setVisible(false));
-                getException().printStackTrace();
-            }
-        };
-
-        executor.submit(loadHomePageTask);
+        }
     }
-
 
 
     private void reloadData() {
@@ -975,7 +956,7 @@ public class SearchPageController implements Initializable {
         }
     }
 
-    private void setKeywordAndCategory(String category){
+    private void setKeywordAndCategory(String category) {
         this.searchTextField.setText(category);
         filterBox.getSelectionModel().select(2);
         handleSearch();

@@ -148,6 +148,8 @@ public class HomePageController implements Initializable {
     private Label artLabel;
     @FXML
     private ImageView mainBanner0;
+    @FXML
+    private ImageView mainBanner1;
 
     @FXML
     private AnchorPane notificationPane;
@@ -251,6 +253,8 @@ public class HomePageController implements Initializable {
         }
 
         mainBanner0.setOnMouseClicked(event -> openBooksFromBanner(mainBanner0));
+        mainBanner1.setOnMouseClicked(event -> openBooksFromBanner(mainBanner1));
+//        mainBanner2.setOnMouseClicked(event -> openBooksFromBanner(mainBanner2));
     }
 
     public void setAvatarAndUserName() {
@@ -1016,16 +1020,15 @@ public class HomePageController implements Initializable {
                 break;
         }
 
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT * FROM books\n" +
-                "WHERE isbn IN (");
+        StringBuilder condition = new StringBuilder();
+        condition.append("isbn IN (");
         for(String s : list){
-            query.append(s).append(",");
+            condition.append(s).append(",");
         }
-        query.deleteCharAt(query.length()-1);
-        query.append(")");
+        condition.deleteCharAt(condition.length()-1);
+        condition.append(")");
 
-        loadByQuery(query.toString());
+        loadByQuery(condition.toString());
     }
 }
 

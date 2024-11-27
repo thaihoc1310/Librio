@@ -245,17 +245,17 @@
                            <children>
                               <HBox layoutX="146.0" prefHeight="235.0" prefWidth="200.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="banner3" fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../images/banner/banner4.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="banner4" fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../images/banner/banner5.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="banner5" fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../images/banner/banner6.png" />
                                        </image>
@@ -266,7 +266,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="37.0" layoutY="1663.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="1321.0">
                            <children>
-                              <ImageView fitHeight="233.0" fitWidth="1321.0" layoutX="127.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ImageView fx:id="banner6" fitHeight="233.0" fitWidth="1321.0" layoutX="127.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
                                     <Image url="@../../images/banner/banner3.png" />
                                  </image>
@@ -351,17 +351,17 @@
                            <children>
                               <HBox layoutX="146.0" prefHeight="235.0" prefWidth="200.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="banner7" fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../images/banner/banner7.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="banner8" fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../images/banner/banner8.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="banner9" fitHeight="370.0" fitWidth="426.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../images/banner/banner9.png" />
                                        </image>
