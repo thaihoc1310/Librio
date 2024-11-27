@@ -262,6 +262,8 @@ public class HomePageController implements Initializable {
         }
 
         mainBanner0.setOnMouseClicked(event -> openBooksFromBanner(mainBanner0));
+//        mainBanner1.setOnMouseClicked(event -> openBooksFromBanner(mainBanner1));
+//        mainBanner2.setOnMouseClicked(event -> openBooksFromBanner(mainBanner2));
     }
 
     public void setAvatarAndUserName() {

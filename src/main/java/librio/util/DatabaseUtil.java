@@ -134,30 +134,28 @@ public class DatabaseUtil {
         Connection connection = null;
         try {
             connection = DatabaseConnection.getConnection();
-            connection.setAutoCommit(false); // Start a transaction
+            connection.setAutoCommit(false);
 
-            // Check if the user is a member
+
             String checkMemberQuery = "SELECT id FROM Members WHERE id = ?";
             try (PreparedStatement checkMemberStmt = connection.prepareStatement(checkMemberQuery)) {
                 checkMemberStmt.setString(1, user.getId());
                 ResultSet memberResult = checkMemberStmt.executeQuery();
 
                 if (memberResult.next()) {
-                    // Delete borrows associated with the member
+                    String deleteFeedbackQuery = "DELETE FROM Feedbacks WHERE borrow_id IN (SELECT id FROM Borrows WHERE member_id = ?)";
+                    try (PreparedStatement deleteFeedbackStmt = connection.prepareStatement(deleteFeedbackQuery)) {
+                        deleteFeedbackStmt.setString(1, user.getId());
+                        deleteFeedbackStmt.executeUpdate();
+                    }
+
                     String deleteBorrowQuery = "DELETE FROM Borrows WHERE member_id = ?";
                     try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
                         deleteBorrowStmt.setString(1, user.getId());
                         deleteBorrowStmt.executeUpdate();
                     }
 
-                    // Delete feedbacks associated with the member
-                    String deleteFeedBackQuery = "DELETE FROM Feedbacks WHERE member_id = ?";
-                    try (PreparedStatement deleteFeedBackStmt = connection.prepareStatement(deleteFeedBackQuery)) {
-                        deleteFeedBackStmt.setString(1, user.getId());
-                        deleteFeedBackStmt.executeUpdate();
-                    }
 
-                    // Delete from Members table
                     String deleteMemberQuery = "DELETE FROM Members WHERE id = ?";
                     try (PreparedStatement deleteMemberStmt = connection.prepareStatement(deleteMemberQuery)) {
                         deleteMemberStmt.setString(1, user.getId());
@@ -166,14 +164,12 @@ public class DatabaseUtil {
                 }
             }
 
-            // Check if the user is a librarian
             String checkLibrarianQuery = "SELECT id FROM Librarians WHERE id = ?";
             try (PreparedStatement checkLibrarianStmt = connection.prepareStatement(checkLibrarianQuery)) {
                 checkLibrarianStmt.setString(1, user.getId());
                 ResultSet librarianResult = checkLibrarianStmt.executeQuery();
 
                 if (librarianResult.next()) {
-                    // Delete from Librarians table
                     String deleteLibrarianQuery = "DELETE FROM Librarians WHERE id = ?";
                     try (PreparedStatement deleteLibrarianStmt = connection.prepareStatement(deleteLibrarianQuery)) {
                         deleteLibrarianStmt.setString(1, user.getId());
@@ -182,36 +178,38 @@ public class DatabaseUtil {
                 }
             }
 
-            // Finally, delete the user from the Users table
             String deleteUserQuery = "DELETE FROM Users WHERE id = ?";
             try (PreparedStatement deleteUserStmt = connection.prepareStatement(deleteUserQuery)) {
                 deleteUserStmt.setString(1, user.getId());
                 int rowsAffected = deleteUserStmt.executeUpdate();
                 if (rowsAffected > 0) {
-                    System.out.println("Deleted User with ID: " + user.getId());
+                    System.out.println("Đã xóa người dùng có ID: " + user.getId());
                 } else {
-                    System.out.println("Failed to delete User with ID: " + user.getId());
+                    System.out.println("Không thể xóa người dùng có ID: " + user.getId());
                 }
             }
 
-            connection.commit(); // Commit the transaction
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             try {
-                connection.rollback(); // Rollback in case of error
+                if (connection != null) {
+                    connection.rollback();
+                }
             } catch (SQLException rollbackEx) {
                 rollbackEx.printStackTrace();
             }
         } finally {
             if (connection != null) {
                 try {
-                    connection.close(); // Close the connection in the final block
+                    connection.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();
                 }
             }
         }
     }
+
 
     public static void deleteBook(Book book) {
         Connection connection = null;
