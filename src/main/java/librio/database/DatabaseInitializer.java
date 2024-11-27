@@ -7,11 +7,10 @@ public class DatabaseInitializer {
         String checkEmptyQuery = "SELECT 1 FROM " + tableName + " LIMIT 1";
         try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(checkEmptyQuery);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            return !resultSet.next();  // Nếu có dòng, resultSet.next() trả về true, nghĩa là bảng không trống
+            return !resultSet.next();
         }
     }
 
-    // Phương thức để tự động tạo bảng nếu chưa tồn tại
     public static void initializeDatabase() {
         try (Connection connection = DatabaseConnection.getConnection(); Statement statement = connection.createStatement()) {
             String createUserTable = "CREATE TABLE IF NOT EXISTS Users (" +

@@ -162,8 +162,6 @@ public class HomePageController implements Initializable {
     private Timeline autoScrollTimeline;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    private static final Map<String, Image> imageCache = new HashMap<>();
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -469,7 +467,7 @@ public class HomePageController implements Initializable {
             String projectDir = System.getProperty("user.dir");
             String booksDir = projectDir + "/src/main/resources/images/book/";
             String path = booksDir + book.getImagePath();
-            bookImage.setImage(loadImage(path, booksDir + "defaultBook.jpg"));
+            bookImage.setImage(ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg"));
 
             Label titleLabel = new Label(book.getTitle());
             titleLabel.setLayoutX(11);
@@ -889,18 +887,6 @@ public class HomePageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private Image loadImage(String imagePath, String defaultPath) {
-        if (imageCache.containsKey(imagePath)) {
-            return imageCache.get(imagePath);
-        }
-
-        File file = new File(imagePath);
-        String pathToLoad = file.exists() ? imagePath : defaultPath;
-        Image image = new Image(new File(pathToLoad).toURI().toString());
-        imageCache.put(imagePath, image);
-        return image;
     }
 
 }
