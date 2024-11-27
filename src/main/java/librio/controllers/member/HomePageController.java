@@ -31,7 +31,6 @@ import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -42,7 +41,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import static javafx.scene.input.KeyCode.R;
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 import static librio.util.DatabaseUtil.getAvailableCopyByIsbn;
 import static librio.util.DesignUtil.*;
@@ -92,7 +90,6 @@ public class HomePageController implements Initializable {
     private Button rightOurEconomicsBooksButton;
     @FXML
     private Button rightTrendingNowButton;
-
     @FXML
     private ImageView searchButton;
     @FXML
@@ -123,7 +120,6 @@ public class HomePageController implements Initializable {
     private HBox trendingNowContainer;
     @FXML
     private Label userNameUser;
-
     @FXML
     private AnchorPane menuPane;
     @FXML
@@ -159,22 +155,18 @@ public class HomePageController implements Initializable {
     private Text numberText;
     @FXML
     private AnchorPane numberPane;
+    @FXML
+    private ProgressIndicator loadingIndicator;
     private boolean isAnchorPaneVisible = false;
     private boolean isNotificationPane = false;
     private Timeline autoScrollTimeline;
-    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-
-    @FXML
-    private ProgressIndicator loadingIndicator;
-
-
+    private ExecutorService executor;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
+        executor = Executors.newCachedThreadPool();
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
-        loadingIndicator.setVisible(false);
         loadAllBooksAsync();
         currentIndexes.put("TopRate", 0);
         currentIndexes.put("MostBorrowed", 0);
@@ -223,8 +215,6 @@ public class HomePageController implements Initializable {
                 scrollBooks(1, currentIndexes.get("TrendingNow"), trendingNowScroll, index -> currentIndexes.put("TrendingNow", index))
         );
 
-
-
         leftOurEconomicsBooksButton.setOnMouseClicked(event ->
                 scrollBooks(-1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
         );
@@ -249,7 +239,6 @@ public class HomePageController implements Initializable {
         socialScienceLabel.setOnMouseClicked(event -> setKeywordAndCategory("SocialScience"));
         educationLabel.setOnMouseClicked(event -> setKeywordAndCategory("Education"));
         artLabel.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
-
         notificationPane.setVisible(false);
         int totalBooks = Session.getInstance().getTotalBooks();
         if (totalBooks != 0) {
@@ -342,7 +331,7 @@ public class HomePageController implements Initializable {
 
 
     private void loadAllBooksAsync() {
-        loadingIndicator.setVisible(true);
+//        loadingIndicator.setVisible(true);
         loadBooksByCategoryAsync("SELECT * FROM books ORDER BY average_of_rating DESC LIMIT 18", topRateContainer);
         loadBooksByCategoryAsync(
                 "SELECT b.* FROM books b JOIN borrows br ON b.isbn = br.book_isbn GROUP BY b.id ORDER BY COUNT(*) DESC LIMIT 18",
@@ -381,7 +370,6 @@ public class HomePageController implements Initializable {
                if(books!=null) {
                    container.getChildren().clear();
                    displayBooks(books, container);
-                   System.out.println(container.toString());
                }
             }
 
@@ -864,7 +852,7 @@ public class HomePageController implements Initializable {
     }
 
     @FXML
-    private void seeAllTredingNowBooks(){
+    private void seeAllTrendingNowBooks(){
         String query = "SELECT b.*, COUNT(br.id) AS borrow_count " +
                 "FROM books b JOIN borrows br ON b.isbn = br.book_isbn " +
                 "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +

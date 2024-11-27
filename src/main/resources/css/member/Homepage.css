@@ -96,6 +96,7 @@
 
 .button.scroll:hover {
     -fx-opacity: 0.6;
+    -fx-cursor: hand;
 }
 
 .quick-borrow-button {
