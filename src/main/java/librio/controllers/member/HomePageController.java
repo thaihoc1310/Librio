@@ -335,7 +335,6 @@ public class HomePageController implements Initializable {
 
 
     private void loadAllBooksAsync() {
-//        loadingIndicator.setVisible(true);
         loadBooksByCategoryAsync("SELECT * FROM books ORDER BY average_of_rating DESC LIMIT 18", topRateContainer);
         loadBooksByCategoryAsync(
                 "SELECT b.* FROM books b JOIN borrows br ON b.isbn = br.book_isbn GROUP BY b.id ORDER BY COUNT(*) DESC LIMIT 18",
@@ -461,9 +460,6 @@ public class HomePageController implements Initializable {
                 container.getChildren().clear();
                 List<AnchorPane> panes = getValue();
                 container.getChildren().addAll(panes);
-                if(container.toString().equals("HBox[id=trendingNowContainer, styleClass=white-pane]")){
-                    loadingIndicator.setVisible(false);
-                }
             }
             @Override
             protected void failed() {
@@ -471,7 +467,6 @@ public class HomePageController implements Initializable {
             }
         };
         executor.submit(loadBooksTask);
-
     }
 
     private AnchorPane createBookPane(Book book) {
@@ -486,18 +481,17 @@ public class HomePageController implements Initializable {
         infoPane.setPrefSize(183, 99);
         infoPane.setLayoutY(226);
 
-            ImageView bookImage = new ImageView();
-            bookImage.setFitHeight(226);
-            bookImage.setFitWidth(160);
-            bookImage.setLayoutX(12);
-            bookImage.setPickOnBounds(true);
-            bookImage.setSmooth(true);
-            bookImage.setPreserveRatio(false);
-            String projectDir = System.getProperty("user.dir");
-            String booksDir = projectDir + "/src/main/resources/images/book/";
-            String path = booksDir + book.getImagePath();
-            bookImage.setImage(ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg"));
-
+        ImageView bookImage = new ImageView();
+        bookImage.setFitHeight(226);
+        bookImage.setFitWidth(160);
+        bookImage.setLayoutX(12);
+        bookImage.setPickOnBounds(true);
+        bookImage.setSmooth(true);
+        bookImage.setPreserveRatio(false);
+        String projectDir = System.getProperty("user.dir");
+        String booksDir = projectDir + "/src/main/resources/images/book/";
+        String path = booksDir + book.getImagePath();
+        bookImage.setImage(ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg"));
 
         Label titleLabel = new Label(book.getTitle());
         titleLabel.setLayoutX(11);
@@ -516,7 +510,6 @@ public class HomePageController implements Initializable {
         buttonPane.setPrefSize(162, 45);
         buttonPane.setLayoutY(225);
         buttonPane.setLayoutX(11);
-
 
         Button quickBorrowButton = new Button();
         quickBorrowButton.getStyleClass().add("quick-borrow-button");
@@ -548,6 +541,7 @@ public class HomePageController implements Initializable {
         bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
 
         boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
+
         if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
             quickBorrowButton.setOnAction(e -> openBorrowConfirmationPane(book, quickBorrowButton));
         }
@@ -775,7 +769,7 @@ public class HomePageController implements Initializable {
     }
 
     private void updateAllContainers(Book book) {
-        List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer);
+        List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer, ourFictionContainer, ourEconomicsBooksContainer, newestBooksContainer, trendingNowContainer);
         for (HBox container : containers) {
             updateButtonInContainer(container, book);
         }

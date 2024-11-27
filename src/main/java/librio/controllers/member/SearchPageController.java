@@ -201,7 +201,7 @@ public class SearchPageController implements Initializable {
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
         loadingIndicator.setVisible(false);
-        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newCachedThreadPool();
         setupAnimatedPane(ratePane, 255);
         setupAnimatedPane(categoryPane, 454);
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
@@ -460,16 +460,31 @@ public class SearchPageController implements Initializable {
 
     @FXML
     private void returnHomepage() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml"));
-        try {
-            Parent searchPageRoot = loader.load();
-            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(searchPageRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
+        loadingIndicator.setVisible(true);
 
-        }
+        Task<Parent> loadHomePageTask = new Task<>() {
+            @Override
+            protected Parent call() throws Exception {
+                return new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml")).load();
+            }
+
+            @Override
+            protected void succeeded() {
+                Parent homepageRoot = getValue();Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+                Scene currentScene = currentStage.getScene();
+                currentScene.setRoot(homepageRoot);
+                loadingIndicator.setVisible(false);
+                flowPane.getChildren().clear();
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> loadingIndicator.setVisible(false));
+                getException().printStackTrace();
+            }
+        };
+
+        executor.submit(loadHomePageTask);
     }
 
 
