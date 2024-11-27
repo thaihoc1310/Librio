@@ -71,7 +71,7 @@ public class HomePageController implements Initializable {
     @FXML
     private Button leftOurEconomicsBooksButton;
     @FXML
-    private Button leftTrendingNowButton;
+    private Button leftEducationButton;
     @FXML
     private ScrollPane mainBannerScroll;
     @FXML
@@ -89,7 +89,7 @@ public class HomePageController implements Initializable {
     @FXML
     private Button rightOurEconomicsBooksButton;
     @FXML
-    private Button rightTrendingNowButton;
+    private Button rightEducationButton;
     @FXML
     private ImageView searchButton;
     @FXML
@@ -115,9 +115,9 @@ public class HomePageController implements Initializable {
     @FXML
     private HBox ourEconomicsBooksContainer;
     @FXML
-    private ScrollPane trendingNowScroll;
+    private ScrollPane educationScroll;
     @FXML
-    private HBox trendingNowContainer;
+    private HBox educationContainer;
     @FXML
     private Label userNameUser;
     @FXML
@@ -174,7 +174,7 @@ public class HomePageController implements Initializable {
         currentIndexes.put("MostBorrowed", 0);
         currentIndexes.put("NewestBooks", 0);
         currentIndexes.put("OurFiction", 0);
-        currentIndexes.put("TrendingNow", 0);
+        currentIndexes.put("Education", 0);
         currentIndexes.put("OurEconomicsBooks", 0);
         leftMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(-1));
         rightMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(1));
@@ -209,12 +209,12 @@ public class HomePageController implements Initializable {
                 scrollBooks(1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
         );
 
-        leftTrendingNowButton.setOnMouseClicked(event ->
-                scrollBooks(-1, currentIndexes.get("TrendingNow"), trendingNowScroll, index -> currentIndexes.put("TrendingNow", index))
+        leftEducationButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("Education"), educationScroll, index -> currentIndexes.put("Education", index))
         );
 
-        rightTrendingNowButton.setOnMouseClicked(event ->
-                scrollBooks(1, currentIndexes.get("TrendingNow"), trendingNowScroll, index -> currentIndexes.put("TrendingNow", index))
+        rightEducationButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("Education"), educationScroll, index -> currentIndexes.put("Education", index))
         );
 
         leftOurEconomicsBooksButton.setOnMouseClicked(event ->
@@ -254,7 +254,6 @@ public class HomePageController implements Initializable {
 
         mainBanner0.setOnMouseClicked(event -> openBooksFromBanner(mainBanner0));
         mainBanner1.setOnMouseClicked(event -> openBooksFromBanner(mainBanner1));
-//        mainBanner2.setOnMouseClicked(event -> openBooksFromBanner(mainBanner2));
     }
 
     public void setAvatarAndUserName() {
@@ -350,11 +349,8 @@ public class HomePageController implements Initializable {
                 ourEconomicsBooksContainer
         );
         loadBooksByCategoryAsync(
-                "SELECT b.*, COUNT(br.id) AS borrow_count " +
-                        "FROM books b JOIN borrows br ON b.isbn = br.book_isbn " +
-                        "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
-                        "GROUP BY b.isbn ORDER BY borrow_count DESC LIMIT 18",
-                trendingNowContainer
+                "SELECT * FROM books WHERE category = 'Education' ORDER BY average_of_rating DESC LIMIT 18",
+                educationContainer
         );
     }
 
@@ -434,7 +430,7 @@ public class HomePageController implements Initializable {
         try {
             Parent searchPageRoot = loader.load();
             SearchPageController searchController = loader.getController();
-            searchController.setSearchParameters(keyword, selectedFilter, null);
+            searchController.setSearchParameters(keyword, selectedFilter, null,"Top rated");
             Stage currentStage = (Stage) mainScroll.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(searchPageRoot);
@@ -741,8 +737,6 @@ public class HomePageController implements Initializable {
             stage.showAndWait();
             updateAllContainers(book);
 
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -769,7 +763,7 @@ public class HomePageController implements Initializable {
     }
 
     private void updateAllContainers(Book book) {
-        List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer, ourFictionContainer, ourEconomicsBooksContainer, newestBooksContainer, trendingNowContainer);
+        List<HBox> containers = Arrays.asList(topRateContainer, mostBorrowedContainer, ourFictionContainer, ourEconomicsBooksContainer, newestBooksContainer, educationContainer);
         for (HBox container : containers) {
             updateButtonInContainer(container, book);
         }
@@ -819,24 +813,18 @@ public class HomePageController implements Initializable {
 
     @FXML
     private void seeAllMostBorrowedBooks() {
-        String query = "SELECT b.* FROM books b " +
-                "JOIN borrows br ON b.isbn = br.book_isbn " +
-                "GROUP BY b.id " +
-                "ORDER BY COUNT(*) DESC";
-        loadByQuery(query);
+        loadByQuery(null,"Most borrowed");
     }
 
 
     @FXML
     private void seeAllTopRatedBooks(){
-        String query = "SELECT * FROM books ORDER BY average_of_rating DESC";
-        loadByQuery(query);
+        loadByQuery(null,"Top rated");
     }
 
     @FXML
     private void seeAllNewestBooks(){
-        String query = "SELECT * FROM books ORDER BY id DESC";
-        loadByQuery(query);
+        loadByQuery(null,"Newest to Oldest");
     }
 
     @FXML
@@ -850,22 +838,18 @@ public class HomePageController implements Initializable {
     }
 
     @FXML
-    private void seeAllTrendingNowBooks(){
-        String query = "SELECT b.*, COUNT(br.id) AS borrow_count " +
-                "FROM books b JOIN borrows br ON b.isbn = br.book_isbn " +
-                "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
-                "GROUP BY b.isbn ORDER BY borrow_count DESC";
-        loadByQuery(query);
+    private void seeAllEducationBooks(){
+        setKeywordAndCategory("Education");
     }
 
     @FXML
-    private void loadByQuery(String query){
+    private void loadByQuery(String additionalCondition, String sortCondition) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
         try {
             Parent searchPageRoot = loader.load();
             SearchPageController searchController = loader.getController();
 
-            searchController.setSearchParameters("", "Title", query);
+            searchController.setSearchParameters("", "Title", additionalCondition, sortCondition);
 
             Stage currentStage = (Stage) mainScroll.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
@@ -1022,7 +1006,7 @@ public class HomePageController implements Initializable {
         condition.deleteCharAt(condition.length()-1);
         condition.append(")");
 
-        loadByQuery(condition.toString());
+        loadByQuery(condition.toString(),"Top rated");
     }
 }
 

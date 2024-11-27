@@ -381,22 +381,22 @@
                         </AnchorPane>
                         <AnchorPane layoutX="77.0" layoutY="3354.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                            <children>
-                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="180.0" text="Trending-now">
+                              <Label layoutY="-4.0" prefHeight="32.0" prefWidth="180.0" text="Education">
                                  <font>
                                     <Font name="System Bold Italic" size="24.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="1184.0" layoutY="4.0" onMouseClicked="#seeAllTrendingNowBooks" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
+                              <Label layoutX="1184.0" layoutY="4.0" onMouseClicked="#seeAllEducationBooks" prefHeight="25.0" prefWidth="52.0" styleClass="see-all" text="See All">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ScrollPane fx:id="trendingNowScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
+                              <ScrollPane fx:id="educationScroll" hbarPolicy="NEVER" layoutX="40.0" layoutY="41.0" prefHeight="329.0" prefWidth="1160.0" vbarPolicy="NEVER">
                                  <content>
-                                    <HBox fx:id="trendingNowContainer" prefHeight="325.0" prefWidth="1156.0" spacing="12.0" styleClass="white-pane" />
+                                    <HBox fx:id="educationContainer" prefHeight="325.0" prefWidth="1156.0" spacing="12.0" styleClass="white-pane" />
                                  </content>
                               </ScrollPane>
-                              <Button fx:id="leftTrendingNowButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
+                              <Button fx:id="leftEducationButton" layoutX="-5.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="40.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
@@ -405,7 +405,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="rightTrendingNowButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
+                              <Button fx:id="rightEducationButton" layoutX="1203.0" layoutY="150.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="43.0" styleClass="scroll">
                                  <graphic>
                                     <ImageView fitHeight="20" fitWidth="20">
                                        <image>
