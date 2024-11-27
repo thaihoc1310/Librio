@@ -445,9 +445,9 @@ public class SearchPageController implements Initializable {
 
     private String getOrderByClause(String sortBy) {
         return switch (sortBy) {
-            case "Top rated" -> "ORDER BY average_of_rating DESC";
-            case "Most borrowed" -> "GROUP BY books.id ORDER BY COUNT(br.id) DESC";
-            case "Newest" -> "ORDER BY year_published DESC";
+            case "Top rated" -> " ORDER BY average_of_rating DESC";
+            case "Most borrowed" -> " GROUP BY books.id ORDER BY COUNT(br.id) DESC";
+            case "Newest" -> " ORDER BY year_published DESC";
             default -> "";
         };
     }
