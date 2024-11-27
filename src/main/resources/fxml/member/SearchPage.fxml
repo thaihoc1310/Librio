@@ -66,68 +66,63 @@
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="18.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="Fiction" />
+                                    <Label fx:id="fictionLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="Fiction" />
                                     <AnchorPane prefHeight="61.0" prefWidth="18.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="History" />
+                                    <Label fx:id="historyLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="History" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="Science" />
+                                    <Label fx:id="scienceLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="100.0" styleClass="label-button" text="Science" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="Technology" />
+                                    <Label fx:id="technologyLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="120.0" styleClass="label-button" text="Technology" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="Computers" />
+                                    <Label fx:id="computersLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="110.0" styleClass="label-button" text="Computers" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="Economics" />
+                                    <Label fx:id="economicsLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="Economics" />
                                     <AnchorPane prefHeight="61.0" prefWidth="20.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="Law" />
+                                    <Label fx:id="lawLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="Law" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="96.0" styleClass="label-button" text="Social Science" />
+                                    <Label fx:id="socialScienceLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="96.0" styleClass="label-button" text="Social Science" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="Education" />
+                                    <Label fx:id="educationLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="Education" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label alignment="CENTER" prefHeight="61.0" prefWidth="46.0" styleClass="label-button" text="Art" />
+                                    <Label fx:id="artLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="46.0" styleClass="label-button" text="Art" />
                                  </children>
                               </HBox>
-                              <Label fx:id="userNameUser2" alignment="CENTER_RIGHT" layoutX="1106.0" layoutY="26.0" prefHeight="22.0" prefWidth="206.0" text="Đinh Viết Huy" textFill="#481f10" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="30.0">
-                                 <font>
-                                    <Font name="Segoe UI Bold" size="16.0" />
-                                 </font>
-                              </Label>
                               <Circle fx:id="moreIcon" fill="#1f93ff" layoutX="1356.0" layoutY="52.0" onMouseClicked="#handleAvatarClick" radius="9.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="43.0" />
                            </children>
                         </AnchorPane>
@@ -161,7 +156,7 @@
                                                             <Label fx:id="economicsLabel" prefHeight="26.0" prefWidth="185.0" text="Economics" />
                                                             <Label fx:id="computersLabel" prefHeight="26.0" prefWidth="185.0" text="Computers" />
                                                             <Label fx:id="historyLabel" prefHeight="26.0" prefWidth="185.0" text="History" />
-                                                            <Label fx:id="scieneLabel" prefHeight="26.0" prefWidth="185.0" text="Science" />
+                                                            <Label fx:id="scienceLabel" prefHeight="26.0" prefWidth="185.0" text="Science" />
                                                             <Label fx:id="healthLabel" prefHeight="26.0" prefWidth="185.0" text="Health" />
                                                             <Label fx:id="lawLabel" prefHeight="26.0" prefWidth="185.0" text="Law" />
                                                             <Label fx:id="socialScienceLabel" prefHeight="26.0" prefWidth="185.0" text="Social Science" />
@@ -312,8 +307,8 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <fx:include fx:id="notificationPane" source="Notification.fxml" AnchorPane.rightAnchor="100.00000000000011" AnchorPane.topAnchor="70.0" />
-                  <Button layoutX="1118.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleOpenNotification" prefHeight="43.0" prefWidth="43.0" styleClass="circular-button">
+                  <fx:include fx:id="notificationPane" source="Notification.fxml" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="70.0" />
+                  <Button layoutX="1270.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleOpenNotification" prefHeight="43.0" prefWidth="43.0" styleClass="circular-button">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -322,7 +317,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <AnchorPane fx:id="numberPane" layoutX="1145.0" layoutY="15.0" prefHeight="20.0" prefWidth="20.0" styleClass="bag-Pane" visible="false">
+                  <AnchorPane fx:id="numberPane" layoutX="1297.0" layoutY="17.0" prefHeight="20.0" prefWidth="20.0" styleClass="bag-Pane" visible="false">
                      <children>
                         <Text fx:id="numberText" fill="WHITE" layoutX="6.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.69765625">
                            <font>

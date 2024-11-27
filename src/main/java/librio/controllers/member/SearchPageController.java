@@ -32,14 +32,13 @@ import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.session.Session;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -102,8 +101,6 @@ public class SearchPageController implements Initializable {
     @FXML
     private Label userNameUser;
     @FXML
-    private Label userNameUser2;
-    @FXML
     private ImageView searchButton;
     @FXML
     private TextField searchTextField;
@@ -134,7 +131,7 @@ public class SearchPageController implements Initializable {
     @FXML
     private Label historyLabel;
     @FXML
-    private Label scieneLabel;
+    private Label scienceLabel;
     @FXML
     private Label healthLabel;
     @FXML
@@ -151,6 +148,26 @@ public class SearchPageController implements Initializable {
     private Label sportsLabel;
     @FXML
     private Label travelLabel;
+    @FXML
+    private Label fictionLabel2;
+    @FXML
+    private Label historyLabel2;
+    @FXML
+    private Label scienceLabel2;
+    @FXML
+    private Label technologyLabel2;
+    @FXML
+    private Label computersLabel2;
+    @FXML
+    private Label economicsLabel2;
+    @FXML
+    private Label lawLabel2;
+    @FXML
+    private Label socialScienceLabel2;
+    @FXML
+    private Label educationLabel2;
+    @FXML
+    private Label artLabel2;
     @FXML
     private Label musicLabel;
     @FXML
@@ -207,6 +224,16 @@ public class SearchPageController implements Initializable {
             }
         }
 
+        fictionLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Fiction"));
+        historyLabel2.setOnMouseClicked(event -> setKeywordAndCategory("History"));
+        scienceLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Science"));
+        technologyLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Technology"));
+        computersLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
+        economicsLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
+        lawLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Law"));
+        socialScienceLabel2.setOnMouseClicked(event -> setKeywordAndCategory("SocialScience"));
+        educationLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Education"));
+        artLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
     }
 
 
@@ -217,7 +244,6 @@ public class SearchPageController implements Initializable {
      */
     private void loadBooksAsync(int pageIndex) {
         loadingIndicator.setVisible(true);
-
         flowPane.getChildren().clear();
         Task<List<Book>> loadTask = new Task<>() {
             @Override
@@ -228,6 +254,7 @@ public class SearchPageController implements Initializable {
             @Override
             protected void succeeded() {
                 List<Book> fetchedBooks = getValue();
+
                 if (fetchedBooks != null) {
                     displayBooks(fetchedBooks);
                 }
@@ -251,6 +278,9 @@ public class SearchPageController implements Initializable {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
         this.customQuery = customQuery;
+        if(customQuery != null && customQuery.contains("COUNT(*)")){
+            this.sortBox.getSelectionModel().select(1);
+        }
         handleSearch();
     }
 
@@ -259,12 +289,11 @@ public class SearchPageController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
+        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "img.png");
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, clickAvatar, 23);
 
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
-        userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
     private void setupAnimatedPane(TitledPane pane, double targetHeight) {
@@ -430,36 +459,19 @@ public class SearchPageController implements Initializable {
         int limit = Integer.parseInt(limitBox.getValue());
         return " LIMIT " + limit;
     }
-
+    
     @FXML
     private void returnHomepage() {
-        loadingIndicator.setVisible(true);
-        Task<Parent> loadHomePageTask = new Task<>() {
-            @Override
-            protected Parent call() throws Exception {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
-                return loader.load();
-            }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml"));
+        try {
+            Parent searchPageRoot = loader.load();
+            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(searchPageRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
 
-            @Override
-            protected void succeeded() {
-                Parent homepageRoot = getValue();
-                Platform.runLater(() -> {
-                    Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-                    Scene currentScene = currentStage.getScene();
-                    currentScene.setRoot(homepageRoot);
-                    loadingIndicator.setVisible(false);
-                });
-            }
-
-            @Override
-            protected void failed() {
-                Platform.runLater(() -> loadingIndicator.setVisible(false));
-                getException().printStackTrace();
-            }
-        };
-
-        executor.submit(loadHomePageTask);
+        }
     }
 
 
@@ -512,7 +524,7 @@ public class SearchPageController implements Initializable {
         setCategoryLabelClickListener(economicsLabel, "Economics");
         setCategoryLabelClickListener(computersLabel, "Computers");
         setCategoryLabelClickListener(historyLabel, "History");
-        setCategoryLabelClickListener(scieneLabel, "Science");
+        setCategoryLabelClickListener(scienceLabel, "Science");
         setCategoryLabelClickListener(healthLabel, "Health");
         setCategoryLabelClickListener(lawLabel, "Law");
         setCategoryLabelClickListener(socialScienceLabel, "Social Science");
@@ -523,7 +535,6 @@ public class SearchPageController implements Initializable {
         setCategoryLabelClickListener(travelLabel, "Travel");
         setCategoryLabelClickListener(musicLabel, "Music");
         setCategoryLabelClickListener(othersLabel, "Others");
-
     }
 
     private void setLanguageLabelClickListener(Label label, String language) {
@@ -625,7 +636,7 @@ public class SearchPageController implements Initializable {
                 flowPane.getChildren().addAll(panes);
                 flowPane.setHgap(40);
                 flowPane.setVgap(20);
-                loadingIndicator.setVisible(false);//
+                loadingIndicator.setVisible(false);
             }
 
             @Override
@@ -659,8 +670,7 @@ public class SearchPageController implements Initializable {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
-        Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
-        bookImage.setImage(image);
+        bookImage.setImage(ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg"));
 
         Label titleLabel = new Label(book.getTitle());
         titleLabel.setLayoutX(11);
@@ -947,5 +957,11 @@ public class SearchPageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setKeywordAndCategory(String category){
+        this.searchTextField.setText(category);
+        filterBox.getSelectionModel().select(2);
+        handleSearch();
     }
 }

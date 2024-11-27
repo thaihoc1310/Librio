@@ -42,6 +42,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import static javafx.scene.input.KeyCode.R;
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 import static librio.util.DatabaseUtil.getAvailableCopyByIsbn;
 import static librio.util.DesignUtil.*;
@@ -122,8 +123,7 @@ public class HomePageController implements Initializable {
     private HBox trendingNowContainer;
     @FXML
     private Label userNameUser;
-    @FXML
-    private Label userNameUser2;
+
     @FXML
     private AnchorPane menuPane;
     @FXML
@@ -150,6 +150,8 @@ public class HomePageController implements Initializable {
     private Label educationLabel;
     @FXML
     private Label artLabel;
+    @FXML
+    private ImageView mainBanner0;
 
     @FXML
     private AnchorPane notificationPane;
@@ -163,12 +165,17 @@ public class HomePageController implements Initializable {
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 
+    @FXML
+    private ProgressIndicator loadingIndicator;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadAllBooksAsync();
         Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
+        loadingIndicator.setVisible(false);
+        loadAllBooksAsync();
         currentIndexes.put("TopRate", 0);
         currentIndexes.put("MostBorrowed", 0);
         currentIndexes.put("NewestBooks", 0);
@@ -253,6 +260,8 @@ public class HomePageController implements Initializable {
                 numberText.setText("99+");
             }
         }
+
+        mainBanner0.setOnMouseClicked(event -> openBooksFromBanner(mainBanner0));
     }
 
     public void setAvatarAndUserName() {
@@ -260,11 +269,11 @@ public class HomePageController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "img.png");
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, clickAvatar, 23);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
-        userNameUser2.setText(Session.getInstance().getLoggedInUser().getName());
+
     }
 
     private void scrollMainBanner(int direction) {
@@ -333,6 +342,7 @@ public class HomePageController implements Initializable {
 
 
     private void loadAllBooksAsync() {
+        loadingIndicator.setVisible(true);
         loadBooksByCategoryAsync("SELECT * FROM books ORDER BY average_of_rating DESC LIMIT 18", topRateContainer);
         loadBooksByCategoryAsync(
                 "SELECT b.* FROM books b JOIN borrows br ON b.isbn = br.book_isbn GROUP BY b.id ORDER BY COUNT(*) DESC LIMIT 18",
@@ -368,10 +378,11 @@ public class HomePageController implements Initializable {
             @Override
             protected void succeeded() {
                 List<Book> books = getValue();
-                Platform.runLater(() -> {
-                    container.getChildren().clear();
-                    displayBooks(books, container);
-                });
+               if(books!=null) {
+                   container.getChildren().clear();
+                   displayBooks(books, container);
+                   System.out.println(container.toString());
+               }
             }
 
             @Override
@@ -382,7 +393,6 @@ public class HomePageController implements Initializable {
                 getException().printStackTrace();
             }
         };
-
         executor.submit(loadTask);
     }
 
@@ -445,17 +455,44 @@ public class HomePageController implements Initializable {
 
     private void displayBooks(List<Book> books, HBox container) {
         container.getChildren().clear();
-        for (Book book : books) {
-            AnchorPane bookPane = new AnchorPane();
-            bookPane.setPrefSize(183, 325);
+        Task<List<AnchorPane>> loadBooksTask = new Task<>() {
+            @Override
+            protected List<AnchorPane> call() {
+                List<AnchorPane> panes = new ArrayList<>();
+                for (Book book : books) {
+                    panes.add(createBookPane(book));
+                }
+                return panes;
+            }
+            @Override
+            protected void succeeded() {
+                container.getChildren().clear();
+                List<AnchorPane> panes = getValue();
+                container.getChildren().addAll(panes);
+                if(container.toString().equals("HBox[id=trendingNowContainer, styleClass=white-pane]")){
+                    loadingIndicator.setVisible(false);
+                }
+            }
+            @Override
+            protected void failed() {
+                getException().printStackTrace();
+            }
+        };
+        executor.submit(loadBooksTask);
 
-            AnchorPane bookImagePane = new AnchorPane();
-            bookImagePane.setPrefSize(183, 226);
-            bookImagePane.setLayoutX(0);
+    }
 
-            AnchorPane infoPane = new AnchorPane();
-            infoPane.setPrefSize(183, 99);
-            infoPane.setLayoutY(226);
+    private AnchorPane createBookPane(Book book) {
+        AnchorPane bookPane = new AnchorPane();
+        bookPane.setPrefSize(183, 325);
+
+        AnchorPane bookImagePane = new AnchorPane();
+        bookImagePane.setPrefSize(183, 226);
+        bookImagePane.setLayoutX(0);
+
+        AnchorPane infoPane = new AnchorPane();
+        infoPane.setPrefSize(183, 99);
+        infoPane.setLayoutY(226);
 
             ImageView bookImage = new ImageView();
             bookImage.setFitHeight(226);
@@ -469,87 +506,82 @@ public class HomePageController implements Initializable {
             String path = booksDir + book.getImagePath();
             bookImage.setImage(ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg"));
 
-            Label titleLabel = new Label(book.getTitle());
-            titleLabel.setLayoutX(11);
-            titleLabel.setLayoutY(8);
-            titleLabel.setPrefWidth(160);
-            titleLabel.getStyleClass().add("title-label");
 
-            Label authorLabel = new Label(book.getAuthor());
-            authorLabel.setLayoutX(11);
-            authorLabel.setLayoutY(55);
-            authorLabel.setPrefWidth(160);
-            authorLabel.getStyleClass().add("author-label");
+        Label titleLabel = new Label(book.getTitle());
+        titleLabel.setLayoutX(11);
+        titleLabel.setLayoutY(8);
+        titleLabel.setPrefWidth(160);
+        titleLabel.getStyleClass().add("title-label");
 
-            AnchorPane buttonPane = new AnchorPane();
-            buttonPane.setStyle("-fx-background-color: #FFF;");
-            buttonPane.setPrefSize(162, 45);
-            buttonPane.setLayoutY(225);
-            buttonPane.setLayoutX(11);
+        Label authorLabel = new Label(book.getAuthor());
+        authorLabel.setLayoutX(11);
+        authorLabel.setLayoutY(55);
+        authorLabel.setPrefWidth(160);
+        authorLabel.getStyleClass().add("author-label");
 
-            Button quickBorrowButton = new Button();
-            quickBorrowButton.getStyleClass().add("quick-borrow-button");
-            quickBorrowButton.setLayoutX(6);
-            quickBorrowButton.setLayoutY(5);
-
-            setConfirmButton(quickBorrowButton, book);
-            buttonPane.getChildren().add(quickBorrowButton);
-
-            bookImagePane.getChildren().addAll(bookImage, buttonPane);
-            bookImagePane.setOnMouseEntered(e -> {
-                TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
-                slideUp.setFromY(0);
-                slideUp.setToY(-38);
-                slideUp.play();
-            });
-
-            bookImagePane.setOnMouseExited(e -> {
-                TranslateTransition slideDown = new TranslateTransition(Duration.millis(250), buttonPane);
-                slideDown.setFromY(-38);
-                slideDown.setToY(0);
-                slideDown.play();
-            });
-
-            bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
-
-            Task<HBox> ratingTask = new Task<>() {
-                @Override
-                protected HBox call() {
-                    return getStarBox(book);
-                }
-
-                @Override
-                protected void succeeded() {
-                    HBox starBox = getValue();
-                    starBox.setLayoutX(42);
-                    starBox.setLayoutY(80);
-                    infoPane.getChildren().add(starBox);
-                }
-
-                @Override
-                protected void failed() {
-                    Platform.runLater(() -> {
-                    });
-                }
-            };
-            executor.execute(ratingTask);
+        AnchorPane buttonPane = new AnchorPane();
+        buttonPane.setStyle("-fx-background-color: #FFF;");
+        buttonPane.setPrefSize(162, 45);
+        buttonPane.setLayoutY(225);
+        buttonPane.setLayoutX(11);
 
 
-            infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
-            infoPane.getChildren().addAll(titleLabel, authorLabel);
-            bookPane.getChildren().addAll(bookImagePane, infoPane);
+        Button quickBorrowButton = new Button();
+        quickBorrowButton.getStyleClass().add("quick-borrow-button");
+        quickBorrowButton.setLayoutX(6);
+        quickBorrowButton.setLayoutY(5);
+        setConfirmButton(quickBorrowButton, book);
+        buttonPane.getChildren().add(quickBorrowButton);
 
-            bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
+        bookImagePane.getChildren().addAll(bookImage, buttonPane);
+        bookImagePane.setOnMouseEntered(e -> {
+            TranslateTransition slideUp = new TranslateTransition(Duration.millis(250), buttonPane);
+            slideUp.setFromY(0);
+            slideUp.setToY(-38);
+            slideUp.play();
+        });
 
-            boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
-            if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
-                quickBorrowButton.setOnAction(e -> {
-                    openBorrowConfirmationPane(book, quickBorrowButton);
+        bookImagePane.setOnMouseExited(e -> {
+            TranslateTransition slideDown = new TranslateTransition(Duration.millis(250), buttonPane);
+            slideDown.setFromY(-38);
+            slideDown.setToY(0);
+            slideDown.play();
+        });
+
+        bookPane.setOnMouseEntered(e -> bookPane.setStyle("-fx-cursor: hand; "));
+        infoPane.setStyle("-fx-background-color: #FFFFFF;-fx-padding: 0;");
+        infoPane.getChildren().addAll(titleLabel, authorLabel);
+        bookPane.getChildren().addAll(bookImagePane, infoPane);
+
+        bookPane.setOnMouseClicked(e -> openBookDetailScene(book, quickBorrowButton));
+
+        boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
+        if (!isAlreadyBorrowed && getAvailableCopyByIsbn(book.getIsbn()) > 0) {
+            quickBorrowButton.setOnAction(e -> openBorrowConfirmationPane(book, quickBorrowButton));
+        }
+
+        Task<HBox> ratingTask = new Task<>() {
+            @Override
+            protected HBox call() {
+                return getStarBox(book);
+            }
+
+            @Override
+            protected void succeeded() {
+                HBox starBox = getValue();
+                starBox.setLayoutX(42);
+                starBox.setLayoutY(80);
+                infoPane.getChildren().add(starBox);
+            }
+
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> {
                 });
             }
-            container.getChildren().add(bookPane);
-        }
-        container.setSpacing(10);
+        };
+        executor.execute(ratingTask);
+        return bookPane;
     }
 
     private void scrollBooks(int direction, int currentIndex, ScrollPane scrollPane, Consumer<Integer> updateIndex) {
@@ -660,6 +692,7 @@ public class HomePageController implements Initializable {
             notificationPane.setVisible(false);
             isNotificationPane = false;
         }
+
         backPane.setVisible(false);
     }
 
@@ -721,6 +754,9 @@ public class HomePageController implements Initializable {
 
             stage.showAndWait();
             updateAllContainers(book);
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -789,9 +825,9 @@ public class HomePageController implements Initializable {
                 fullStar.setClip(clip);
                 starPane.getChildren().add(fullStar);
             }
+
             starBox.getChildren().add(starPane);
         }
-
         return starBox;
     }
 
@@ -801,60 +837,20 @@ public class HomePageController implements Initializable {
                 "JOIN borrows br ON b.isbn = br.book_isbn " +
                 "GROUP BY b.id " +
                 "ORDER BY COUNT(*) DESC";
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
-        try {
-            Parent searchPageRoot = loader.load();
-            SearchPageController searchController = loader.getController();
-
-            searchController.setSearchParameters("", "", query);
-
-            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(searchPageRoot);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadByQuery(query);
     }
 
 
     @FXML
     private void seeAllTopRatedBooks(){
         String query = "SELECT * FROM books ORDER BY average_of_rating DESC";
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
-        try {
-            Parent searchPageRoot = loader.load();
-            SearchPageController searchController = loader.getController();
-
-            searchController.setSearchParameters("", "Title", query);
-
-            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(searchPageRoot);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadByQuery(query);
     }
 
     @FXML
     private void seeAllNewestBooks(){
         String query = "SELECT * FROM books ORDER BY id DESC";
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
-        try {
-            Parent searchPageRoot = loader.load();
-            SearchPageController searchController = loader.getController();
-
-            searchController.setSearchParameters("", "Title", query);
-
-            Stage currentStage = (Stage) mainScroll.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(searchPageRoot);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadByQuery(query);
     }
 
     @FXML
@@ -873,6 +869,11 @@ public class HomePageController implements Initializable {
                 "FROM books b JOIN borrows br ON b.isbn = br.book_isbn " +
                 "WHERE br.borrow_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
                 "GROUP BY b.isbn ORDER BY borrow_count DESC";
+        loadByQuery(query);
+    }
+
+    @FXML
+    private void loadByQuery(String query){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
         try {
             Parent searchPageRoot = loader.load();
@@ -889,5 +890,154 @@ public class HomePageController implements Initializable {
         }
     }
 
+    private void openBooksFromBanner(ImageView image) {
+        List<String> list = new ArrayList<>();
+
+        String imageId = image.getId();
+
+        switch (imageId) {
+            case "mainBanner0":
+                Collections.addAll(list, "1568582307", "9781250165343", "9781838718039");
+                break;
+            case "mainBanner1":
+                Collections.addAll(list,
+                        "9780593418932",
+                        "9780735281820",
+                        "9781668027912",
+                        "9780593862735",
+                        "9781035005703",
+                        "9781648294273",
+                        "9780593536148",
+                        "9781802065831",
+                        "9781789466058",
+                        "9780593809884",
+                        "9781250906168"
+                );
+                break;
+            case "mainBanner2":
+                Collections.addAll(list,
+                        "9781250906168",
+                        "9780593809884",
+                        "9781250893444",
+                        "9780735281820",
+                        "0063410400",
+                        "9780316581479"
+                );
+                break;
+
+            case "mainBanner3":
+                Collections.addAll(list,
+                        "9781668027912"
+                );
+                break;
+
+            case "mainBanner4":
+                Collections.addAll(list
+                        ,"9780751585568"
+                        ,"9781761189159"
+                        ,"9781250328144"
+                        ,"9780593852200"
+
+                );
+                break;
+
+            case "mainBanner5":
+                Collections.addAll(list,
+                        "9781400337026",
+                        "0008610746",
+                        "1728296226",
+                        "9781454954903",
+                        "9780063251991",
+                        "9781423147343"
+
+                );
+                break;
+
+            case "mainBanner6":
+                Collections.addAll(list,
+                        "1423145143\n"
+                );
+                break;
+
+            case "mainBanner7":
+                Collections.addAll(list,
+                        "9781646222384",
+                        "9781250031211",
+                        "9781464218637",
+                        "9780063371378",
+                        "9781982163310",
+                        "9781250360687"
+                );
+                break;
+
+            case "mainBanner8":
+                Collections.addAll(list,
+                        "9780593862735",
+                        "9781250759009",
+                        "9780316557818",
+                        "9780735281820",
+                        "9780316581479",
+                        "9781984863164",
+                        "9780593536148",
+                        "9781405963732",
+                        "9780063251991",
+                        "9780316569439",
+                        "9788756799775"
+
+                );
+                break;
+
+            case "mainBanner9":
+                Collections.addAll(list,
+                        "9781594748639",
+                        "9780593201282",
+                        "9780593201251"
+                );
+                break;
+
+            case "mainBanner10":
+                Collections.addAll(list,
+                        "9781534427204",
+                        "9781665974608",
+                        "9798887075143",
+                        "9780241583029",
+                        "9780525647744",
+                        "9780593707968"
+                );
+                break;
+
+            case "mainBanner12":
+                Collections.addAll(list,
+                        "9781464218637\n"
+                );
+                break;
+
+            case "mainBanner13":
+                Collections.addAll(list,
+                        "9781786583253",
+                        "9780593815717",
+                        "9781529052114",
+                        "9780369742018",
+                        "9781529029598",
+                        "9780369747303"
+
+                );
+                break;
+
+            default:
+                break;
+        }
+
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM books\n" +
+                "WHERE isbn IN (");
+        for(String s : list){
+            query.append(s).append(",");
+        }
+        query.deleteCharAt(query.length()-1);
+        query.append(")");
+
+        loadByQuery(query.toString());
+    }
 }
 
