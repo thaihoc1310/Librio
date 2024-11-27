@@ -193,7 +193,7 @@ public class SearchPageController implements Initializable {
     private boolean isAnchorPaneVisible = false;
     private boolean isNotificationPane = false;
 
-    private String customQuery = null;
+    private String additionalCondition = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -274,11 +274,11 @@ public class SearchPageController implements Initializable {
      * @param keyword the keyword to search for
      * @param filter  the filter criteria to apply
      */
-    public void setSearchParameters(String keyword, String filter, String customQuery) {
+    public void setSearchParameters(String keyword, String filter, String additionalCondition) {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
-        this.customQuery = customQuery;
-        if (customQuery != null && customQuery.contains("COUNT(*)")) {
+        this.additionalCondition = additionalCondition;
+        if (additionalCondition != null && additionalCondition.contains("COUNT(*)")) {
             this.sortBox.getSelectionModel().select(1);
         }
         handleSearch();
@@ -324,11 +324,10 @@ public class SearchPageController implements Initializable {
 
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query;
-
-
             String selectedFilter = filterBox.getValue();
             String orderByClause = getOrderByClause(sortBox.getValue());
             query = buildQuery(selectedFilter, orderByClause, limitClause);
+
             System.out.println(query);
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
@@ -376,12 +375,10 @@ public class SearchPageController implements Initializable {
                 Book book = new Book(id, title, author, isbn, category, publisher, quantityCopy, availableCopy, averageOfRating, yearPublished, language, numberOfPages, description, imageBook);
                 fetchedBooks.add(book);
             }
-            customQuery = null;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return fetchedBooks;
     }
 
@@ -413,13 +410,13 @@ public class SearchPageController implements Initializable {
         }
 
         if (!conditions.isEmpty()) {
-            queryBuilder.append("WHERE ").append(String.join(" AND ", conditions)).append(" ");
-            if (customQuery != null) {
-                queryBuilder.append(" AND").append(customQuery);
+            queryBuilder.append("WHERE ").append(String.join(" AND ", conditions));
+            if (additionalCondition != null) {
+                queryBuilder.append(" AND ").append(additionalCondition);
             }
+        } else if (additionalCondition != null) {
+            queryBuilder.append("WHERE ").append(additionalCondition);
         }
-
-
 
         queryBuilder.append(orderByClause).append(" ");
         queryBuilder.append(limitClause).append(" OFFSET ?");

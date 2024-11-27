@@ -1021,7 +1021,7 @@ public class HomePageController implements Initializable {
         }
 
         StringBuilder condition = new StringBuilder();
-        condition.append(" isbn IN (");
+        condition.append("isbn IN (");
         for(String s : list){
             condition.append(s).append(",");
         }
