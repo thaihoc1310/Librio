@@ -191,3 +191,8 @@
  -fx-background-color: #dd2334;
   -fx-background-radius: 10;
 }
+
+.progress-indicator {
+    -fx-stroke: #A45C23;
+    -fx-accent: #A45C23;
+}
