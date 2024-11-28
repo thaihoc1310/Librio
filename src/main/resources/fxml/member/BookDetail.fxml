@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1133.0" style="-fx-background-color: transparent;" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1133.0" style="-fx-background-color: transparent;" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BookDetailController">
    <children>
       <AnchorPane layoutX="40.0" layoutY="74.0" prefHeight="550.0" prefWidth="1036.0" styleClass="whitePane2">
          <children>
@@ -28,7 +28,7 @@
                                  <children>
                                     <AnchorPane prefHeight="255.0" prefWidth="635.0" styleClass="whitePane">
                                        <children>
-                                          <VBox layoutX="20.0" layoutY="14.0" prefHeight="225.0" prefWidth="596.0" spacing="15.0">
+                                          <VBox layoutX="20.0" layoutY="14.0" prefHeight="239.0" prefWidth="598.0" spacing="15.0">
                                              <children>
                                                 <VBox prefHeight="84.0" prefWidth="596.0">
                                                    <children>
@@ -69,6 +69,7 @@
                                                                   <Font size="15.0" />
                                                                </font>
                                                             </Label>
+                                                            <AnchorPane prefHeight="19.0" prefWidth="289.0" />
                                                          </children>
                                                       </VBox>
                                                       <VBox layoutX="310.0" layoutY="30.0" prefHeight="102.0" prefWidth="281.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="6.666666666666686" AnchorPane.topAnchor="30.0">
@@ -88,6 +89,7 @@
                                                                   <Font size="15.0" />
                                                                </font>
                                                             </Label>
+                                                            <AnchorPane prefHeight="19.0" prefWidth="281.0" />
                                                          </children>
                                                       </VBox>
                                                       <Line endX="483.66668701171875" endY="-1.52587890625E-5" startX="-113.00003051757812" startY="-1.52587890625E-5" strokeWidth="0.25" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.333251953125" AnchorPane.topAnchor="0.0" />
@@ -104,7 +106,7 @@
                                                 <Font size="23.0" />
                                              </font>
                                           </Text>
-                                          <TextFlow fx:id="descriptionFlow" layoutX="14.0" layoutY="52.0" prefHeight="119.0" prefWidth="567.0" textAlignment="JUSTIFY">
+                                          <TextFlow fx:id="descriptionFlow" layoutX="21.0" layoutY="52.0" prefHeight="109.0" prefWidth="603.0" textAlignment="JUSTIFY">
                                              <children>
                                                 <Text fx:id="descriptionText" textAlignment="JUSTIFY">
                                                    <font>
@@ -126,6 +128,7 @@
                                           <Insets bottom="20.0" />
                                        </VBox.margin>
                                     </AnchorPane>
+                                    <AnchorPane prefHeight="0.0" prefWidth="645.0" />
                                  </children>
                               </VBox>
                               <ImageView fx:id="bookCoverImage" fitHeight="315.0" fitWidth="217.0" layoutX="57.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar-view">
