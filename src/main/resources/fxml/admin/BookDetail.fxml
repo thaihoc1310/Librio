@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
@@ -144,6 +145,9 @@
                <image>
                   <Image url="@../../icons/MemberIcon/cancel.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <Text layoutX="451.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Book Details" wrappingWidth="135.33441162109375">
                <font>

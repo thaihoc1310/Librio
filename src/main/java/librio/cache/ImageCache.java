@@ -49,7 +49,7 @@ public class ImageCache {
      * @param defaultImagePath the path to the default image to be used if the desired image is unavailable
      * @return the image object corresponding to the specified path or the default image if the specified path is not available
      */
-    public Image getImage(String path,String defaultImagePath) {
+    public Image getImage(String path, String defaultImagePath) {
         if (cache.containsKey(path)) {
             return cache.get(path);
         }

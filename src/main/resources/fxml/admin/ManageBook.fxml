@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
@@ -142,11 +143,14 @@
                                 <Label layoutX="997.0" layoutY="24.0" prefHeight="43.0" prefWidth="51.0" text="User ID" textAlignment="CENTER" AnchorPane.rightAnchor="151.79999999999995" AnchorPane.topAnchor="24.0" />
                                 <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="-121.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" strokeWidth="0.5" AnchorPane.rightAnchor="31.100109863281432" />
                                 <Line endX="-305.7107238769531" endY="143.29287719726562" fill="#282626" layoutX="544.0" layoutY="-63.0" startX="628.71728515625" startY="143.29287719726562" stroke="#aeaeae" strokeMiterLimit="1000.0" strokeWidth="0.5" style="-fx-effect: bloom(0.5);" AnchorPane.leftAnchor="232.79999999999995" />
-                                <TextField fx:id="searchTextField" layoutX="871.0" layoutY="86.0" prefHeight="26.0" prefWidth="205.0" promptText="Search" style="-fx-background-radius: 5em; -fx-border-color: #4C2113; -fx-border-radius: 2em;" AnchorPane.rightAnchor="323.4000000000001" />
-                                <ImageView fitHeight="19.0" fitWidth="20.0" layoutX="1046.0" layoutY="89.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="335.0">
+                                <TextField fx:id="searchTextField" layoutX="871.0" layoutY="86.0" prefHeight="26.0" prefWidth="205.0" promptText="Search" style="-fx-background-radius: 5em; -fx-border-color: #4C2113; -fx-border-radius: 2em;" styleClass="text-field1" AnchorPane.rightAnchor="323.4000000000001" />
+                                <ImageView fitHeight="19.0" fitWidth="20.0" layoutX="1050.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="331.0">
                                     <image>
                                         <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                                     </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                                 </ImageView>
                                 <Button fx:id="addBookButton" layoutX="1248.0" layoutY="85.0" mnemonicParsing="false" onAction="#openAddBookScene" prefHeight="30.0" prefWidth="110.0" text="Create" AnchorPane.rightAnchor="41.59999999999991">
                            <graphic>

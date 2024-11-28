@@ -50,7 +50,7 @@
                               </ImageView>
                               <ImageView fx:id="clickAvatar" fitHeight="46.0" fitWidth="46.0" layoutX="1319.0" layoutY="18.0" onMouseClicked="#handleAvatarClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="18.0">
                                  <image>
-                                    <Image url="@../../icons/MemberIcon/MaleUser.png" />
+                                    <Image url="@../../icons/MemberIcon/MaleUser2.png" />
                                  </image>
                               </ImageView>
                               <HBox layoutX="70.0" layoutY="78.0" prefHeight="61.0" prefWidth="1257.0">

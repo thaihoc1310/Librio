@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
@@ -29,6 +30,9 @@
                            <image>
                               <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
                         <ImageView fitHeight="66.0" fitWidth="147.0" layoutX="14.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
                            <image>

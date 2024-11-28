@@ -2,6 +2,18 @@
     -fx-background-color: #f0f0f4;
     -fx-background-radius: 0px 5px 5px 0px;
 }
+
+.design-textField {
+    -fx-background-color: #f8edd9;
+}
+
+.text-field-1 {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color:  #4C2113;
+    -fx-border-radius:  2em;
+    -fx-text-fill: #333333;
+}
+
 .root {
     -fx-font-family: "Helvetica Neue", Arial, sans-serif;
     -fx-font-size: 14px;
@@ -164,7 +176,7 @@
 -fx-border-style: solid solid none solid;
 -fx-border-width: 0.3px;
 }
-.design-Anchor2: hover {
+.design-Anchor2:hover {
 -fx-border-style: solid solid solid solid;
 -fx-border-width: 0.3px  0.3px 1px 0.3px;
 }
@@ -176,9 +188,46 @@
 -fx-border-width: 0.3px;
 }
 
-.design-textField {
--fx-background-color: #f8edd9;
+
+
+.combo-box {
+    -fx-border-color: transparent;
 }
+
+.combo-box, .combo-box .list-cell {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+    -fx-cursor: hand;
+}
+
+.combo-box:hover, .combo-box:focused {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #F1DEBC;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #4C2113; /* Màu cho mũi tên */
+}
+
+.textField-password{
+ -fx-background-color: #FFFFFF;
+ -fx-background-radius: 20px;
+ -fx-border-radius: 20px;
+ -fx-border-color:#4c2113;
+ -fx-border-width: 0.8px;
+}
+
 /* Định dạng cho DatePicker */
 .date-picker {
     -fx-border-color: transparent;
@@ -186,8 +235,7 @@
 
 .date-picker, .date-picker .text-field, .date-picker .content {
     -fx-background-color: #F1DEBC;
-    -fx-text-fill: #000000;
-    -fx-font-weight: 500;
+    -fx-text-fill: #4C2113;
     -fx-font-family: 'System';
 }
 
@@ -224,7 +272,7 @@
 
 /* Thay đổi màu nền và màu chữ cho các ô ngày */
 .date-picker .day-cell {
-    -fx-background-color: #F1DEBC; /* Màu nền cho các ô ngày */
+    -fx-background-color: #FFFFFF; /* Màu nền cho các ô ngày */
     -fx-text-fill: #4C2113; /* Màu chữ cho ngày */
 }
 
@@ -243,42 +291,32 @@
 .date-picker .left-arrow .arrow, .date-picker .right-arrow .arrow {
     -fx-background-color: #4C2113; /* Màu cho mũi tên chuyển tháng/năm */
 }
-.combo-box {
-    -fx-border-color: transparent;
+
+.pagination .label {
+    -fx-opacity: 0;
 }
 
-.combo-box, .combo-box .list-cell {
-    -fx-background-color: #F1DEBC;
-    -fx-text-fill: #4C2113;
-    -fx-font-weight: 500;
-    -fx-font-family: 'System';
+.pagination .number-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #B38B60;
+    -fx-font-size: 12px;
 }
 
-.combo-box .list-cell:hover {
-    -fx-background-color: #F1DEBC;
-    -fx-text-fill: #4C2113;
-    -fx-font-family: 'System';
+.pagination .number-button:hover {
     -fx-cursor: hand;
+    -fx-underline: true;
 }
 
-.combo-box:hover, .combo-box:focused {
-    -fx-background-color: #F1DEBC;
+.pagination .number-button:selected {
+    -fx-background-color: transparent;
     -fx-text-fill: #4C2113;
 }
 
-.combo-box .arrow-button {
-    -fx-background-color: #F1DEBC;
+.pagination .page-information {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
 }
 
-.combo-box .arrow-button .arrow {
-    -fx-background-color: #4C2113;
-}
-.textField-password{
- -fx-background-color: #FFFFFF;
- -fx-background-radius: 20px;
- -fx-border-radius: 20px;
- -fx-border-color:#4c2113;
- -fx-border-width: 0.8px;
 
-}
 

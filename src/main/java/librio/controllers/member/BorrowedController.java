@@ -507,7 +507,7 @@ public class BorrowedController implements Initializable {
             Stage currentStage = (Stage) avatarUser.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
 
-            FadeTransition fadeOut = new FadeTransition(Duration.millis(150), currentScene.getRoot());
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(50), currentScene.getRoot());
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
 
@@ -658,6 +658,36 @@ public class BorrowedController implements Initializable {
                 }
             }
         });
+    }
+
+    @FXML
+    private void openEditProfileScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
+            Parent root = loader.load();
+            Stage currentStage = (Stage) tabPane.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initOwner(tabPane.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL); stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+
+            });
+            stage.showAndWait();
+            setAvatarAndUserName();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

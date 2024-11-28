@@ -1,8 +1,9 @@
 .tile-pane {
     -fx-background-image: url("background_tile_pane.png");
     -fx-background-repeat: no-repeat;
-     -fx-background-size: 100% auto;
+    -fx-background-size: 100% auto;
 }
+
 .combo-box {
     -fx-background-color: #FFFFFF;
     -fx-border-color: transparent;
@@ -46,7 +47,7 @@
 
 .tilePane-book {
     -fx-background-color: #ffffff;
-     -fx-border-color: #4c2113;
+    -fx-border-color: #4c2113;
     -fx-border-radius: 8px;
     -fx-border-width: 0.5px;
 }
@@ -57,6 +58,7 @@
 
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 14, 0.2, 0, 0);
 }
+
 .whitePane2 {
     -fx-background-radius: 10px;
     -fx-background-color: #ffffff;
@@ -88,8 +90,9 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.3, 0, 0); /* Hiệu ứng đổ bóng phát sáng */
 
 }
+
 .button-settings {
-    -fx-background-color:  #e4e6eb ;
+    -fx-background-color: #e4e6eb;
     -fx-text-fill: #000000;
     -fx-font-size: 14;
     -fx-font-weight: bold;
@@ -97,158 +100,172 @@
 
     -fx-border-radius: 6px;
 }
+
 .button-settings:hover {
-    -fx-background-color:#d8dadf; /* Màu nền khi hover */
+    -fx-background-color: #d8dadf; /* Màu nền khi hover */
     -fx-cursor: hand;
-    }
-    .Pane-avatar {
-        -fx-background-color: #ffffff; /* Màu nền */
-         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 0);
-          -fx-background-radius: 6px;
-    }
-    .button-ctrl {
-        -fx-background-color:  #ffffff ;
-        -fx-text-fill: #000000;
-        -fx-font-size: 15;
-        -fx-font-weight: 700;
-        -fx-background-radius: 6px;
-    }
-    .button-ctrl:hover {
-        -fx-background-color:#f2f2f2;
-         -fx-text-fill: #000000;
-         -fx-font-size: 15;
-         -fx-font-weight: 700;
-        -fx-background-radius: 7px;
-        -fx-cursor: hand;
-        }
-        .button-borrow {
-                -fx-background-color:  #6e2f18;
-                -fx-text-fill: #ffffff;
-                -fx-font-size: 18;
-                -fx-font-weight: 700;
-                -fx-background-radius: 10px;
-            }
-            .button-borrow:hover {
-                -fx-background-color:#943f20;
-                 -fx-text-fill: #ffffff;
-                 -fx-font-size: 18;
-                 -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 0);
-                 -fx-font-weight: 700;
-                -fx-cursor: hand;
-                }
-                .button-borrow:pressed {
-                    -fx-background-color: #5b2614;
-                    -fx-text-fill: #ffffff;
-                    -fx-font-size: 18;
-                    -fx-font-weight: 700;
-                    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
-                }
+}
+
+.Pane-avatar {
+    -fx-background-color: #ffffff; /* Màu nền */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 0);
+    -fx-background-radius: 6px;
+}
+
+.button-ctrl {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-font-size: 15;
+    -fx-font-weight: 700;
+    -fx-background-radius: 6px;
+}
+
+.button-ctrl:hover {
+    -fx-background-color: #f2f2f2;
+    -fx-text-fill: #000000;
+    -fx-font-size: 15;
+    -fx-font-weight: 700;
+    -fx-background-radius: 7px;
+    -fx-cursor: hand;
+}
+
+.button-borrow {
+    -fx-background-color: #6e2f18;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10px;
+}
+
+.button-borrow:hover {
+    -fx-background-color: #943f20;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 0);
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
+}
+
+.button-borrow:pressed {
+    -fx-background-color: #5b2614;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18;
+    -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
+}
 
 
 .button-borrow2 {
- -fx-background-color:  #6e2f18;
- -fx-text-fill: #ffffff;
- -fx-font-size: 14;
- -fx-font-weight: 700;
- -fx-background-radius: 4px;
+    -fx-background-color: #6e2f18;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14;
+    -fx-font-weight: 700;
+    -fx-background-radius: 4px;
     -fx-cursor: hand;
-                }
- .button-borrow2:hover {
-  -fx-background-color:#943f20;
-  -fx-text-fill: #ffffff;
-  -fx-font-size: 14;
-  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 0);
-  -fx-font-weight: 700;
-  -fx-background-radius: 4px;
-  -fx-cursor: hand;
-                                }
-  .button-borrow2:pressed {
-   -fx-background-color: #5b2614;
-   -fx-text-fill: #ffffff;
-   -fx-font-size: 14;
-   -fx-font-weight: 700;
-   -fx-background-radius: 4px;
-   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
-  }
-        .image-avatar: hover {
-         -fx-cursor: hand;
-        }
+}
 
-        .tab-pane {
-            -fx-background-color: #ffffff;
-            -fx-border-width: 10px;
-            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
-        }
+.button-borrow2:hover {
+    -fx-background-color: #943f20;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 0);
+    -fx-font-weight: 700;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
 
-        .tab {
-            -fx-background-color: #e0e0e0;
-           -fx-background-radius: 10px 10px 10px 10px;
-             -fx-padding: 5px 12px;
-             -fx-background-insets: 0 5px 0 0;
-             -fx-focus-color: transparent;
-              -fx-faint-focus-color: transparent;
-        }
+.button-borrow2:pressed {
+    -fx-background-color: #5b2614;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14;
+    -fx-font-weight: 700;
+    -fx-background-radius: 4px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
+}
 
-        .tab:selected {
-            -fx-background-color: #6e2f18;
-            -fx-text-fill: white;
-             -fx-focus-color: transparent;
-              -fx-faint-focus-color: transparent;
-        }
+.image-avatar: hover {
+    -fx-cursor: hand;
+}
 
+.tab-pane {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
+}
 
-        .tab .tab-label {
-            -fx-font-size: 14px;
-            -fx-font-weight: bold;
-             -fx-focus-color: transparent;
-              -fx-faint-focus-color: transparent;
-        }
+.tab {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 10px 10px 10px 10px;
+    -fx-padding: 5px 12px;
+    -fx-background-insets: 0 5px 0 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-cursor: hand;
+}
+
+.tab:selected {
+    -fx-background-color: #6e2f18;
+    -fx-text-fill: white;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
 
 
-        .tab:hover {
-            -fx-background-color: #d0d0d0;
-             -fx-focus-color: transparent;
-              -fx-faint-focus-color: transparent;
-        }
+.tab .tab-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
 
 
-        .tab-header-background {
-            -fx-background-color: #ffffff;
-        }
-        .tab-pane .tab-header-area {
-        -fx-padding: 0 0 0 12px;
-        }
+.tab:hover {
+    -fx-background-color: #d0d0d0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
 
 
-        .tab:selected .tab-label {
-            -fx-text-fill: white;
-        }
-        *:focus {
-            -fx-focus-color: transparent;
-            -fx-faint-focus-color: transparent;
-        }
- .rounded-scroll-pane {
-    -fx-background-color: transparent;  
+.tab-header-background {
+    -fx-background-color: #ffffff;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 12px;
+}
+
+
+.tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+
+*:focus {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.rounded-scroll-pane {
+    -fx-background-color: transparent;
     -fx-background-radius: 20;
     -fx-border-radius: 20;
     -fx-border-color: lightgray;
     -fx-padding: 5;
- }
+}
 
- .rate-button {
-     -fx-background-color: white;
-     -fx-border-color: #FFA500;
-     -fx-border-radius: 8;
-     -fx-background-radius: 8;
-     -fx-text-fill: rgba(255, 165, 0, 1);
-     -fx-font-weight: bold;
+.rate-button {
+    -fx-background-color: white;
+    -fx-border-color: #FFA500;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: rgba(255, 165, 0, 1);
+    -fx-font-weight: bold;
     -fx-font-size: 16px;
- }
+}
 
- .rate-button:hover {
-     -fx-text-fill: rgba(255, 165, 0, 0.7);
-         -fx-cursor: hand;
- }
+.rate-button:hover {
+    -fx-text-fill: rgba(255, 165, 0, 0.7);
+    -fx-cursor: hand;
+}
 
 .book-pane {
     -fx-background-color: white;
