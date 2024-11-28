@@ -387,7 +387,6 @@ public class HomePageController implements Initializable {
         String keyword = searchTextField.getText().trim();
         String selectedFilter = filterBox.getValue();
         searchSuggestion.setVisible(false);
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
         try {
             Parent searchPageRoot = loader.load();
@@ -805,7 +804,6 @@ public class HomePageController implements Initializable {
         loadByQuery(null,"Most borrowed");
     }
 
-
     @FXML
     private void seeAllTopRatedBooks(){
         loadByQuery(null,"Top rated");
@@ -843,7 +841,6 @@ public class HomePageController implements Initializable {
             Stage currentStage = (Stage) mainScroll.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(searchPageRoot);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
