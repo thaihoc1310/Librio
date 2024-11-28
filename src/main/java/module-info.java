@@ -13,6 +13,8 @@ module librio {
     requires org.json;
     requires mysql.connector.j;
     requires java.mail;
+    requires com.google.zxing;
+    requires com.google.zxing.javase;
 
     exports librio;
     exports librio.models;

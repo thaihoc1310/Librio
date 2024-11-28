@@ -137,6 +137,7 @@
                                  </image>
                               </ImageView>
                               <Button fx:id="confirmButton" layoutX="57.0" layoutY="401.0" mnemonicParsing="false" onAction="#openBorrowConfirmationPane" prefHeight="40.0" prefWidth="211.0" styleClass="button-borrow" text="Borrow" />
+                              <ImageView fx:id="qrCodeImageView" fitHeight="86.0" fitWidth="86.0" layoutX="4.0" layoutY="454.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </AnchorPane>
                         <VBox fx:id="feedbackContainer" prefHeight="281.0" prefWidth="1026.0" spacing="10" style="-fx-background-color: ffffff;" styleClass="whitePane">
