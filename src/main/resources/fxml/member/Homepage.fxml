@@ -167,7 +167,7 @@
                               </Button>
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutX="77.0" layoutY="496.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0" styleClass="white-pane">
+                        <AnchorPane layoutX="77.0" layoutY="496.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="1240.0">
                            <children>
                               <Label layoutY="-4.0" prefHeight="32.0" prefWidth="141.0" text="Top-rated">
                                  <font>
@@ -488,6 +488,11 @@
                      </children>
                   </AnchorPane>
                   <Pane fx:id="backPane" onMouseClicked="#cancelMenuButton" prefHeight="741.0" prefWidth="1390.0" visible="false" />
+                  <AnchorPane fx:id="searchSuggestion" layoutX="437.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="0.0" prefWidth="647.0" visible="false">
+                     <children>
+                        <VBox fx:id="searchSuggestionContainer" prefHeight="38.0" prefWidth="647.0" styleClass="white-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="370.0" styleClass="Pane-avatar" stylesheets="@../../css/member/DesignUI.css" visible="false" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
                      <children>
                         <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="128.0" prefWidth="342.0" styleClass="Pane-avatar">

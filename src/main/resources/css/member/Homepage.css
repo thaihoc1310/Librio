@@ -191,3 +191,17 @@
     -fx-stroke: #A45C23;
     -fx-accent: #A45C23;
 }
+
+.suggest-label {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+    -fx-padding: 8;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.suggest-label:hover {
+    -fx-background-color: #f7f1e1;
+    -fx-cursor: hand;
+}

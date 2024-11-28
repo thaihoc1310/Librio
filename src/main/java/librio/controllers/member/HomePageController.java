@@ -13,10 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -36,6 +33,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -174,9 +172,10 @@ public class HomePageController implements Initializable {
     private ImageView banner13;
     @FXML
     private ImageView banner14;
-
-
-
+    @FXML
+    public VBox searchSuggestionContainer;
+    @FXML
+    public AnchorPane searchSuggestion;
     @FXML
     private AnchorPane notificationPane;
     @FXML
@@ -202,6 +201,7 @@ public class HomePageController implements Initializable {
         startAutoScroll();
         initScrollNavigation();
         initCategoryLabelClick();
+        setupSearchSuggestions();
 
         notificationPane.setVisible(false);
         int totalBooks = Session.getInstance().getTotalBooks();
@@ -386,6 +386,7 @@ public class HomePageController implements Initializable {
     private void handleSearch() {
         String keyword = searchTextField.getText().trim();
         String selectedFilter = filterBox.getValue();
+        searchSuggestion.setVisible(false);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
         try {
@@ -1088,6 +1089,80 @@ public class HomePageController implements Initializable {
         rightOurEconomicsBooksButton.setOnMouseClicked(event ->
                 scrollBooks(1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
         );
+    }
+
+    private List<String> loadSuggestionsFromDatabase(String query) {
+        List<String> suggestions = new ArrayList<>();
+        String filter = filterBox.getValue();
+        String sqlQuery = "SELECT DISTINCT " + filter + " FROM books WHERE " + filter + " LIKE ? LIMIT 10";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, "%" + query + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                suggestions.add(resultSet.getString(filter.toLowerCase()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return suggestions;
+    }
+
+    private void updateSearchSuggestionContainer(List<String> suggestions) {
+        searchSuggestionContainer.getChildren().clear();
+        if (suggestions.isEmpty()) {
+            searchSuggestion.setVisible(false);
+            return;
+        }
+
+        for (String suggestion : suggestions) {
+            Label suggestionLabel = new Label(suggestion);
+            suggestionLabel.setOnMouseClicked(event -> {
+                searchTextField.setText(suggestion);
+                handleSearch();
+            });
+            suggestionLabel.getStyleClass().add("suggest-label");
+            suggestionLabel.setPrefWidth(647);
+            suggestionLabel.setPrefHeight(38);
+            searchSuggestionContainer.getChildren().add(suggestionLabel);
+        }
+        searchSuggestion.setVisible(true);
+    }
+    private void setupSearchSuggestions() {
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                searchSuggestionContainer.getChildren().clear();
+                searchSuggestion.setVisible(false);
+            } else {
+                if (!searchTextField.isFocused()) {
+                    searchSuggestion.setVisible(false);
+                    return;
+                }
+                searchSuggestion.setVisible(true);
+                fetchSearchSuggestions(newValue.trim());
+            }
+        });
+    }
+
+    private void fetchSearchSuggestions(String query) {
+        Task<List<String>> suggestionTask = new Task<>() {
+            @Override
+            protected List<String> call() {
+                return loadSuggestionsFromDatabase(query);
+            }
+
+            @Override
+            protected void succeeded() {
+                List<String> suggestions = getValue();
+                updateSearchSuggestionContainer(suggestions);
+            }
+
+            @Override
+            protected void failed() {
+                getException().printStackTrace();
+            }
+        };
+        executor.submit(suggestionTask);
     }
 }
 

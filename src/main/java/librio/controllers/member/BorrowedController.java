@@ -531,12 +531,12 @@ public class BorrowedController implements Initializable {
     void logOut() throws IOException {
         Stage currenStage = (Stage) avatarUser.getScene().getWindow();
         Stage stage = new Stage();
-        stage.setTitle("Librio");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
         Parent loginRoot = loader.load();
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
+        ImageCache.getInstance().clearCache();
         currenStage.close();
     }
 

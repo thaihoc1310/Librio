@@ -221,6 +221,7 @@ public class SearchPageController implements Initializable {
         setupComboBoxListeners();
         setupPaneListeners();
         initCategoryLabelClick();
+        setupSearchSuggestions();
         notificationPane.setVisible(false);
 
         int totalBooks = Session.getInstance().getTotalBooks();
@@ -249,8 +250,6 @@ public class SearchPageController implements Initializable {
         socialScienceLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Social Science"));
         educationLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Education"));
         artLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
-//        searchSuggestion.toFront();
-        setupSearchSuggestions();
     }
 
     /**
