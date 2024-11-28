@@ -38,6 +38,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -78,6 +79,10 @@ public class SearchPageController implements Initializable {
     public Label thaiLabel;
     @FXML
     public Label chineseLabel;
+    @FXML
+    public VBox searchSuggestionContainer;
+    @FXML
+    public AnchorPane searchSuggestion;
     @FXML
     private ImageView clickAvatar;
     @FXML
@@ -244,6 +249,8 @@ public class SearchPageController implements Initializable {
         socialScienceLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Social Science"));
         educationLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Education"));
         artLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
+//        searchSuggestion.toFront();
+        setupSearchSuggestions();
     }
 
     /**
@@ -338,7 +345,6 @@ public class SearchPageController implements Initializable {
             String orderByClause = getOrderByClause(sortBox.getValue());
             query = buildQuery(selectedFilter, orderByClause, limitClause);
 
-            System.out.println(query);
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             int paramIndex = 1;
@@ -511,6 +517,7 @@ public class SearchPageController implements Initializable {
         bookList.clear();
         keyword = searchTextField.getText().trim();
         reloadData();
+        searchSuggestion.setVisible(false);
     }
 
     private void setupComboBoxListeners() {
@@ -521,6 +528,81 @@ public class SearchPageController implements Initializable {
         limitBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             reloadData();
         });
+    }
+
+    private void setupSearchSuggestions() {
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                searchSuggestionContainer.getChildren().clear();
+                searchSuggestion.setVisible(false);
+            } else {
+                if (!searchTextField.isFocused()) {
+                    searchSuggestion.setVisible(false);
+                    return;
+                }
+                searchSuggestion.setVisible(true);
+                fetchSearchSuggestions(newValue.trim());
+            }
+        });
+    }
+
+    private void fetchSearchSuggestions(String query) {
+        Task<List<String>> suggestionTask = new Task<>() {
+            @Override
+            protected List<String> call() {
+                return loadSuggestionsFromDatabase(query);
+            }
+
+            @Override
+            protected void succeeded() {
+                List<String> suggestions = getValue();
+                updateSearchSuggestionContainer(suggestions);
+            }
+
+            @Override
+            protected void failed() {
+                getException().printStackTrace();
+            }
+        };
+        executor.submit(suggestionTask);
+    }
+
+    private List<String> loadSuggestionsFromDatabase(String query) {
+        List<String> suggestions = new ArrayList<>();
+        String filter = filterBox.getValue();
+        String sqlQuery = "SELECT DISTINCT " + filter + " FROM books WHERE " + filter + " LIKE ? LIMIT 10";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, "%" + query + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                suggestions.add(resultSet.getString(filter.toLowerCase()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return suggestions;
+    }
+
+    private void updateSearchSuggestionContainer(List<String> suggestions) {
+        searchSuggestionContainer.getChildren().clear();
+        if (suggestions.isEmpty()) {
+            searchSuggestion.setVisible(false);
+            return;
+        }
+
+        for (String suggestion : suggestions) {
+            Label suggestionLabel = new Label(suggestion);
+            suggestionLabel.setOnMouseClicked(event -> {
+                searchTextField.setText(suggestion);
+                handleSearch();
+            });
+            suggestionLabel.getStyleClass().add("suggest-label");
+            suggestionLabel.setPrefWidth(647);
+            suggestionLabel.setPrefHeight(38);
+            searchSuggestionContainer.getChildren().add(suggestionLabel);
+        }
+        searchSuggestion.setVisible(true);
     }
 
     private void setupPaneListeners() {
