@@ -19,13 +19,13 @@
                <top>
                   <AnchorPane prefHeight="94.0" prefWidth="700.0" style="-fx-background-color: dcb485; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 2); -fx-background-radius: 10px 10px 0px 0px;" BorderPane.alignment="CENTER">
                      <children>
-                        <TextField fx:id="searchTextField" layoutX="283.0" layoutY="33.0" prefHeight="30.0" prefWidth="275.0" style="-fx-border-color: #4C2113; -fx-border-radius: 0px 15px 15px 0px; -fx-background-radius: 0px 15px 15px 0px; -fx-focus-color: #4C2113; -fx-faint-focus-color: transparent;">
+                        <TextField fx:id="searchTextField" layoutX="307.0" layoutY="33.0" prefHeight="30.0" prefWidth="275.0" style="-fx-border-color: #4C2113; -fx-border-radius: 0px 15px 15px 0px; -fx-background-radius: 0px 15px 15px 0px; -fx-focus-color: #4C2113; -fx-faint-focus-color: transparent;">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <ComboBox fx:id="filterBox" layoutX="197.0" layoutY="33.0" prefHeight="31.0" prefWidth="86.0" promptText="All" style="-fx-background-color: ffffff; -fx-border-color: #4C2113; -fx-border-width: 1.1px; -fx-border-radius: 15px 0px 0px 15px; -fx-background-radius: 15px 0px 0px 15px;" />
-                        <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="24.0" layoutX="518.0" layoutY="37.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
+                        <ComboBox fx:id="filterBox" layoutX="197.0" layoutY="33.0" prefHeight="31.0" prefWidth="109.0" promptText="All" style="-fx-background-color: ffffff; -fx-border-color: #4C2113; -fx-border-width: 1.1px; -fx-border-radius: 15px 0px 0px 15px; -fx-background-radius: 15px 0px 0px 15px;" />
+                        <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="24.0" layoutX="552.0" layoutY="37.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                            </image>

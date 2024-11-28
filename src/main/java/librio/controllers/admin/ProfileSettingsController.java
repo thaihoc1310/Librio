@@ -211,6 +211,7 @@ public class ProfileSettingsController implements Initializable {
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
+                hideErrorLabels();
                 notification.setText("Profile updated successfully!");
                 if (previousAvatarFilePath != null && avatarFilePath != null) {
                     String projectDir = System.getProperty("user.dir");
@@ -361,6 +362,9 @@ public class ProfileSettingsController implements Initializable {
             hideErrorAndNotificationLabels();
         });
         birthOfDatePicker.setOnMouseClicked(event -> {
+            hideErrorAndNotificationLabels();
+        });
+        birthOfDatePicker.getEditor().setOnMouseClicked(event -> {
             hideErrorAndNotificationLabels();
         });
         addressTextField.setOnMouseClicked(event -> {

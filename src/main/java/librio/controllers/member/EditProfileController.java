@@ -258,14 +258,14 @@ public class EditProfileController implements Initializable {
 
 
     private void addListeners() {
-        memberIdTextField.setOnMouseClicked(event -> notification.setText(""));
-        nameTextField.setOnMouseClicked(event -> notification.setText(""));
-        emailTextField.setOnMouseClicked(event -> notification.setText(""));
-        phoneNumberTextField.setOnMouseClicked(event -> notification.setText(""));
-        genderComboBox.setOnMouseClicked(event -> notification.setText(""));
-        birthOfDatePicker.setOnMouseClicked(event -> notification.setText(""));
-        birthOfDatePicker.getEditor().setOnMouseClicked(event -> notification.setText(""));
-        addressTextArea.setOnMouseClicked(event -> notification.setText(""));
+        memberIdTextField.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
+        nameTextField.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
+        emailTextField.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
+        phoneNumberTextField.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
+        genderComboBox.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
+        birthOfDatePicker.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
+        birthOfDatePicker.getEditor().setOnMouseClicked(event -> hideErrorAndNotificationLabels());
+        addressTextArea.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
     }
 
     private void hideErrorLabels() {
@@ -274,6 +274,13 @@ public class EditProfileController implements Initializable {
         phoneNumberErrorLabel.setText("");
         dateOfBirthErrorLabel.setText("");
     }
+
+    private void hideErrorAndNotificationLabels(){
+        hideErrorLabels();
+        notification.setText("");
+    }
+
+
 
     @FXML
     private void openChangePasswordScene() {
