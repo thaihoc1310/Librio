@@ -1,5 +1,6 @@
 package librio.controllers.member;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import librio.cache.ImageCache;
 import librio.session.Session;
 import librio.database.DatabaseConnection;
@@ -504,7 +506,22 @@ public class BorrowedController implements Initializable {
             Parent manageUserRoot = loader.load();
             Stage currentStage = (Stage) avatarUser.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageUserRoot);
+
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(150), currentScene.getRoot());
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+
+            fadeOut.setOnFinished(event -> {
+                currentScene.setRoot(manageUserRoot);
+
+                FadeTransition fadeIn = new FadeTransition(Duration.millis(50), manageUserRoot);
+                fadeIn.setFromValue(0.0);
+                fadeIn.setToValue(1.0);
+                fadeIn.play();
+            });
+
+            fadeOut.play();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

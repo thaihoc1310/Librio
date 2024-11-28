@@ -316,6 +316,11 @@ public class ChangePasswordController implements Initializable {
         confirmPasswordTextField.requestFocus();
         confirmPasswordTextField.positionCaret(confirmPasswordTextVisible.getText().length());
     }
+    @FXML
+    private void cancel() {
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        stage.close();
+    }
 
 
 }

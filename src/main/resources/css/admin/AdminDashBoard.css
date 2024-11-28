@@ -10,14 +10,40 @@
 .button {
     -fx-background-color:  #DCB485 ;
     -fx-text-fill: #4C2113;
-    -fx-background-radius: 6px;
-    -fx-border-radius: 6px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
 }
 .button:hover {
     -fx-background-color:#f1debc;
     -fx-cursor: hand;
 
 }
+.button-inSettings {
+    -fx-background-color:  #DCB485 ;
+       -fx-text-fill: #4C2113;
+    -fx-background-radius: 25px;
+
+}
+.button-inSettings:hover {
+  -fx-background-color:  #DCB485 ;
+     -fx-text-fill: #4C2113;
+}
+
+.button-inSettings:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+.button-inSettings2 {
+    -fx-background-color:  #DCB485 ;
+    -fx-text-fill: #4C2113;
+    -fx-background-radius: 25px;
+}
+.button-inSettings2:hover {
+    -fx-background-color:  #DCB485;
+
+
+}
+
 .table-view .column-header,
 .table-view .column-header-background .filler {
     -fx-cell-size : 20;
@@ -124,3 +150,135 @@
     -fx-fill: #333333;
     -fx-pie-padding: 100px;
 }
+
+.design-Anchor {
+-fx-background-color: #f8edd9;
+-fx-border-color: #4c2113;
+-fx-border-radius: 15px 15px 0 0;
+-fx-border-style: solid solid none solid;
+-fx-border-width: 0.3px;
+}
+.design-Anchor2 {
+-fx-background-color: #f8edd9;
+-fx-border-color: #4c2113;
+-fx-border-style: solid solid none solid;
+-fx-border-width: 0.3px;
+}
+.design-Anchor2: hover {
+-fx-border-style: solid solid solid solid;
+-fx-border-width: 0.3px  0.3px 1px 0.3px;
+}
+.design-Anchor3 {
+-fx-background-color: #f8edd9;
+-fx-border-color: #4c2113;
+-fx-border-radius: 0 0 15px 15px ;
+-fx-border-style: none solid solid solid;
+-fx-border-width: 0.3px;
+}
+
+.design-textField {
+-fx-background-color: #f8edd9;
+}
+/* Định dạng cho DatePicker */
+.date-picker {
+    -fx-border-color: transparent;
+}
+
+.date-picker, .date-picker .text-field, .date-picker .content {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #000000;
+    -fx-font-weight: 500;
+    -fx-font-family: 'System';
+}
+
+.date-picker:hover, .date-picker:focused {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+}
+
+.date-picker:hover,.combo-box:hover, .date-picker .text-field:hover{
+    -fx-cursor: hand;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #F1DEBC;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #4C2113; /* Màu cho biểu tượng lịch */
+}
+
+.date-picker .month-year-pane {
+    -fx-background-color: #DCB485; /* Màu nền cho tiêu đề tháng/năm */
+    -fx-text-fill: #4C2113; /* Màu chữ cho tháng và năm */
+}
+
+.date-picker .month-year-label {
+    -fx-text-fill: #4C2113; /* Màu chữ cho tháng và năm */
+}
+
+.date-picker .day-name-cell {
+    -fx-background-color: #F1DEBC; /* Màu nền cho các tên ngày (Mon, Tue, ...) */
+    -fx-text-fill: #4C2113; /* Màu chữ cho tên ngày */
+}
+
+/* Thay đổi màu nền và màu chữ cho các ô ngày */
+.date-picker .day-cell {
+    -fx-background-color: #F1DEBC; /* Màu nền cho các ô ngày */
+    -fx-text-fill: #4C2113; /* Màu chữ cho ngày */
+}
+
+.date-picker .day-cell:hover {
+    -fx-background-color: #F1DEBC; /* Màu nền khi hover vào các ô ngày */
+    -fx-cursor: hand;
+}
+
+/* Thay đổi màu nền và màu chữ cho ngày được chọn */
+.date-picker .day-cell:selected {
+    -fx-background-color: #4C2113; /* Màu nền cho ngày được chọn */
+    -fx-text-fill: #FFFFFF; /* Màu chữ cho ngày được chọn */
+}
+
+/* Định dạng các mũi tên chuyển tháng/năm */
+.date-picker .left-arrow .arrow, .date-picker .right-arrow .arrow {
+    -fx-background-color: #4C2113; /* Màu cho mũi tên chuyển tháng/năm */
+}
+.combo-box {
+    -fx-border-color: transparent;
+}
+
+.combo-box, .combo-box .list-cell {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+    -fx-font-weight: 500;
+    -fx-font-family: 'System';
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+    -fx-cursor: hand;
+}
+
+.combo-box:hover, .combo-box:focused {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #F1DEBC;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #4C2113;
+}
+.textField-password{
+ -fx-background-color: #FFFFFF;
+ -fx-background-radius: 20px;
+ -fx-border-radius: 20px;
+ -fx-border-color:#4c2113;
+ -fx-border-width: 0.8px;
+
+}
+
