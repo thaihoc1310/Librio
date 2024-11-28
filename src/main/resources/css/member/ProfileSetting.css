@@ -55,14 +55,30 @@
 
 /* Nút Lưu thay đổi */
 .save-button {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #d2ac7f;
      -fx-background-radius: 10px;
 }
 
 .save-button:hover {
-    -fx-background-color: #FFFFFF;
+     -fx-background-color: rgba(210, 172, 127, 0.7);
      -fx-background-radius: 10px;
      -fx-border-width: 0.5px;
+}
+
+.cancel-button {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color:#4c2113;
+    -fx-border-width: 0.5px;
+}
+
+.cancel-button:hover {
+    -fx-background-color: rgba(210, 172, 127, 0.7);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color:#4c2113;
+    -fx-border-width: 0.5px;
 }
 
 /* Style mặc định cho nút với màu xám */
@@ -95,6 +111,7 @@
     -fx-background-radius: 4px;
     -fx-padding: 5px;
     -fx-font-size: 13px;
+    -fx-cursor: hand;
 }
 
 .date-picker {
@@ -117,12 +134,13 @@
 }
 
 .date-picker:hover,.combo-box:hover, .date-picker .text-field:hover{
-    -fx-cursor: hand;
+    /*-fx-cursor: hand;*/
 }
 
 .date-picker .arrow-button {
     -fx-background-color: #ffffff;
        -fx-background-radius:10px;
+    -fx-cursor: hand;
 }
 
 .date-picker .arrow-button .arrow {
@@ -150,7 +168,7 @@
 }
 
 .date-picker .day-cell:hover {
-    -fx-background-color: #F1DEBC; /* Màu nền khi hover vào các ô ngày */
+    -fx-background-color: #eac37d; /* Màu nền khi hover vào các ô ngày */
     -fx-cursor: hand;
 }
 
@@ -170,7 +188,6 @@
  -fx-border-radius: 10px;
  -fx-border-color:#4c2113;
  -fx-border-width: 0.5px;
-
 }
 
 

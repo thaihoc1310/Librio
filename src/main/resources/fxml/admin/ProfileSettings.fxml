@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -22,7 +23,7 @@
             <children>
                 <BorderPane prefHeight="741.0" prefWidth="1400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <left>
-                        <AnchorPane prefHeight="578.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
+                        <AnchorPane prefHeight="466.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" BorderPane.alignment="CENTER">
                             <children>
                                 <VBox layoutY="81.8" prefHeight="290.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                     <children>
@@ -126,10 +127,13 @@
                         </AnchorPane>
                     </left>
                     <bottom>
-                        <HBox alignment="CENTER" prefHeight="51.2" BorderPane.alignment="CENTER">
+                        <HBox alignment="CENTER" prefHeight="43.0" prefWidth="1595.0" BorderPane.alignment="CENTER">
                             <padding>
                                 <Insets left="200.0" />
                             </padding>
+                     <children>
+                        <Pagination fx:id="pagination" disable="true" prefHeight="38.0" prefWidth="1111.0" visible="false" />
+                     </children>
                         </HBox>
                     </bottom>
                     <top>
@@ -154,7 +158,7 @@
                     <center>
                         <AnchorPane prefHeight="282.0" prefWidth="612.0" BorderPane.alignment="CENTER">
                             <children>
-                                <ImageView fx:id="avatar" fitHeight="150.0" fitWidth="150.0" layoutX="147.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fx:id="avatar" fitHeight="150.0" fitWidth="150.0" layoutX="144.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
                                     </image>
@@ -237,7 +241,7 @@
                               <AnchorPane prefHeight="86.0" prefWidth="682.0" styleClass="design-Anchor2">
                                  <children>
                                     <Label layoutX="14.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="Date of birth" />
-                                              <DatePicker fx:id="birthOfDatePicker" layoutX="10.0" layoutY="28.0" prefHeight="34.0" prefWidth="180.0" styleClass="design-textField2">
+                                              <DatePicker fx:id="birthOfDatePicker" layoutX="10.0" layoutY="28.0" prefHeight="34.0" prefWidth="180.0" styleClass="date-picker">
                                                   <opaqueInsets>
                                                       <Insets />
                                                   </opaqueInsets>
@@ -267,7 +271,7 @@
                         </AnchorPane>
                     </center>
                 </BorderPane>
-                <AnchorPane layoutY="590.0" prefHeight="51.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.bottomAnchor="0.0" />
+                <AnchorPane layoutY="590.0" prefHeight="55.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.bottomAnchor="0.0" />
                 <AnchorPane layoutY="20.0" prefHeight="123.0" prefWidth="200.0" style="-fx-background-color: #DCB485;" AnchorPane.topAnchor="0.0">
                     <children>
                         <ImageView fx:id="avatarUser" fitHeight="77.0" fitWidth="77.0" layoutX="63.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">

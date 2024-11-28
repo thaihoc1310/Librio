@@ -17,11 +17,13 @@ import java.io.File;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.*;
 import static librio.util.DatabaseUtil.isEmailExists;
+import static librio.util.DesignUtil.setDatePickerFormat;
 
 public class CreateBorrowController implements Initializable {
     @FXML
@@ -63,6 +65,7 @@ public class CreateBorrowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         borrowDateTextField.setText(LocalDate.now().toString());
         dueDatePicker.setValue(LocalDate.now().plusDays(30));
+        setDatePickerFormat(dueDatePicker);
         hideErrorLabels();
         addListeners();
     }
@@ -72,11 +75,32 @@ public class CreateBorrowController implements Initializable {
     private void createBorrow() {
         String email = emailTextField.getText();
         String isbn = bookIsbnTextField.getText();
-        LocalDate dueDate = dueDatePicker.getValue();
+        String dueDateString = dueDatePicker.getEditor().getText();
+        LocalDate dueDate = null;
+
+        String dateRegex = "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$";
+        boolean validation = false;
+
+//        if (!dueDateString.matches(dateRegex)) {
+//            dueDateErrorLabel.setText("Invalid date format!");
+//            validation = true;
+//        } else {
+//            try {
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+//                dueDate = LocalDate.parse(dueDateString, formatter);
+//                if (dueDate.isBefore(borrowDate)) {
+//                    dueDateErrorLabel.setText("Due date cannot be before borrow date!");
+//                    validation = true;
+//                }
+//            } catch (Exception e) {
+//                dueDateErrorLabel.setText("Invalid date format!");
+//                validation = true;
+//            }
+//        }
 
         Book book = getBookByIsbn(isbn);
 
-        boolean validation = false;
+//        boolean validation = false;
 
         if (email.trim().isEmpty()) {
             emailErrorLabel.setText("Email is required!");

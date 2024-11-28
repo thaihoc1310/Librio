@@ -186,7 +186,6 @@ public class UpdateBorrowController implements Initializable {
         borrowDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
         dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
         returnDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
-
     }
 
 

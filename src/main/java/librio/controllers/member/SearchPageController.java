@@ -978,17 +978,26 @@ public class SearchPageController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
             Parent root = loader.load();
-
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Edit Profile");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(searchTextField.getScene().getWindow());
-            stage.initModality(Modality.APPLICATION_MODAL);
-            // Hiển thị scene
+            stage.initModality(Modality.WINDOW_MODAL); stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+
+            });
             stage.showAndWait();
             setAvatarAndUserName();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }

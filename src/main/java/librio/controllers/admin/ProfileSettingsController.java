@@ -392,7 +392,7 @@ public class ProfileSettingsController implements Initializable {
 
         Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
         cropAndClipToCircle(image, avatarUser, 38.5);
-        cropAndClipToCircle(image, avatar, 100);
+        cropAndClipToCircle(image, avatar, 75);
         userNameLabel.setText(loggedInUser.getName());
     }
 

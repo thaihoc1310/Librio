@@ -35,7 +35,7 @@
             </ImageView>
             <ImageView fx:id="ClickAvatar" fitHeight="46.0" fitWidth="46.0" layoutX="1319.0" layoutY="18.0" onMouseClicked="#handleAvatarClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" styleClass="Pane-avatar">
                <image>
-                  <Image url="@../../icons/MemberIcon/MaleUser.png" />
+                  <Image url="@../../icons/MemberIcon/MaleUser2.png" />
                </image>
             </ImageView>
          </children>

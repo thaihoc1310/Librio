@@ -107,6 +107,7 @@ public class NotificationController {
                 bookPane.setPrefSize(BOOK_PANE_WIDTH, BOOK_PANE_HEIGHT);
                 bookPane.setMaxHeight(BOOK_PANE_HEIGHT);
                 bookPane.setMinHeight(BOOK_PANE_HEIGHT);
+                bookPane.setStyle("-fx-cursor: hand");
                 bookPane.getStyleClass().add("book-pane");
                 bookPane.setOnMouseClicked(event -> openBorrowedBooksPage(String.valueOf(book.getBorrowId())));
 
@@ -164,6 +165,7 @@ public class NotificationController {
                 bookPane.setMaxHeight(BOOK_PANE_HEIGHT);
                 bookPane.setMinHeight(BOOK_PANE_HEIGHT);
                 bookPane.getStyleClass().add("book-pane");
+                bookPane.setStyle("-fx-cursor: hand");
                 bookPane.setOnMouseClicked(event -> openBorrowedBooksPage(String.valueOf(book.getBorrowId())));
 
                 ImageView bookImageView = new ImageView();
