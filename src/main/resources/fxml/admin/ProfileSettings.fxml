@@ -203,7 +203,7 @@
                                             <GridPane.margin>
                                                 <Insets top="10.0" />
                                             </GridPane.margin></TextField>
-                                        <DatePicker fx:id="birthOfDatePicker" editable="false" prefHeight="30.0" prefWidth="341.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
+                                        <DatePicker fx:id="birthOfDatePicker" prefHeight="30.0" prefWidth="341.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
                                             <opaqueInsets>
                                                 <Insets />
                                             </opaqueInsets>
@@ -220,10 +220,10 @@
                                                 <Insets top="-55.0" />
                                             </GridPane.margin></Text>
                                         <TextArea fx:id="addressTextArea" prefHeight="50.0" prefWidth="340.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />
-                                        <Label fx:id="nameErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                        <Label fx:id="emailErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                        <Label fx:id="phoneNumberErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                                        <Label fx:id="dateOfBirthErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                                        <Label fx:id="nameErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                        <Label fx:id="emailErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                        <Label fx:id="phoneNumberErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                        <Label fx:id="dateOfBirthErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="2" GridPane.rowIndex="11" />
                                     </children>
                                 </GridPane>
                                 <ImageView fx:id="avatar" fitHeight="180.0" fitWidth="180.0" layoutX="830.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">

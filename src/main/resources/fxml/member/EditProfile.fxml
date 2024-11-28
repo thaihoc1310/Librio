@@ -87,10 +87,10 @@
                      </GridPane.margin>
                   </Text>
                   <TextArea fx:id="addressTextArea" prefHeight="62.0" prefWidth="340.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />
-                  <Label fx:id="nameErrorLabel" text="h" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <Label fx:id="emailErrorLabel" text="h" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                  <Label fx:id="phoneNumberErrorLabel" text="h" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                  <Label fx:id="dateOfBirthErrorLabel" text="h" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                  <Label fx:id="nameErrorLabel" text="h" GridPane.columnIndex="2" GridPane.rowIndex="3" textFill="#ff0f0f"/>
+                  <Label fx:id="emailErrorLabel" text="h" GridPane.columnIndex="2" GridPane.rowIndex="5" textFill="#ff0f0f"/>
+                  <Label fx:id="phoneNumberErrorLabel" text="h" GridPane.columnIndex="2" GridPane.rowIndex="7" textFill="#ff0f0f"/>
+                  <Label fx:id="dateOfBirthErrorLabel" text="h" GridPane.columnIndex="2" GridPane.rowIndex="11" textFill="#ff0f0f"/>
                </children>
             </GridPane>
             <Button layoutX="775.0" layoutY="222.0" mnemonicParsing="false" onAction="#changeAvatar" text="Change Avatar" />

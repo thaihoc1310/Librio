@@ -70,7 +70,7 @@
                               <Label fx:id="emailErrorLabel" textFill="#ff0f0f" />
                               <TextField fx:id="phoneNumberTextField" />
                               <Label fx:id="phoneNumberErrorLabel" textFill="#ff0f0f" />
-                              <DatePicker fx:id="birthOfDatePicker" prefHeight="25.0" prefWidth="189.0" />
+                              <DatePicker fx:id="birthOfDatePicker" prefHeight="25.0" prefWidth="189.0" promptText="mm/dd/yyyy" />
                               <Label fx:id="birthOfDateErrorLabel" prefHeight="17.0" prefWidth="188.0" textFill="#ff0f0f" />
                               <TextArea fx:id="addressTextArea" prefHeight="93.0" prefWidth="183.0" wrapText="true" />
                            </children>

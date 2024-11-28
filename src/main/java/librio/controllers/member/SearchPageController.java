@@ -1070,6 +1070,7 @@ public class SearchPageController implements Initializable {
     }
 
     private void setKeywordAndCategory(String category) {
+        additionalCondition = null;
         this.searchTextField.setText(category);
         filterBox.getSelectionModel().select(2);
         handleSearch();

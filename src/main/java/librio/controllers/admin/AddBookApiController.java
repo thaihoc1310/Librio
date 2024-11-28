@@ -345,6 +345,7 @@ public class AddBookApiController implements Initializable {
             stage.initStyle(StageStyle.TRANSPARENT);
             Scene scene = new Scene(root);
             scene.setFill(Color.TRANSPARENT);
+            scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.setResizable(false);
             stage.initOwner(searchButton.getScene().getWindow());

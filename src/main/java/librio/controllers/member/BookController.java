@@ -19,6 +19,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import librio.cache.ImageCache;
 import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
@@ -371,15 +372,17 @@ public class BookController implements Initializable {
 
     @FXML
     void logOut() throws IOException {
-        Stage currenStage = (Stage) searchTextField.getScene().getWindow();
+        Stage currenStage = (Stage) avatarUser.getScene().getWindow();
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-        Parent loginRoot  = loader.load();
+        Parent loginRoot = loader.load();
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
+        ImageCache.getInstance().clearCache();
         currenStage.close();
     }
+
     @FXML
     private void openBorrowed() {
         try {

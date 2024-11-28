@@ -32,10 +32,13 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setDatePickerFormat;
 
 public class EditProfileController implements Initializable {
 
@@ -117,8 +120,29 @@ public class EditProfileController implements Initializable {
         String phoneNumber = phoneNumberTextField.getText();
         Gender gender = genderComboBox.getValue();
         String address = addressTextArea != null ? addressTextArea.getText() : null;
-        LocalDate birthOfDate = birthOfDatePicker.getValue();
+        String dateString = birthOfDatePicker.getEditor().getText();
+        LocalDate birthOfDate = null;
+
+        String dateRegex = "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$";
         boolean validation = false;
+
+        if (!dateString.matches(dateRegex)) {
+            dateOfBirthErrorLabel.setText("Invalid date format!");
+            validation = true;
+        } else {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                birthOfDate = LocalDate.parse(dateString, formatter);
+
+                if (birthOfDate.isAfter(LocalDate.now())) {
+                    dateOfBirthErrorLabel.setText("Birth of Date cannot be after now!");
+                    validation = true;
+                }
+            } catch (DateTimeParseException e) {
+                dateOfBirthErrorLabel.setText("Invalid date!");
+                validation = true;
+            }
+        }
 
         if (name.isEmpty()) {
             nameErrorLabel.setText("Name cannot be empty!");
@@ -141,11 +165,6 @@ public class EditProfileController implements Initializable {
             validation = true;
         } else if (!phoneNumber.matches("\\d{10}")) {
             phoneNumberErrorLabel.setText("Phone number must be 10 digits!");
-            validation = true;
-        }
-
-        if (birthOfDate.isAfter(LocalDate.now())) {
-            dateOfBirthErrorLabel.setText("Birth date cannot be after now!");
             validation = true;
         }
 
@@ -232,6 +251,7 @@ public class EditProfileController implements Initializable {
         birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
         genderComboBox.setValue(loggedInUser.getGender());
         memberIdTextField.setText(String.valueOf(loggedInUser.getId()));
+        setDatePickerFormat(birthOfDatePicker);
         hideErrorLabels();
         addListeners();
     }
@@ -244,6 +264,7 @@ public class EditProfileController implements Initializable {
         phoneNumberTextField.setOnMouseClicked(event -> notification.setText(""));
         genderComboBox.setOnMouseClicked(event -> notification.setText(""));
         birthOfDatePicker.setOnMouseClicked(event -> notification.setText(""));
+        birthOfDatePicker.getEditor().setOnMouseClicked(event -> notification.setText(""));
         addressTextArea.setOnMouseClicked(event -> notification.setText(""));
     }
 

@@ -32,10 +32,13 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setDatePickerFormat;
 
 public class ProfileSettingsController implements Initializable {
 
@@ -120,8 +123,29 @@ public class ProfileSettingsController implements Initializable {
         String phoneNumber = phoneNumberTextField.getText();
         Gender gender = genderComboBox.getValue();
         String address = addressTextArea != null ? addressTextArea.getText() : null;
-        LocalDate birthOfDate = birthOfDatePicker.getValue();
+        String dateString = birthOfDatePicker.getEditor().getText();
+        LocalDate birthOfDate = null;
+
+        String dateRegex = "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$";
         boolean validation = false;
+
+        if (!dateString.matches(dateRegex)) {
+            dateOfBirthErrorLabel.setText("Invalid date format!");
+            validation = true;
+        } else {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                birthOfDate = LocalDate.parse(dateString, formatter);
+
+                if (birthOfDate.isAfter(LocalDate.now())) {
+                    dateOfBirthErrorLabel.setText("Birth of Date cannot be after now!");
+                    validation = true;
+                }
+            } catch (DateTimeParseException e) {
+                dateOfBirthErrorLabel.setText("Invalid date!");
+                validation = true;
+            }
+        }
 
         if (name.isEmpty()) {
             nameErrorLabel.setText("Name cannot be empty");
@@ -145,10 +169,6 @@ public class ProfileSettingsController implements Initializable {
         } else if (!phoneNumber.matches("\\d{10}")) {
             phoneNumberErrorLabel.setText("Phone number must be 10 digits");
             validation = true;
-        }
-
-        if (birthOfDate.isAfter(LocalDate.now())) {
-            dateOfBirthErrorLabel.setText("Birth of Date must not be after today");
         }
 
         if (validation) {
@@ -182,6 +202,7 @@ public class ProfileSettingsController implements Initializable {
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
+                hideErrorLabels();
                 notification.setText("Profile updated successfully!");
                 if (previousAvatarFilePath != null && avatarFilePath != null) {
                     String projectDir = System.getProperty("user.dir");
@@ -220,24 +241,6 @@ public class ProfileSettingsController implements Initializable {
         addressTextArea.setText(loggedInUser.getAddress());
         genderComboBox.setValue(loggedInUser.getGender());
         birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
-
-        // Lấy đường dẫn ảnh từ project
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + loggedInUser.getAvatar();
-
-        // Chuyển đổi đường dẫn thành URL
-        File file = new File(path);
-        if (file.exists()) {
-            Image image = new Image(file.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-            cropAndClipToCircle(image, avatar, 90);
-        } else {
-            String defaultImage = avatarsDir + "Male User.png";
-            File defaultImageFile = new File(defaultImage);
-            Image image = new Image(defaultImageFile.toURI().toString()); // Chuyển đổi file thành URL hợp lệ
-            cropAndClipToCircle(image, avatar, 90);
-        }
-
         nameTextField.setText(loggedInUser.getName());
         emailTextField.setText(loggedInUser.getEmail());
         phoneNumberTextField.setText(loggedInUser.getPhoneNumber());
@@ -245,6 +248,15 @@ public class ProfileSettingsController implements Initializable {
         birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
         genderComboBox.setValue(loggedInUser.getGender());
         memberIdTextField.setText(String.valueOf(loggedInUser.getId()));
+
+
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + loggedInUser.getAvatar();
+
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatar, 90);
+        setDatePickerFormat(birthOfDatePicker);
         addListeners();
     }
 
@@ -260,11 +272,15 @@ public class ProfileSettingsController implements Initializable {
     }
 
     private void hideErrorAndNotificationLabels() {
+        hideErrorLabels();
+        notification.setText("");
+    }
+
+    private void hideErrorLabels(){
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");
         phoneNumberErrorLabel.setText("");
         dateOfBirthErrorLabel.setText("");
-        notification.setText("");
     }
 
     public void setAvatarAndUserName(){

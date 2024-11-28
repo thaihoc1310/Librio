@@ -224,7 +224,7 @@ public class AdDashboardController implements Initializable {
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
         Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
-        avatarUser.setImage(image);
+        cropAndClipToCircle(image, avatarUser, 38.5);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
     }
 
