@@ -17,10 +17,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import librio.cache.ImageCache;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.models.User;
+import librio.session.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,10 +39,10 @@ import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class EditProfileController implements Initializable {
 
-    private User loggedInUser =  Session.getInstance().getLoggedInUser();
+    private User loggedInUser = Session.getInstance().getLoggedInUser();
 
     @FXML
-    private TextArea addressTextArea;
+    private TextField addressTextArea;
 
     @FXML
     private Button saveButton;
@@ -159,7 +159,7 @@ public class EditProfileController implements Initializable {
         loggedInUser.setGender(gender);
         loggedInUser.setAddress(address);
         loggedInUser.setBirthOfDate(birthOfDate);
-        if(avatarFilePath != null){
+        if (avatarFilePath != null) {
             loggedInUser.setAvatar(avatarFilePath);
         }
 
@@ -196,7 +196,7 @@ public class EditProfileController implements Initializable {
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
             }
-
+            cancel();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -206,7 +206,7 @@ public class EditProfileController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if(loggedInUser == null) {
+        if (loggedInUser == null) {
             return;
         }
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
@@ -222,7 +222,7 @@ public class EditProfileController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + loggedInUser.getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
         cropAndClipToCircle(image, avatar, 50);
 
         nameTextField.setText(loggedInUser.getName());
@@ -255,7 +255,7 @@ public class EditProfileController implements Initializable {
     }
 
     @FXML
-    private void openChangePasswordScene(){
+    private void openChangePasswordScene() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Password.fxml"));
             Parent manageBorrowRoot = loader.load();
@@ -296,6 +296,12 @@ public class EditProfileController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void cancel() {
+        Stage stage = (Stage) profilePane.getScene().getWindow();
+        stage.close();
     }
 }
 

@@ -150,7 +150,7 @@
     -fx-underline: true;
 }
 
-/* Author style */
+
 .author-label {
     -fx-font-size: 13px;
     -fx-text-fill: #000000;
@@ -182,10 +182,10 @@
 }
 
 .circular-button:pressed {
-    -fx-background-color: #d8c4a3; /* Màu nền khi nhấn */
-    -fx-border-color: #d1b89b;    /* Đổi màu viền khi nhấn */
--fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 3, 0, 0, 1); /* Giảm bóng */
-    -fx-translate-y: 2px;        /* Tạo hiệu ứng nhấn chìm */
+    -fx-background-color: #d8c4a3;
+    -fx-border-color: #d1b89b;
+-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 3, 0, 0, 1);
+    -fx-translate-y: 2px;
 }
 .bag-Pane {
  -fx-background-color: #dd2334;

@@ -5,23 +5,18 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<StackPane fx:id="stackPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ProfileSettingsController">
+<StackPane fx:id="stackPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1595.0" stylesheets="@../../css/admin/AdminDashBoard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.admin.ProfileSettingsController">
     <children>
         <AnchorPane prefHeight="741.0" prefWidth="1400.0" style="-fx-background-color: f8edd9;" styleClass="main-pane">
             <children>
@@ -159,98 +154,119 @@
                     <center>
                         <AnchorPane prefHeight="282.0" prefWidth="612.0" BorderPane.alignment="CENTER">
                             <children>
-                                <GridPane layoutX="75.0" layoutY="40.0" prefHeight="462.0" prefWidth="514.0">
-                                    <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="197.4000244140625" minWidth="10.0" prefWidth="122.99996337890624" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="197.4000244140625" minWidth="0.0" prefWidth="0.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="340.00000000000006" minWidth="10.0" prefWidth="340.00000000000006" />
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="32.60001220703125" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="63.60001220703124" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="72.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="88.59998168945313" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="34.60001220703123" minHeight="4.999975585937477" prefHeight="15.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="73.80002441406253" minHeight="10.0" prefHeight="65.80002441406253" vgrow="SOMETIMES" />
-                                    </rowConstraints>
-                                    <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ID :" GridPane.halignment="RIGHT" />
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name :" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email :" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number :" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date of Birth :" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Gender :" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
-                                        <TextField fx:id="memberIdTextField" editable="false" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2">
-                                            <GridPane.margin>
-                                                <Insets top="10.0" />
-                                            </GridPane.margin></TextField>
-                                        <TextField fx:id="nameTextField" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                                            <GridPane.margin>
-                                                <Insets top="10.0" />
-                                            </GridPane.margin></TextField>
-                                        <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="263.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                                            <GridPane.margin>
-                                                <Insets top="10.0" />
-                                            </GridPane.margin></TextField>
-                                        <TextField fx:id="phoneNumberTextField" GridPane.columnIndex="2" GridPane.rowIndex="6">
-                                            <GridPane.margin>
-                                                <Insets top="10.0" />
-                                            </GridPane.margin></TextField>
-                                        <DatePicker fx:id="birthOfDatePicker" editable="false" prefHeight="30.0" prefWidth="341.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
-                                            <opaqueInsets>
-                                                <Insets />
-                                            </opaqueInsets>
-                                            <GridPane.margin>
-                                                <Insets top="10.0" />
-                                            </GridPane.margin>
-                                        </DatePicker>
-                                        <ComboBox fx:id="genderComboBox" prefHeight="30.0" prefWidth="342.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
-                                            <GridPane.margin>
-                                                <Insets top="10.0" />
-                                            </GridPane.margin></ComboBox>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address :" GridPane.halignment="RIGHT" GridPane.rowIndex="12">
-                                            <GridPane.margin>
-                                                <Insets top="-55.0" />
-                                            </GridPane.margin></Text>
-                                        <TextArea fx:id="addressTextArea" prefHeight="50.0" prefWidth="340.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />
-                                        <Label fx:id="nameErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                        <Label fx:id="emailErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                        <Label fx:id="phoneNumberErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                                        <Label fx:id="dateOfBirthErrorLabel" GridPane.columnIndex="2" GridPane.rowIndex="11" />
-                                    </children>
-                                </GridPane>
-                                <ImageView fx:id="avatar" fitHeight="180.0" fitWidth="180.0" layoutX="830.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fx:id="avatar" fitHeight="150.0" fitWidth="150.0" layoutX="147.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../icons/AdminDashBoardIcon/Male%20User.png" />
+                                        <Image url="@../../icons/AdminDashBoardIcon/Male User.png" />
                                     </image>
                                 </ImageView>
-                                <Button layoutX="862.0" layoutY="218.0" mnemonicParsing="false" onAction="#changeAvatar" text="Change Avatar" />
-                                <ImageView fitHeight="156.0" fitWidth="165.0" layoutX="721.0" layoutY="271.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../../icons/AdminDashBoardIcon/Settings.png" />
-                                    </image>
-                                </ImageView>
-                                <Button fx:id="saveButton" layoutX="286.0" layoutY="510.0" mnemonicParsing="false" onAction="#save" prefHeight="41.0" prefWidth="266.0" text="Save" />
-                                <ImageView fitHeight="223.0" fitWidth="254.0" layoutX="920.0" layoutY="255.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../../icons/AdminDashBoardIcon/Settings.png" />
-                                    </image>
-                                </ImageView>
-                                <ImageView fitHeight="179.0" fitWidth="193.0" layoutX="799.0" layoutY="366.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../../icons/AdminDashBoardIcon/Settings.png" />
-                                    </image>
-                                </ImageView>
-                                <Button layoutX="67.0" layoutY="-1.0" mnemonicParsing="false" style="-fx-background-color: f1debc;" text="Personal Information" />
-                                <Button layoutX="252.0" layoutY="-1.0" mnemonicParsing="false" onAction="#openChangePasswordScene" text="Change password" />
-                        <Label fx:id="notification" layoutX="322.0" layoutY="559.0" />
+                                <Button layoutX="175.0" layoutY="227.0" mnemonicParsing="false" onAction="#changeAvatar" prefHeight="34.0" prefWidth="91.0" styleClass="button-inSettings" text="Edit" />
+                                <Button fx:id="saveButton" graphicTextGap="8.0" layoutX="110.0" layoutY="501.0" mnemonicParsing="false" onAction="#save" prefHeight="33.0" prefWidth="223.0" styleClass="button-inSettings" text="Save">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../icons/AdminDashBoardIcon/Save.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                                <Button layoutX="49.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="172.0" styleClass="button-inSettings2" text="Personal Information" />
+                                <Button layoutX="235.0" mnemonicParsing="false" onAction="#openChangePasswordScene" prefHeight="38.0" prefWidth="158.0" style="-fx-background-color: f1debc;" styleClass="button-inSettings" text="Change password" />
+                        <Label fx:id="notification" layoutX="119.0" layoutY="559.0" prefHeight="20.0" prefWidth="200.0" />
+                        <VBox layoutX="435.0" layoutY="45.0" prefHeight="533.0" prefWidth="682.0">
+                           <children>
+                              <AnchorPane prefHeight="70.0" prefWidth="682.0" styleClass="design-Anchor">
+                                 <children>
+                                              <TextField fx:id="memberIdTextField" alignment="TOP_LEFT" editable="false" layoutX="6.0" layoutY="22.0" prefHeight="39.0" prefWidth="666.0" styleClass="design-textField" text="1">
+                                       <font>
+                                          <Font name="System" size="17.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label layoutX="16.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="ID" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="namePane" prefHeight="70.0" prefWidth="538.0" styleClass="design-Anchor2">
+                                 <children>
+                                    <TextField fx:id="nameTextField" alignment="TOP_LEFT" layoutX="4.0" layoutY="22.0" prefHeight="39.0" prefWidth="594.0" styleClass="design-textField" text="huyd761@gmail.com">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label layoutX="14.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="Full name" />
+                                    <Label fx:id="nameErrorLabel" layoutX="17.0" layoutY="49.0" prefHeight="10.0" prefWidth="350.0" style="-fx-font-weight: 500;" textFill="RED" />
+                                    <ImageView fx:id="deleteName" fitHeight="40.0" fitWidth="40.0" layoutX="628.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/cancel.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="emailPane" prefHeight="70.0" prefWidth="538.0" styleClass="design-Anchor2">
+                                 <children>
+                                    <TextField fx:id="emailTextField" alignment="TOP_LEFT" layoutX="4.0" layoutY="22.0" prefHeight="39.0" prefWidth="621.0" styleClass="design-textField" text="huyd761@gmail.com">
+                                       <font>
+                                          <Font name="System" size="17.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label layoutX="14.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="Email" />
+                                    <Label fx:id="emailErrorLabel" layoutX="17.0" layoutY="49.0" prefHeight="10.0" prefWidth="350.0" style="-fx-font-weight: 500;" textFill="RED" />
+                                    <ImageView fx:id="deleteEmail" fitHeight="40.0" fitWidth="40.0" layoutX="628.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/cancel.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="phonePane" prefHeight="70.0" prefWidth="538.0" styleClass="design-Anchor2">
+                                 <children>
+                                    <TextField fx:id="phoneNumberTextField" alignment="TOP_LEFT" layoutX="5.0" layoutY="22.0" prefHeight="39.0" prefWidth="662.0" styleClass="design-textField" text="0385214458">
+                                       <font>
+                                          <Font name="System" size="17.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label layoutX="14.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="Phone number" />
+                                    <Label fx:id="phoneNumberErrorLabel" layoutX="14.0" layoutY="49.0" prefHeight="20.0" prefWidth="372.0" style="-fx-font-weight: 500;" textFill="RED" />
+                                    <ImageView fx:id="deletePhoneNumber" fitHeight="40.0" fitWidth="40.0" layoutX="628.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                       <image>
+                                          <Image url="@../../icons/MemberIcon/cancel.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="86.0" prefWidth="682.0" styleClass="design-Anchor2">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="Birth of date" />
+                                              <DatePicker fx:id="birthOfDatePicker" editable="false" layoutX="10.0" layoutY="28.0" prefHeight="34.0" prefWidth="180.0" styleClass="design-textField2">
+                                                  <opaqueInsets>
+                                                      <Insets />
+                                                  </opaqueInsets>
+                                              </DatePicker>
+                                    <Label fx:id="dateOfBirthErrorLabel" layoutX="14.0" layoutY="64.0" prefHeight="16.0" prefWidth="404.0" textFill="RED">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="85.0" prefWidth="682.0" styleClass="design-Anchor2">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="Gender" />
+                                              <ComboBox fx:id="genderComboBox" layoutX="10.0" layoutY="28.0" prefHeight="34.0" prefWidth="180.0" promptText="Gender" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="70.0" prefWidth="538.0" styleClass="design-Anchor3">
+                                 <children>
+                                    <TextField fx:id="addressTextField" alignment="TOP_LEFT" layoutX="5.0" layoutY="22.0" prefHeight="39.0" prefWidth="510.0" styleClass="design-textField" text="Hương Cần - Thanh Sơn - Phú Thọ">
+                                       <font>
+                                          <Font name="System" size="17.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label layoutX="14.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="Adress" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </VBox>
                             </children>
                         </AnchorPane>
                     </center>

@@ -403,7 +403,7 @@ public class SearchPageController implements Initializable {
         int limit = Integer.parseInt(limitBox.getValue());
         return " LIMIT " + limit;
     }
-    
+
     @FXML
     private void returnHomepage() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml"));

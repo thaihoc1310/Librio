@@ -671,11 +671,28 @@ public class HomePageController implements Initializable {
     @FXML
     private void openBorrowed() {
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
             Parent manageUserRoot = loader.load();
+
             Stage currentStage = (Stage) avatarUser.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageUserRoot);
+
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(50), currentScene.getRoot());
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+
+            fadeOut.setOnFinished(event -> {
+                currentScene.setRoot(manageUserRoot);
+
+                FadeTransition fadeIn = new FadeTransition(Duration.millis(50), manageUserRoot);
+                fadeIn.setFromValue(0.0);
+                fadeIn.setToValue(1.0);
+                fadeIn.play();
+            });
+
+            fadeOut.play();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -726,16 +743,26 @@ public class HomePageController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/AccountSetting.fxml"));
             Parent root = loader.load();
-
+            Stage currentStage = (Stage) searchTextField.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             Stage stage = new Stage();
-            stage.setTitle("Edit Profile");
-            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(searchTextField.getScene().getWindow());
-            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initModality(Modality.WINDOW_MODAL); stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+
+            });
             stage.showAndWait();
             setAvatarAndUserName();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
