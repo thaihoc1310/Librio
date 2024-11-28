@@ -151,7 +151,7 @@
     -fx-underline: true;
 }
 
-
+/* Author style */
 .author-label {
     -fx-font-size: 13px;
     -fx-text-fill: #000000;
@@ -182,12 +182,6 @@
     -fx-background-color: #e6d4b3;
 }
 
-.circular-button:pressed {
-    -fx-background-color: #d8c4a3;
-    -fx-border-color: #d1b89b;
--fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 3, 0, 0, 1);
-    -fx-translate-y: 2px;
-}
 .bag-Pane {
  -fx-background-color: #dd2334;
   -fx-background-radius: 10;
