@@ -184,6 +184,8 @@ public class SearchPageController implements Initializable {
     @FXML
     private AnchorPane numberPane;
     @FXML
+    private ImageView banner15;
+    @FXML
     private Text numberText;
     private List<Book> bookList = new ArrayList<>();
     private String keyword;
@@ -218,7 +220,9 @@ public class SearchPageController implements Initializable {
         pagination.setPageFactory(this::createPage);
         setupComboBoxListeners();
         setupPaneListeners();
+        initCategoryLabelClick();
         notificationPane.setVisible(false);
+
         int totalBooks = Session.getInstance().getTotalBooks();
         if (totalBooks != 0) {
             numberPane.setVisible(true);
@@ -229,20 +233,25 @@ public class SearchPageController implements Initializable {
             }
         }
 
+        banner15.setOnMouseClicked(event -> handleBannersClick());
+    }
+
+    private void initCategoryLabelClick(){
         fictionLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Fiction"));
         historyLabel2.setOnMouseClicked(event -> setKeywordAndCategory("History"));
         scienceLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Science"));
         technologyLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Technology"));
         computersLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
         economicsLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
+        computersLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
+        economicsLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
         lawLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Law"));
-        socialScienceLabel2.setOnMouseClicked(event -> setKeywordAndCategory("SocialScience"));
+        socialScienceLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Social Science"));
         educationLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Education"));
         artLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
 //        searchSuggestion.toFront();
         setupSearchSuggestions();
     }
-
 
     /**
      * Asynchronously loads a list of books for the specified page index and updates the UI components accordingly.
@@ -1064,5 +1073,9 @@ public class SearchPageController implements Initializable {
         this.searchTextField.setText(category);
         filterBox.getSelectionModel().select(2);
         handleSearch();
+    }
+
+    private void handleBannersClick(){
+        setSearchParameters("", "Title", "isbn = '9781529901795'", "Top rated");
     }
 }

@@ -21,10 +21,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setDatePickerFormat;
 
 
 public class UpdateUserController implements Initializable {
@@ -70,6 +73,7 @@ public class UpdateUserController implements Initializable {
         roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
         hideErrorLabels();
         addListeners();
+        setDatePickerFormat(birthOfDatePicker);
     }
 
     public void setUser(User user) {
@@ -104,8 +108,29 @@ public class UpdateUserController implements Initializable {
         Gender gender = genderComboBox.getValue();
         Role role = roleComboBox.getValue();
         String address = addressTextArea.getText();
-        LocalDate birthOfDate = birthOfDatePicker.getValue();
+        String dateString = birthOfDatePicker.getEditor().getText();
+        LocalDate birthOfDate = null;
+
+        String dateRegex = "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$";
         boolean validation = false;
+
+        if (!dateString.matches(dateRegex)) {
+            birthOfDateErrorLabel.setText("Invalid date format!");
+            validation = true;
+        } else {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                birthOfDate = LocalDate.parse(dateString, formatter);
+
+                if (birthOfDate.isAfter(LocalDate.now())) {
+                    birthOfDateErrorLabel.setText("Birth of Date cannot be after now!");
+                    validation = true;
+                }
+            } catch (DateTimeParseException e) {
+                birthOfDateErrorLabel.setText("Invalid date!");
+                validation = true;
+            }
+        }
 
         if(name.isEmpty()){
             nameErrorLabel.setText("Name cannot be empty!");
@@ -141,14 +166,6 @@ public class UpdateUserController implements Initializable {
             validation = true;
         }
 
-        if(birthOfDate == null){
-            birthOfDateErrorLabel.setText("Birth of Date must be selected!");
-            validation = true;
-        }else if(birthOfDate.isAfter(LocalDate.now())){
-            birthOfDateErrorLabel.setText("Birth of Date cannot be after now!");
-            validation = true;
-        }
-
         if(validation) {
             return;
         }
@@ -171,10 +188,8 @@ public class UpdateUserController implements Initializable {
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
-                // Xử lý thay đổi vai trò
                 if (!role.equals(user.getRole())) {
                     if (user.getRole().equals(Role.MEMBER)) {
-                        // Nếu user trước đây là MEMBER và bây giờ là LIBRARIAN
                         String deleteMemberQuery = "DELETE FROM Members WHERE id = ?";
                         try (PreparedStatement deleteMemberStatement = connection.prepareStatement(deleteMemberQuery)) {
                             deleteMemberStatement.setString(1, user.getId());
@@ -188,7 +203,6 @@ public class UpdateUserController implements Initializable {
                         }
 
                     } else if (user.getRole().equals(Role.LIBRARIAN)) {
-                        // Nếu user trước đây là LIBRARIAN và bây giờ là MEMBER
                         String deleteLibrarianQuery = "DELETE FROM Librarians WHERE id = ?";
                         try (PreparedStatement deleteLibrarianStatement = connection.prepareStatement(deleteLibrarianQuery)) {
                             deleteLibrarianStatement.setString(1, user.getId());
@@ -198,8 +212,8 @@ public class UpdateUserController implements Initializable {
                         String insertMemberQuery = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES (?, ?, ?)";
                         try (PreparedStatement insertMemberStatement = connection.prepareStatement(insertMemberQuery)) {
                             insertMemberStatement.setString(1, user.getId());
-                            insertMemberStatement.setLong(2, 0); // Fine amount bắt đầu từ 0
-                            insertMemberStatement.setLong(3, 0); // Total books borrowed bắt đầu từ 0
+                            insertMemberStatement.setLong(2, 0);
+                            insertMemberStatement.setLong(3, 0);
                             insertMemberStatement.executeUpdate();
                         }
                     }
