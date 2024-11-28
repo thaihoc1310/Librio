@@ -22,7 +22,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/SearchPage.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.SearchPageController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/SearchPage.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.SearchPageController">
    <children>
       <ScrollPane fx:id="mainScroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" styleClass="main-scroll" vbarPolicy="ALWAYS">
          <content>
@@ -102,25 +102,25 @@
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label fx:id="lawLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="Law" />
+                                    <Label fx:id="educationLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="95.0" styleClass="label-button" text="Education" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label fx:id="socialScienceLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="96.0" styleClass="label-button" text="Social Science" />
+                                    <Label fx:id="socialScienceLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="Social Science" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label fx:id="educationLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="115.0" styleClass="label-button" text="Education" />
+                                    <Label fx:id="lawLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="90.0" styleClass="label-button" text="Law" />
                                     <AnchorPane prefHeight="61.0" prefWidth="19.0">
                                        <children>
                                           <Line endX="-4.333343505859375" endY="18.333358764648438" layoutX="14.0" layoutY="23.0" startX="-4.333343505859375" startY="1.0000228881835938" styleClass="line-style" />
                                        </children>
                                     </AnchorPane>
-                                    <Label fx:id="artLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="46.0" styleClass="label-button" text="Art" />
+                                    <Label fx:id="artLabel2" alignment="CENTER" prefHeight="61.0" prefWidth="75.0" styleClass="label-button" text="Art" />
                                  </children>
                               </HBox>
                               <Circle fx:id="moreIcon" fill="#1f93ff" layoutX="1356.0" layoutY="52.0" onMouseClicked="#handleAvatarClick" radius="9.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="43.0" />
@@ -200,7 +200,7 @@
                                        <children>
                                           <Separator layoutX="14.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="37.0" />
                                           <ComboBox fx:id="limitBox" layoutX="797.0" layoutY="30.0" prefHeight="30.0" prefWidth="69.0" promptText="20" />
-                                          <ComboBox fx:id="sortBox" layoutX="958.0" layoutY="30.0" prefHeight="29.0" prefWidth="145.0" promptText="Most Borrowed" />
+                                          <ComboBox fx:id="sortBox" layoutX="958.0" layoutY="30.0" prefHeight="29.0" prefWidth="160.0" promptText="Most Borrowed" />
                                           <VBox layoutX="62.0" layoutY="93.0" prefHeight="507.0" prefWidth="1081.0" spacing="30.0">
                                              <children>
                                                 <FlowPane fx:id="flowPane" prefHeight="456.0" prefWidth="1081.0" />
@@ -225,7 +225,7 @@
                                  <children>
                                     <AnchorPane layoutX="38.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="232.0" prefWidth="1311.0" AnchorPane.bottomAnchor="153.33333333333331" AnchorPane.leftAnchor="38.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <ImageView fitHeight="234.0" fitWidth="1311.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="banner15" fitHeight="234.0" fitWidth="1311.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../images/banner/banner15.png" />
                                              </image>

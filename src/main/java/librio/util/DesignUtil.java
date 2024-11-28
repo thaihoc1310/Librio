@@ -3,6 +3,7 @@ package librio.util;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -11,11 +12,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.util.StringConverter;
 import librio.cache.ImageCache;
 import librio.session.Session;
 import librio.models.Book;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 
@@ -134,5 +139,34 @@ public class DesignUtil {
                 }
             }
         }
+    }
+
+    public static void setDatePickerFormat(DatePicker datePicker) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+        datePicker.setConverter(new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                return (date == null) ? "" : date.format(formatter);
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                String dateRegex = "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$";
+                if (string.isEmpty()) {
+                    return null;
+                }
+
+                if (string.matches(dateRegex)) {
+                    try {
+                        return LocalDate.parse(string, formatter);
+                    } catch (DateTimeParseException e) {
+                        return null;
+                    }
+                } else {
+                    return datePicker.getValue();
+                }
+            }
+        });
     }
 }

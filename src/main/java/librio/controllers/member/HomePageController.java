@@ -150,6 +150,32 @@ public class HomePageController implements Initializable {
     private ImageView mainBanner0;
     @FXML
     private ImageView mainBanner1;
+    @FXML
+    private ImageView mainBanner2;
+    @FXML
+    private ImageView banner3;
+    @FXML
+    private ImageView banner4;
+    @FXML
+    private ImageView banner5;
+    @FXML
+    private ImageView banner6;
+    @FXML
+    private ImageView banner7;
+    @FXML
+    private ImageView banner8;
+    @FXML
+    private ImageView banner9;
+    @FXML
+    private ImageView banner10;
+    @FXML
+    private ImageView banner12;
+    @FXML
+    private ImageView banner13;
+    @FXML
+    private ImageView banner14;
+
+
 
     @FXML
     private AnchorPane notificationPane;
@@ -170,77 +196,13 @@ public class HomePageController implements Initializable {
         moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
         loadAllBooksAsync();
-        currentIndexes.put("TopRate", 0);
-        currentIndexes.put("MostBorrowed", 0);
-        currentIndexes.put("NewestBooks", 0);
-        currentIndexes.put("OurFiction", 0);
-        currentIndexes.put("Education", 0);
-        currentIndexes.put("OurEconomicsBooks", 0);
-        leftMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(-1));
-        rightMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(1));
-
-        leftToprateButton.setOnMouseClicked(event ->
-                scrollBooks(-1, currentIndexes.get("TopRate"), topRateScroll, index -> currentIndexes.put("TopRate", index))
-        );
-        rightToprateButton.setOnMouseClicked(event ->
-                scrollBooks(1, currentIndexes.get("TopRate"), topRateScroll, index -> currentIndexes.put("TopRate", index))
-        );
-
-        leftMostborrowedButton.setOnMouseClicked(event ->
-                scrollBooks(-1, currentIndexes.get("MostBorrowed"), mostBorrowedScroll, index -> currentIndexes.put("MostBorrowed", index))
-        );
-        rightMostborrowedButton.setOnMouseClicked(event ->
-                scrollBooks(1, currentIndexes.get("MostBorrowed"), mostBorrowedScroll, index -> currentIndexes.put("MostBorrowed", index))
-        );
-
-        leftNewestBooksButton.setOnMouseClicked(event ->
-                scrollBooks(-1, currentIndexes.get("NewestBooks"), newestBooksScroll, index -> currentIndexes.put("NewestBooks", index))
-        );
-
-        rightNewestBooksButton.setOnMouseClicked(event ->
-                scrollBooks(1, currentIndexes.get("NewestBooks"), newestBooksScroll, index -> currentIndexes.put("NewestBooks", index))
-        );
-
-        leftOurFictionButton.setOnMouseClicked(event ->
-                scrollBooks(-1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
-        );
-
-        rightOurFictionButton.setOnMouseClicked(event ->
-                scrollBooks(1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
-        );
-
-        leftEducationButton.setOnMouseClicked(event ->
-                scrollBooks(-1, currentIndexes.get("Education"), educationScroll, index -> currentIndexes.put("Education", index))
-        );
-
-        rightEducationButton.setOnMouseClicked(event ->
-                scrollBooks(1, currentIndexes.get("Education"), educationScroll, index -> currentIndexes.put("Education", index))
-        );
-
-        leftOurEconomicsBooksButton.setOnMouseClicked(event ->
-                scrollBooks(-1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
-        );
-
-        rightOurEconomicsBooksButton.setOnMouseClicked(event ->
-                scrollBooks(1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
-        );
 
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         startAutoScroll();
+        initScrollNavigation();
+        initCategoryLabelClick();
 
-        fictionLabel.setOnMouseClicked(event -> setKeywordAndCategory("Fiction"));
-        historyLabel.setOnMouseClicked(event -> setKeywordAndCategory("History"));
-        scienceLabel.setOnMouseClicked(event -> setKeywordAndCategory("Science"));
-        technologyLabel.setOnMouseClicked(event -> setKeywordAndCategory("Technology"));
-        computersLabel.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
-        economicsLabel.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
-        computersLabel.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
-        economicsLabel.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
-        lawLabel.setOnMouseClicked(event -> setKeywordAndCategory("Law"));
-        socialScienceLabel.setOnMouseClicked(event -> setKeywordAndCategory("SocialScience"));
-        educationLabel.setOnMouseClicked(event -> setKeywordAndCategory("Education"));
-        artLabel.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
         notificationPane.setVisible(false);
         int totalBooks = Session.getInstance().getTotalBooks();
         if (totalBooks != 0) {
@@ -252,8 +214,7 @@ public class HomePageController implements Initializable {
             }
         }
 
-        mainBanner0.setOnMouseClicked(event -> openBooksFromBanner(mainBanner0));
-        mainBanner1.setOnMouseClicked(event -> openBooksFromBanner(mainBanner1));
+        initBannersClick();
     }
 
     public void setAvatarAndUserName() {
@@ -895,13 +856,13 @@ public class HomePageController implements Initializable {
                 );
                 break;
 
-            case "mainBanner3":
+            case "banner3":
                 Collections.addAll(list,
                         "9781668027912"
                 );
                 break;
 
-            case "mainBanner4":
+            case "banner4":
                 Collections.addAll(list
                         ,"9780751585568"
                         ,"9781761189159"
@@ -911,7 +872,7 @@ public class HomePageController implements Initializable {
                 );
                 break;
 
-            case "mainBanner5":
+            case "banner5":
                 Collections.addAll(list,
                         "9781400337026",
                         "0008610746",
@@ -923,13 +884,13 @@ public class HomePageController implements Initializable {
                 );
                 break;
 
-            case "mainBanner6":
+            case "banner6":
                 Collections.addAll(list,
                         "1423145143\n"
                 );
                 break;
 
-            case "mainBanner7":
+            case "banner7":
                 Collections.addAll(list,
                         "9781646222384",
                         "9781250031211",
@@ -940,7 +901,7 @@ public class HomePageController implements Initializable {
                 );
                 break;
 
-            case "mainBanner8":
+            case "banner8":
                 Collections.addAll(list,
                         "9780593862735",
                         "9781250759009",
@@ -957,7 +918,7 @@ public class HomePageController implements Initializable {
                 );
                 break;
 
-            case "mainBanner9":
+            case "banner9":
                 Collections.addAll(list,
                         "9781594748639",
                         "9780593201282",
@@ -965,7 +926,7 @@ public class HomePageController implements Initializable {
                 );
                 break;
 
-            case "mainBanner10":
+            case "banner10":
                 Collections.addAll(list,
                         "9781534427204",
                         "9781665974608",
@@ -976,13 +937,13 @@ public class HomePageController implements Initializable {
                 );
                 break;
 
-            case "mainBanner12":
+            case "banner12":
                 Collections.addAll(list,
                         "9781464218637\n"
                 );
                 break;
 
-            case "mainBanner13":
+            case "banner13":
                 Collections.addAll(list,
                         "9781786583253",
                         "9780593815717",
@@ -992,6 +953,10 @@ public class HomePageController implements Initializable {
                         "9780369747303"
 
                 );
+                break;
+
+            case "banner14":
+                Collections.addAll(list,"9781646222384");
                 break;
 
             default:
@@ -1007,6 +972,95 @@ public class HomePageController implements Initializable {
         condition.append(")");
 
         loadByQuery(condition.toString(),"Top rated");
+    }
+
+    private void initBannersClick(){
+        mainBanner0.setOnMouseClicked(event -> openBooksFromBanner(mainBanner0));
+        mainBanner1.setOnMouseClicked(event -> openBooksFromBanner(mainBanner1));
+        mainBanner2.setOnMouseClicked(event -> openBooksFromBanner(mainBanner2));
+        banner3.setOnMouseClicked(event -> openBooksFromBanner(banner3));
+        banner4.setOnMouseClicked(event -> openBooksFromBanner(banner4));
+        banner5.setOnMouseClicked(event -> openBooksFromBanner(banner5));
+        banner6.setOnMouseClicked(event -> openBooksFromBanner(banner6));
+        banner7.setOnMouseClicked(event -> openBooksFromBanner(banner7));
+        banner8.setOnMouseClicked(event -> openBooksFromBanner(banner8));
+        banner9.setOnMouseClicked(event -> openBooksFromBanner(banner9));
+        banner10.setOnMouseClicked(event -> openBooksFromBanner(banner10));
+        banner12.setOnMouseClicked(event -> openBooksFromBanner(banner12));
+        banner13.setOnMouseClicked(event -> openBooksFromBanner(banner13));
+        banner14.setOnMouseClicked(event -> openBooksFromBanner(banner14));
+    }
+
+    private void initCategoryLabelClick(){
+        fictionLabel.setOnMouseClicked(event -> setKeywordAndCategory("Fiction"));
+        historyLabel.setOnMouseClicked(event -> setKeywordAndCategory("History"));
+        scienceLabel.setOnMouseClicked(event -> setKeywordAndCategory("Science"));
+        technologyLabel.setOnMouseClicked(event -> setKeywordAndCategory("Technology"));
+        computersLabel.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
+        economicsLabel.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
+        computersLabel.setOnMouseClicked(event -> setKeywordAndCategory("Computers"));
+        economicsLabel.setOnMouseClicked(event -> setKeywordAndCategory("Economics"));
+        lawLabel.setOnMouseClicked(event -> setKeywordAndCategory("Law"));
+        socialScienceLabel.setOnMouseClicked(event -> setKeywordAndCategory("Social Science"));
+        educationLabel.setOnMouseClicked(event -> setKeywordAndCategory("Education"));
+        artLabel.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
+    }
+
+    private void initScrollNavigation(){
+        currentIndexes.put("TopRate", 0);
+        currentIndexes.put("MostBorrowed", 0);
+        currentIndexes.put("NewestBooks", 0);
+        currentIndexes.put("OurFiction", 0);
+        currentIndexes.put("Education", 0);
+        currentIndexes.put("OurEconomicsBooks", 0);
+        leftMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(-1));
+        rightMainBannerButton.setOnMouseClicked(event -> scrollMainBanner(1));
+
+        leftToprateButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("TopRate"), topRateScroll, index -> currentIndexes.put("TopRate", index))
+        );
+        rightToprateButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("TopRate"), topRateScroll, index -> currentIndexes.put("TopRate", index))
+        );
+
+        leftMostborrowedButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("MostBorrowed"), mostBorrowedScroll, index -> currentIndexes.put("MostBorrowed", index))
+        );
+        rightMostborrowedButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("MostBorrowed"), mostBorrowedScroll, index -> currentIndexes.put("MostBorrowed", index))
+        );
+
+        leftNewestBooksButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("NewestBooks"), newestBooksScroll, index -> currentIndexes.put("NewestBooks", index))
+        );
+
+        rightNewestBooksButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("NewestBooks"), newestBooksScroll, index -> currentIndexes.put("NewestBooks", index))
+        );
+
+        leftOurFictionButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
+        );
+
+        rightOurFictionButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("OurFiction"), ourFictionScroll, index -> currentIndexes.put("OurFiction", index))
+        );
+
+        leftEducationButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("Education"), educationScroll, index -> currentIndexes.put("Education", index))
+        );
+
+        rightEducationButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("Education"), educationScroll, index -> currentIndexes.put("Education", index))
+        );
+
+        leftOurEconomicsBooksButton.setOnMouseClicked(event ->
+                scrollBooks(-1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
+        );
+
+        rightOurEconomicsBooksButton.setOnMouseClicked(event ->
+                scrollBooks(1, currentIndexes.get("OurEconomicsBooks"), ourEconomicsBooksScroll, index -> currentIndexes.put("OurEconomicsBooks", index))
+        );
     }
 }
 

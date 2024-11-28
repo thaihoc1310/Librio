@@ -20,9 +20,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setDatePickerFormat;
 
 public class CreateUserController implements Initializable {
     @FXML
@@ -71,6 +74,7 @@ public class CreateUserController implements Initializable {
         roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
         hideErrorLabels();
         addListeners();
+        setDatePickerFormat(birthOfDatePicker);
     }
 
 
@@ -84,10 +88,34 @@ public class CreateUserController implements Initializable {
         Gender gender = genderComboBox.getValue();
         Role role = roleComboBox.getValue();
         String address = addressTextArea.getText();
-        LocalDate birthOfDate = birthOfDatePicker.getValue();
+        String dateString = birthOfDatePicker.getEditor().getText();
+        LocalDate birthOfDate = null;
+
+        String dateRegex = "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$";
         boolean validation = false;
 
-        if(name.isEmpty()){
+        if (!dateString.matches(dateRegex)) {
+            birthOfDateErrorLabel.setText("Invalid date format!");
+            validation = true;
+        } else {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                birthOfDate = LocalDate.parse(dateString, formatter);
+
+                if (birthOfDate.isAfter(LocalDate.now())) {
+                    birthOfDateErrorLabel.setText("Birth of Date cannot be after now!");
+                    validation = true;
+                }
+            } catch (DateTimeParseException e) {
+                birthOfDateErrorLabel.setText("Invalid date!");
+                validation = true;
+            }
+        }
+
+        System.out.println(dateString);
+        System.out.println(birthOfDate);
+
+        if (name.isEmpty()) {
             nameErrorLabel.setText("Name cannot be empty!");
             validation = true;
         }
@@ -103,10 +131,10 @@ public class CreateUserController implements Initializable {
             validation = true;
         }
 
-        if(password.isEmpty()){
+        if (password.isEmpty()) {
             passwordErrorLabel.setText("Password cannot be empty!");
             validation = true;
-        }else if (password.length() < 6){
+        } else if (password.length() < 6) {
             passwordErrorLabel.setText("Password must be at least 6 characters!");
             validation = true;
         }
@@ -124,27 +152,22 @@ public class CreateUserController implements Initializable {
             validation = true;
         }
 
-        if(role == null){
+        if (role == null) {
             roleErrorLabel.setText("Role must be selected!");
             validation = true;
         }
 
-        if(gender == null){
+        if (gender == null) {
             genderErrorLabel.setText("Gender must be selected!");
             validation = true;
         }
 
-        if(birthOfDate == null){
-            birthOfDateErrorLabel.setText("Birth of Date must be selected!");
-        } else if (birthOfDate.isAfter(LocalDate.now())) {
-            birthOfDateErrorLabel.setText("Birth of Date cannot be after now!");
-        }
-
-        if(validation) {
+        if (validation) {
             return;
         }
+
         String query = "INSERT INTO users (name, email, password, phone_number, address, gender, role, avatar, birth_of_date, created_by, created_at) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -156,7 +179,6 @@ public class CreateUserController implements Initializable {
             statement.setString(6, gender.name());
             statement.setString(7, role.name());
             statement.setString(8, avatarFilePath);
-            assert birthOfDate != null;
             statement.setDate(9, Date.valueOf(birthOfDate));
             statement.setString(10, Session.getInstance().getLoggedInUser().getEmail());
 
@@ -164,16 +186,15 @@ public class CreateUserController implements Initializable {
             ResultSet generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 int userId = generatedKeys.getInt(1);
-                if(role.equals(Role.MEMBER)){
+                if (role.equals(Role.MEMBER)) {
                     String insertMemberQuery = "INSERT INTO Members (id, fine_amount, total_books_borrowed) VALUES (?, ?, ?)";
                     try (PreparedStatement memberStatement = connection.prepareStatement(insertMemberQuery)) {
-                        memberStatement.setInt(1, userId); // userId là id của user vừa tạo
-                        memberStatement.setLong(2, 0); // Fine amount bắt đầu từ 0
-                        memberStatement.setLong(3, 0); // Total books borrowed bắt đầu từ 0
+                        memberStatement.setInt(1, userId);
+                        memberStatement.setLong(2, 0);
+                        memberStatement.setLong(3, 0);
                         memberStatement.executeUpdate();
                     }
-                }
-                else if(role.equals(Role.LIBRARIAN)){
+                } else if (role.equals(Role.LIBRARIAN)) {
                     String insertLibrarianQuery = "INSERT INTO Librarians (id) VALUES (?)";
                     try (PreparedStatement librarianStatement = connection.prepareStatement(insertLibrarianQuery)) {
                         librarianStatement.setInt(1, userId); // userId là id của user vừa tạo
@@ -182,7 +203,7 @@ public class CreateUserController implements Initializable {
                 }
                 String projectDir = System.getProperty("user.dir");
                 String avatarsDir = projectDir + "/src/main/resources/images/user/";
-                if(previousAvatarFilePath != null){
+                if (previousAvatarFilePath != null) {
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
                 }
                 clearInputFields();
@@ -215,9 +236,9 @@ public class CreateUserController implements Initializable {
         phoneNumberTextField.setOnMouseClicked(event -> {hideErrorLabels();});
         addressTextArea.setOnMouseClicked(event -> {hideErrorLabels();});
         birthOfDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
+        birthOfDatePicker.getEditor().setOnMouseClicked(event -> {hideErrorLabels();});
         genderComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
         roleComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
-
     }
 
 
