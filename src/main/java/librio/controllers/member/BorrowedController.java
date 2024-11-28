@@ -2,6 +2,7 @@ package librio.controllers.member;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -44,6 +45,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static librio.enums.Status.BORROWING;
 import static librio.enums.Status.OVERDUE;
@@ -70,9 +73,7 @@ public class BorrowedController implements Initializable {
     @FXML
     private VBox bookBorrowVBox;
     @FXML
-    private Button confirmReturnButton;
-    @FXML
-    private Button cancelReturnButton;
+    private ProgressIndicator loadingIndicator;
     @FXML
     private TilePane tilePane;
     @FXML
@@ -80,10 +81,9 @@ public class BorrowedController implements Initializable {
     private List<BorrowedBook> borrowBookList = new ArrayList<>();
     private List<BorrowedBook> returnedBookList = new ArrayList<>();
     private boolean isAnchorPaneVisible = false;
-
     private BorrowedBook selectedBook;
 
-
+    private ExecutorService executor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -91,6 +91,7 @@ public class BorrowedController implements Initializable {
         moreIcon.setFill(new ImagePattern(image));
         loadBorrowBookFromDatabase();
         setAvatarAndUserName();
+        executor = Executors.newCachedThreadPool();
     }
 
     private void loadBorrowBookFromDatabase() {
@@ -501,30 +502,29 @@ public class BorrowedController implements Initializable {
 
     @FXML
     private void openHomepage() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Homepage.fxml"));
-            Parent manageUserRoot = loader.load();
-            Stage currentStage = (Stage) avatarUser.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
+        loadingIndicator.setVisible(true);
+        Task<Parent> loadHomePageTask = new Task<>() {
+            @Override
+            protected Parent call() throws Exception {
+                return new FXMLLoader(getClass().getResource("/fxml/member/HomePage.fxml")).load();
+            }
 
-            FadeTransition fadeOut = new FadeTransition(Duration.millis(50), currentScene.getRoot());
-            fadeOut.setFromValue(1.0);
-            fadeOut.setToValue(0.0);
+            @Override
+            protected void succeeded() {
+                Parent homepageRoot = getValue();Stage currentStage = (Stage) tabPane.getScene().getWindow();
+                Scene currentScene = currentStage.getScene();
+                currentScene.setRoot(homepageRoot);
+                loadingIndicator.setVisible(false);
+            }
 
-            fadeOut.setOnFinished(event -> {
-                currentScene.setRoot(manageUserRoot);
+            @Override
+            protected void failed() {
+                loadingIndicator.setVisible(false);
+                getException().printStackTrace();
+            }
+        };
 
-                FadeTransition fadeIn = new FadeTransition(Duration.millis(50), manageUserRoot);
-                fadeIn.setFromValue(0.0);
-                fadeIn.setToValue(1.0);
-                fadeIn.play();
-            });
-
-            fadeOut.play();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        executor.submit(loadHomePageTask);
     }
 
     @FXML

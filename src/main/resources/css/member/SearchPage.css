@@ -252,9 +252,10 @@
 }
 
 .progress-indicator {
-    -fx-stroke: #F1DEBC;
-    -fx-accent: #F1DEBC;
+    -fx-stroke: #B38B60;
+    -fx-accent: #B38B60;
 }
+
 .circular-button {
     -fx-background-color: #f1debc;
     -fx-text-fill: white;

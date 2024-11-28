@@ -661,22 +661,7 @@ public class HomePageController implements Initializable {
 
             Stage currentStage = (Stage) avatarUser.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
-
-            FadeTransition fadeOut = new FadeTransition(Duration.millis(50), currentScene.getRoot());
-            fadeOut.setFromValue(1.0);
-            fadeOut.setToValue(0.0);
-
-            fadeOut.setOnFinished(event -> {
-                currentScene.setRoot(manageUserRoot);
-
-                FadeTransition fadeIn = new FadeTransition(Duration.millis(50), manageUserRoot);
-                fadeIn.setFromValue(0.0);
-                fadeIn.setToValue(1.0);
-                fadeIn.play();
-            });
-
-            fadeOut.play();
-
+            currentScene.setRoot(manageUserRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,4 @@
 .tile-pane {
-    -fx-background-image: url("background_tile_pane.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100% auto;
 }
@@ -183,9 +182,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 7, 0.5, 0, 0);
 }
 
-.image-avatar: hover {
-    -fx-cursor: hand;
-}
 
 .tab-pane {
     -fx-background-color: #ffffff;
@@ -239,10 +235,6 @@
     -fx-text-fill: white;
 }
 
-*:focus {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
 
 .rounded-scroll-pane {
     -fx-background-color: transparent;
@@ -276,3 +268,9 @@
     -fx-background-color: #f2f2f2;
 
 }
+
+.progress-indicator {
+    -fx-stroke: #B38B60;
+    -fx-accent: #B38B60;
+}
+
