@@ -6,11 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
-import librio.models.Borrow;
 import librio.enums.Status;
+import librio.models.Borrow;
+import librio.session.Session;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -29,32 +28,37 @@ import static librio.util.DesignUtil.setDatePickerFormat;
 public class UpdateBorrowController implements Initializable {
     @FXML
     private Button backButton;
-
     @FXML
-    private DatePicker borrowDatePicker;
-
+    private DatePicker borrowDatePicker, dueDatePicker, returnDatePicker;
     @FXML
-    private DatePicker dueDatePicker;
-
-    @FXML
-    private Label fineLabel;
-
-    @FXML
-    private DatePicker returnDatePicker;
-
-    @FXML
-    private Label statusLabel;
-
-    @FXML
-    private Label borrowDateErrorLabel;
-
-    @FXML
-    private Label dueDateErrorLabel;
-
-    @FXML
-    private Label returnDateErrorLabel;
+    private Label fineLabel, statusLabel, borrowDateErrorLabel, dueDateErrorLabel, returnDateErrorLabel;
 
     private Borrow borrow;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initDatePicker();
+    }
+
+    private void initDatePicker() {
+        dueDatePicker.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        dueDatePicker.getEditor().setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        returnDatePicker.getEditor().setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+
+        setDatePickerFormat(borrowDatePicker);
+        setDatePickerFormat(dueDatePicker);
+        setDatePickerFormat(returnDatePicker);
+
+        borrowDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
+        dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
+        returnDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
+    }
 
     @FXML
     void back() {
@@ -179,38 +183,11 @@ public class UpdateBorrowController implements Initializable {
         }
     }
 
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        dueDatePicker.setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        dueDatePicker.getEditor().setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        returnDatePicker.getEditor().setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-
-        setDatePickerFormat(borrowDatePicker);
-        setDatePickerFormat(dueDatePicker);
-        setDatePickerFormat(returnDatePicker);
-
-        borrowDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
-        dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
-        returnDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
-    }
-
-
     private void updateStatus() {
         LocalDate borrowDate = borrowDatePicker.getValue() == null ? borrow.getBorrowDate() : borrowDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue() == null ? borrow.getDueDate() : dueDatePicker.getValue();
         LocalDate returnDate = returnDatePicker.getValue();
-        boolean validation = false;
-
-        if (dueDate == null || dueDate.isBefore(borrowDate)) {
-            validation = true;
-        }
+        boolean validation = dueDate == null || dueDate.isBefore(borrowDate);
 
         if (validation) {
             return;
@@ -262,9 +239,6 @@ public class UpdateBorrowController implements Initializable {
         statusLabel.setText(newStatus.toString());
         fineLabel.setText(String.valueOf(fine));
     }
-
-
-
 
     private void hideErrorLabels() {
         borrowDateErrorLabel.setText("");
