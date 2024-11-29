@@ -12,13 +12,17 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -26,18 +30,19 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import librio.cache.ImageCache;
-import librio.controllers.admin.BorrowDetailController;
-import librio.controllers.admin.CreateBookController;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
-import librio.models.*;
+import librio.models.Book;
+import librio.models.Feedback;
+import librio.models.User;
+import librio.session.Session;
 import librio.util.DatabaseUtil;
-import librio.util.DesignUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -49,80 +54,30 @@ import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.cropToAspectRatio;
 
 public class BookDetailController implements Initializable {
+    private static final int DESCRIPTION_LIMIT = 500;
 
     @FXML
-    private Label author;
-
+    private Label author, categoryLabel, isbnLabel, languageLabel, pageCountLabel, publishedLabel, publisherLabel;
     @FXML
-    private ImageView bookCoverImage;
-
+    private ImageView bookCoverImage, qrCodeImageView;
     @FXML
     private ScrollPane bookDetailsPane;
-
-    @FXML
-    private ImageView bookImage;
-
-    @FXML
-    private AnchorPane borrowConfirmationPane;
-
-    @FXML
-    private Label borrowDateLabel;
-
-    @FXML
-    private Label categoryLabel;
-
     @FXML
     private Button confirmButton;
-
     @FXML
-    private Text descriptionText;
-
-    @FXML
-    private Label dueDateErrorLabel;
-
-    @FXML
-    private DatePicker dueDatePicker;
-
+    private Text descriptionText, moreLessLabel, title;
     @FXML
     private VBox feedbackContainer;
-
-    @FXML
-    private Label isbnLabel;
-
-    @FXML
-    private Label languageLabel;
-
-    @FXML
-    private Text moreLessLabel;
-
-    @FXML
-    private Label pageCountLabel;
-
-    @FXML
-    private Label publishedLabel;
-
-    @FXML
-    private Label publisherLabel;
-
-    @FXML
-    private Text title;
-
-    @FXML
-    private Label titleLabel;
-
     @FXML
     private HBox starBox;
 
-    @FXML
-    private ImageView qrCodeImageView;
-
     private boolean isExpanded = false;
+
     private String fullDescription;
-    private static final int DESCRIPTION_LIMIT = 500;
 
     private Book book;
 
-    private List<Feedback> feedbackList = new ArrayList<>();
+    private final List<Feedback> feedbackList = new ArrayList<>();
 
 
     @Override
@@ -131,14 +86,14 @@ public class BookDetailController implements Initializable {
         moreLessLabel.setOnMouseClicked(event -> toggleDescription());
     }
 
-    public void setBook(Book book){
+    public void setBook(Book book) {
         this.book = book;
         setBookDetails();
         loadFeedbacksFromDatabase();
         displayRating();
     }
 
-    public void displayRating(){
+    public void displayRating() {
         double rating = book.getAverageOfRating();
         int fullStars = (int) rating;
         double decimalPart = rating - fullStars;
@@ -167,7 +122,7 @@ public class BookDetailController implements Initializable {
         }
         starBox.getStyleClass().add("star-box");
 
-        Label ratingLabel = new Label("  "+rating + " (" + getTotalBorrows() + ")");
+        Label ratingLabel = new Label("  " + rating + " (" + getTotalBorrows() + ")");
         ratingLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: #4C2113; -fx-font-weight: bold;");
         ratingLabel.setAlignment(Pos.CENTER_LEFT);
 
@@ -175,7 +130,7 @@ public class BookDetailController implements Initializable {
         generateAndDisplayQRCode();
     }
 
-    public void setBookDetails(){
+    public void setBookDetails() {
         title.setText(book.getTitle());
         author.setText("   " + book.getAuthor());
         isbnLabel.setText("ISBN:     " + book.getIsbn());
@@ -197,15 +152,15 @@ public class BookDetailController implements Initializable {
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
 
-        Image image = ImageCache.getInstance().getImage(path,projectDir + "defaultBook.jpg");
+        Image image = ImageCache.getInstance().getImage(path, projectDir + "defaultBook.jpg");
         cropToAspectRatio(image, bookCoverImage, 217, 315);
 
         setConfirmButton();
     }
 
-    private void setConfirmButton(){
+    private void setConfirmButton() {
         int availableCopy = book.getAvailableCopy();
-        boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(),book);
+        boolean isAlreadyBorrowed = checkIfUserBorrowedBook(Session.getInstance().getLoggedInUser(), book);
         if (availableCopy == 0) {
             updateBorrowButton("Out of stock", "#9e4b3e", false);
         } else if (isAlreadyBorrowed) {
@@ -221,7 +176,6 @@ public class BookDetailController implements Initializable {
         confirmButton.setDisable(!isEnabled);
         confirmButton.setCursor(isEnabled ? Cursor.HAND : Cursor.DEFAULT);
     }
-
 
     private void toggleDescription() {
         if (isExpanded) {
@@ -276,7 +230,7 @@ public class BookDetailController implements Initializable {
                 avatar.setFitWidth(50);
                 avatar.setFitHeight(50);
 
-                Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+                Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
                 cropAndClipToCircle(image, avatar, 25);
 
 
@@ -290,7 +244,7 @@ public class BookDetailController implements Initializable {
                 for (int i = 0; i < rating; i++) {
                     stars.append("★");
                 }
-                Text ratingText = new Text("Rating: " + stars.toString());
+                Text ratingText = new Text("Rating: " + stars);
                 ratingText.setStyle("-fx-font-size: 12; -fx-fill: #FFB700;");
 
                 LocalDateTime formattedDate = LocalDateTime.ofInstant(createdAtInstant, ZoneOffset.UTC);
@@ -367,6 +321,7 @@ public class BookDetailController implements Initializable {
         }
         return total;
     }
+
     @FXML
     private void openBorrowConfirmationPane() {
         try {

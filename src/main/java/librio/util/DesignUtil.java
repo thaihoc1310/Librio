@@ -10,7 +10,9 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import librio.cache.ImageCache;
@@ -81,20 +83,6 @@ public class DesignUtil {
 
         Image image = ImageCache.getInstance().getImage(defaultImage,defaultImage);
         bookImageView.setImage(image);
-    }
-
-    public static void truncateTextToFit(Text textNode, double maxWidth, int maxLines) {
-        String originalText = textNode.getText();
-        String ellipsis = "...";
-        textNode.setText(originalText);
-
-        double lineHeight = textNode.getFont().getSize();
-        double maxHeight = lineHeight * maxLines;
-
-        while ((textNode.getLayoutBounds().getWidth() > maxWidth || textNode.getLayoutBounds().getHeight() > maxHeight) && originalText.length() > 0) {
-            originalText = originalText.substring(0, originalText.length() - 1);
-            textNode.setText(originalText + ellipsis);
-        }
     }
 
     public static void setConfirmButton(Button confirmButton, Book book) {
@@ -168,5 +156,41 @@ public class DesignUtil {
                 }
             }
         });
+    }
+
+    public static HBox getStarBox(Book book) {
+        HBox starBox = new HBox(5);
+        double rating = book.getAverageOfRating();
+        int fullStars = (int) rating;
+        double decimalPart = rating - fullStars;
+        Image fullStarImage = new Image(DesignUtil.class.getResource("/icons/MemberIcon/Star.png").toExternalForm());
+        Image emptyStarImage = new Image(DesignUtil.class.getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm());
+        for (int i = 1; i <= 5; i++) {
+            StackPane starPane = new StackPane();
+
+            ImageView emptyStar = new ImageView(emptyStarImage);
+            emptyStar.setFitHeight(15);
+            emptyStar.setFitWidth(15);
+
+            starPane.getChildren().add(emptyStar);
+
+            if (i <= fullStars) {
+                ImageView fullStar = new ImageView(fullStarImage);
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+                starPane.getChildren().add(fullStar);
+            } else if (i == fullStars + 1 && decimalPart > 0) {
+                ImageView fullStar = new ImageView(fullStarImage);
+                fullStar.setFitHeight(15);
+                fullStar.setFitWidth(15);
+
+                Rectangle clip = new Rectangle(15 * decimalPart, 15);
+                fullStar.setClip(clip);
+                starPane.getChildren().add(fullStar);
+            }
+
+            starBox.getChildren().add(starPane);
+        }
+        return starBox;
     }
 }

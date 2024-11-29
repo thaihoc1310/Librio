@@ -11,9 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import librio.cache.ImageCache;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import librio.session.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,33 +29,30 @@ import static librio.util.DatabaseUtil.updateBookAverageRating;
  * submitting feedback to the database, and configuring the controller's UI elements with book details.
  */
 public class RatingPageController {
+    private final int starCount = 5;
+
+    private final Image emptyStar = new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm());
+
+    private final Image fullStar = new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm());
 
     @FXML
     private Label authorNameLabel;
-
     @FXML
     private ImageView bookImage;
-
     @FXML
     private TextArea commentBox;
-
     @FXML
     private HBox starBox;
-
     @FXML
     private Button submitButton;
-
     @FXML
     private Label titleLabel;
 
     private Book book;
+
     private int borrowId;
 
-    private final int starCount = 5;
     private int selectedStars = 0;
-
-    private final Image emptyStar = new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm());
-    private final Image fullStar = new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm());
 
     /**
      * Initializes the UI components related to star ratings within the RatingPageController.
@@ -185,7 +182,7 @@ public class RatingPageController {
      * Sets the book and borrow ID for the current context and updates the UI elements accordingly.
      * This method configures the labels and image related to the book and assigns the borrow ID.
      *
-     * @param book the Book object containing information such as title, author, and image path
+     * @param book     the Book object containing information such as title, author, and image path
      * @param borrowId the unique identifier for the borrowing event associated with the book
      */
     public void setBookAndBorrowId(Book book, int borrowId) {

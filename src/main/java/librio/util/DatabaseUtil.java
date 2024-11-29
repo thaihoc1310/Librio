@@ -1,5 +1,6 @@
 package librio.util;
 
+import javafx.scene.control.ComboBox;
 import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.enums.Role;
@@ -9,6 +10,8 @@ import librio.models.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -661,5 +664,22 @@ public class DatabaseUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<String> loadSuggestionsFromDatabase(String query, ComboBox<String> filterBox) {
+        List<String> suggestions = new ArrayList<>();
+        String filter = filterBox.getValue();
+        String sqlQuery = "SELECT DISTINCT " + filter + " FROM books WHERE " + filter + " LIKE ? LIMIT 10";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, "%" + query + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                suggestions.add(resultSet.getString(filter.toLowerCase()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return suggestions;
     }
 }

@@ -13,207 +13,99 @@ import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import librio.session.Session;
 import librio.cache.ImageCache;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import librio.session.Session;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
-import static librio.util.DatabaseUtil.getAvailableCopyByIsbn;
+import static librio.util.DatabaseUtil.*;
 import static librio.util.DesignUtil.*;
 
 public class HomePageController implements Initializable {
-
     private static final int TOTAL_BOOKS = 18;
+
     private static final int BOOKS_PER_PAGE = 6;
+
     private final Map<String, Integer> currentIndexes = new HashMap<>();
+
     @FXML
-    private ScrollPane mainScroll;
+    private ScrollPane mainScroll, mainBannerScroll, topRateScroll, mostBorrowedScroll,
+            ourFictionScroll, newestBooksScroll, ourEconomicsBooksScroll, educationScroll;
     @FXML
-    private ImageView avatarUser;
-    @FXML
-    private ImageView clickAvatar;
+    private ImageView avatarUser, clickAvatar, searchButton, mainBanner0, mainBanner1,
+            mainBanner2, banner3, banner4, banner5, banner6, banner7, banner8, banner9,
+            banner10, banner12, banner13, banner14;
     @FXML
     private ComboBox<String> filterBox;
     @FXML
-    private Button leftMainBannerButton;
+    private Button leftMainBannerButton, leftToprateButton, leftMostborrowedButton,
+            leftOurFictionButton, leftNewestBooksButton, leftOurEconomicsBooksButton, leftEducationButton;
     @FXML
-    private Button leftToprateButton;
-    @FXML
-    private Button leftMostborrowedButton;
-    @FXML
-    private Button leftOurFictionButton;
-    @FXML
-    private Button leftNewestBooksButton;
-    @FXML
-    private Button leftOurEconomicsBooksButton;
-    @FXML
-    private Button leftEducationButton;
-    @FXML
-    private ScrollPane mainBannerScroll;
-    @FXML
-    private HBox mainBannerContainer;
-    @FXML
-    private Button rightMainBannerButton;
-    @FXML
-    private Button rightToprateButton;
-    @FXML
-    private Button rightMostborrowedButton;
-    @FXML
-    private Button rightOurFictionButton;
-    @FXML
-    private Button rightNewestBooksButton;
-    @FXML
-    private Button rightOurEconomicsBooksButton;
-    @FXML
-    private Button rightEducationButton;
-    @FXML
-    private ImageView searchButton;
+    private Button rightMainBannerButton, rightToprateButton, rightMostborrowedButton,
+            rightOurFictionButton, rightNewestBooksButton, rightOurEconomicsBooksButton, rightEducationButton;
     @FXML
     private TextField searchTextField;
     @FXML
-    private HBox topRateContainer;
+    private HBox mainBannerContainer, topRateContainer, mostBorrowedContainer, ourFictionContainer,
+            newestBooksContainer, ourEconomicsBooksContainer, educationContainer;
     @FXML
-    private ScrollPane topRateScroll;
+    private Label userNameUser, fictionLabel, historyLabel, scienceLabel, technologyLabel,
+            computersLabel, economicsLabel, lawLabel, socialScienceLabel, educationLabel, artLabel;
     @FXML
-    private HBox mostBorrowedContainer;
+    private AnchorPane menuPane, searchSuggestion, notificationPane;
     @FXML
-    private ScrollPane mostBorrowedScroll;
-    @FXML
-    private HBox ourFictionContainer;
-    @FXML
-    private ScrollPane ourFictionScroll;
-    @FXML
-    private HBox newestBooksContainer;
-    @FXML
-    private ScrollPane newestBooksScroll;
-    @FXML
-    private ScrollPane ourEconomicsBooksScroll;
-    @FXML
-    private HBox ourEconomicsBooksContainer;
-    @FXML
-    private ScrollPane educationScroll;
-    @FXML
-    private HBox educationContainer;
-    @FXML
-    private Label userNameUser;
-    @FXML
-    private AnchorPane menuPane;
-    @FXML
-    private Pane backPane;
+    private Pane numberPane, backPane;
     @FXML
     private Circle moreIcon;
     @FXML
-    private Label fictionLabel;
-    @FXML
-    private Label historyLabel;
-    @FXML
-    private Label scienceLabel;
-    @FXML
-    private Label technologyLabel;
-    @FXML
-    private Label computersLabel;
-    @FXML
-    private Label economicsLabel;
-    @FXML
-    private Label lawLabel;
-    @FXML
-    private Label socialScienceLabel;
-    @FXML
-    private Label educationLabel;
-    @FXML
-    private Label artLabel;
-    @FXML
-    private ImageView mainBanner0;
-    @FXML
-    private ImageView mainBanner1;
-    @FXML
-    private ImageView mainBanner2;
-    @FXML
-    private ImageView banner3;
-    @FXML
-    private ImageView banner4;
-    @FXML
-    private ImageView banner5;
-    @FXML
-    private ImageView banner6;
-    @FXML
-    private ImageView banner7;
-    @FXML
-    private ImageView banner8;
-    @FXML
-    private ImageView banner9;
-    @FXML
-    private ImageView banner10;
-    @FXML
-    private ImageView banner12;
-    @FXML
-    private ImageView banner13;
-    @FXML
-    private ImageView banner14;
-    @FXML
-    public VBox searchSuggestionContainer;
-    @FXML
-    public AnchorPane searchSuggestion;
-    @FXML
-    private AnchorPane notificationPane;
+    private VBox searchSuggestionContainer;
     @FXML
     private Text numberText;
     @FXML
-    private AnchorPane numberPane;
-    @FXML
     private ProgressIndicator loadingIndicator;
+
     private boolean isAnchorPaneVisible = false;
+
     private boolean isNotificationPane = false;
+
     private Timeline autoScrollTimeline;
+
     private ExecutorService executor;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
         executor = Executors.newCachedThreadPool();
-        moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
         loadAllBooksAsync();
-
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         startAutoScroll();
         initScrollNavigation();
         initCategoryLabelClick();
         setupSearchSuggestions();
-
-        notificationPane.setVisible(false);
-        int totalBooks = Session.getInstance().getTotalBooks();
-        if (totalBooks != 0) {
-            numberPane.setVisible(true);
-            if (totalBooks < 100) {
-                numberText.setText(String.valueOf(totalBooks));
-            } else {
-                numberText.setText("99+");
-            }
-        }
-
+        initNotification();
         initBannersClick();
     }
 
@@ -222,7 +114,7 @@ public class HomePageController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, clickAvatar, 23);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
@@ -237,17 +129,14 @@ public class HomePageController implements Initializable {
         Node currentBanner = getCurrentBanner(currentHValue);
         Node nextBanner = getCurrentBanner(targetHValue);
         if (currentBanner != null && nextBanner != null) {
-            // Fade out current banner
             FadeTransition fadeOut = new FadeTransition(Duration.millis(250), currentBanner);
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.7);
 
-            // Fade in next banner
             FadeTransition fadeIn = new FadeTransition(Duration.millis(250), nextBanner);
             fadeIn.setFromValue(0.7);
             fadeIn.setToValue(1.0);
 
-            // Set scroll position after fade out
             fadeOut.setOnFinished(event -> {
                 mainBannerScroll.setHvalue(targetHValue);
                 fadeIn.play();
@@ -293,7 +182,6 @@ public class HomePageController implements Initializable {
         }
     }
 
-
     private void loadAllBooksAsync() {
         loadBooksByCategoryAsync("SELECT * FROM books ORDER BY average_of_rating DESC LIMIT 18", topRateContainer);
         loadBooksByCategoryAsync(
@@ -315,7 +203,6 @@ public class HomePageController implements Initializable {
         );
     }
 
-
     private void loadBooksByCategoryAsync(String query, HBox container) {
 
         Task<List<Book>> loadTask = new Task<>() {
@@ -327,10 +214,10 @@ public class HomePageController implements Initializable {
             @Override
             protected void succeeded() {
                 List<Book> books = getValue();
-               if(books!=null) {
-                   container.getChildren().clear();
-                   displayBooks(books, container);
-               }
+                if (books != null) {
+                    container.getChildren().clear();
+                    displayBooks(books, container);
+                }
             }
 
             @Override
@@ -379,9 +266,6 @@ public class HomePageController implements Initializable {
         return fetchedBooks;
     }
 
-
-
-
     @FXML
     private void handleSearch() {
         String keyword = searchTextField.getText().trim();
@@ -391,12 +275,11 @@ public class HomePageController implements Initializable {
         try {
             Parent searchPageRoot = loader.load();
             SearchPageController searchController = loader.getController();
-            searchController.setSearchParameters(keyword, selectedFilter, null,"Top rated");
+            searchController.setSearchParameters(keyword, selectedFilter, null, "Top rated");
             Stage currentStage = (Stage) mainScroll.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
             currentScene.setRoot(searchPageRoot);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -412,12 +295,14 @@ public class HomePageController implements Initializable {
                 }
                 return panes;
             }
+
             @Override
             protected void succeeded() {
                 container.getChildren().clear();
                 List<AnchorPane> panes = getValue();
                 container.getChildren().addAll(panes);
             }
+
             @Override
             protected void failed() {
                 getException().printStackTrace();
@@ -547,7 +432,6 @@ public class HomePageController implements Initializable {
         }
     }
 
-
     private void openBookDetailScene(Book book, Button confirmButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/BookDetail.fxml"));
@@ -586,7 +470,6 @@ public class HomePageController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void handleAvatarClick() {
@@ -640,7 +523,7 @@ public class HomePageController implements Initializable {
     }
 
     @FXML
-    void logOut() throws IOException {
+    private void logOut() throws IOException {
         Stage currenStage = (Stage) avatarUser.getScene().getWindow();
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
@@ -721,7 +604,8 @@ public class HomePageController implements Initializable {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.initOwner(searchTextField.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL); stage.setOnHidden(event -> {
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
 
@@ -742,75 +626,39 @@ public class HomePageController implements Initializable {
         }
     }
 
-    private void setKeywordAndCategory(String category){
+    private void setKeywordAndCategory(String category) {
         this.searchTextField.setText(category);
         filterBox.getSelectionModel().select(2);
         handleSearch();
     }
 
-    private HBox getStarBox(Book book) {
-        HBox starBox = new HBox(5);
-        double rating = book.getAverageOfRating();
-        int fullStars = (int) rating;
-        double decimalPart = rating - fullStars;
-        Image fullStarImage = new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm());
-        Image emptyStarImage = new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm());
-        for (int i = 1; i <= 5; i++) {
-            StackPane starPane = new StackPane();
-
-            ImageView emptyStar = new ImageView(emptyStarImage);
-            emptyStar.setFitHeight(15);
-            emptyStar.setFitWidth(15);
-
-            starPane.getChildren().add(emptyStar);
-
-            if (i <= fullStars) {
-                ImageView fullStar = new ImageView(fullStarImage);
-                fullStar.setFitHeight(15);
-                fullStar.setFitWidth(15);
-                starPane.getChildren().add(fullStar);
-            } else if (i == fullStars + 1 && decimalPart > 0) {
-                ImageView fullStar = new ImageView(fullStarImage);
-                fullStar.setFitHeight(15);
-                fullStar.setFitWidth(15);
-
-                Rectangle clip = new Rectangle(15 * decimalPart, 15);
-                fullStar.setClip(clip);
-                starPane.getChildren().add(fullStar);
-            }
-
-            starBox.getChildren().add(starPane);
-        }
-        return starBox;
-    }
-
     @FXML
     private void seeAllMostBorrowedBooks() {
-        loadByQuery(null,"Most borrowed");
+        loadByQuery(null, "Most borrowed");
     }
 
     @FXML
-    private void seeAllTopRatedBooks(){
-        loadByQuery(null,"Top rated");
+    private void seeAllTopRatedBooks() {
+        loadByQuery(null, "Top rated");
     }
 
     @FXML
-    private void seeAllNewestBooks(){
-        loadByQuery(null,"Newest to Oldest");
+    private void seeAllNewestBooks() {
+        loadByQuery(null, "Newest to Oldest");
     }
 
     @FXML
-    private void seeAllEconomicsBooks(){
+    private void seeAllEconomicsBooks() {
         setKeywordAndCategory("Economics");
     }
 
     @FXML
-    private void seeAllFictionBooks(){
+    private void seeAllFictionBooks() {
         setKeywordAndCategory("Fiction");
     }
 
     @FXML
-    private void seeAllEducationBooks(){
+    private void seeAllEducationBooks() {
         setKeywordAndCategory("Education");
     }
 
@@ -874,10 +722,10 @@ public class HomePageController implements Initializable {
 
             case "banner4":
                 Collections.addAll(list
-                        ,"9780751585568"
-                        ,"9781761189159"
-                        ,"9781250328144"
-                        ,"9780593852200"
+                        , "9780751585568"
+                        , "9781761189159"
+                        , "9781250328144"
+                        , "9780593852200"
 
                 );
                 break;
@@ -966,7 +814,7 @@ public class HomePageController implements Initializable {
                 break;
 
             case "banner14":
-                Collections.addAll(list,"9781646222384");
+                Collections.addAll(list, "9781646222384");
                 break;
 
             default:
@@ -975,16 +823,16 @@ public class HomePageController implements Initializable {
 
         StringBuilder condition = new StringBuilder();
         condition.append("isbn IN (");
-        for(String s : list){
+        for (String s : list) {
             condition.append(s).append(",");
         }
-        condition.deleteCharAt(condition.length()-1);
+        condition.deleteCharAt(condition.length() - 1);
         condition.append(")");
 
-        loadByQuery(condition.toString(),"Top rated");
+        loadByQuery(condition.toString(), "Top rated");
     }
 
-    private void initBannersClick(){
+    private void initBannersClick() {
         mainBanner0.setOnMouseClicked(event -> openBooksFromBanner(mainBanner0));
         mainBanner1.setOnMouseClicked(event -> openBooksFromBanner(mainBanner1));
         mainBanner2.setOnMouseClicked(event -> openBooksFromBanner(mainBanner2));
@@ -1001,7 +849,7 @@ public class HomePageController implements Initializable {
         banner14.setOnMouseClicked(event -> openBooksFromBanner(banner14));
     }
 
-    private void initCategoryLabelClick(){
+    private void initCategoryLabelClick() {
         fictionLabel.setOnMouseClicked(event -> setKeywordAndCategory("Fiction"));
         historyLabel.setOnMouseClicked(event -> setKeywordAndCategory("History"));
         scienceLabel.setOnMouseClicked(event -> setKeywordAndCategory("Science"));
@@ -1016,7 +864,7 @@ public class HomePageController implements Initializable {
         artLabel.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
     }
 
-    private void initScrollNavigation(){
+    private void initScrollNavigation() {
         currentIndexes.put("TopRate", 0);
         currentIndexes.put("MostBorrowed", 0);
         currentIndexes.put("NewestBooks", 0);
@@ -1073,21 +921,19 @@ public class HomePageController implements Initializable {
         );
     }
 
-    private List<String> loadSuggestionsFromDatabase(String query) {
-        List<String> suggestions = new ArrayList<>();
-        String filter = filterBox.getValue();
-        String sqlQuery = "SELECT DISTINCT " + filter + " FROM books WHERE " + filter + " LIKE ? LIMIT 10";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-            preparedStatement.setString(1, "%" + query + "%");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                suggestions.add(resultSet.getString(filter.toLowerCase()));
+    private void initNotification() {
+        notificationPane.setVisible(false);
+        int totalBooks = Session.getInstance().getTotalBooks();
+        if (totalBooks != 0) {
+            numberPane.setVisible(true);
+            if (totalBooks < 100) {
+                numberText.setText(String.valueOf(totalBooks));
+            } else {
+                numberText.setText("99+");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return suggestions;
+        Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
+        moreIcon.setFill(new ImagePattern(image));
     }
 
     private void updateSearchSuggestionContainer(List<String> suggestions) {
@@ -1110,6 +956,7 @@ public class HomePageController implements Initializable {
         }
         searchSuggestion.setVisible(true);
     }
+
     private void setupSearchSuggestions() {
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.trim().isEmpty()) {
@@ -1130,7 +977,7 @@ public class HomePageController implements Initializable {
         Task<List<String>> suggestionTask = new Task<>() {
             @Override
             protected List<String> call() {
-                return loadSuggestionsFromDatabase(query);
+                return loadSuggestionsFromDatabase(query, filterBox);
             }
 
             @Override
