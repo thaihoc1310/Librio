@@ -17,7 +17,7 @@
                 <AnchorPane prefHeight="204.0" prefWidth="424.0" styleClass="background_pane" stylesheets="@../../css/admin/CRUDUser.css">
                     <children>
                         <Button fx:id="cancelButton" layoutX="212.0" layoutY="152.0" mnemonicParsing="false" onAction="#cancel" prefHeight="38.0" prefWidth="68.0" styleClass="btn-3" text="Cancel" />
-                        <Button fx:id="deleteButton" layoutX="286.0" layoutY="152.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="38.0" prefWidth="114.0" styleClass="btn-2" text="Yes, Delete" />
+                        <Button fx:id="deleteButton" layoutX="286.0" layoutY="152.0" mnemonicParsing="false" onAction="#deleteBook" prefHeight="38.0" prefWidth="114.0" styleClass="btn-2" text="Yes, Delete" />
                         <Label layoutX="14.0" layoutY="56.0" text="Are you sure you want to delete this book?">
                             <font>
                                 <Font name="System Bold" size="20.0" />

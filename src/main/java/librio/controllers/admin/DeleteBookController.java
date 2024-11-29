@@ -23,7 +23,7 @@ public class DeleteBookController implements Initializable {
 
 
     @FXML
-    private void deleteUser() {
+    private void deleteBook() {
         if(DatabaseUtil.checkIfBookIsBorrowed(book)){
             errorLabel.setVisible(true);
             return;

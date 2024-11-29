@@ -735,7 +735,7 @@ public class DatabaseUtil {
     }
 
     public static boolean checkIfBookIsBorrowed(Book book) {
-        String query = "SELECT 1 FROM borrows AND book_isbn = ? AND status IN ('OVERDUE', 'BORROWING') LIMIT 1";
+        String query = "SELECT 1 FROM borrows WHERE book_isbn = ? AND status IN ('OVERDUE', 'BORROWING') LIMIT 1";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, book.getIsbn());
