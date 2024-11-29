@@ -40,7 +40,7 @@ public class User {
         this.update_by = new SimpleStringProperty();
     }
 
-    public User(String id, String name, String email,  String phoneNumber, Gender gender, Role role) {
+    public User(String id, String name, String email, String phoneNumber, Gender gender, Role role) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.email = new SimpleStringProperty(email);
@@ -66,120 +66,120 @@ public class User {
         return id.get();
     }
 
-    public StringProperty idProperty() {
-        return id;
-    }
-
     public void setId(String id) {
         this.id.set(id);
+    }
+
+    public StringProperty idProperty() {
+        return id;
     }
 
     public String getName() {
         return name.get();
     }
 
-    public StringProperty nameProperty() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name.set(name);
+    }
+
+    public StringProperty nameProperty() {
+        return name;
     }
 
     public String getEmail() {
         return email.get();
     }
 
-    public StringProperty emailProperty() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email.set(email);
+    }
+
+    public StringProperty emailProperty() {
+        return email;
     }
 
     public String getPassword() {
         return password.get();
     }
 
-    public StringProperty passwordProperty() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password.set(password);
+    }
+
+    public StringProperty passwordProperty() {
+        return password;
     }
 
     public String getPhoneNumber() {
         return phoneNumber.get();
     }
 
-    public StringProperty phoneNumberProperty() {
-        return phoneNumber;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber.set(phoneNumber);
+    }
+
+    public StringProperty phoneNumberProperty() {
+        return phoneNumber;
     }
 
     public String getAddress() {
         return address.get();
     }
 
-    public StringProperty addressProperty() {
-        return address;
-    }
-
     public void setAddress(String address) {
         this.address.set(address);
+    }
+
+    public StringProperty addressProperty() {
+        return address;
     }
 
     public Gender getGender() {
         return gender.get();
     }
 
-    public ObjectProperty<Gender> genderProperty() {
-        return gender;
-    }
-
     public void setGender(Gender gender) {
         this.gender.set(gender);
+    }
+
+    public ObjectProperty<Gender> genderProperty() {
+        return gender;
     }
 
     public Role getRole() {
         return role.get();
     }
 
-    public ObjectProperty<Role> roleProperty() {
-        return role;
-    }
-
     public void setRole(Role role) {
         this.role.set(role);
+    }
+
+    public ObjectProperty<Role> roleProperty() {
+        return role;
     }
 
     public String getAvatar() {
         return avatar.get();
     }
 
-    public StringProperty avatarProperty() {
-        return avatar;
-    }
-
     public void setAvatar(String avatar) {
         this.avatar.set(avatar);
+    }
+
+    public StringProperty avatarProperty() {
+        return avatar;
     }
 
     public LocalDate getBirthOfDate() {
         return birthOfDate.get();
     }
 
-    public ObjectProperty<LocalDate> birthOfDateProperty() {
-        return birthOfDate;
-    }
-
     public void setBirthOfDate(LocalDate birthOfDate) {
         this.birthOfDate.set(birthOfDate);
+    }
+
+    public ObjectProperty<LocalDate> birthOfDateProperty() {
+        return birthOfDate;
     }
 
     public String getCreated_by() {
@@ -202,23 +202,23 @@ public class User {
         return update_by.get();
     }
 
-    public StringProperty update_byProperty() {
-        return update_by;
-    }
-
     public void setUpdate_by(String update_by) {
         this.update_by.set(update_by);
+    }
+
+    public StringProperty update_byProperty() {
+        return update_by;
     }
 
     public Instant getUpdate_at() {
         return update_at.get();
     }
 
-    public ObjectProperty<Instant> update_atProperty() {
-        return update_at;
-    }
-
     public void setUpdate_at(Instant update_at) {
         this.update_at.set(update_at);
+    }
+
+    public ObjectProperty<Instant> update_atProperty() {
+        return update_at;
     }
 }

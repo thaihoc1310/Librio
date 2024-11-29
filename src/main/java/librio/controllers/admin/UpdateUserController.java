@@ -8,18 +8,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import librio.session.Session;
+import librio.cache.ImageCache;
+import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.enums.Role;
-import librio.cache.ImageCache;
 import librio.models.User;
-import librio.database.DatabaseConnection;
+import librio.session.Session;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -31,15 +35,10 @@ import static librio.util.DesignUtil.setDatePickerFormat;
 
 
 public class UpdateUserController implements Initializable {
-
     @FXML
     private Button updateUserButton;
     @FXML
-    private TextField nameTextField;
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField phoneNumberTextField;
+    private TextField nameTextField, emailTextField, phoneNumberTextField;
     @FXML
     private ComboBox<Gender> genderComboBox;
     @FXML
@@ -47,22 +46,14 @@ public class UpdateUserController implements Initializable {
     @FXML
     private TextArea addressTextArea;
     @FXML
-    private Label nameErrorLabel;
-    @FXML
-    private Label emailErrorLabel;
-    @FXML
-    private Label phoneNumberErrorLabel;
-    @FXML
-    private Label roleErrorLabel;
-    @FXML
-    private Label genderErrorLabel;
+    private Label nameErrorLabel, emailErrorLabel, phoneNumberErrorLabel, roleErrorLabel, genderErrorLabel, birthOfDateErrorLabel;
     @FXML
     private DatePicker birthOfDatePicker;
     @FXML
-    private Label birthOfDateErrorLabel;
-    @FXML
     private ImageView avatarImageView;
+
     private String avatarFilePath;
+
     private String previousAvatarFilePath;
 
     private User user;
@@ -95,7 +86,7 @@ public class UpdateUserController implements Initializable {
             String avatarsDir = projectDir + "/src/main/resources/images/user/";
             String path = avatarsDir + user.getAvatar();
 
-            Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+            Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
             cropAndClipToCircle(image, avatarImageView, 55);
         }
     }
@@ -132,7 +123,7 @@ public class UpdateUserController implements Initializable {
             }
         }
 
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             nameErrorLabel.setText("Name cannot be empty!");
             validation = true;
         }
@@ -156,21 +147,21 @@ public class UpdateUserController implements Initializable {
             validation = true;
         }
 
-        if(role == null){
+        if (role == null) {
             roleErrorLabel.setText("Role must be selected!");
             validation = true;
         }
 
-        if(gender == null){
+        if (gender == null) {
             genderErrorLabel.setText("Gender must be selected!");
             validation = true;
         }
 
-        if(validation) {
+        if (validation) {
             return;
         }
         String query = "UPDATE users SET name = ?, email = ?, phone_number = ?, address = ?, " +
-                        "gender = ?, role = ?, avatar = ?, birth_of_date = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+                "gender = ?, role = ?, avatar = ?, birth_of_date = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -252,15 +243,28 @@ public class UpdateUserController implements Initializable {
     }
 
     private void addListeners() {
-        nameTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        emailTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        phoneNumberTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        birthOfDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
-        addressTextArea.setOnMouseClicked(event -> {hideErrorLabels();});
-        genderComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
-        roleComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
+        nameTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        emailTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        phoneNumberTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        birthOfDatePicker.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        addressTextArea.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        genderComboBox.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        roleComboBox.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
     }
-
 
     @FXML
     private void addAvatar() {

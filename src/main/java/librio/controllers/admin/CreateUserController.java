@@ -8,10 +8,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.enums.Role;
+import librio.session.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,21 +23,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
+
 import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.setDatePickerFormat;
 
 public class CreateUserController implements Initializable {
     @FXML
-    private TextField nameTextField;
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField passwordTextField;
-    @FXML
-    private TextField confirmPasswordTextField;
-    @FXML
-    private TextField phoneNumberTextField;
+    private TextField nameTextField, emailTextField, passwordTextField, confirmPasswordTextField,
+            phoneNumberTextField;
     @FXML
     private ComboBox<Gender> genderComboBox;
     @FXML
@@ -47,27 +41,17 @@ public class CreateUserController implements Initializable {
     @FXML
     private Button createUserButton;
     @FXML
-    private Label nameErrorLabel;
-    @FXML
-    private Label emailErrorLabel;
-    @FXML
-    private Label passwordErrorLabel;
-    @FXML
-    private Label confirmPasswordErrorLabel;
-    @FXML
-    private Label phoneNumberErrorLabel;
-    @FXML
-    private Label roleErrorLabel;
-    @FXML
-    private Label genderErrorLabel;
+    private Label nameErrorLabel, emailErrorLabel, passwordErrorLabel, confirmPasswordErrorLabel,
+            phoneNumberErrorLabel, roleErrorLabel, genderErrorLabel, birthOfDateErrorLabel;
     @FXML
     private DatePicker birthOfDatePicker;
     @FXML
-    private Label birthOfDateErrorLabel;
-    @FXML
-    private ImageView avatarImageView;  // ImageView để hiển thị ảnh đại diện
+    private ImageView avatarImageView;
+
     private String avatarFilePath;
+
     private String previousAvatarFilePath;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
@@ -76,7 +60,6 @@ public class CreateUserController implements Initializable {
         addListeners();
         setDatePickerFormat(birthOfDatePicker);
     }
-
 
     @FXML
     private void createUser() {
@@ -229,18 +212,37 @@ public class CreateUserController implements Initializable {
 
     private void addListeners() {
         // Name validation
-        nameTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        emailTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        passwordTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        confirmPasswordTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        phoneNumberTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        addressTextArea.setOnMouseClicked(event -> {hideErrorLabels();});
-        birthOfDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
-        birthOfDatePicker.getEditor().setOnMouseClicked(event -> {hideErrorLabels();});
-        genderComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
-        roleComboBox.setOnMouseClicked(event -> {hideErrorLabels();});
+        nameTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        emailTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        passwordTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        confirmPasswordTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        phoneNumberTextField.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        addressTextArea.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        birthOfDatePicker.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        birthOfDatePicker.getEditor().setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        genderComboBox.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        roleComboBox.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
     }
-
 
     @FXML
     private void addAvatar() {

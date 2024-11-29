@@ -16,11 +16,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import librio.models.User;
-import librio.enums.Gender;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
+import librio.enums.Gender;
 import librio.enums.Role;
+import librio.models.User;
+import librio.session.Session;
 import librio.util.DatabaseUtil;
 import librio.util.EmailUtil;
 
@@ -39,17 +39,24 @@ public class LoginController {
     @FXML
     private Button loginButton, nextButton, submitButton, signUpButton;
     @FXML
-    private PasswordField passwordField, signUpPasswordField, signUpConfirmPasswordField, newPasswordField, confirmNewPasswordField;
+    private PasswordField passwordField, signUpPasswordField, signUpConfirmPasswordField,
+            newPasswordField, confirmNewPasswordField;
     @FXML
-    private TextField usernameField, passwordTextVisible, resetCode, signUpPasswordTextVisible, signUpConfirmPasswordTextVisible;
+    private TextField usernameField, passwordTextVisible, resetCode, signUpPasswordTextVisible,
+            signUpConfirmPasswordTextVisible;
     @FXML
-    private TextField emailTextField, emailTextField1, userNameTextField, phoneNumberTextField, newPasswordFieldVisible, confirmNewPasswordFieldVisible;
+    private TextField emailTextField, emailTextField1, userNameTextField, phoneNumberTextField,
+            newPasswordFieldVisible, confirmNewPasswordFieldVisible;
     @FXML
-    private ImageView closeEyeImage1, openEyeImage1, closeEyeImage2, openEyeImage2, openEyeImage21, closeEyeImage21, openEyeImage11, closeEyeImage11;
+    private ImageView closeEyeImage1, openEyeImage1, closeEyeImage2, openEyeImage2, openEyeImage21,
+            closeEyeImage21, openEyeImage11, closeEyeImage11;
     @FXML
     private ImageView openEyeImage, closeEyeImage;
     @FXML
-    private Label incorrectLoginInformation, switchSignUp, switchSignIn, forgotPassword, switchSignIn1, switchSignIn2, sentCodeButton, emailErrorLabel, resetCodeErrorLabel, confirmPasswordErrorLabel, passwordErrorLabel, nameErrorLabel, emailErrorLabel1, genderAndbirthDateErrorLabel, phoneNumberErrorLabel, confirmPasswordErrorLabel1, passwordErrorLabel1;
+    private Label incorrectLoginInformation, switchSignUp, switchSignIn, forgotPassword,
+            switchSignIn1, switchSignIn2, sentCodeButton, emailErrorLabel, resetCodeErrorLabel,
+            confirmPasswordErrorLabel, passwordErrorLabel, nameErrorLabel, emailErrorLabel1,
+            genderAndbirthDateErrorLabel, phoneNumberErrorLabel, confirmPasswordErrorLabel1, passwordErrorLabel1;
     @FXML
     private AnchorPane leftPane, rightPane, centerPane, sendCodePane, changePassWordPane;
     @FXML
@@ -60,30 +67,17 @@ public class LoginController {
     private ProgressIndicator loadingIndicator;
 
     private ExecutorService executor;
+
     private String generatedCode;
+
     private User user;
 
     @FXML
     private void initialize() {
         executor = Executors.newFixedThreadPool(2);
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
-
-        passwordTextVisible.setVisible(false);
-        signUpPasswordTextVisible.setVisible(false);
-        signUpConfirmPasswordTextVisible.setVisible(false);
-        newPasswordFieldVisible.setVisible(false);
-        confirmNewPasswordFieldVisible.setVisible(false);
-
-
-        usernameField.setOnMouseClicked(event -> clearErrorMessage());
-        passwordField.setOnMouseClicked(event -> clearErrorMessage());
-        passwordTextVisible.setOnMouseClicked(event -> clearErrorMessage());
-        switchSignUp.setOnMouseClicked(event -> switchToSignUpAndForgotPassword(centerPane));
-        switchSignIn.setOnMouseClicked(event -> switchToSignIn(centerPane));
-        switchSignIn1.setOnMouseClicked(event -> switchToSignIn(sendCodePane));
-        switchSignIn2.setOnMouseClicked(event -> switchToSignIn(changePassWordPane));
-        forgotPassword.setOnMouseClicked(event -> switchToSignUpAndForgotPassword(sendCodePane));
-        setUpEyePassword();
+        initPassword();
+        initMouseClicked();
     }
 
     @FXML
@@ -94,22 +88,17 @@ public class LoginController {
         FadeTransition rightPaneFade = new FadeTransition(Duration.seconds(0.3), rightPane);
         rightPaneFade.setFromValue(1.0);
         rightPaneFade.setToValue(0.0);
-
         FadeTransition paneFade = new FadeTransition(Duration.seconds(0.3), pane);
         paneFade.setFromValue(0.0);
         paneFade.setToValue(1.0);
-
         pane.setVisible(true);
 
         ParallelTransition parallelTransition = new ParallelTransition(leftPaneTranslate, rightPaneFade);
-
         SequentialTransition transition = new SequentialTransition(parallelTransition, paneFade);
-
         transition.setOnFinished(e -> {
             leftPane.setVisible(false);
             rightPane.setVisible(false);
         });
-
         transition.play();
         incorrectLoginInformation.setText("");
         clearFieldData();
@@ -167,25 +156,25 @@ public class LoginController {
         String name = userNameTextField.getText();
         String email = emailTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
-        String signUpPassword = signUpPasswordField.isVisible() ?  signUpPasswordField.getText() : signUpPasswordTextVisible.getText();
+        String signUpPassword = signUpPasswordField.isVisible() ? signUpPasswordField.getText() : signUpPasswordTextVisible.getText();
         String signUpConfirmPassword = signUpConfirmPasswordField.isVisible() ? signUpConfirmPasswordField.getText() : signUpConfirmPasswordTextVisible.getText();
         Gender gender = genderComboBox.getValue();
         LocalDate birthDate = birthDatePicker.getValue();
 
         boolean validation = false;
 
-        if(name.trim().isEmpty()){
+        if (name.trim().isEmpty()) {
             nameErrorLabel.setText("Name cannot be empty!");
             validation = true;
         }
 
-        if(email.trim().isEmpty()){
+        if (email.trim().isEmpty()) {
             emailErrorLabel.setText("Email cannot be empty!");
             validation = true;
-        }else if(isEmailExists(email.trim())){
+        } else if (isEmailExists(email.trim())) {
             emailErrorLabel.setText("This email already exists!");
             validation = true;
-        }else if(!email.trim().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")){
+        } else if (!email.trim().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
             emailErrorLabel.setText("Invalid email address!");
             validation = true;
         }
@@ -198,30 +187,30 @@ public class LoginController {
             validation = true;
         }
 
-        if(gender == null || birthDate == null){
+        if (gender == null || birthDate == null) {
             genderAndbirthDateErrorLabel.setText("Please select your Gender and Birth Date!");
             validation = true;
-        }else if(birthDate.isAfter(LocalDate.now())){
+        } else if (birthDate.isAfter(LocalDate.now())) {
             genderAndbirthDateErrorLabel.setText("Birth date must be before now!");
         }
 
-        if(signUpPassword.isEmpty()){
+        if (signUpPassword.isEmpty()) {
             passwordErrorLabel.setText("Password cannot be empty!");
             validation = true;
-        }else if(signUpPassword.length() < 6){
+        } else if (signUpPassword.length() < 6) {
             passwordErrorLabel.setText("Password must be at least 6 characters!");
             validation = true;
         }
 
-        if(signUpConfirmPassword.isEmpty()){
+        if (signUpConfirmPassword.isEmpty()) {
             confirmPasswordErrorLabel.setText("Confirm password cannot be empty!");
             validation = true;
-        }else if(!signUpConfirmPassword.equals(signUpPassword)){
+        } else if (!signUpConfirmPassword.equals(signUpPassword)) {
             confirmPasswordErrorLabel.setText("Passwords do not match!");
             validation = true;
         }
 
-        if(validation){
+        if (validation) {
             return;
         }
 
@@ -252,7 +241,7 @@ public class LoginController {
                 switchToSignIn(centerPane);
             }
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -286,7 +275,6 @@ public class LoginController {
         generatedCode = generateResetCode();
         EmailUtil.sendResetCode(email, generatedCode);
     }
-
 
 
     @FXML
@@ -423,7 +411,7 @@ public class LoginController {
         confirmPasswordErrorLabel1.setText("");
     }
 
-    private void clearForgotPasswordFieldData(){
+    private void clearForgotPasswordFieldData() {
         emailTextField1.clear();
         resetCode.clear();
         confirmNewPasswordField.clear();
@@ -442,7 +430,7 @@ public class LoginController {
         genderAndbirthDateErrorLabel.setText("");
     }
 
-    private void clearFieldData(){
+    private void clearFieldData() {
         userNameTextField.clear();
         passwordField.clear();
         usernameField.clear();
@@ -478,5 +466,26 @@ public class LoginController {
         closeEyeImage21.setOnMouseClicked(event -> hidePassword(confirmNewPasswordField, confirmNewPasswordFieldVisible, openEyeImage21, closeEyeImage21));
         openEyeImage11.setOnMouseClicked(event -> showPassword(newPasswordField, newPasswordFieldVisible, openEyeImage11, closeEyeImage11));
         closeEyeImage11.setOnMouseClicked(event -> hidePassword(newPasswordField, newPasswordFieldVisible, openEyeImage11, closeEyeImage11));
+    }
+
+
+    private void initPassword() {
+        passwordTextVisible.setVisible(false);
+        signUpPasswordTextVisible.setVisible(false);
+        signUpConfirmPasswordTextVisible.setVisible(false);
+        newPasswordFieldVisible.setVisible(false);
+        confirmNewPasswordFieldVisible.setVisible(false);
+        setUpEyePassword();
+    }
+
+    private void initMouseClicked() {
+        usernameField.setOnMouseClicked(event -> clearErrorMessage());
+        passwordField.setOnMouseClicked(event -> clearErrorMessage());
+        passwordTextVisible.setOnMouseClicked(event -> clearErrorMessage());
+        switchSignUp.setOnMouseClicked(event -> switchToSignUpAndForgotPassword(centerPane));
+        switchSignIn.setOnMouseClicked(event -> switchToSignIn(centerPane));
+        switchSignIn1.setOnMouseClicked(event -> switchToSignIn(sendCodePane));
+        switchSignIn2.setOnMouseClicked(event -> switchToSignIn(changePassWordPane));
+        forgotPassword.setOnMouseClicked(event -> switchToSignUpAndForgotPassword(sendCodePane));
     }
 }

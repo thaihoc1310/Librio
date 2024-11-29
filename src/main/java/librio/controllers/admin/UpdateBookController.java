@@ -11,9 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import librio.cache.ImageCache;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import librio.session.Session;
 
 import java.io.File;
 import java.net.URL;
@@ -24,76 +24,31 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import static librio.util.DatabaseUtil.*;
+import static librio.util.DatabaseUtil.getBookByIsbn;
+import static librio.util.DatabaseUtil.isBookTitleExists;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
 public class UpdateBookController implements Initializable {
-    private Book book;
-
     @FXML
-    private Label authorErrorLabel;
-
+    private Label authorErrorLabel, bookTitleErrorLabel, categoryErrorLabel, isbnErrorLabel,
+            languageErrorLabel, numberOfPagesErrorLabel, publisherErrorLabel,
+            quantityOfCopyErrorLabel;
     @FXML
-    private TextField authorTextField;
-
+    private TextField authorTextField, categoryTextField, isbnTextField, languageTextField,
+            numberOfPagesTextField, publisherTextField, quantityOfCopyTextField,
+            yearPublishedTextField;
+    @FXML
+    private TextArea bookTitleTextField, descriptionTextArea;
+    @FXML
+    private Button cancelButton;
     @FXML
     private ImageView bookImageView;
 
+    private Book book;
+
     private String bookImageFilePath;
+
     private String previousBookFilePath;
-
-    @FXML
-    private Label bookTitleErrorLabel;
-
-    @FXML
-    private TextArea bookTitleTextField;
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Label categoryErrorLabel;
-
-    @FXML
-    private TextField categoryTextField;
-
-
-    @FXML
-    private TextArea descriptionTextArea;
-
-    @FXML
-    private Label isbnErrorLabel;
-
-    @FXML
-    private TextField isbnTextField;
-
-    @FXML
-    private Label languageErrorLabel;
-
-    @FXML
-    private TextField languageTextField;
-
-    @FXML
-    private Label numberOfPagesErrorLabel;
-
-    @FXML
-    private TextField numberOfPagesTextField;
-
-    @FXML
-    private Label publisherErrorLabel;
-
-    @FXML
-    private TextField publisherTextField;
-
-    @FXML
-    private TextField quantityOfCopyTextField;
-
-    @FXML
-    private TextField yearPublishedTextField;
-
-    @FXML
-    private Label quantityOfCopyErrorLabel;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -121,7 +76,7 @@ public class UpdateBookController implements Initializable {
 
         Book book = getBookByIsbn(isbn);
 
-        if(book == null) {
+        if (book == null) {
             return;
         }
 
@@ -129,33 +84,33 @@ public class UpdateBookController implements Initializable {
 
         boolean validation = false;
 
-        if(bookTitle.isEmpty()){
+        if (bookTitle.isEmpty()) {
             bookTitleErrorLabel.setText("Title cannot be empty!");
             validation = true;
-        } else if(isBookTitleExists(bookTitle) && !bookTitle.equals(book.getTitle())){
+        } else if (isBookTitleExists(bookTitle) && !bookTitle.equals(book.getTitle())) {
             bookTitleErrorLabel.setText("Title already exists!");
             validation = true;
         }
 
-        if(isbn.isEmpty()){
+        if (isbn.isEmpty()) {
             isbnErrorLabel.setText("isbn cannot be empty!");
             validation = true;
-        }else if (!isbn.matches("\\d{10}|\\d{13}")) {
+        } else if (!isbn.matches("\\d{10}|\\d{13}")) {
             isbnErrorLabel.setText("isbn must be 10 or 13 digits!");
             validation = true;
         }
 
-        if(author.isEmpty()){
+        if (author.isEmpty()) {
             authorErrorLabel.setText("Author cannot be empty!");
             validation = true;
         }
 
-        if(publisher.isEmpty()){
+        if (publisher.isEmpty()) {
             publisherErrorLabel.setText("Publisher cannot be empty!");
             validation = true;
         }
 
-        if(category.isEmpty()){
+        if (category.isEmpty()) {
             categoryErrorLabel.setText("Category cannot be empty!");
             validation = true;
         }
@@ -168,23 +123,23 @@ public class UpdateBookController implements Initializable {
             validation = true;
         }
 
-        if(quantityOfCopy.isEmpty()){
+        if (quantityOfCopy.isEmpty()) {
             quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty!");
             validation = true;
         } else if (!quantityOfCopy.matches("\\d+")) {
             quantityOfCopyErrorLabel.setText("Quantity of copy must be a non-negative number!");
             validation = true;
-        }else if(Integer.parseInt(quantityOfCopy) < totalBorrowedBooks){
+        } else if (Integer.parseInt(quantityOfCopy) < totalBorrowedBooks) {
             quantityOfCopyErrorLabel.setText("Invalid quantity of copy!");
             validation = true;
         }
 
-        if(language.isEmpty()){
+        if (language.isEmpty()) {
             languageErrorLabel.setText("Password cannot be empty!");
             validation = true;
         }
 
-        if(validation) {
+        if (validation) {
             return;
         }
 
@@ -192,7 +147,7 @@ public class UpdateBookController implements Initializable {
 
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query = "UPDATE books SET title = ?, author = ?, isbn = ?, publisher = ?, category = ?, quantity_copy = ?, available_copy = ? ,year_published = ?, " +
-                            "language = ?, number_of_pages = ?, description = ?, book_image = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+                    "language = ?, number_of_pages = ?, description = ?, book_image = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, bookTitle);
             statement.setString(2, author);
@@ -206,7 +161,7 @@ public class UpdateBookController implements Initializable {
             statement.setString(10, numberOfPages);
             if (descriptionTextArea.getText().isEmpty()) {
                 statement.setString(11, "No description provided!");
-            }else {
+            } else {
                 statement.setString(11, description);
             }
             statement.setString(12, bookImageFilePath != null ? bookImageFilePath : book.getImagePath());
@@ -238,6 +193,7 @@ public class UpdateBookController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void hideErrorLabels() {
         bookTitleErrorLabel.setText("");
         isbnErrorLabel.setText("");
@@ -268,7 +224,7 @@ public class UpdateBookController implements Initializable {
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + book.getImagePath();
 
-                Image image = ImageCache.getInstance().getImage(path,projectDir + "defaultBook.jpg");
+                Image image = ImageCache.getInstance().getImage(path, projectDir + "defaultBook.jpg");
                 bookImageView.setImage(image);
             } else {
                 loadDefaultBookImage(bookImageView);
@@ -276,19 +232,17 @@ public class UpdateBookController implements Initializable {
         }
     }
 
-
     private void addListeners() {
-
-        bookTitleTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        isbnTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        authorTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        publisherTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        categoryTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        numberOfPagesTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        quantityOfCopyTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        languageTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        descriptionTextArea.setOnMouseClicked(event -> {hideErrorLabels();});
-        yearPublishedTextField.setOnMouseClicked(event -> {hideErrorLabels();});
+        bookTitleTextField.setOnMouseClicked(event -> hideErrorLabels());
+        isbnTextField.setOnMouseClicked(event -> hideErrorLabels());
+        authorTextField.setOnMouseClicked(event -> hideErrorLabels());
+        publisherTextField.setOnMouseClicked(event -> hideErrorLabels());
+        categoryTextField.setOnMouseClicked(event -> hideErrorLabels());
+        numberOfPagesTextField.setOnMouseClicked(event -> hideErrorLabels());
+        quantityOfCopyTextField.setOnMouseClicked(event -> hideErrorLabels());
+        languageTextField.setOnMouseClicked(event -> hideErrorLabels());
+        descriptionTextArea.setOnMouseClicked(event -> hideErrorLabels());
+        yearPublishedTextField.setOnMouseClicked(event -> hideErrorLabels());
     }
 
     @FXML

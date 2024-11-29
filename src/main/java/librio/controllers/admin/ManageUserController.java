@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.getTotalUserCount;
 import static librio.util.DatabaseUtil.getUserById;
-import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.*;
 
 public class ManageUserController implements Initializable {
 
@@ -83,7 +83,7 @@ public class ManageUserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setAvatarAndUserName();
+        setAvatarAndUserName(avatarUser, userNameUser);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -124,7 +124,6 @@ public class ManageUserController implements Initializable {
 
                         btnUpdate.setOnAction(event -> {
                             User user = getTableView().getItems().get(getIndex());
-                            // Lấy dữ liệu người dùng đã cập nhật từ cơ sở dữ liệu
                             User updatedUser = getUserById(user.getId());
                             openUpdateUserScene(updatedUser);
                         });
@@ -210,16 +209,6 @@ public class ManageUserController implements Initializable {
         return new BorderPane();
     }
 
-    public void setAvatarAndUserName() {
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
-
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
-        cropAndClipToCircle(image, avatarUser, 38.5);
-        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
-    }
-
     @FXML
     private void openCreateUserScene() {
         try {
@@ -252,7 +241,6 @@ public class ManageUserController implements Initializable {
     @FXML
     private void openUpdateUserScene(User user) {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UpdateUser.fxml"));
             Parent root = loader.load();
             Stage currentStage = (Stage) userTableView.getScene().getWindow();
@@ -314,7 +302,6 @@ public class ManageUserController implements Initializable {
     @FXML
     private void openDeleteUserScene(User user) {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/DeleteUser.fxml"));
             Parent root = loader.load();
             Stage currentStage = (Stage) userTableView.getScene().getWindow();
@@ -381,57 +368,21 @@ public class ManageUserController implements Initializable {
 
     @FXML
     private void openManageBookScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) createUserButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(createUserButton,"/fxml/admin/ManageBook.fxml");
     }
 
     @FXML
     private void openManageBorrowScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBorrow.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) createUserButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(createUserButton,"/fxml/admin/ManageBorrow.fxml");
     }
 
     @FXML
     private void openAdDashboardScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot = loader.load();
-
-            Stage currentStage = (Stage) createUserButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(adminDashboardRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(createUserButton,"/fxml/admin/AdDashboard.fxml");
     }
 
     @FXML
     private void openProfileSettingsScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) createUserButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(createUserButton,"/fxml/admin/ProfileSettings.fxml");
     }
 }

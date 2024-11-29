@@ -30,7 +30,6 @@ import librio.database.DatabaseConnection;
 import librio.models.Borrow;
 import librio.enums.Status;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -42,7 +41,7 @@ import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.getBorrowById;
 import static librio.util.DatabaseUtil.getTotalBorrowCount;
-import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.*;
 
 public class ManageBorrowController implements Initializable {
 
@@ -90,7 +89,7 @@ public class ManageBorrowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setAvatarAndUserName();
+        setAvatarAndUserName(avatarUser, userNameUser);
         borrowIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         bookIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("bookIsbn"));
@@ -228,44 +227,17 @@ public class ManageBorrowController implements Initializable {
 
     @FXML
     private void openManageBookScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(createBorrowButton,"/fxml/admin/ManageBook.fxml");
     }
 
     @FXML
     private void openManageUserScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageUser.fxml"));
-            Parent manageUserRoot = loader.load();
-
-            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageUserRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(createBorrowButton,"/fxml/admin/ManageUser.fxml");
     }
 
     @FXML
     private void openAdDashboardScene() {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot  = loader.load();
-
-            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(adminDashboardRoot);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        switchScene(createBorrowButton,"/fxml/admin/AdDashboard.fxml");
     }
 
     @FXML
@@ -382,16 +354,7 @@ public class ManageBorrowController implements Initializable {
 
     @FXML
     private void openProfileSettingsScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) createBorrowButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(createBorrowButton,"/fxml/admin/ProfileSettings.fxml");
     }
 
     @FXML
@@ -428,14 +391,4 @@ public class ManageBorrowController implements Initializable {
         }
     }
 
-
-    public void setAvatarAndUserName(){
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
-
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
-        cropAndClipToCircle(image, avatarUser, 38.5);
-        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
-    }
 }

@@ -21,10 +21,14 @@ public class DeleteBookController implements Initializable {
 
     private Book book;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        errorLabel.setVisible(false);
+    }
 
     @FXML
-    private void deleteBook() {
-        if(DatabaseUtil.checkIfBookIsBorrowed(book)){
+    private void deleteUser() {
+        if (DatabaseUtil.checkIfBookIsBorrowed(book)) {
             errorLabel.setVisible(true);
             return;
         }
@@ -57,8 +61,4 @@ public class DeleteBookController implements Initializable {
         stage.close();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        errorLabel.setVisible(false);
-    }
 }

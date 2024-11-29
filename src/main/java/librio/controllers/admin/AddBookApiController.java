@@ -27,7 +27,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -44,14 +46,16 @@ public class AddBookApiController implements Initializable {
     private ScrollPane bookListScrollPane;
     @FXML
     private ProgressIndicator loadingIndicator;
-    @FXML
-    private AnchorPane isbnPane;
 
-    private List<Book> bookList = new ArrayList<>();
+    private final List<Book> bookList = new ArrayList<>();
+
     private ExecutorService executor;
+
     private int startIndex = 0;
+
     private int totalItems = 0;
-    private VBox contentPane = new VBox(10);
+
+    private final VBox contentPane = new VBox(10);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,6 +83,7 @@ public class AddBookApiController implements Initializable {
                 }
                 Platform.runLater(() -> loadingIndicator.setVisible(false));
             }
+
             @Override
             protected void failed() {
                 Platform.runLater(() -> loadingIndicator.setVisible(false));
@@ -115,7 +120,7 @@ public class AddBookApiController implements Initializable {
                     Integer numberOfPages = volumeInfo.optInt("pageCount", 0);
                     if (isDigit(isbn.charAt(0))) isbn = "ISBN : " + isbn;
                     Book book = new Book(0, title, author, isbn, category, publisher, 0, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
-                     fetchedBooks.add(book);
+                    fetchedBooks.add(book);
                 }
             }
         } catch (Exception e) {
@@ -158,11 +163,9 @@ public class AddBookApiController implements Initializable {
 
     @FXML
     private void handleSearch() {
-        // Cancel existing executor
         if (executor != null && !executor.isShutdown()) {
             executor.shutdownNow();
         }
-        // Re-initialize executor
         executor = Executors.newFixedThreadPool(2);
         String keyword = searchTextField.getText().trim();
         startIndex = 0;
@@ -183,7 +186,6 @@ public class AddBookApiController implements Initializable {
         };
     }
 
-
     private void displayBooks(List<Book> booksToDisplay) {
         Platform.runLater(() -> {
             if (startIndex == 0) {
@@ -191,7 +193,6 @@ public class AddBookApiController implements Initializable {
                 contentPane.getChildren().clear();
                 contentPane.setPrefWidth(bookListScrollPane.getPrefWidth());
             } else {
-                // Remove existing 'More' button if it exists
                 if (!contentPane.getChildren().isEmpty() && contentPane.getChildren().getLast() instanceof Button) {
                     contentPane.getChildren().removeLast();
                 }
@@ -203,16 +204,7 @@ public class AddBookApiController implements Initializable {
             }
 
             if ((startIndex + 15) < totalItems) {
-                Button moreButton = new Button("More");
-                moreButton.setPrefHeight(32.0);
-                moreButton.setPrefWidth(667.0);
-                moreButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;");
-                moreButton.setOnMouseEntered(event -> moreButton.setStyle("-fx-background-color: #4c2113; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px; -fx-cursor: hand;"));
-                moreButton.setOnMouseExited(event -> moreButton.setStyle("-fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;-fx-background-color: #72311c;"));
-                moreButton.setOnAction(event -> {
-                    startIndex += 15;
-                    loadBooksAsync(searchTextField.getText().trim());
-                });
+                Button moreButton = getMoreButton();
                 contentPane.getChildren().add(moreButton);
             }
 
@@ -223,9 +215,20 @@ public class AddBookApiController implements Initializable {
         });
     }
 
-    /**
-     * Create an AnchorPane for each book
-     */
+    private Button getMoreButton() {
+        Button moreButton = new Button("More");
+        moreButton.setPrefHeight(32.0);
+        moreButton.setPrefWidth(667.0);
+        moreButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;");
+        moreButton.setOnMouseEntered(event -> moreButton.setStyle("-fx-background-color: #4c2113; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px; -fx-cursor: hand;"));
+        moreButton.setOnMouseExited(event -> moreButton.setStyle("-fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;-fx-background-color: #72311c;"));
+        moreButton.setOnAction(event -> {
+            startIndex += 15;
+            loadBooksAsync(searchTextField.getText().trim());
+        });
+        return moreButton;
+    }
+
     private AnchorPane createBookPane(Book book) {
         AnchorPane bookPane = new AnchorPane();
         bookPane.setPrefHeight(155.0);
@@ -280,6 +283,13 @@ public class AddBookApiController implements Initializable {
         isbnLabel.setPrefWidth(189.0);
         bookPane.getChildren().add(isbnLabel);
 
+        Button addButton = getAddButton(book);
+        bookPane.getChildren().add(addButton);
+
+        return bookPane;
+    }
+
+    private Button getAddButton(Book book) {
         Button addButton = new Button("+ Add");
         addButton.setLayoutX(526.0);
         addButton.setLayoutY(62.0);
@@ -289,9 +299,7 @@ public class AddBookApiController implements Initializable {
         addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color: #4c2113; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px; -fx-cursor: hand;"));
         addButton.setOnMouseExited(event -> addButton.setStyle("-fx-background-color: #72311c; -fx-text-fill: #ffffff; -fx-font-weight: 700; -fx-background-radius: 5px; -fx-font-size: 15px;"));
         addButton.setOnAction(event -> openCreateBookScene(book));
-        bookPane.getChildren().add(addButton);
-
-        return bookPane;
+        return addButton;
     }
 
     @FXML
@@ -300,12 +308,10 @@ public class AddBookApiController implements Initializable {
         stage.close();
     }
 
-    private boolean isIsbnPaneVisible = false;
-
     @FXML
     private void openCreateBookScene(Book book) {
         try {
-            if(!book.getIsbn().contains("ISBN") || book.getIsbn().equals("Unknown ISBN")){
+            if (!book.getIsbn().contains("ISBN") || book.getIsbn().equals("Unknown ISBN")) {
                 openIsbnNotAvailable();
                 return;
             }
@@ -315,7 +321,6 @@ public class AddBookApiController implements Initializable {
             Stage addBookStage = (Stage) searchButton.getScene().getWindow();
             CreateBookController createBookController = loader.getController();
             createBookController.setBook(book);
-
             Stage createBookStage = new Stage();
             createBookStage.initStyle(StageStyle.TRANSPARENT);
             Scene scene = new Scene(root);
@@ -334,7 +339,6 @@ public class AddBookApiController implements Initializable {
     @FXML
     private void openIsbnNotAvailable() {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/IsbnNotAvailable.fxml"));
             Parent root = loader.load();
             Stage currentStage = (Stage) searchButton.getScene().getWindow();
@@ -354,7 +358,8 @@ public class AddBookApiController implements Initializable {
 
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
-            });   stage.showAndWait();
+            });
+            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }

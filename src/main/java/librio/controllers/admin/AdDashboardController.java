@@ -8,21 +8,16 @@ import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import librio.cache.ImageCache;
 import librio.controllers.auth.LogoutController;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.util.DatabaseUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -33,44 +28,35 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setAvatarAndUserName;
+import static librio.util.DesignUtil.switchScene;
 
 public class AdDashboardController implements Initializable {
-
     @FXML
-    Button openManageBookButton;
-
+    private Button openManageBookButton;
     @FXML
     private ImageView avatarUser;
-
     @FXML
     private Label userNameUser;
-
     @FXML
     private StackPane stackPaneRoot;
-
     @FXML
     private Label totalBooksLabel;
-
     @FXML
     private Label totalUsersLabel;
-
     @FXML
     private Label totalBorrowsLabel;
-
     @FXML
     private Label totalBookCopyLabel;
-
     @FXML
     private PieChart pieChart;
-
     @FXML
     private BarChart<String, Number> barChart;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setAvatarAndUserName();
+        setAvatarAndUserName(avatarUser, userNameUser);
         addDataToDashboardCardAndChart();
     }
 
@@ -128,7 +114,6 @@ public class AdDashboardController implements Initializable {
         pieChart.setLegendVisible(false);
 
 
-
         //Add data to bar Chart
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Month-Year");
@@ -159,7 +144,6 @@ public class AdDashboardController implements Initializable {
         barChart.getData().add(series);
     }
 
-    //Take months
     private List<String> getAllMonthsInLast12Months() {
         List<String> months = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
@@ -171,7 +155,6 @@ public class AdDashboardController implements Initializable {
         return months;
     }
 
-    //Query to get month, year, borrows data;
     private List<String> getMonthYearLabels() {
         List<String> monthYearLabels = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -217,77 +200,29 @@ public class AdDashboardController implements Initializable {
         return borrowCounts;
     }
 
-
-    public void setAvatarAndUserName() {
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
-
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
-        cropAndClipToCircle(image, avatarUser, 38.5);
-        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
-    }
-
     @FXML
     private void openManageBookScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) openManageBookButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(openManageBookButton,"/fxml/admin/ManageBook.fxml");
     }
 
     @FXML
     private void openManageUserScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageUser.fxml"));
-            Parent manageUserRoot = loader.load();
-
-            Stage currentStage = (Stage) openManageBookButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageUserRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(openManageBookButton,"/fxml/admin/ManageUser.fxml");
     }
 
     @FXML
     private void openManageBorrowScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBorrow.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) openManageBookButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(openManageBookButton,"/fxml/admin/ManageBorrow.fxml");
     }
 
     @FXML
     private void openProfileSettingsScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) openManageBookButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(openManageBookButton,"/fxml/admin/ProfileSettings.fxml");
     }
 
     @FXML
     private void openLogOutScene() {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
             Parent root = loader.load();
             stackPaneRoot.setOpacity(0.45);
@@ -296,7 +231,6 @@ public class AdDashboardController implements Initializable {
             LogoutController logoutController = loader.getController();
             logoutController.setOwnerStage(currentStage);
             logoutController.setStackPaneRoot(stackPaneRoot);
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Logout");
             stage.setScene(new Scene(root));
@@ -314,7 +248,6 @@ public class AdDashboardController implements Initializable {
                 stage.setX(currentStage.getX() + (currentStage.getWidth() - stage.getWidth()) / 2);
                 stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
             });
-            // Hiển thị scene
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();

@@ -17,6 +17,7 @@ public class LogoutController {
     private Button cancelButton;
 
     private Stage ownerStage;
+
     private StackPane stackPaneRoot;
 
     public void setOwnerStage(Stage ownerStage) {
@@ -28,7 +29,7 @@ public class LogoutController {
     }
 
     @FXML
-    void cancel() throws IOException {
+    void cancel() {
         stackPaneRoot.setOpacity(1.0);
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
@@ -45,11 +46,9 @@ public class LogoutController {
         stage.show();
         Session.getInstance().logout();
         DatabaseUtil.stopAutoUpdate();
-
         if (ownerStage != null) {
             ownerStage.close();
         }
-
         currenStage.close();
     }
 

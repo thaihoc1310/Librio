@@ -5,10 +5,14 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.image.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -17,12 +21,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import librio.cache.ImageCache;
 import librio.session.Session;
 import librio.models.Book;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -220,6 +226,29 @@ public class DesignUtil {
 
             qrCodeImageView.setImage(qrCodeImage);
         } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setAvatarAndUserName(ImageView avatarUser, Label userNameUser) {
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatarUser, 38.5);
+        userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
+    }
+
+    public static void switchScene(Button button, String path) {
+        try {
+            FXMLLoader loader = new FXMLLoader(DesignUtil.class.getResource(path));
+            Parent manageBookRoot = loader.load();
+
+            Stage currentStage = (Stage)button.getScene().getWindow();
+            Scene currentScene = currentStage.getScene();
+            currentScene.setRoot(manageBookRoot);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -1,17 +1,10 @@
 package librio.controllers.admin;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -24,19 +17,16 @@ import javafx.util.Duration;
 import librio.cache.ImageCache;
 import librio.models.Book;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static librio.util.DesignUtil.generateAndDisplayQRCode;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
-/**
- * @author WINDOWS 10
- */
 public class BookDetailController implements Initializable {
-    private Book book;
+    private static final int DESCRIPTION_LIMIT = 500;
 
+    private Book book;
     @FXML
     private Label bookIdLabel;
     @FXML
@@ -73,9 +63,16 @@ public class BookDetailController implements Initializable {
     private AnchorPane bookDetailsPane;
 
     private boolean isExpanded = false;
-    private String fullDescription;
-    private static final int DESCRIPTION_LIMIT = 500;
 
+    private String fullDescription;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        moreLessLabel.setText("more");
+        moreLessLabel.setOnMouseClicked(event -> toggleDescription());
+        initScroll();
+
+    }
 
     public void setBook(Book book) {
         this.book = book;
@@ -89,7 +86,7 @@ public class BookDetailController implements Initializable {
             isbnLabel.setText(book.getIsbn());
             bookIdLabel.setText("ID :   " + book.getId());
             categoryLabel.setText("Category :   " + book.getCategory());
-            quantityOfAvailableCopyLabel.setText("Quantity of available copy :   " + String.valueOf(book.getAvailableCopy()));
+            quantityOfAvailableCopyLabel.setText("Quantity of available copy :   " + book.getAvailableCopy());
             averageOfRatingLabel.setText("Average of rating :   " + book.getAverageOfRating());
             publisherLabel.setText("Publisher :   " + book.getPublisher());
             yearPublishedLabel.setText("Year published :   " + book.getYearPublished());
@@ -111,13 +108,13 @@ public class BookDetailController implements Initializable {
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + book.getImagePath();
 
-                Image image = ImageCache.getInstance().getImage(path,booksDir + "defaultBook.jpg");
+                Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
                 bookImageView.setImage(image);
 
             } else {
                 loadDefaultBookImage(bookImageView);
             }
-            generateAndDisplayQRCode(qrCodeImageView,book);
+            generateAndDisplayQRCode(qrCodeImageView, book);
         }
     }
 
@@ -137,19 +134,12 @@ public class BookDetailController implements Initializable {
         closeWindow();
     }
 
-
     private void closeWindow() {
-        // Đóng cửa sổ hiện tại
         Stage stage = (Stage) isbnLabel.getScene().getWindow();
         stage.close();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-        moreLessLabel.setText("more");
-        moreLessLabel.setOnMouseClicked(event -> toggleDescription());
-
+    private void initScroll() {
         scrollPane.setOnScroll(event -> {
             Node thumb = scrollPane.lookup(".thumb");
 
@@ -162,7 +152,6 @@ public class BookDetailController implements Initializable {
                 })).play();
             }
         });
-
     }
 
 }

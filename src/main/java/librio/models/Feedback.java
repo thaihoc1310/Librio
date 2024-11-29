@@ -116,23 +116,23 @@ public class Feedback {
         return update_by.get();
     }
 
-    public StringProperty update_byProperty() {
-        return update_by;
-    }
-
     public void setUpdate_by(String update_by) {
         this.update_by.set(update_by);
+    }
+
+    public StringProperty update_byProperty() {
+        return update_by;
     }
 
     public Instant getUpdate_at() {
         return update_at.get();
     }
 
-    public ObjectProperty<Instant> update_atProperty() {
-        return update_at;
-    }
-
     public void setUpdate_at(Instant update_at) {
         this.update_at.set(update_at);
+    }
+
+    public ObjectProperty<Instant> update_atProperty() {
+        return update_at;
     }
 }

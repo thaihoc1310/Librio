@@ -18,10 +18,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import librio.cache.ImageCache;
 import librio.controllers.auth.LogoutController;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.models.User;
+import librio.session.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,71 +38,35 @@ import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.isEmailExists;
-import static librio.util.DesignUtil.cropAndClipToCircle;
-import static librio.util.DesignUtil.setDatePickerFormat;
+import static librio.util.DesignUtil.*;
 
 public class ProfileSettingsController implements Initializable {
+    private final User loggedInUser = Session.getInstance().getLoggedInUser();
 
     @FXML
-    private ImageView deleteName;
+    private ImageView deleteName, deleteEmail, deletePhoneNumber, avatar, avatarUser;
     @FXML
-    private ImageView deleteEmail;
-    @FXML
-    private ImageView deletePhoneNumber;
-    private User loggedInUser = Session.getInstance().getLoggedInUser();
-    @FXML
-    private TextField addressTextField;
+    private TextField addressTextField, emailTextField, memberIdTextField, nameTextField, phoneNumberTextField;
     @FXML
     private Button saveButton;
     @FXML
-    private ImageView avatar;
-    private String avatarFilePath;
-    private String previousAvatarFilePath;
+    private Label userNameLabel, dateOfBirthErrorLabel, emailErrorLabel, nameErrorLabel, phoneNumberErrorLabel, notification;
     @FXML
-    private Label userNameLabel;
+    private DatePicker birthOfDatePicker;
+    @FXML
+    private ComboBox<Gender> genderComboBox;
     @FXML
     private StackPane stackPaneRoot;
     @FXML
-    private ImageView avatarUser;
+    private AnchorPane namePane, emailPane, phonePane;
+    private String avatarFilePath, previousAvatarFilePath;
 
-    @FXML
-    private DatePicker birthOfDatePicker;
-
-    @FXML
-    private Label dateOfBirthErrorLabel;
-
-    @FXML
-    private Label emailErrorLabel;
-
-    @FXML
-    private TextField emailTextField;
-
-    @FXML
-    private ComboBox<Gender> genderComboBox;
-
-    @FXML
-    private TextField memberIdTextField;
-
-    @FXML
-    private Label nameErrorLabel;
-
-    @FXML
-    private TextField nameTextField;
-
-    @FXML
-    private Label phoneNumberErrorLabel;
-
-    @FXML
-    private TextField phoneNumberTextField;
-
-    @FXML
-    private Label notification;
-    @FXML
-    private AnchorPane namePane;
-    @FXML
-    private AnchorPane emailPane;
-    @FXML
-    private AnchorPane phonePane;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setAvatarAndUserName(avatarUser, userNameLabel);
+        initFieldData();
+        addListeners();
+    }
 
     @FXML
     void changeAvatar() {
@@ -124,9 +88,6 @@ public class ProfileSettingsController implements Initializable {
 
     @FXML
     private void save() {
-        if (loggedInUser == null) {
-            return;
-        }
         String name = nameTextField.getText();
         String email = emailTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
@@ -226,7 +187,7 @@ public class ProfileSettingsController implements Initializable {
                         }
                     }
                     Files.copy(Paths.get(previousAvatarFilePath), Paths.get(avatarsDir + avatarFilePath));
-                    setAvatarAndUserName();
+                    setAvatarAndUserName(avatarUser, userNameLabel);
                 }
             }
 
@@ -237,54 +198,9 @@ public class ProfileSettingsController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (loggedInUser == null) {
-            return;
-        }
-        genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
-        setAvatarAndUserName();
-        emailTextField.setText(loggedInUser.getEmail());
-        nameTextField.setText(loggedInUser.getName());
-        phoneNumberTextField.setText(loggedInUser.getPhoneNumber());
-        addressTextField.setText(loggedInUser.getAddress());
-        genderComboBox.setValue(loggedInUser.getGender());
-        birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
-
-        nameTextField.setText(loggedInUser.getName());
-        emailTextField.setText(loggedInUser.getEmail());
-        phoneNumberTextField.setText(loggedInUser.getPhoneNumber());
-        addressTextField.setText(loggedInUser.getAddress() != null ? loggedInUser.getAddress() : "");
-        birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
-        genderComboBox.setValue(loggedInUser.getGender());
-        memberIdTextField.setText(String.valueOf(loggedInUser.getId()));
-
-
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + loggedInUser.getAvatar();
-
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
-        cropAndClipToCircle(image, avatar, 75);
-        setDatePickerFormat(birthOfDatePicker);
-        addListeners();
-        deleteName.setOnMouseClicked(e -> {
-            deleteTextField(nameTextField);
-        });
-        deleteEmail.setOnMouseClicked(e -> {
-            deleteTextField(emailTextField);
-        });
-        deletePhoneNumber.setOnMouseClicked(e -> {
-            deleteTextField(phoneNumberTextField);
-        });
-
-    }
-
-
     private void addListeners() {
-        memberIdTextField.setOnMouseClicked(event -> {
-            hideErrorAndNotificationLabels();
-        });
+        memberIdTextField.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
+
         nameTextField.setOnMouseClicked(event -> {
             hideErrorAndNotificationLabels();
             if (!nameTextField.getText().isEmpty()) {
@@ -295,11 +211,7 @@ public class ProfileSettingsController implements Initializable {
         });
 
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                deleteName.setVisible(false);
-            } else {
-                deleteName.setVisible(true);
-            }
+            deleteName.setVisible(!newValue.isEmpty());
         });
 
         nameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -320,11 +232,7 @@ public class ProfileSettingsController implements Initializable {
         });
 
         emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                deleteEmail.setVisible(false);
-            } else {
-                deleteEmail.setVisible(true);
-            }
+            deleteEmail.setVisible(!newValue.isEmpty());
         });
 
         emailTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -344,11 +252,7 @@ public class ProfileSettingsController implements Initializable {
         });
 
         phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                deletePhoneNumber.setVisible(false);
-            } else {
-                deletePhoneNumber.setVisible(true);
-            }
+            deletePhoneNumber.setVisible(!newValue.isEmpty());
         });
 
         phoneNumberTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -377,7 +281,7 @@ public class ProfileSettingsController implements Initializable {
         notification.setText("");
     }
 
-    private void hideErrorLabels(){
+    private void hideErrorLabels() {
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");
         phoneNumberErrorLabel.setText("");
@@ -385,71 +289,24 @@ public class ProfileSettingsController implements Initializable {
         notification.setText("");
     }
 
-    public void setAvatarAndUserName() {
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + loggedInUser.getAvatar();
-
-        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
-        cropAndClipToCircle(image, avatarUser, 38.5);
-        cropAndClipToCircle(image, avatar, 75);
-        userNameLabel.setText(loggedInUser.getName());
-    }
-
     @FXML
     private void openAdDashboardScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(adminDashboardRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/AdDashboard.fxml");
     }
 
     @FXML
     private void openManageBorrowScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBorrow.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/ManageBorrow.fxml");
     }
 
     @FXML
     private void openManageBookScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/ManageBook.fxml");
     }
 
     @FXML
     private void openManageUserScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageUser.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/ManageUser.fxml");
     }
 
     @FXML
@@ -492,16 +349,37 @@ public class ProfileSettingsController implements Initializable {
 
     @FXML
     private void openChangePasswordScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ChangePassword.fxml"));
-            Parent manageBorrowRoot = loader.load();
+        switchScene(saveButton, "/fxml/admin/ChangePassword.fxml");
+    }
 
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void initFieldData() {
+        genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
+        emailTextField.setText(loggedInUser.getEmail());
+        nameTextField.setText(loggedInUser.getName());
+        phoneNumberTextField.setText(loggedInUser.getPhoneNumber());
+        addressTextField.setText(loggedInUser.getAddress());
+        genderComboBox.setValue(loggedInUser.getGender());
+        birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
+
+        nameTextField.setText(loggedInUser.getName());
+        emailTextField.setText(loggedInUser.getEmail());
+        phoneNumberTextField.setText(loggedInUser.getPhoneNumber());
+        addressTextField.setText(loggedInUser.getAddress() != null ? loggedInUser.getAddress() : "");
+        birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
+        genderComboBox.setValue(loggedInUser.getGender());
+        memberIdTextField.setText(String.valueOf(loggedInUser.getId()));
+
+
+        String projectDir = System.getProperty("user.dir");
+        String avatarsDir = projectDir + "/src/main/resources/images/user/";
+        String path = avatarsDir + loggedInUser.getAvatar();
+
+        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
+        cropAndClipToCircle(image, avatar, 75);
+        setDatePickerFormat(birthOfDatePicker);
+        deleteName.setOnMouseClicked(e -> deleteTextField(nameTextField));
+        deleteEmail.setOnMouseClicked(e -> deleteTextField(emailTextField));
+        deletePhoneNumber.setOnMouseClicked(e -> deleteTextField(phoneNumberTextField));
     }
 
     private void deleteTextField(TextField textField) {

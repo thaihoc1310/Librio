@@ -12,7 +12,9 @@ public class Session {
     private static Session instance;
     private User loggedInUser;
     private int totalBooks;
-    private Session() {}
+
+    private Session() {
+    }
 
     /**
      * Returns the singleton instance of the Session class.
@@ -27,12 +29,12 @@ public class Session {
         return instance;
     }
 
-    public void setLoggedInUser(User user) {
-        this.loggedInUser = user;
-    }
-
     public User getLoggedInUser() {
         return loggedInUser;
+    }
+
+    public void setLoggedInUser(User user) {
+        this.loggedInUser = user;
     }
 
     /**
@@ -63,12 +65,13 @@ public class Session {
     public void logout() {
         loggedInUser = null;
     }
-    public void setTotalBooks(int totalBooks) {
-        this.totalBooks = totalBooks;
-    }
 
     public int getTotalBooks() {
         return totalBooks;
+    }
+
+    public void setTotalBooks(int totalBooks) {
+        this.totalBooks = totalBooks;
     }
 }
 

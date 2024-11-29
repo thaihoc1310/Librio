@@ -5,21 +5,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import librio.cache.ImageCache;
 import librio.controllers.auth.LogoutController;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.User;
+import librio.session.Session;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -27,89 +27,33 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import static librio.util.DesignUtil.cropAndClipToCircle;
+import static librio.util.DesignUtil.setAvatarAndUserName;
+import static librio.util.DesignUtil.switchScene;
 
 public class ChangePasswordController implements Initializable {
 
-    private boolean ignoreListener = false;
-
-    private User loggedInUser = Session.getInstance().getLoggedInUser();
+    private final User loggedInUser = Session.getInstance().getLoggedInUser();
 
     @FXML
-    private ImageView avatarUser;
-
+    private ImageView avatarUser, currentPasswordOpenEyeImage, newPasswordOpenEyeImage, confirmPasswordOpenEyeImage,
+            currentPasswordCloseEyeImage, newPasswordCloseEyeImage, confirmPasswordCloseEyeImage;
     @FXML
-    private Label confirmPasswordErrorLabel;
-
-    @FXML
-    private PasswordField confirmPasswordTextField;
-
-    @FXML
-    private Label currentPasswordErrorLabel;
-
-    @FXML
-    private PasswordField currentPasswordTextField;
-
-    @FXML
-    private Label newPasswordErrorLabel;
-
-    @FXML
-    private PasswordField newPasswordTextField;
-
-    @FXML
-    private Label notification;
-
+    private Label confirmPasswordErrorLabel, currentPasswordErrorLabel, newPasswordErrorLabel, notification, userNameLabel;
     @FXML
     private Button saveButton;
-
     @FXML
-    private Label userNameLabel;
-
+    private TextField currentPasswordTextVisible, newPasswordTextVisible, confirmPasswordTextVisible;
     @FXML
-    private TextField currentPasswordTextVisible;
-
-    @FXML
-    private TextField newPasswordTextVisible;
-
-    @FXML
-    private TextField confirmPasswordTextVisible;
-
-    @FXML
-    private ImageView currentPasswordOpenEyeImage;
-
-    @FXML
-    private ImageView newPasswordOpenEyeImage;
-
-    @FXML
-    private ImageView confirmPasswordOpenEyeImage;
-
-    @FXML
-    private ImageView currentPasswordCloseEyeImage;
-
-    @FXML
-    private ImageView newPasswordCloseEyeImage;
-
-    @FXML
-    private ImageView confirmPasswordCloseEyeImage;
-
+    private PasswordField currentPasswordTextField, newPasswordTextField, confirmPasswordTextField;
     @FXML
     private StackPane stackPaneRoot;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (loggedInUser == null) {
-            return;
-        }
-        currentPasswordTextField.setText("");
-        newPasswordTextField.setText("");
-        confirmPasswordTextField.setText("");
-        currentPasswordTextVisible.setVisible(false);
-        newPasswordTextVisible.setVisible(false);
-        confirmPasswordTextVisible.setVisible(false);
+        initPassword();
         addListeners();
         hideErrorLabels();
-        setAvatarAndUserName();
+        setAvatarAndUserName(avatarUser, userNameLabel);
     }
 
     @FXML
@@ -181,86 +125,37 @@ public class ChangePasswordController implements Initializable {
     }
 
     private void addListeners() {
-        currentPasswordTextField.setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        currentPasswordTextVisible.setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        newPasswordTextField.setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        newPasswordTextVisible.setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        confirmPasswordTextField.setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        confirmPasswordTextVisible.setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
+        currentPasswordTextField.setOnMouseClicked(event -> hideErrorLabels());
+        currentPasswordTextVisible.setOnMouseClicked(event -> hideErrorLabels());
+        newPasswordTextField.setOnMouseClicked(event -> hideErrorLabels());
+        newPasswordTextVisible.setOnMouseClicked(event -> hideErrorLabels());
+        confirmPasswordTextField.setOnMouseClicked(event -> hideErrorLabels());
+        confirmPasswordTextVisible.setOnMouseClicked(event -> hideErrorLabels());
     }
 
     @FXML
     private void openAdDashboardScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/AdDashboard.fxml"));
-            Parent adminDashboardRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(adminDashboardRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/AdDashboard.fxml");
     }
 
     @FXML
     private void openManageBorrowScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBorrow.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/ManageBorrow.fxml");
     }
 
     @FXML
     private void openManageBookScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageBook.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/ManageBook.fxml");
     }
 
     @FXML
     private void openManageUserScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ManageUser.fxml"));
-            Parent manageBookRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBookRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/ManageUser.fxml");
     }
 
     @FXML
     private void openLogOutScene() {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Logout.fxml"));
             Parent root = loader.load();
             stackPaneRoot.setOpacity(0.45);
@@ -269,7 +164,6 @@ public class ChangePasswordController implements Initializable {
             LogoutController logoutController = loader.getController();
             logoutController.setOwnerStage(currentStage);
             logoutController.setStackPaneRoot(stackPaneRoot);
-            // Tạo stage mới cho scene
             Stage stage = new Stage();
             stage.setTitle("Logout");
             stage.setScene(new Scene(root));
@@ -288,13 +182,11 @@ public class ChangePasswordController implements Initializable {
                 stage.setY(currentStage.getY() + (currentStage.getHeight() - stage.getHeight()) / 2);
             });
 
-            // Hiển thị scene
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     private void hideErrorLabels() {
         newPasswordErrorLabel.setText("");
@@ -303,32 +195,12 @@ public class ChangePasswordController implements Initializable {
         notification.setText("");
     }
 
-    public void setAvatarAndUserName() {
-        String projectDir = System.getProperty("user.dir");
-        String avatarsDir = projectDir + "/src/main/resources/images/user/";
-        String path = avatarsDir + loggedInUser.getAvatar();
-
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
-        cropAndClipToCircle(image, avatarUser, 38.5);
-        userNameLabel.setText(loggedInUser.getName());
-    }
-
     @FXML
     private void openPersonalInformationScene() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/ProfileSettings.fxml"));
-            Parent manageBorrowRoot = loader.load();
-
-            Stage currentStage = (Stage) saveButton.getScene().getWindow();
-            Scene currentScene = currentStage.getScene();
-            currentScene.setRoot(manageBorrowRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(saveButton, "/fxml/admin/ProfileSettings.fxml");
     }
 
     private void clearPasswordFieldAndHideErrorLabels() {
-
         currentPasswordTextField.clear();
         currentPasswordTextVisible.clear();
         newPasswordTextField.clear();
@@ -401,5 +273,14 @@ public class ChangePasswordController implements Initializable {
         confirmPasswordCloseEyeImage.setVisible(false);
         confirmPasswordTextField.requestFocus();
         confirmPasswordTextField.positionCaret(confirmPasswordTextVisible.getText().length());
+    }
+
+    private void initPassword() {
+        currentPasswordTextField.setText("");
+        newPasswordTextField.setText("");
+        confirmPasswordTextField.setText("");
+        currentPasswordTextVisible.setVisible(false);
+        newPasswordTextVisible.setVisible(false);
+        confirmPasswordTextVisible.setVisible(false);
     }
 }

@@ -1,14 +1,5 @@
 package librio.controllers.admin;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,32 +11,31 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.cache.ImageCache;
 import librio.models.User;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class UserDetailsController implements Initializable {
-    private User user;
+    @FXML
+    private TextField emailTextField, nameTextField, phoneNumberTextField, userIDTextField,
+            genderTextField, roleTextField, bodTextField;
 
     @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField nameTextField;
-    @FXML
-    private TextField phoneNumberTextField;
-    @FXML
     private TextArea addressTextArea;
-    @FXML
-    private TextField userIDTextField;
-    @FXML
-    private TextField genderTextField;
-    @FXML
-    private TextField roleTextField;
-    @FXML
-    private TextField bodTextField;
+
     @FXML
     private ImageView avatarImageView;
+
     @FXML
     private Button backButton;
 
+    private User user;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     public void setUser(User user) {
         this.user = user;
@@ -62,12 +52,11 @@ public class UserDetailsController implements Initializable {
             genderTextField.setText(user.getGender().toString());
             roleTextField.setText(user.getRole().toString());
             bodTextField.setText(user.getBirthOfDate().toString());
-            // Lấy đường dẫn ảnh từ project
             String projectDir = System.getProperty("user.dir");
             String avatarsDir = projectDir + "/src/main/resources/images/user/";
             String path = avatarsDir + user.getAvatar();
 
-            Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+            Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
             cropAndClipToCircle(image, avatarImageView, 55);
         }
     }
@@ -77,14 +66,9 @@ public class UserDetailsController implements Initializable {
         closeWindow();
     }
 
-
     private void closeWindow() {
         Stage stage = (Stage) backButton.getScene().getWindow();
         stage.close();
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
     }
 
 }
