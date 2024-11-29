@@ -28,6 +28,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static librio.util.DesignUtil.generateAndDisplayQRCode;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
 /**
@@ -65,7 +66,7 @@ public class BookDetailController implements Initializable {
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private Button backButton;
+    private ImageView qrCodeImageView;
     @FXML
     private Text moreLessLabel;
     @FXML
@@ -86,11 +87,10 @@ public class BookDetailController implements Initializable {
             bookTitleLabel.setText(book.getTitle());
             authorLabel.setText(book.getAuthor());
             isbnLabel.setText(book.getIsbn());
-
-            bookIdLabel.setText("ID :   " + String.valueOf(book.getId()));
+            bookIdLabel.setText("ID :   " + book.getId());
             categoryLabel.setText("Category :   " + book.getCategory());
             quantityOfAvailableCopyLabel.setText("Quantity of available copy :   " + String.valueOf(book.getAvailableCopy()));
-            averageOfRatingLabel.setText(String.valueOf("Average of rating :   " + book.getAverageOfRating()));
+            averageOfRatingLabel.setText("Average of rating :   " + book.getAverageOfRating());
             publisherLabel.setText("Publisher :   " + book.getPublisher());
             yearPublishedLabel.setText("Year published :   " + book.getYearPublished());
             languageLabel.setText("Language :   " + book.getLanguage());
@@ -115,9 +115,9 @@ public class BookDetailController implements Initializable {
                 bookImageView.setImage(image);
 
             } else {
-                // Sử dụng ảnh mặc định nếu imagePath là null hoặc rỗng
                 loadDefaultBookImage(bookImageView);
             }
+            generateAndDisplayQRCode(qrCodeImageView,book);
         }
     }
 

@@ -1,16 +1,19 @@
 package librio.util;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
+import javafx.scene.image.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -23,6 +26,8 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
 
@@ -192,5 +197,30 @@ public class DesignUtil {
             starBox.getChildren().add(starPane);
         }
         return starBox;
+    }
+
+    public static void generateAndDisplayQRCode(ImageView qrCodeImageView, Book book) {
+        String bookUrl = "https://books.google.com.vn/books?vid=ISBN" + book.getIsbn() + "&redir_esc=y";
+        int size = 350;
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            Map<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+            BitMatrix bitMatrix = qrCodeWriter.encode(bookUrl, BarcodeFormat.QR_CODE, size, size, hints);
+
+            WritableImage qrCodeImage = new WritableImage(size, size);
+            PixelWriter pixelWriter = qrCodeImage.getPixelWriter();
+
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
+                    Color color = bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE;
+                    pixelWriter.setColor(x, y, color);
+                }
+            }
+
+            qrCodeImageView.setImage(qrCodeImage);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
     }
 }

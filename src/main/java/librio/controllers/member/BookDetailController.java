@@ -1,10 +1,5 @@
 package librio.controllers.member;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,8 +13,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -50,8 +43,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
-import static librio.util.DesignUtil.cropAndClipToCircle;
-import static librio.util.DesignUtil.cropToAspectRatio;
+import static librio.util.DesignUtil.*;
 
 public class BookDetailController implements Initializable {
     private static final int DESCRIPTION_LIMIT = 500;
@@ -127,7 +119,6 @@ public class BookDetailController implements Initializable {
         ratingLabel.setAlignment(Pos.CENTER_LEFT);
 
         starBox.getChildren().add(ratingLabel);
-        generateAndDisplayQRCode();
     }
 
     public void setBookDetails() {
@@ -154,7 +145,7 @@ public class BookDetailController implements Initializable {
 
         Image image = ImageCache.getInstance().getImage(path, projectDir + "defaultBook.jpg");
         cropToAspectRatio(image, bookCoverImage, 217, 315);
-
+        generateAndDisplayQRCode(qrCodeImageView,book);
         setConfirmButton();
     }
 
@@ -272,31 +263,6 @@ public class BookDetailController implements Initializable {
                 feedbackContainer.getChildren().addAll(container);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void generateAndDisplayQRCode() {
-        String bookUrl = "https://books.google.com.vn/books?vid=ISBN" + book.getIsbn() + "&redir_esc=y";
-        int size = 350;
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        try {
-            Map<EncodeHintType, Object> hints = new HashMap<>();
-            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            BitMatrix bitMatrix = qrCodeWriter.encode(bookUrl, BarcodeFormat.QR_CODE, size, size, hints);
-
-            WritableImage qrCodeImage = new WritableImage(size, size);
-            PixelWriter pixelWriter = qrCodeImage.getPixelWriter();
-
-            for (int y = 0; y < size; y++) {
-                for (int x = 0; x < size; x++) {
-                    Color color = bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE;
-                    pixelWriter.setColor(x, y, color);
-                }
-            }
-
-            qrCodeImageView.setImage(qrCodeImage);
-        } catch (WriterException e) {
             e.printStackTrace();
         }
     }
