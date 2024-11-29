@@ -271,7 +271,6 @@ public class HomePageController implements Initializable {
         String keyword = searchTextField.getText().trim();
         String selectedFilter = filterBox.getValue();
         searchSuggestion.setVisible(false);
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/SearchPage.fxml"));
         try {
             Parent searchPageRoot = loader.load();
