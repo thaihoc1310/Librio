@@ -10,6 +10,9 @@ import librio.util.DatabaseUtil;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static librio.util.DatabaseUtil.getBookByIsbn;
+import static librio.util.DatabaseUtil.updateBookAverageRating;
+
 public class DeleteBorrowController implements Initializable {
     private Borrow borrow;
 
@@ -26,6 +29,7 @@ public class DeleteBorrowController implements Initializable {
     @FXML
     void deleteBorrow() {
         DatabaseUtil.deleteBorrow(borrow);
+        updateBookAverageRating(getBookByIsbn(borrow.getBookIsbn()).getIsbn());
         closeWindow();
     }
 

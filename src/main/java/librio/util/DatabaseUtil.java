@@ -140,8 +140,6 @@ public class DatabaseUtil {
                         deleteFeedbackStmt.executeUpdate();
                     }
 
-                    updateBookAverageRating(bookIsbn);
-
                     if (status.equals("BORROWING") || status.equals("OVERDUE")) {
                         String updateBookQuery = "UPDATE Books SET available_copy = available_copy + 1 WHERE isbn = ?";
                         try (PreparedStatement updateBookStmt = connection.prepareStatement(updateBookQuery)) {
@@ -192,17 +190,23 @@ public class DatabaseUtil {
             connection = DatabaseConnection.getConnection();
             connection.setAutoCommit(false);
 
-
             String checkMemberQuery = "SELECT id FROM Members WHERE id = ?";
             try (PreparedStatement checkMemberStmt = connection.prepareStatement(checkMemberQuery)) {
                 checkMemberStmt.setString(1, user.getId());
                 ResultSet memberResult = checkMemberStmt.executeQuery();
 
                 if (memberResult.next()) {
+
                     String deleteFeedbackQuery = "DELETE FROM Feedbacks WHERE borrow_id IN (SELECT id FROM Borrows WHERE member_id = ?)";
                     try (PreparedStatement deleteFeedbackStmt = connection.prepareStatement(deleteFeedbackQuery)) {
                         deleteFeedbackStmt.setString(1, user.getId());
                         deleteFeedbackStmt.executeUpdate();
+                    }
+
+                    String deleteBorrowQuery = "DELETE FROM Borrows WHERE member_id = ?";
+                    try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
+                        deleteBorrowStmt.setString(1, user.getId());
+                        deleteBorrowStmt.executeUpdate();
                     }
 
                     String deleteMemberQuery = "DELETE FROM Members WHERE id = ?";
@@ -213,12 +217,14 @@ public class DatabaseUtil {
                 }
             }
 
+            // Kiểm tra xem user có phải là thủ thư không
             String checkLibrarianQuery = "SELECT id FROM Librarians WHERE id = ?";
             try (PreparedStatement checkLibrarianStmt = connection.prepareStatement(checkLibrarianQuery)) {
                 checkLibrarianStmt.setString(1, user.getId());
                 ResultSet librarianResult = checkLibrarianStmt.executeQuery();
 
                 if (librarianResult.next()) {
+                    // Xóa thông tin thủ thư
                     String deleteLibrarianQuery = "DELETE FROM Librarians WHERE id = ?";
                     try (PreparedStatement deleteLibrarianStmt = connection.prepareStatement(deleteLibrarianQuery)) {
                         deleteLibrarianStmt.setString(1, user.getId());
@@ -258,6 +264,7 @@ public class DatabaseUtil {
             }
         }
     }
+
 
 
     public static void deleteBook(Book book) {
@@ -569,6 +576,7 @@ public class DatabaseUtil {
             e.printStackTrace();
         }
     }
+
 
     public static int getAvailableBooks() {
         String query = "SELECT SUM(available_copy) FROM books";
