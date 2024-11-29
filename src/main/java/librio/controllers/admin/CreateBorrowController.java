@@ -45,7 +45,7 @@ public class CreateBorrowController implements Initializable {
     private TextField bookTitleTextField;
 
     @FXML
-    private TextField borrowDateTextField;
+    private DatePicker borrowDatePicker;
 
     @FXML
     private DatePicker dueDatePicker;
@@ -63,7 +63,7 @@ public class CreateBorrowController implements Initializable {
     private Label userAlreadyBorrowErrorLabel;
 
     public void initialize(URL location, ResourceBundle resources) {
-        borrowDateTextField.setText(LocalDate.now().toString());
+        borrowDatePicker.setValue(LocalDate.now());
         dueDatePicker.setValue(LocalDate.now().plusDays(30));
         setDatePickerFormat(dueDatePicker);
         hideErrorLabels();
@@ -76,31 +76,14 @@ public class CreateBorrowController implements Initializable {
         String email = emailTextField.getText();
         String isbn = bookIsbnTextField.getText();
         String dueDateString = dueDatePicker.getEditor().getText();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDate dueDate = null;
+        LocalDate borrowDate = LocalDate.parse(borrowDatePicker.getEditor().getText(), formatter);
 
         String dateRegex = "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\\d{4}$";
         boolean validation = false;
 
-//        if (!dueDateString.matches(dateRegex)) {
-//            dueDateErrorLabel.setText("Invalid date format!");
-//            validation = true;
-//        } else {
-//            try {
-//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-//                dueDate = LocalDate.parse(dueDateString, formatter);
-//                if (dueDate.isBefore(borrowDate)) {
-//                    dueDateErrorLabel.setText("Due date cannot be before borrow date!");
-//                    validation = true;
-//                }
-//            } catch (Exception e) {
-//                dueDateErrorLabel.setText("Invalid date format!");
-//                validation = true;
-//            }
-//        }
-
         Book book = getBookByIsbn(isbn);
-
-//        boolean validation = false;
 
         if (email.trim().isEmpty()) {
             emailErrorLabel.setText("Email is required!");
@@ -133,17 +116,28 @@ public class CreateBorrowController implements Initializable {
             validation = true;
         }
 
-        if (dueDate.isBefore(LocalDate.now())) {
-            dueDateErrorLabel.setText("Due date must not be before current date!");
-            validation = true;
-        } else if (ChronoUnit.DAYS.between(LocalDate.now(), dueDate) > 60) {
-            dueDateErrorLabel.setText("The borrowing period cannot exceed 60 days!");
-            validation = true;
-        }
-
         if (isBookAlreadyBorrowedByUser(getUserByEmail(email).getId(), isbn) == true) {
             userAlreadyBorrowErrorLabel.setText("This user has already borrowed this book!");
             validation = true;
+        }
+
+        if (!dueDateString.matches(dateRegex)) {
+            dueDateErrorLabel.setText("Invalid date format!");
+            validation = true;
+        } else {
+            try {
+                dueDate = LocalDate.parse(dueDateString, formatter);
+                if (dueDate.isBefore(borrowDate)) {
+                    dueDateErrorLabel.setText("Due date cannot be before borrow date!");
+                    validation = true;
+                } else if (ChronoUnit.DAYS.between(borrowDate, dueDate) > 90) {
+                    dueDateErrorLabel.setText("The borrowing period cannot exceed 90 days!");
+                    validation = true;
+                }
+            } catch (Exception e) {
+                dueDateErrorLabel.setText("Invalid date format!");
+                validation = true;
+            }
         }
 
         if (validation) {
@@ -192,7 +186,6 @@ public class CreateBorrowController implements Initializable {
     private void addListeners() {
         emailTextField.setOnMouseClicked(event -> {hideErrorLabels();});
         bookIsbnTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        borrowDateTextField.setOnMouseClicked(event -> {hideErrorLabels();});
         nameTextField.setOnMouseClicked(event -> {hideErrorLabels();});
         dueDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
 

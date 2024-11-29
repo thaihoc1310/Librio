@@ -76,7 +76,7 @@
                               </Label>
                         <DatePicker fx:id="dueDatePicker" prefHeight="26.0" prefWidth="196.0" promptText="mm/dd/yyyy" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <DatePicker fx:id="borrowDatePicker" disable="true" editable="false" prefHeight="26.0" prefWidth="196.0" GridPane.columnIndex="1" />
-                        <DatePicker fx:id="returnDatePicker" prefHeight="26.0" prefWidth="196.0" promptText="mm/dd/yyyy" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <DatePicker fx:id="returnDatePicker" prefHeight="26.0" prefWidth="196.0" promptText="mm/dd/yyyy" styleClass="date-picker" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label fx:id="borrowDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="returnDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <Label fx:id="dueDateErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="3" />

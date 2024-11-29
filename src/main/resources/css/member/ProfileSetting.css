@@ -63,6 +63,7 @@
      -fx-background-color: rgba(210, 172, 127, 0.7);
      -fx-background-radius: 10px;
      -fx-border-width: 0.5px;
+    -fx-cursor: hand;
 }
 
 .cancel-button {
@@ -79,6 +80,7 @@
     -fx-border-radius: 10px;
     -fx-border-color:#4c2113;
     -fx-border-width: 0.5px;
+    -fx-cursor: hand;
 }
 
 /* Style mặc định cho nút với màu xám */

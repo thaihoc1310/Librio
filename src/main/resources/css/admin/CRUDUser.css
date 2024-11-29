@@ -44,6 +44,18 @@
     -fx-cursor: hand;
 }
 
+.setAvatar-btn{
+    -fx-background-color: #72311c ;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 700;
+    -fx-background-radius: 3px;
+    -fx-font-size: 12px;
+}
+.setAvatar-btn:hover{
+    -fx-background-color: #4c2113;
+    -fx-cursor: hand;
+}
+
 
 .text-field-custom {
     -fx-control-inner-background: #f8edd9;
@@ -96,6 +108,37 @@
     -fx-background-color: #dcb485;
 }
 
+/* Định dạng cho DatePicker */
+.date-picker {
+    -fx-border-color: transparent;
+}
+
+.date-picker, .date-picker .text-field, .date-picker .content {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+}
+
+.date-picker:hover, .date-picker:focused {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+}
+
+.date-picker:hover,.combo-box:hover, .date-picker:hover{
+    -fx-cursor: hand;
+
+}
+
+
+.date-picker .arrow-button {
+    -fx-background-color: #F1DEBC;
+
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #4C2113; /* Màu cho biểu tượng lịch */
+}
+
 .date-picker .month-year-pane {
     -fx-background-color: #DCB485; /* Màu nền cho tiêu đề tháng/năm */
     -fx-text-fill: #4C2113; /* Màu chữ cho tháng và năm */
@@ -118,6 +161,7 @@
 
 .date-picker .day-cell:hover {
     -fx-background-color: #F1DEBC; /* Màu nền khi hover vào các ô ngày */
+    -fx-cursor: hand;
 }
 
 /* Thay đổi màu nền và màu chữ cho ngày được chọn */
@@ -130,6 +174,37 @@
 .date-picker .left-arrow .arrow, .date-picker .right-arrow .arrow {
     -fx-background-color: #4C2113; /* Màu cho mũi tên chuyển tháng/năm */
 }
+
+.combo-box {
+    -fx-border-color: transparent;
+}
+
+.combo-box, .combo-box .list-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+    -fx-font-family: 'System';
+    -fx-cursor: hand;
+}
+
+.combo-box:hover, .combo-box:focused {
+    -fx-background-color: #F1DEBC;
+    -fx-text-fill: #4C2113;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #F1DEBC;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #4C2113; /* Màu cho mũi tên */
+}
+
 
 
 

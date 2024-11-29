@@ -81,7 +81,7 @@
                                  <GridPane.margin>
                                     <Insets bottom="-10.0" />
                                  </GridPane.margin></TextField>
-                              <DatePicker fx:id="dueDatePicker" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                              <DatePicker fx:id="dueDatePicker" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                                  <GridPane.margin>
                                     <Insets bottom="-10.0" />
                                  </GridPane.margin></DatePicker>
@@ -110,15 +110,12 @@
                                  <GridPane.margin>
                                     <Insets bottom="-10.0" />
                                  </GridPane.margin></TextField>
-                              <TextField fx:id="borrowDateTextField" disable="true" editable="false" prefHeight="30.0" prefWidth="189.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
-                                 <GridPane.margin>
-                                    <Insets bottom="-10.0" />
-                                 </GridPane.margin></TextField>
                               <Label fx:id="userAlreadyBorrowErrorLabel" textFill="#ff0f0f" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                  <GridPane.margin>
                                     <Insets top="-5.0" />
                                  </GridPane.margin>
                               </Label>
+                              <DatePicker fx:id="borrowDatePicker" disable="true" editable="false" prefHeight="30.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                            </children>
                         </GridPane>
                         <ImageView fx:id="bookImageView" fitHeight="280.0" fitWidth="194.0" layoutX="451.0" layoutY="105.0" pickOnBounds="true">

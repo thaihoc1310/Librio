@@ -116,19 +116,72 @@ public class DatabaseUtil {
     }
 
     public static void deleteBorrow(Borrow borrow) {
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM borrows WHERE id = ?")) {
-            statement.setInt(1, borrow.getId());
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Deleted Borrow with ID: " + borrow.getId());
-            } else {
-                System.out.println("Failed to delete Borrow with ID: " + borrow.getId());
+        Connection connection = null;
+        try {
+            connection = DatabaseConnection.getConnection();
+            connection.setAutoCommit(false);
+
+            String checkBorrowQuery = "SELECT id, status, book_isbn FROM Borrows WHERE id = ?";
+            try (PreparedStatement checkBorrowStmt = connection.prepareStatement(checkBorrowQuery)) {
+                checkBorrowStmt.setInt(1, borrow.getId());
+                ResultSet borrowResult = checkBorrowStmt.executeQuery();
+
+                if (borrowResult.next()) {
+                    String status = borrowResult.getString("status");
+                    String bookIsbn = borrowResult.getString("book_isbn");
+
+
+                    String deleteFeedbackQuery = "DELETE FROM Feedbacks WHERE borrow_id = ?";
+                    try (PreparedStatement deleteFeedbackStmt = connection.prepareStatement(deleteFeedbackQuery)) {
+                        deleteFeedbackStmt.setInt(1, borrow.getId());
+                        deleteFeedbackStmt.executeUpdate();
+                    }
+
+                    updateBookAverageRating(bookIsbn);
+
+                    if (status.equals("BORROWING") || status.equals("OVERDUE")) {
+                        String updateBookQuery = "UPDATE Books SET available_copy = available_copy + 1 WHERE isbn = ?";
+                        try (PreparedStatement updateBookStmt = connection.prepareStatement(updateBookQuery)) {
+                            updateBookStmt.setString(1, bookIsbn);
+                            updateBookStmt.executeUpdate();
+                        }
+                    }
+
+                    String deleteBorrowQuery = "DELETE FROM Borrows WHERE id = ?";
+                    try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
+                        deleteBorrowStmt.setInt(1, borrow.getId());
+                        int rowsAffected = deleteBorrowStmt.executeUpdate();
+
+                        if (rowsAffected > 0) {
+                            System.out.println("Deleted Borrow with ID: " + borrow.getId());
+                        }
+                    }
+                } else {
+                    System.out.println("No Borrow found with ID: " + borrow.getId());
+                }
             }
+
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException closeEx) {
+                closeEx.printStackTrace();
+            }
         }
     }
+
 
     public static void deleteUser(User user) {
         Connection connection = null;
@@ -148,13 +201,6 @@ public class DatabaseUtil {
                         deleteFeedbackStmt.setString(1, user.getId());
                         deleteFeedbackStmt.executeUpdate();
                     }
-
-                    String deleteBorrowQuery = "DELETE FROM Borrows WHERE member_id = ?";
-                    try (PreparedStatement deleteBorrowStmt = connection.prepareStatement(deleteBorrowQuery)) {
-                        deleteBorrowStmt.setString(1, user.getId());
-                        deleteBorrowStmt.executeUpdate();
-                    }
-
 
                     String deleteMemberQuery = "DELETE FROM Members WHERE id = ?";
                     try (PreparedStatement deleteMemberStmt = connection.prepareStatement(deleteMemberQuery)) {
@@ -661,5 +707,31 @@ public class DatabaseUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean checkIfUserBorrowingBook(User user) {
+        String query = "SELECT 1 FROM borrows WHERE member_id = ? AND status IN ('OVERDUE', 'BORROWING') LIMIT 1";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getId());
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean checkIfBookIsBorrowed(Book book) {
+        String query = "SELECT 1 FROM borrows AND book_isbn = ? AND status IN ('OVERDUE', 'BORROWING') LIMIT 1";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, book.getIsbn());
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -107,6 +107,9 @@ public class UpdateBorrowController implements Initializable {
                 if (dueDate.isBefore(borrowDate)) {
                     dueDateErrorLabel.setText("Due date cannot be before borrow date!");
                     validation = true;
+                } else if (ChronoUnit.DAYS.between(borrowDate, dueDate) > 90) {
+                    dueDateErrorLabel.setText("The borrowing period cannot exceed 90 days!");
+                    validation = true;
                 }
             } catch (Exception e) {
                 dueDateErrorLabel.setText("Invalid date format!");
@@ -128,9 +131,6 @@ public class UpdateBorrowController implements Initializable {
                         validation = true;
                     } else if (returnDate.isAfter(LocalDate.now())) {
                         returnDateErrorLabel.setText("Return Date must not be after current Date!");
-                        validation = true;
-                    } else if (ChronoUnit.DAYS.between(borrowDate, dueDate) > 90) {
-                        dueDateErrorLabel.setText("The borrowing period cannot exceed 90 days!");
                         validation = true;
                     }
                 } catch (DateTimeParseException e) {

@@ -84,24 +84,19 @@
     -fx-text-fill: #4C2113;
 }
 
-.date-picker:hover,.combo-box:hover, .date-picker .text-field:hover{
+.date-picker:hover,.combo-box:hover, .date-picker:hover{
     -fx-cursor: hand;
+
 }
+
 
 .date-picker .arrow-button {
     -fx-background-color: #F1DEBC;
+
 }
 
 .date-picker .arrow-button .arrow {
     -fx-background-color: #4C2113; /* Màu cho biểu tượng lịch */
-}
-
-.combo-box .arrow-button {
-    -fx-background-color: #F1DEBC;
-}
-
-.combo-box .arrow-button .arrow {
-    -fx-background-color: #4C2113; /* Màu cho mũi tên */
 }
 
 .date-picker .month-year-pane {
@@ -138,6 +133,14 @@
 /* Định dạng các mũi tên chuyển tháng/năm */
 .date-picker .left-arrow .arrow, .date-picker .right-arrow .arrow {
     -fx-background-color: #4C2113; /* Màu cho mũi tên chuyển tháng/năm */
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #F1DEBC;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #4C2113; /* Màu cho mũi tên */
 }
 
 .forgot-password-label {

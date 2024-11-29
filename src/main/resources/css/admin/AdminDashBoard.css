@@ -37,8 +37,7 @@
 
 }
 .button-inSettings:hover {
-  -fx-background-color:  #DCB485 ;
-     -fx-text-fill: #4C2113;
+    -fx-background-color: rgba(220, 180, 133, 0.69);
 }
 
 .button-inSettings:pressed {
@@ -51,9 +50,7 @@
     -fx-background-radius: 25px;
 }
 .button-inSettings2:hover {
-    -fx-background-color:  #DCB485;
-
-
+    -fx-background-color: rgba(220, 180, 133, 0.7);
 }
 
 .table-view .column-header,
@@ -195,7 +192,7 @@
 }
 
 .combo-box, .combo-box .list-cell {
-    -fx-background-color: #F1DEBC;
+    -fx-background-color: #FFFFFF;
     -fx-text-fill: #4C2113;
     -fx-font-family: 'System';
 }
@@ -234,7 +231,7 @@
 }
 
 .date-picker, .date-picker .text-field, .date-picker .content {
-    -fx-background-color: #F1DEBC;
+    -fx-background-color: #FFFFFF;
     -fx-text-fill: #4C2113;
     -fx-font-family: 'System';
 }
@@ -244,12 +241,15 @@
     -fx-text-fill: #4C2113;
 }
 
-.date-picker:hover,.combo-box:hover, .date-picker .text-field:hover{
+.date-picker:hover,.combo-box:hover, .date-picker:hover{
     -fx-cursor: hand;
+
 }
+
 
 .date-picker .arrow-button {
     -fx-background-color: #F1DEBC;
+
 }
 
 .date-picker .arrow-button .arrow {

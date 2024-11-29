@@ -1,23 +1,33 @@
 package librio.controllers.admin;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import librio.models.Book;
 import librio.util.DatabaseUtil;
 
 import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
-public class DeleteBookController {
+public class DeleteBookController implements Initializable {
     @FXML
     private Button deleteButton;
+    @FXML
+    private Label errorLabel;
 
     private Book book;
 
 
     @FXML
     private void deleteUser() {
+        if(DatabaseUtil.checkIfBookIsBorrowed(book)){
+            errorLabel.setVisible(true);
+            return;
+        }
         DatabaseUtil.deleteBook(book);
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/book/";
@@ -47,4 +57,8 @@ public class DeleteBookController {
         stage.close();
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        errorLabel.setVisible(false);
+    }
 }
