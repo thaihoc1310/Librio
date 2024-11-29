@@ -100,9 +100,9 @@
                         </VBox>
                         <VBox layoutX="499.0" layoutY="268.0" prefHeight="113.0" prefWidth="154.0" spacing="2.0">
                            <children>
-                              <ComboBox fx:id="genderComboBox" prefHeight="26.0" prefWidth="137.0" />
+                              <ComboBox fx:id="genderComboBox" prefHeight="26.0" prefWidth="137.0" styleClass="combo-box-1" />
                               <Label fx:id="genderErrorLabel" prefHeight="17.0" prefWidth="159.0" textFill="#ff0f0f" />
-                              <ComboBox fx:id="roleComboBox" prefHeight="25.0" prefWidth="137.0" />
+                              <ComboBox fx:id="roleComboBox" prefHeight="25.0" prefWidth="137.0" styleClass="combo-box-1" />
                               <Label fx:id="roleErrorLabel" prefHeight="17.0" prefWidth="203.0" textFill="#ff0f0f" />
                            </children>
                         </VBox>

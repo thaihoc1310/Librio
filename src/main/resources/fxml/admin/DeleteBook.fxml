@@ -42,7 +42,7 @@
                                 <Image url="@../../icons/AdminDashBoardIcon/hoicham.png" />
                             </image>
                         </ImageView>
-                  <Label fx:id="errorLabel" layoutX="14.0" layoutY="95.0" text="This user is currently borrowing a book!" textFill="#bc4444">
+                  <Label fx:id="errorLabel" layoutX="14.0" layoutY="95.0" text="This book is being borrowed by user!" textFill="#bc4444">
                      <font>
                         <Font size="15.0" />
                      </font>

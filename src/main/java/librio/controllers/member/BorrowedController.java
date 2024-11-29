@@ -572,17 +572,6 @@ public class BorrowedController implements Initializable {
         }
     }
 
-    private void updateQuantityBook(int bookId) {
-        String query = "UPDATE books SET available_copy = available_copy + 1 WHERE id = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, bookId);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     private void openRating(BorrowedBook borrowedBook, Button rateButton) {
         try {

@@ -23,6 +23,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 
+import static librio.util.DatabaseUtil.*;
 import static librio.util.DesignUtil.setDatePickerFormat;
 
 public class UpdateBorrowController implements Initializable {
@@ -89,7 +90,8 @@ public class UpdateBorrowController implements Initializable {
         LocalDate borrowDate = borrowDatePicker.getValue();
         LocalDate dueDate = null;
         LocalDate returnDate = null;
-        Status status = Status.valueOf(statusLabel.getText());
+        Status oldStatus = borrow.getStatus();
+        Status newStatus = Status.valueOf(statusLabel.getText());
         double fine = Double.parseDouble(fineLabel.getText().replace(" VNĐ", ""));
 
         String returnDateString = returnDatePicker.getEditor().getText();
@@ -143,13 +145,24 @@ public class UpdateBorrowController implements Initializable {
         if (validation) {
             return;
         }
+
+        if (oldStatus == Status.OVERDUE || oldStatus == Status.BORROWING) {
+            if (newStatus == Status.RETURNED || newStatus == Status.RETURNED_LATE) {
+                updateQuantityBook(getBookByIsbn(borrow.getBookIsbn()).getId());
+            }
+        } else if (oldStatus == Status.RETURNED || oldStatus == Status.RETURNED_LATE) {
+            if (newStatus == Status.BORROWING || newStatus == Status.OVERDUE) {
+                decreaseQuantityBook(getBookByIsbn(borrow.getBookIsbn()).getId());
+            }
+        }
+
         String query = "UPDATE borrows SET borrow_date = ?, due_date = ?, return_date = ?, status = ?, fine = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDate(1, Date.valueOf(borrowDate));
             statement.setDate(2, Date.valueOf(dueDate));
             statement.setDate(3, returnDate != null ? Date.valueOf(returnDate) : null);  // Nếu returnDate null thì không set ngày trả
-            statement.setString(4, status.name());
+            statement.setString(4, newStatus.name());
             statement.setString(5, String.valueOf(fine));
             statement.setString(6, Session.getInstance().getLoggedInUser().getEmail());
             statement.setInt(7, borrow.getId());
@@ -215,7 +228,6 @@ public class UpdateBorrowController implements Initializable {
             return;
         }
 
-
         if (ChronoUnit.DAYS.between(borrowDate, dueDate) > 90) {
             validation = true;
         }
@@ -226,6 +238,7 @@ public class UpdateBorrowController implements Initializable {
 
         double fine = 0;
         Status newStatus;
+
 
         if (returnDate == null) {
             if (LocalDate.now().isAfter(dueDate)) {
@@ -249,6 +262,7 @@ public class UpdateBorrowController implements Initializable {
         statusLabel.setText(newStatus.toString());
         fineLabel.setText(String.valueOf(fine));
     }
+
 
 
 

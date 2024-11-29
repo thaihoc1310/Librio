@@ -25,7 +25,7 @@
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <ComboBox fx:id="filterBox" layoutX="197.0" layoutY="33.0" prefHeight="31.0" prefWidth="109.0" promptText="All" style="-fx-background-color: ffffff; -fx-border-color: #4C2113; -fx-border-width: 1.1px; -fx-border-radius: 15px 0px 0px 15px; -fx-background-radius: 15px 0px 0px 15px;" />
+                        <ComboBox fx:id="filterBox" layoutX="197.0" layoutY="33.0" prefHeight="31.0" prefWidth="109.0" promptText="All" styleClass="combo-box-api" />
                         <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="24.0" layoutX="552.0" layoutY="37.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
