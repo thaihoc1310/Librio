@@ -11,58 +11,33 @@ import librio.cache.ImageCache;
 import librio.models.Book;
 import librio.models.Borrow;
 import librio.models.User;
-import librio.util.DatabaseUtil;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static librio.util.DatabaseUtil.*;
+import static librio.util.DatabaseUtil.getBookByIsbn;
+import static librio.util.DatabaseUtil.getUserById;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
 public class BorrowDetailController implements Initializable {
-        private Borrow borrow;
+    @FXML
+    private Label bookIsbnLabel, bookTitleLabel, borrowDateLabel, borrowIdLabel, dueDateLabel,
+            fineLabel, memberEmailLabel, returnDateLabel, statusLabel, memberNameLabel;
+    @FXML
+    private Button backButton;
+    @FXML
+    private ImageView bookImageView;
 
-        @FXML
-        private Button backButton;
+    private Borrow borrow;
 
-        @FXML
-        private ImageView bookImageView;
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
-        @FXML
-        private Label bookIsbnLabel;
-
-        @FXML
-        private Label bookTitleLabel;
-
-        @FXML
-        private Label borrowDateLabel;
-
-        @FXML
-        private Label borrowIdLabel;
-
-        @FXML
-        private Label dueDateLabel;
-
-        @FXML
-        private Label fineLabel;
-
-        @FXML
-        private Label memberEmailLabel;
-
-        @FXML
-        private Label returnDateLabel;
-
-        @FXML
-        private Label statusLabel;
-
-        @FXML
-        private Label memberNameLabel;
-
-        public void setBorrow(Borrow borrow) {
-            this.borrow = borrow;
-            populateFields();
-        }
+    public void setBorrow(Borrow borrow) {
+        this.borrow = borrow;
+        populateFields();
+    }
 
     private void populateFields() {
         if (borrow != null) {
@@ -76,42 +51,35 @@ public class BorrowDetailController implements Initializable {
             bookTitleLabel.setText(borrowedBook.getTitle());
             borrowDateLabel.setText(borrow.getBorrowDate().toString());
             dueDateLabel.setText(borrow.getDueDate().toString());
-            if(borrow.getReturnDate() != null) {
+            if (borrow.getReturnDate() != null) {
                 returnDateLabel.setText(borrow.getReturnDate().toString());
-            }else {
+            } else {
                 returnDateLabel.setText("Not returned yet!");
             }
             statusLabel.setText(borrow.getStatus().toString());
             fineLabel.setText(String.valueOf(borrow.getFine()));
-
 
             if (borrowedBook.getImagePath() != null && !borrowedBook.getImagePath().isEmpty()) {
                 String projectDir = System.getProperty("user.dir");
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + borrowedBook.getImagePath();
 
-                Image image = ImageCache.getInstance().getImage(path,booksDir + "defaultBook.jpg");
+                Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
                 bookImageView.setImage(image);
             } else {
-
                 loadDefaultBookImage(bookImageView);
             }
         }
     }
 
-        @FXML
-        void back() {
-            closeWindow();
-        }
+    @FXML
+    void back() {
+        closeWindow();
+    }
 
     private void closeWindow() {
         Stage stage = (Stage) backButton.getScene().getWindow();
         stage.close();
-    }
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
     }
 
 }

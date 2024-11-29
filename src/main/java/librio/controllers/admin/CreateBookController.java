@@ -10,9 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import librio.session.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,452 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static librio.util.DatabaseUtil.*;
+import static librio.util.DatabaseUtil.isIsbnExists;
 
 public class CreateBookController implements Initializable {
-
-    private boolean openedFromApi = false;
-
-    @FXML
-    private Label authorErrorLabel;
-
-    @FXML
-    private TextField authorTextField;
-
-    @FXML
-    private ImageView bookImageView;
-
-    private String bookImageFilePath;
-    private String previousBookFilePath;
-
-    @FXML
-    private Label bookTitleErrorLabel;
-
-    @FXML
-    private TextArea bookTitleTextField;
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Label categoryErrorLabel;
-
-    @FXML
-    private TextField categoryTextField;
-
-    @FXML
-    private TextArea descriptionTextArea;
-
-    @FXML
-    private Label isbnErrorLabel;
-
-    @FXML
-    private TextField isbnTextField;
-
-    @FXML
-    private Label languageErrorLabel;
-
-    @FXML
-    private TextField languageTextField;
-
-    @FXML
-    private Label numberOfPagesErrorLabel;
-
-    @FXML
-    private TextField numberOfPagesTextField;
-
-    @FXML
-    private Label publisherErrorLabel;
-
-    @FXML
-    private TextField publisherTextField;
-
-    @FXML
-    private TextField quantityOfCopyTextField;
-
-    @FXML
-    private Button uploadImageButton;
-
-    @FXML
-    private TextField yearPublishedTextField;
-
-    @FXML
-    private Label yearPublishedErrorLabel;
-
-    @FXML
-    private Label quantityOfCopyErrorLabel;
-
-    private Book apiBook;
-
-    /**
-     * Initializes the controller class. This method is automatically called after the FXML file has been loaded.
-     * It hides error labels and sets up necessary listeners for the GUI components.
-     *
-     * @param location The location used to resolve relative paths for the root object, or {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if the root object was not localized.
-     */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        hideErrorLabels();
-        addListeners();
-    }
-
-    /**
-     * Sets the book in the CreateBookController to the given Book object.
-     * This method updates the internal state and triggers a population of fields.
-     *
-     * @param book the Book object to be set
-     */
-    public void setBook(Book book) {
-        this.apiBook = book;
-        populateFields();
-    }
-
-    /**
-     * Downloads an image from the specified URL and saves it to the local file system.
-     *
-     * @param imageUrl the URL of the image to be downloaded.
-     * @return the relative path of the saved image file. Returns "defaultBook.jpg" if an error occurs.
-     */
-    private String downloadImage(String imageUrl) {
-        String savedImagePath = "defaultBook.jpg";
-        try {
-            String projectDir = System.getProperty("user.dir");
-            String imageDir = projectDir + "/src/main/resources/images/book/";
-            String imageName = System.currentTimeMillis() + "_book_image.jpg";
-            savedImagePath = imageDir + imageName;
-
-            InputStream in = new URL(imageUrl).openStream();
-            Files.copy(in, Paths.get(savedImagePath), StandardCopyOption.REPLACE_EXISTING);
-            in.close();
-
-            return imageName;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return savedImagePath;
-    }
-
-    /**
-     * Populates the UI fields of the CreateBookController with data from the apiBook object.
-     * <p>
-     * This method retrieves book details such as title, ISBN, author, publisher, category, language, year
-     * published, description, and number of pages from the apiBook object and sets them into the corresponding
-     * text fields and text area in the user interface. It also manages the display of the book's image.
-     * <p>
-     * If the apiBook does not specify an image, a default image is used. Additionally, all text fields are set
-     * to be non-editable after populating them with data.
-     * <p>
-     * The following fields are populated:
-     * - Book Title
-     * - ISBN (checks if it is "Unknown ISBN")
-     * - Author
-     * - Publisher
-     * - Broad Category (mapped from detailed category)
-     * - Language (full language name)
-     * - Year Published (checks if it is "Unknown")
-     * - Description
-     * - Number of Pages
-     * <p>
-     * If apiBook is null, no action is performed.
-     */
-    public void populateFields() {
-        if (apiBook != null) {
-            bookTitleTextField.setText(apiBook.getTitle());
-            isbnTextField.setText(apiBook.getIsbn().equals("Unknown ISBN") ? "Unknown ISBN" : apiBook.getIsbn().substring(7));
-            authorTextField.setText(apiBook.getAuthor());
-            publisherTextField.setText(apiBook.getPublisher());
-
-            String broadCategory = mapCategoryToBroadCategory(apiBook.getCategory());
-            categoryTextField.setText(broadCategory);
-
-            languageTextField.setText(getFullLanguageName(apiBook.getLanguage()));
-            yearPublishedTextField.setText(apiBook.getYearPublished().contains("Unknown") ? "Unknown" : apiBook.getYearPublished().substring(0,4));
-            descriptionTextArea.setText(apiBook.getDescription());
-            numberOfPagesTextField.setText(apiBook.getNumberOfPages());
-            openedFromApi = true;
-
-            if (apiBook.getImagePath().equals("defaultBook.jpg")) {
-                bookImageView.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
-                bookImageFilePath = null;
-            } else {
-                bookImageView.setImage(new Image(apiBook.getImagePath()));
-                bookImageFilePath = apiBook.getImagePath();
-            }
-
-
-            bookTitleTextField.setEditable(false);
-            isbnTextField.setEditable(false);
-            authorTextField.setEditable(false);
-            publisherTextField.setEditable(false);
-            categoryTextField.setEditable(false);
-            languageTextField.setEditable(false);
-            yearPublishedTextField.setEditable(false);
-            descriptionTextArea.setEditable(false);
-            numberOfPagesTextField.setEditable(false);
-        }
-    }
-
-
-    /**
-     * Handles the creation of a new book entry by gathering input from various text fields, performing validation,
-     * and inserting the validated data into a database. If an image URL is provided through an API object, the image
-     * is downloaded and saved to a specific directory.
-     * <p>
-     * The method performs the following steps:
-     * 1. Retrieves input from the text fields.
-     * 2. Validates the input data (e.g., checks if required fields are non-empty, ISBN format is correct, etc.).
-     * 3. If validation fails, displays appropriate error messages.
-     * 4. If validation passes, inserts the book data into the database.
-     * 5. Downloads and saves the book image if provided through the API.
-     * 6. Clears input fields and closes the stage upon successful insertion.
-     */
-    @FXML
-    private void createBook() {
-        String bookTitle = bookTitleTextField.getText();
-        String isbn = isbnTextField.getText();
-        String author = authorTextField.getText();
-        String publisher = publisherTextField.getText();
-        String category = categoryTextField.getText();
-        String numberOfPages = numberOfPagesTextField.getText();
-        String quantityOfCopy = quantityOfCopyTextField.getText();
-        String language = languageTextField.getText();
-        String yearPublished = yearPublishedTextField.getText();
-        String description = descriptionTextArea.getText();
-        String averageOfRating = "0.0";
-
-        if (apiBook != null && apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()&&!apiBook.getImagePath().equals("defaultBook.jpg")) {
-            bookImageFilePath = downloadImage(apiBook.getImagePath());
-        }
-
-        boolean validation = false;
-
-        if(bookTitle.isEmpty()){
-            bookTitleErrorLabel.setText("Title cannot be empty");
-            validation = true;
-        }
-
-        if(isbn.isEmpty()){
-            isbnErrorLabel.setText("isbn cannot be empty");
-            validation = true;
-        }else if (!isbn.matches("\\d{10}|\\d{13}")) {
-            isbnErrorLabel.setText("isbn must be 10 or 13 digits");
-            validation = true;
-        } else if (isIsbnExists(isbn)) {
-            isbnErrorLabel.setText("isbn already exists");
-            validation = true;
-        }
-
-        if(author.isEmpty()){
-            authorErrorLabel.setText("Author must not be empty");
-            validation = true;
-        }
-
-        if(publisher.isEmpty()){
-            publisherErrorLabel.setText("Publisher must not be empty");
-            validation = true;
-        }
-
-        if(category.isEmpty()){
-            categoryErrorLabel.setText("Category cannot be empty");
-            validation = true;
-        }
-
-        if (numberOfPages.isEmpty()) {
-            numberOfPagesErrorLabel.setText("Number of pages cannot be empty");
-            validation = true;
-        } else if (!numberOfPages.matches("\\d+")) {
-            numberOfPagesErrorLabel.setText("Number of pages must be a number");
-            validation = true;
-        }
-
-        if(quantityOfCopy.isEmpty()){
-            quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty");
-            validation = true;
-        } else if (!quantityOfCopy.matches("\\d+")) {
-            quantityOfCopyErrorLabel.setText("Quantity of copy must be a number");
-            validation = true;
-        }
-
-        if(language.isEmpty()){
-            languageErrorLabel.setText("Language cannot be empty");
-            validation = true;
-        }
-
-        if (!yearPublished.isEmpty() ){
-            if(!yearPublished.matches("\\d++") && !yearPublished.equals("Unknown")){
-                yearPublishedErrorLabel.setText("Year published must be a number or Unknown");
-                validation = true;
-            }
-        }else{
-            yearPublished = null;
-        }
-
-        if(validation) {
-            return;
-        }
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO books (title, author, isbn, publisher, category, quantity_copy, available_copy, average_of_rating, year_published, language, number_of_pages, description, book_image, created_by, created_at)" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, bookTitle);
-            statement.setString(2, author);
-            statement.setString(3, isbn);
-            statement.setString(4, publisher);
-            statement.setString(5, category);
-            statement.setString(6, quantityOfCopy);
-            statement.setString(7, quantityOfCopy);
-            statement.setString(8, averageOfRating);
-            if (yearPublished == null || yearPublished.equals("Unknown")) {
-                statement.setNull(9, java.sql.Types.INTEGER);
-            } else {
-                statement.setInt(9, Integer.parseInt(yearPublished));
-            }
-            statement.setString(10, language);
-            statement.setString(11, numberOfPages);
-            if (descriptionTextArea.getText().isEmpty()) {
-                statement.setString(12, "No description provided!");
-            }else {
-                statement.setString(12, description);
-            }
-
-            statement.setString(13, (bookImageFilePath == null || bookImageFilePath.equals("defaultBook.jpg")) ? null : bookImageFilePath);
-            statement.setString(14, Session.getInstance().getLoggedInUser().getEmail());
-
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
-                String projectDir = System.getProperty("user.dir");
-                String booksDir = projectDir + "/src/main/resources/images/book/";
-                if(previousBookFilePath != null){
-                    Files.copy(Paths.get(previousBookFilePath), Paths.get(booksDir + bookImageFilePath));
-                }
-                clearInputFields();
-                closeStage();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void hideErrorLabels() {
-        bookTitleErrorLabel.setText("");
-        isbnErrorLabel.setText("");
-        authorErrorLabel.setText("");
-        publisherErrorLabel.setText("");
-        categoryErrorLabel.setText("");
-        numberOfPagesErrorLabel.setText("");
-        quantityOfCopyErrorLabel.setText("");
-        languageErrorLabel.setText("");
-        yearPublishedErrorLabel.setText("");
-    }
-
-
-
-    /**
-     * Adds event listeners to various text fields and text areas in the CreateBookController.
-     * <p>
-     * This method sets up mouse click event handlers for UI components such as text fields
-     * and text areas to trigger the hiding of error labels when they are clicked.
-     */
-    private void addListeners() {
-        bookTitleTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        isbnTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        authorTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        publisherTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        categoryTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        numberOfPagesTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        quantityOfCopyTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        languageTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-        descriptionTextArea.setOnMouseClicked(event -> {hideErrorLabels();});
-        yearPublishedTextField.setOnMouseClicked(event -> {hideErrorLabels();});
-    }
-
-    /**
-     * Handles the action of uploading an image for the book being created or edited.
-     * <p>
-     * The method performs the following operations:
-     * 1. Hides all error labels associated with the book information form.
-     * 2. Opens a file chooser dialog to allow the user to select an image file.
-     * 3. Filters the file types to only allow image extensions such as .png, .jpg, and .jpeg.
-     * 4. If a file is selected, constructs a unique file path for the image using the current timestamp
-     *    and the file's original name, and updates the image view to display the chosen image.
-     */
-    @FXML
-    private void uploadImage() {
-        hideErrorLabels();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose image");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-        );
-
-        File selectedFile = fileChooser.showOpenDialog(null);
-
-        if (selectedFile != null) {
-            bookImageFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
-            previousBookFilePath = selectedFile.getAbsolutePath();
-            bookImageView.setImage(new Image(selectedFile.toURI().toString()));
-        }
-    }
-
-    /**
-     * Closes the current stage. This method retrieves the window associated with the cancel button
-     * and closes it. Typically used to exit the current view when a cancel operation is performed.
-     */
-    private void closeStage() {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
-    }
-
-    /**
-     * Handles the cancellation of the create book operation.
-     * This method clears all input fields and closes the current stage.
-     */
-    @FXML
-    private void cancel() {
-            clearInputFields();
-            closeStage();
-    }
-
-
-    /**
-     * Clears the text fields and text area associated with the input fields in the CreateBookController.
-     * This method resets the user input by setting the text fields to an empty string.
-     */
-    private void clearInputFields() {
-        bookTitleTextField.clear();
-        isbnTextField.clear();
-        authorTextField.clear();
-        publisherTextField.clear();
-        categoryTextField.clear();
-        numberOfPagesTextField.clear();
-        quantityOfCopyTextField.clear();
-        languageTextField.clear();
-        yearPublishedTextField.clear();
-        descriptionTextArea.clear();
-    }
-
-    /**
-     * Returns the full language name corresponding to the given ISO code.
-     *
-     * @param isoCode The ISO code of the language for which the full name is required.
-     * @return The full language name mapped from the ISO code, or "Others" if the ISO code is not found in the map.
-     */
-    private String getFullLanguageName(String isoCode) {
-        return LANGUAGE_MAP.getOrDefault(isoCode, "Others");
-    }
-
-    /**
-     * Maps a specific category to a broad category.
-     *
-     * @param category The specific category to be mapped.
-     * @return The broad category corresponding to the specific category, or "Others" if the category is not found.
-     */
-    private String mapCategoryToBroadCategory(String category) {
-        return CATEGORY_MAP.getOrDefault(category, "Others");
-    }
 
     private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();
     private static final Map<String, String> CATEGORY_MAP = new HashMap<>();
@@ -574,6 +131,297 @@ public class CreateBookController implements Initializable {
         CATEGORY_MAP.put("Law", "Law");
         CATEGORY_MAP.put("Administrative courts", "Law");
         //CATEGORY_MAP.put("Administrative Law", "Law");
+    }
+
+    private boolean openedFromApi = false;
+    @FXML
+    private Label authorErrorLabel, bookTitleErrorLabel, categoryErrorLabel, isbnErrorLabel,
+            languageErrorLabel, numberOfPagesErrorLabel, publisherErrorLabel,
+            yearPublishedErrorLabel, quantityOfCopyErrorLabel;
+    @FXML
+    private TextField authorTextField, categoryTextField, isbnTextField, languageTextField,
+            numberOfPagesTextField, publisherTextField, quantityOfCopyTextField,
+            yearPublishedTextField;
+    @FXML
+    private TextArea bookTitleTextField, descriptionTextArea;
+    @FXML
+    private Button cancelButton, uploadImageButton;
+    @FXML
+    private ImageView bookImageView;
+    private Book apiBook;
+    private String bookImageFilePath;
+    private String previousBookFilePath;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        hideErrorLabels();
+        addListeners();
+    }
+
+    public void setBook(Book book) {
+        this.apiBook = book;
+        populateFields();
+    }
+
+    private String downloadImage(String imageUrl) {
+        String savedImagePath = "defaultBook.jpg";
+        try {
+            String projectDir = System.getProperty("user.dir");
+            String imageDir = projectDir + "/src/main/resources/images/book/";
+            String imageName = System.currentTimeMillis() + "_book_image.jpg";
+            savedImagePath = imageDir + imageName;
+
+            InputStream in = new URL(imageUrl).openStream();
+            Files.copy(in, Paths.get(savedImagePath), StandardCopyOption.REPLACE_EXISTING);
+            in.close();
+
+            return imageName;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return savedImagePath;
+    }
+
+    public void populateFields() {
+        if (apiBook != null) {
+            bookTitleTextField.setText(apiBook.getTitle());
+            isbnTextField.setText(apiBook.getIsbn().equals("Unknown ISBN") ? "Unknown ISBN" : apiBook.getIsbn().substring(7));
+            authorTextField.setText(apiBook.getAuthor());
+            publisherTextField.setText(apiBook.getPublisher());
+
+            String broadCategory = mapCategoryToBroadCategory(apiBook.getCategory());
+            categoryTextField.setText(broadCategory);
+
+            languageTextField.setText(getFullLanguageName(apiBook.getLanguage()));
+            yearPublishedTextField.setText(apiBook.getYearPublished().contains("Unknown") ? "Unknown" : apiBook.getYearPublished().substring(0, 4));
+            descriptionTextArea.setText(apiBook.getDescription());
+            numberOfPagesTextField.setText(apiBook.getNumberOfPages());
+            openedFromApi = true;
+
+            if (apiBook.getImagePath().equals("defaultBook.jpg")) {
+                bookImageView.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
+                bookImageFilePath = null;
+            } else {
+                bookImageView.setImage(new Image(apiBook.getImagePath()));
+                bookImageFilePath = apiBook.getImagePath();
+            }
+
+
+            bookTitleTextField.setEditable(false);
+            isbnTextField.setEditable(false);
+            authorTextField.setEditable(false);
+            publisherTextField.setEditable(false);
+            categoryTextField.setEditable(false);
+            languageTextField.setEditable(false);
+            yearPublishedTextField.setEditable(false);
+            descriptionTextArea.setEditable(false);
+            numberOfPagesTextField.setEditable(false);
+        }
+    }
+
+    @FXML
+    private void createBook() {
+        String bookTitle = bookTitleTextField.getText();
+        String isbn = isbnTextField.getText();
+        String author = authorTextField.getText();
+        String publisher = publisherTextField.getText();
+        String category = categoryTextField.getText();
+        String numberOfPages = numberOfPagesTextField.getText();
+        String quantityOfCopy = quantityOfCopyTextField.getText();
+        String language = languageTextField.getText();
+        String yearPublished = yearPublishedTextField.getText();
+        String description = descriptionTextArea.getText();
+        String averageOfRating = "0.0";
+
+        if (apiBook != null && apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty() && !apiBook.getImagePath().equals("defaultBook.jpg")) {
+            bookImageFilePath = downloadImage(apiBook.getImagePath());
+        }
+
+        boolean validation = false;
+
+        if (bookTitle.isEmpty()) {
+            bookTitleErrorLabel.setText("Title cannot be empty");
+            validation = true;
+        }
+
+        if (isbn.isEmpty()) {
+            isbnErrorLabel.setText("isbn cannot be empty");
+            validation = true;
+        } else if (!isbn.matches("\\d{10}|\\d{13}")) {
+            isbnErrorLabel.setText("isbn must be 10 or 13 digits");
+            validation = true;
+        } else if (isIsbnExists(isbn)) {
+            isbnErrorLabel.setText("isbn already exists");
+            validation = true;
+        }
+
+        if (author.isEmpty()) {
+            authorErrorLabel.setText("Author must not be empty");
+            validation = true;
+        }
+
+        if (publisher.isEmpty()) {
+            publisherErrorLabel.setText("Publisher must not be empty");
+            validation = true;
+        }
+
+        if (category.isEmpty()) {
+            categoryErrorLabel.setText("Category cannot be empty");
+            validation = true;
+        }
+
+        if (numberOfPages.isEmpty()) {
+            numberOfPagesErrorLabel.setText("Number of pages cannot be empty");
+            validation = true;
+        } else if (!numberOfPages.matches("\\d+")) {
+            numberOfPagesErrorLabel.setText("Number of pages must be a number");
+            validation = true;
+        }
+
+        if (quantityOfCopy.isEmpty()) {
+            quantityOfCopyErrorLabel.setText("Quantity of copy cannot be empty");
+            validation = true;
+        } else if (!quantityOfCopy.matches("\\d+")) {
+            quantityOfCopyErrorLabel.setText("Quantity of copy must be a number");
+            validation = true;
+        }
+
+        if (language.isEmpty()) {
+            languageErrorLabel.setText("Language cannot be empty");
+            validation = true;
+        }
+
+        if (!yearPublished.isEmpty()) {
+            if (!yearPublished.matches("\\d++") && !yearPublished.equals("Unknown")) {
+                yearPublishedErrorLabel.setText("Year published must be a number or Unknown");
+                validation = true;
+            }
+        } else {
+            yearPublished = null;
+        }
+
+        if (validation) {
+            return;
+        }
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String query = "INSERT INTO books (title, author, isbn, publisher, category, quantity_copy, available_copy, average_of_rating, year_published, language, number_of_pages, description, book_image, created_by, created_at)" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, bookTitle);
+            statement.setString(2, author);
+            statement.setString(3, isbn);
+            statement.setString(4, publisher);
+            statement.setString(5, category);
+            statement.setString(6, quantityOfCopy);
+            statement.setString(7, quantityOfCopy);
+            statement.setString(8, averageOfRating);
+            if (yearPublished == null || yearPublished.equals("Unknown")) {
+                statement.setNull(9, java.sql.Types.INTEGER);
+            } else {
+                statement.setInt(9, Integer.parseInt(yearPublished));
+            }
+            statement.setString(10, language);
+            statement.setString(11, numberOfPages);
+            if (descriptionTextArea.getText().isEmpty()) {
+                statement.setString(12, "No description provided!");
+            } else {
+                statement.setString(12, description);
+            }
+
+            statement.setString(13, (bookImageFilePath == null || bookImageFilePath.equals("defaultBook.jpg")) ? null : bookImageFilePath);
+            statement.setString(14, Session.getInstance().getLoggedInUser().getEmail());
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                String projectDir = System.getProperty("user.dir");
+                String booksDir = projectDir + "/src/main/resources/images/book/";
+                if (previousBookFilePath != null) {
+                    Files.copy(Paths.get(previousBookFilePath), Paths.get(booksDir + bookImageFilePath));
+                }
+                clearInputFields();
+                closeStage();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void hideErrorLabels() {
+        bookTitleErrorLabel.setText("");
+        isbnErrorLabel.setText("");
+        authorErrorLabel.setText("");
+        publisherErrorLabel.setText("");
+        categoryErrorLabel.setText("");
+        numberOfPagesErrorLabel.setText("");
+        quantityOfCopyErrorLabel.setText("");
+        languageErrorLabel.setText("");
+        yearPublishedErrorLabel.setText("");
+    }
+
+    private void addListeners() {
+        bookTitleTextField.setOnMouseClicked(event -> hideErrorLabels());
+        isbnTextField.setOnMouseClicked(event -> hideErrorLabels());
+        authorTextField.setOnMouseClicked(event -> hideErrorLabels());
+        publisherTextField.setOnMouseClicked(event -> hideErrorLabels());
+        categoryTextField.setOnMouseClicked(event -> hideErrorLabels());
+        numberOfPagesTextField.setOnMouseClicked(event -> hideErrorLabels());
+        quantityOfCopyTextField.setOnMouseClicked(event -> hideErrorLabels());
+        languageTextField.setOnMouseClicked(event -> hideErrorLabels());
+        descriptionTextArea.setOnMouseClicked(event -> hideErrorLabels());
+        yearPublishedTextField.setOnMouseClicked(event -> hideErrorLabels());
+    }
+
+    @FXML
+    private void uploadImage() {
+        hideErrorLabels();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            bookImageFilePath = System.currentTimeMillis() + "_" + selectedFile.getName();
+            previousBookFilePath = selectedFile.getAbsolutePath();
+            bookImageView.setImage(new Image(selectedFile.toURI().toString()));
+        }
+    }
+
+    private void closeStage() {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
+    }
+
+
+    @FXML
+    private void cancel() {
+        clearInputFields();
+        closeStage();
+    }
+
+    private void clearInputFields() {
+        bookTitleTextField.clear();
+        isbnTextField.clear();
+        authorTextField.clear();
+        publisherTextField.clear();
+        categoryTextField.clear();
+        numberOfPagesTextField.clear();
+        quantityOfCopyTextField.clear();
+        languageTextField.clear();
+        yearPublishedTextField.clear();
+        descriptionTextArea.clear();
+    }
+
+    private String getFullLanguageName(String isoCode) {
+        return LANGUAGE_MAP.getOrDefault(isoCode, "Others");
+    }
+
+    private String mapCategoryToBroadCategory(String category) {
+        return CATEGORY_MAP.getOrDefault(category, "Others");
     }
 
 }

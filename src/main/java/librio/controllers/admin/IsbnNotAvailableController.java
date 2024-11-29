@@ -10,7 +10,7 @@ public class IsbnNotAvailableController {
 
     @FXML
     private void confirmCancel() {
-        Stage stage = (Stage)isbnPane .getScene().getWindow();
+        Stage stage = (Stage) isbnPane.getScene().getWindow();
         stage.close();
     }
 }

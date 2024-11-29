@@ -30,46 +30,29 @@ public class CreateBorrowController implements Initializable {
     private Button createButton;
 
     @FXML
-    private TextField emailTextField;
+    private TextField emailTextField, bookIsbnTextField, bookTitleTextField, nameTextField;
 
     @FXML
     private ImageView bookImageView;
 
     @FXML
-    private Label bookIsbnErrorLabel;
+    private Label bookIsbnErrorLabel, emailErrorLabel, dueDateErrorLabel, userAlreadyBorrowErrorLabel;
 
     @FXML
-    private TextField bookIsbnTextField;
+    private DatePicker borrowDatePicker, dueDatePicker;
 
-    @FXML
-    private TextField bookTitleTextField;
-
-    @FXML
-    private DatePicker borrowDatePicker;
-
-    @FXML
-    private DatePicker dueDatePicker;
-
-    @FXML
-    private Label emailErrorLabel;
-
-    @FXML
-    private TextField nameTextField;
-
-    @FXML
-    private Label dueDateErrorLabel;
-
-    @FXML
-    private Label userAlreadyBorrowErrorLabel;
 
     public void initialize(URL location, ResourceBundle resources) {
-        borrowDatePicker.setValue(LocalDate.now());
-        dueDatePicker.setValue(LocalDate.now().plusDays(30));
-        setDatePickerFormat(dueDatePicker);
+        initDatePicker();
         hideErrorLabels();
         addListeners();
     }
 
+    private void initDatePicker() {
+        borrowDatePicker.setValue(LocalDate.now());
+        dueDatePicker.setValue(LocalDate.now().plusDays(30));
+        setDatePickerFormat(dueDatePicker);
+    }
 
     @FXML
     private void createBorrow() {
@@ -189,7 +172,6 @@ public class CreateBorrowController implements Initializable {
         nameTextField.setOnMouseClicked(event -> {hideErrorLabels();});
         dueDatePicker.setOnMouseClicked(event -> {hideErrorLabels();});
 
-        // Email validation
         emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.trim().isEmpty() &&
                     newValue.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$") &&
@@ -206,7 +188,6 @@ public class CreateBorrowController implements Initializable {
             Book book = getBookByIsbn(newValue);
             if (!newValue.trim().isEmpty() && newValue.matches("\\d{10}|\\d{13}") && book != null) {
                 bookTitleTextField.setText(book.getTitle());
-
                 String projectDir = System.getProperty("user.dir");
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + book.getImagePath();

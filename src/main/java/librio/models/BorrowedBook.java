@@ -24,8 +24,9 @@ public class BorrowedBook extends Book {
         this.fine = fine;
         this.borrowId = borrowerId;
     }
-    public BorrowedBook(String title, String author, LocalDate dueDate, Status status, Double fine, Integer borrowerId, String imagePath ){
-        super(title,author,imagePath);
+
+    public BorrowedBook(String title, String author, LocalDate dueDate, Status status, Double fine, Integer borrowerId, String imagePath) {
+        super(title, author, imagePath);
         this.dueDate = new SimpleObjectProperty<>(dueDate);
         this.status = status;
         this.fine = fine;

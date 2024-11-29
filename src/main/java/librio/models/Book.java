@@ -6,8 +6,8 @@ import java.time.Instant;
 
 public class Book {
     private IntegerProperty id;
-    private StringProperty title;
-    private StringProperty author;
+    private final StringProperty title;
+    private final StringProperty author;
     private StringProperty category;
     private StringProperty language;
     private StringProperty publisher;
@@ -61,7 +61,7 @@ public class Book {
     }
 
 
-    public Book(Integer id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, Integer availableCopy ,Double averageOfRating, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
+    public Book(Integer id, String title, String author, String isbn, String category, String publisher, Integer quantityCopy, Integer availableCopy, Double averageOfRating, String yearPublished, String language, String numberOfPages, String description, String imagePath) {
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
@@ -78,8 +78,6 @@ public class Book {
         this.imagePath = new SimpleStringProperty(imagePath);
     }
 
-
-    // Getters và Setters cho các thuộc tính
 
     public int getId() {
         return id.get();
@@ -281,11 +279,11 @@ public class Book {
         return availableCopy.get();
     }
 
-    public IntegerProperty availableCopyProperty() {
-        return availableCopy;
-    }
-
     public void setAvailableCopy(int availableCopy) {
         this.availableCopy.set(availableCopy);
+    }
+
+    public IntegerProperty availableCopyProperty() {
+        return availableCopy;
     }
 }

@@ -19,10 +19,16 @@ public class DeleteBorrowController implements Initializable {
     @FXML
     private Button deleteButton;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
+
     @FXML
     void cancel() {
         closeWindow();
     }
+
     @FXML
     void deleteBorrow() {
         DatabaseUtil.deleteBorrow(borrow);
@@ -32,11 +38,6 @@ public class DeleteBorrowController implements Initializable {
     private void closeWindow() {
         Stage stage = (Stage) deleteButton.getScene().getWindow();
         stage.close();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 
     public void setBorrow(Borrow borrow) {
