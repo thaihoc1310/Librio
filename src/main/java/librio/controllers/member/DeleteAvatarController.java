@@ -5,9 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.User;
+import librio.session.Session;
 
 import java.io.File;
 import java.sql.Connection;
@@ -16,14 +16,12 @@ import java.sql.PreparedStatement;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 
 public class DeleteAvatarController {
+    private final User loggedInUser = Session.getInstance().getLoggedInUser();
 
     @FXML
     private Button cancelButton;
-
     @FXML
     private Button deleteButton;
-
-    private User loggedInUser = Session.getInstance().getLoggedInUser();
 
     private ImageView avatar;
 
@@ -61,7 +59,7 @@ public class DeleteAvatarController {
             statement.setString(1, loggedInUser.getId());
             statement.executeUpdate();
             cancel();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

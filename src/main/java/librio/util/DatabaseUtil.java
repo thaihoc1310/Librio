@@ -1,5 +1,6 @@
 package librio.util;
 
+import javafx.scene.control.ComboBox;
 import librio.database.DatabaseConnection;
 import librio.enums.Gender;
 import librio.enums.Role;
@@ -9,6 +10,8 @@ import librio.models.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -526,7 +529,7 @@ public class DatabaseUtil {
                         overDueDays = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
                     } else if (returnDate != null) {
                         status = returnDate.isAfter(dueDate) ? "RETURNED_LATED" : "RETURNED";
-                        if(status.equals("RETURNED_LATED")) {
+                        if (status.equals("RETURNED_LATED")) {
                             overDueDays = ChronoUnit.DAYS.between(dueDate, returnDate);
                         }
                     }
@@ -599,7 +602,7 @@ public class DatabaseUtil {
         return 0;
     }
 
-    public static int getTotalBooks(){
+    public static int getTotalBooks() {
         String query = "SELECT COUNT(*) FROM books";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -632,7 +635,7 @@ public class DatabaseUtil {
     }
 
     public static boolean checkIfUserBorrowedBook(User user, Book book) {
-        return countUserBorrowingBook(user,book) > 0;
+        return countUserBorrowingBook(user, book) > 0;
     }
 
     private static int countUserBorrowingBook(User user, Book book) {
@@ -709,6 +712,7 @@ public class DatabaseUtil {
         }
     }
 
+
     public static boolean checkIfUserBorrowingBook(User user) {
         String query = "SELECT 1 FROM borrows WHERE member_id = ? AND status IN ('OVERDUE', 'BORROWING') LIMIT 1";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -733,5 +737,22 @@ public class DatabaseUtil {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static List<String> loadSuggestionsFromDatabase(String query, ComboBox<String> filterBox) {
+        List<String> suggestions = new ArrayList<>();
+        String filter = filterBox.getValue();
+        String sqlQuery = "SELECT DISTINCT " + filter + " FROM books WHERE " + filter + " LIKE ? LIMIT 10";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, "%" + query + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                suggestions.add(resultSet.getString(filter.toLowerCase()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return suggestions;
     }
 }

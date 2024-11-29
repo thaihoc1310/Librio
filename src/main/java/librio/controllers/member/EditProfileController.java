@@ -41,56 +41,36 @@ import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.setDatePickerFormat;
 
 public class EditProfileController implements Initializable {
-
-    private User loggedInUser = Session.getInstance().getLoggedInUser();
+    private final User loggedInUser = Session.getInstance().getLoggedInUser();
 
     @FXML
-    private TextField addressTextArea;
-
+    private TextField addressTextArea, emailTextField, memberIdTextField, nameTextField, phoneNumberTextField;
     @FXML
     private Button saveButton;
-
-    private String avatarFilePath;
-    private String previousAvatarFilePath;
-
     @FXML
     private ImageView avatar;
-
     @FXML
     private DatePicker birthOfDatePicker;
-
     @FXML
-    private Label dateOfBirthErrorLabel;
-
-    @FXML
-    private Label emailErrorLabel;
-
-    @FXML
-    private TextField emailTextField;
-
+    private Label dateOfBirthErrorLabel, emailErrorLabel, nameErrorLabel, phoneNumberErrorLabel, notification;
     @FXML
     private ComboBox<Gender> genderComboBox;
-
-    @FXML
-    private TextField memberIdTextField;
-
-    @FXML
-    private Label nameErrorLabel;
-
-    @FXML
-    private TextField nameTextField;
-
-    @FXML
-    private Label phoneNumberErrorLabel;
-
-    @FXML
-    private TextField phoneNumberTextField;
-
-    @FXML
-    private Label notification;
-
     @FXML
     private AnchorPane profilePane;
+
+    private String avatarFilePath;
+
+    private String previousAvatarFilePath;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (loggedInUser == null) {
+            return;
+        }
+        hideErrorLabels();
+        addListeners();
+        setMemberInformation();
+    }
 
     @FXML
     void changeAvatar() {
@@ -223,39 +203,22 @@ public class EditProfileController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (loggedInUser == null) {
-            return;
-        }
-        genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
-        emailTextField.setText(loggedInUser.getEmail());
-        nameTextField.setText(loggedInUser.getName());
-        phoneNumberTextField.setText(loggedInUser.getPhoneNumber());
-        addressTextArea.setText(loggedInUser.getAddress());
-        genderComboBox.setValue(loggedInUser.getGender());
-        birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
-
-        // Lấy đường dẫn ảnh từ project
+    private void setMemberInformation() {
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + loggedInUser.getAvatar();
-
         Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
         cropAndClipToCircle(image, avatar, 50);
-
         nameTextField.setText(loggedInUser.getName());
         emailTextField.setText(loggedInUser.getEmail());
         phoneNumberTextField.setText(loggedInUser.getPhoneNumber());
         addressTextArea.setText(loggedInUser.getAddress() != null ? loggedInUser.getAddress() : "");
         birthOfDatePicker.setValue(loggedInUser.getBirthOfDate());
+        genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
         genderComboBox.setValue(loggedInUser.getGender());
         memberIdTextField.setText(String.valueOf(loggedInUser.getId()));
         setDatePickerFormat(birthOfDatePicker);
-        hideErrorLabels();
-        addListeners();
     }
-
 
     private void addListeners() {
         memberIdTextField.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
@@ -275,12 +238,10 @@ public class EditProfileController implements Initializable {
         dateOfBirthErrorLabel.setText("");
     }
 
-    private void hideErrorAndNotificationLabels(){
+    private void hideErrorAndNotificationLabels() {
         hideErrorLabels();
         notification.setText("");
     }
-
-
 
     @FXML
     private void openChangePasswordScene() {
@@ -299,7 +260,6 @@ public class EditProfileController implements Initializable {
     @FXML
     private void openDeleteAvatarStage() {
         try {
-            // Tải FXML của scene mới
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/DeleteAvatar.fxml"));
             Parent root = loader.load();
             Stage currentStage = (Stage) profilePane.getScene().getWindow();

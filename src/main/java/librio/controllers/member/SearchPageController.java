@@ -21,7 +21,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,212 +31,111 @@ import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.session.Session;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static librio.util.DatabaseUtil.checkIfUserBorrowedBook;
-import static librio.util.DatabaseUtil.getAvailableCopyByIsbn;
-import static librio.util.DesignUtil.cropAndClipToCircle;
-import static librio.util.DesignUtil.setConfirmButton;
+import static librio.util.DatabaseUtil.*;
+import static librio.util.DesignUtil.*;
 
-/**
- * Controller class for the search page of the application.
- * Manages the UI elements and interactions within the search page.
- */
+
 public class SearchPageController implements Initializable {
+    private final List<Book> bookList = new ArrayList<>();
+
     @FXML
-    public Label englishLabel;
-    @FXML
-    public Label vietnameseLabel;
-    @FXML
-    public Label frenchLabel;
-    @FXML
-    public Label germanLabel;
-    @FXML
-    public Label spanishLabel;
-    @FXML
-    public Label italianLabel;
-    @FXML
-    public Label russianLabel;
-    @FXML
-    public Label dutchLabel;
-    @FXML
-    public Label japaneseLabel;
-    @FXML
-    public Label koreanLabel;
-    @FXML
-    public Label danishLabel;
-    @FXML
-    public Label thaiLabel;
-    @FXML
-    public Label chineseLabel;
+    public Label englishLabel, vietnameseLabel, frenchLabel, germanLabel, spanishLabel,
+            italianLabel, russianLabel, dutchLabel, japaneseLabel, koreanLabel,
+            danishLabel, thaiLabel, chineseLabel, fiveStarsLabel, fourStarsLabel,
+            threeStarsLabel, twoStarsLabel, oneStarLabel, noRatingsLabel, userNameUser,
+            fictionLabel, economicsLabel, computersLabel, historyLabel, scienceLabel,
+            healthLabel, lawLabel, socialScienceLabel, technologyLabel, artLabel,
+            educationLabel, sportsLabel, travelLabel, fictionLabel2, historyLabel2,
+            scienceLabel2, technologyLabel2, computersLabel2, economicsLabel2,
+            lawLabel2, socialScienceLabel2, educationLabel2, artLabel2, musicLabel, othersLabel;
     @FXML
     public VBox searchSuggestionContainer;
     @FXML
-    public AnchorPane searchSuggestion;
+    public AnchorPane searchSuggestion, notificationPane, menuPane, numberPane;
     @FXML
-    private ImageView clickAvatar;
+    public ImageView clickAvatar, avatarUser, searchButton, banner15;
     @FXML
-    private ImageView avatarUser;
+    public Pane backPane;
     @FXML
-    private Pane backPane;
+    public TitledPane categoryPane, ratePane;
     @FXML
-    private TitledPane categoryPane;
+    public ComboBox<String> filterBox, limitBox, sortBox;
     @FXML
-    private ComboBox<String> filterBox;
+    public FlowPane flowPane;
     @FXML
-    private FlowPane flowPane;
+    public ScrollPane mainScroll;
     @FXML
-    private ComboBox<String> limitBox;
+    public Pagination pagination;
     @FXML
-    private ScrollPane mainScroll;
+    public Circle moreIcon;
     @FXML
-    private Pagination pagination;
+    public ProgressIndicator loadingIndicator;
     @FXML
-    private TitledPane ratePane;
+    public TextField searchTextField;
     @FXML
-    private Label userNameUser;
-    @FXML
-    private ImageView searchButton;
-    @FXML
-    private TextField searchTextField;
-    @FXML
-    private ComboBox<String> sortBox;
-    @FXML
-    private Circle moreIcon;
-    @FXML
-    private ProgressIndicator loadingIndicator;
-    @FXML
-    private Label fiveStarsLabel;
-    @FXML
-    private Label fourStarsLabel;
-    @FXML
-    private Label threeStarsLabel;
-    @FXML
-    private Label twoStarsLabel;
-    @FXML
-    private Label oneStarLabel;
-    @FXML
-    private Label noRatingsLabel;
-    @FXML
-    private Label fictionLabel;
-    @FXML
-    private Label economicsLabel;
-    @FXML
-    private Label computersLabel;
-    @FXML
-    private Label historyLabel;
-    @FXML
-    private Label scienceLabel;
-    @FXML
-    private Label healthLabel;
-    @FXML
-    private Label lawLabel;
-    @FXML
-    private Label socialScienceLabel;
-    @FXML
-    private Label technologyLabel;
-    @FXML
-    private Label artLabel;
-    @FXML
-    private Label educationLabel;
-    @FXML
-    private Label sportsLabel;
-    @FXML
-    private Label travelLabel;
-    @FXML
-    private Label fictionLabel2;
-    @FXML
-    private Label historyLabel2;
-    @FXML
-    private Label scienceLabel2;
-    @FXML
-    private Label technologyLabel2;
-    @FXML
-    private Label computersLabel2;
-    @FXML
-    private Label economicsLabel2;
-    @FXML
-    private Label lawLabel2;
-    @FXML
-    private Label socialScienceLabel2;
-    @FXML
-    private Label educationLabel2;
-    @FXML
-    private Label artLabel2;
-    @FXML
-    private Label musicLabel;
-    @FXML
-    private Label othersLabel;
-    @FXML
-    private AnchorPane notificationPane;
-    @FXML
-    private AnchorPane menuPane;
-    @FXML
-    private AnchorPane numberPane;
-    @FXML
-    private ImageView banner15;
-    @FXML
-    private Text numberText;
-    private List<Book> bookList = new ArrayList<>();
+    public Text numberText;
+
     private String keyword;
+
     private ExecutorService executor;
+
     private boolean isNoRatingFilter = false;
+
     private double currentRatingFilter = 0.0;
+
     private Label selectedRateLabel = null;
+
     private Label selectedLanguageLabel = null;
+
     private Label selectedCategoryLabel = null;
+
     private String currentLanguageFilter = null;
+
     private String currentCategoryFilter = null;
+
     private boolean isAnchorPaneVisible = false;
+
     private boolean isNotificationPane = false;
 
     private String additionalCondition = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image image = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
-        moreIcon.setFill(new ImagePattern(image));
         setAvatarAndUserName();
-        loadingIndicator.setVisible(false);
         executor = Executors.newCachedThreadPool();
         setupAnimatedPane(ratePane, 255);
         setupAnimatedPane(categoryPane, 454);
+        iniBox();
+        pagination.setPageFactory(this::createPage);
+        setupComboBoxListeners();
+        setupPaneListeners();
+        initCategoryLabelClick();
+        setupSearchSuggestions();
+        initNotification();
+        banner15.setOnMouseClicked(event -> handleBannersClick());
+    }
+
+    private void iniBox() {
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
         limitBox.getItems().addAll("100", "50", "20", "10");
         limitBox.getSelectionModel().select(2);
         sortBox.getItems().addAll("Top rated", "Most borrowed", "Newest to Oldest", "Oldest to Newest", "Title A-Z");
         sortBox.getSelectionModel().selectFirst();
-        pagination.setPageFactory(this::createPage);
-        setupComboBoxListeners();
-        setupPaneListeners();
-        initCategoryLabelClick();
-        setupSearchSuggestions();
-        notificationPane.setVisible(false);
-
-        int totalBooks = Session.getInstance().getTotalBooks();
-        if (totalBooks != 0) {
-            numberPane.setVisible(true);
-            if (totalBooks < 100) {
-                numberText.setText(String.valueOf(totalBooks));
-            } else {
-                numberText.setText("99+");
-            }
-        }
-
-        banner15.setOnMouseClicked(event -> handleBannersClick());
     }
 
-    private void initCategoryLabelClick(){
+    private void initCategoryLabelClick() {
         fictionLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Fiction"));
         historyLabel2.setOnMouseClicked(event -> setKeywordAndCategory("History"));
         scienceLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Science"));
@@ -252,11 +150,19 @@ public class SearchPageController implements Initializable {
         artLabel2.setOnMouseClicked(event -> setKeywordAndCategory("Art"));
     }
 
-    /**
-     * Asynchronously loads a list of books for the specified page index and updates the UI components accordingly.
-     *
-     * @param pageIndex the index of the page to load books for
-     */
+    private void initNotification() {
+        notificationPane.setVisible(false);
+        int totalBooks = Session.getInstance().getTotalBooks();
+        if (totalBooks != 0) {
+            numberPane.setVisible(true);
+            if (totalBooks < 100) {
+                numberText.setText(String.valueOf(totalBooks));
+            } else {
+                numberText.setText("99+");
+            }
+        }
+    }
+
     private void loadBooksAsync(int pageIndex) {
         loadingIndicator.setVisible(true);
         flowPane.getChildren().clear();
@@ -283,12 +189,6 @@ public class SearchPageController implements Initializable {
         executor.submit(loadTask);
     }
 
-    /**
-     * Sets the search parameters and initiates a search.
-     *
-     * @param keyword the keyword to search for
-     * @param filter  the filter criteria to apply
-     */
     public void setSearchParameters(String keyword, String filter, String additionalCondition, String sortCondition) {
         searchTextField.setText(keyword);
         filterBox.getSelectionModel().select(filter);
@@ -301,6 +201,8 @@ public class SearchPageController implements Initializable {
     }
 
     public void setAvatarAndUserName() {
+        Image iconImage = new Image(getClass().getResource("/icons/MemberIcon/more.png").toExternalForm());
+        moreIcon.setFill(new ImagePattern(iconImage));
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
@@ -316,14 +218,12 @@ public class SearchPageController implements Initializable {
         pane.setExpanded(false);
         pane.expandedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                // Tạo animation mở rộng chiều cao
                 Timeline expandTimeline = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(pane.prefHeightProperty(), 0)),
                         new KeyFrame(Duration.seconds(0.3), new KeyValue(pane.prefHeightProperty(), targetHeight))
                 );
                 expandTimeline.play();
             } else {
-                // Tạo animation thu nhỏ chiều cao
                 Timeline collapseTimeline = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(pane.prefHeightProperty(), targetHeight)),
                         new KeyFrame(Duration.seconds(0.3), new KeyValue(pane.prefHeightProperty(), 0))
@@ -397,7 +297,6 @@ public class SearchPageController implements Initializable {
         return fetchedBooks;
     }
 
-
     private String buildQuery(String selectedFilter, String orderByClause, String limitClause) {
         StringBuilder queryBuilder = new StringBuilder();
         if (orderByClause.contains("GROUP BY")) {
@@ -435,7 +334,6 @@ public class SearchPageController implements Initializable {
         return queryBuilder.toString();
     }
 
-
     private Node createPage(int pageIndex) {
         loadBooksAsync(pageIndex);
         mainScroll.setVvalue(0);
@@ -465,7 +363,6 @@ public class SearchPageController implements Initializable {
         };
     }
 
-
     private String getLimitClause() {
         int limit = Integer.parseInt(limitBox.getValue());
         return " LIMIT " + limit;
@@ -483,7 +380,8 @@ public class SearchPageController implements Initializable {
 
             @Override
             protected void succeeded() {
-                Parent homepageRoot = getValue();Stage currentStage = (Stage) mainScroll.getScene().getWindow();
+                Parent homepageRoot = getValue();
+                Stage currentStage = (Stage) mainScroll.getScene().getWindow();
                 Scene currentScene = currentStage.getScene();
                 currentScene.setRoot(homepageRoot);
                 loadingIndicator.setVisible(false);
@@ -499,7 +397,6 @@ public class SearchPageController implements Initializable {
 
         executor.submit(loadHomePageTask);
     }
-
 
     private void reloadData() {
         loadBooksAsync(0);
@@ -549,7 +446,7 @@ public class SearchPageController implements Initializable {
         Task<List<String>> suggestionTask = new Task<>() {
             @Override
             protected List<String> call() {
-                return loadSuggestionsFromDatabase(query);
+                return loadSuggestionsFromDatabase(query, filterBox);
             }
 
             @Override
@@ -564,23 +461,6 @@ public class SearchPageController implements Initializable {
             }
         };
         executor.submit(suggestionTask);
-    }
-
-    private List<String> loadSuggestionsFromDatabase(String query) {
-        List<String> suggestions = new ArrayList<>();
-        String filter = filterBox.getValue();
-        String sqlQuery = "SELECT DISTINCT " + filter + " FROM books WHERE " + filter + " LIKE ? LIMIT 10";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-            preparedStatement.setString(1, "%" + query + "%");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                suggestions.add(resultSet.getString(filter.toLowerCase()));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return suggestions;
     }
 
     private void updateSearchSuggestionContainer(List<String> suggestions) {
@@ -858,44 +738,6 @@ public class SearchPageController implements Initializable {
         return bookPane;
     }
 
-    private HBox getStarBox(Book book) {
-        HBox starBox = new HBox(5);
-        double rating = book.getAverageOfRating();
-        int fullStars = (int) rating;
-        double decimalPart = rating - fullStars;
-        Image fullStarImage = new Image(getClass().getResource("/icons/MemberIcon/Star.png").toExternalForm());
-        Image emptyStarImage = new Image(getClass().getResource("/icons/MemberIcon/Star_notfill.png").toExternalForm());
-        for (int i = 1; i <= 5; i++) {
-            StackPane starPane = new StackPane();
-
-            ImageView emptyStar = new ImageView(emptyStarImage);
-            emptyStar.setFitHeight(15);
-            emptyStar.setFitWidth(15);
-
-            starPane.getChildren().add(emptyStar);
-
-            if (i <= fullStars) {
-                ImageView fullStar = new ImageView(fullStarImage);
-                fullStar.setFitHeight(15);
-                fullStar.setFitWidth(15);
-                starPane.getChildren().add(fullStar);
-            } else if (i == fullStars + 1 && decimalPart > 0) {
-                ImageView fullStar = new ImageView(fullStarImage);
-                fullStar.setFitHeight(15);
-                fullStar.setFitWidth(15);
-
-                Rectangle clip = new Rectangle(15 * decimalPart, 15);
-                fullStar.setClip(clip);
-                starPane.getChildren().add(fullStar);
-            }
-
-            starBox.getChildren().add(starPane);
-        }
-
-        return starBox;
-    }
-
-
     @FXML
     private void handleAvatarClick() {
         if (!isAnchorPaneVisible) {
@@ -989,7 +831,8 @@ public class SearchPageController implements Initializable {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.initOwner(searchTextField.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL); stage.setOnHidden(event -> {
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setOnHidden(event -> {
                 colorAdjust.setBrightness(0);
                 currentStage.getScene().getRoot().setEffect(null);
 
@@ -1084,7 +927,9 @@ public class SearchPageController implements Initializable {
         handleSearch();
     }
 
-    private void handleBannersClick(){
+    @FXML
+    private void handleBannersClick() {
         setSearchParameters("", "Title", "isbn = '9781529901795'", "Top rated");
+        mainScroll.setVvalue(0);
     }
 }

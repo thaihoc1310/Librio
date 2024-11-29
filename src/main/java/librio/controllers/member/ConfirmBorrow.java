@@ -1,19 +1,16 @@
 package librio.controllers.member;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import librio.cache.ImageCache;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
 import librio.models.Book;
+import librio.session.Session;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -21,22 +18,12 @@ import java.sql.Statement;
 import java.time.LocalDate;
 
 public class ConfirmBorrow {
-
     @FXML
     private Label authorNameLabel;
-
     @FXML
     private ImageView bookImage;
-
-    @FXML
-    private AnchorPane borrowConfirmationPane;
-
-    @FXML
-    private Button confirmButton;
-
     @FXML
     private Text dueDateLabel;
-
     @FXML
     private Text titleText;
 
@@ -44,9 +31,8 @@ public class ConfirmBorrow {
 
     private LocalDate dueDate;
 
-    public void setBook (Book book) {
+    public void setBook(Book book) {
         this.book = book;
-
         titleText.setText(book.getTitle());
         authorNameLabel.setText(book.getAuthor());
         dueDate = LocalDate.now().plusDays(90);
@@ -61,9 +47,9 @@ public class ConfirmBorrow {
     }
 
     @FXML
-    private void closeBorrowConfirmationPane() {
-            Stage stage = (Stage) authorNameLabel.getScene().getWindow();
-            stage.close();
+    private void closeStage() {
+        Stage stage = (Stage) authorNameLabel.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -78,12 +64,12 @@ public class ConfirmBorrow {
             statement.setString(5, null);
             statement.setString(6, "BORROWING");
             statement.setString(7, String.valueOf(0));
-            statement.setString(8,  Session.getInstance().getLoggedInUser().getEmail());
+            statement.setString(8, Session.getInstance().getLoggedInUser().getEmail());
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 updateQuantityBook();
             }
-            closeBorrowConfirmationPane();
+            closeStage();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -93,7 +79,7 @@ public class ConfirmBorrow {
         String query = "UPDATE books SET available_copy = ? WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1,book.getAvailableCopy() - 1);
+            statement.setInt(1, book.getAvailableCopy() - 1);
             statement.setInt(2, book.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
