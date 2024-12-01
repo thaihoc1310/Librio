@@ -6,11 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
-import librio.session.Session;
 import librio.database.DatabaseConnection;
-import librio.models.Borrow;
 import librio.enums.Status;
+import librio.models.Borrow;
+import librio.session.Session;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -28,49 +27,87 @@ import static librio.util.DesignUtil.setDatePickerFormat;
 
 public class UpdateBorrowController implements Initializable {
     @FXML
-    private Button backButton;
-
+    protected Button backButton;
     @FXML
-    private DatePicker borrowDatePicker;
-
+    protected DatePicker borrowDatePicker;
     @FXML
-    private DatePicker dueDatePicker;
-
+    protected DatePicker dueDatePicker;
     @FXML
-    private Label fineLabel;
-
+    protected Label fineLabel;
     @FXML
-    private DatePicker returnDatePicker;
-
+    protected Label statusLabel;
     @FXML
-    private Label statusLabel;
-
+    protected Label borrowDateErrorLabel;
     @FXML
-    private Label borrowDateErrorLabel;
-
+    protected Label dueDateErrorLabel;
     @FXML
-    private Label dueDateErrorLabel;
-
+    protected Label returnDateErrorLabel;
     @FXML
-    private Label returnDateErrorLabel;
+    protected DatePicker returnDatePicker;
 
     private Borrow borrow;
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Sets up the date pickers for the borrow, due, and return date fields and listeners
+     * for changes to these fields to update the borrow status.
+     *
+     * @param url the location used to resolve relative paths for the root object, or null if unknown
+     * @param resourceBundle the resources used to localize the root object, or null if not localized
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initDatePicker();
+    }
+
+    /**
+     * Handles the action of navigating back from the current view.
+     * This method will close the current stage window, effectively
+     * taking the user back to the previous view or main application window.
+     */
     @FXML
     void back() {
         closeStage();
     }
 
+    /**
+     * Closes the current stage associated with the backButton.
+     * This method retrieves the current window from the scene of the backButton
+     * and closes it, effectively hiding or terminating the associated stage.
+     */
     private void closeStage() {
         Stage stage = (Stage) backButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Sets the borrow instance for the controller and updates the relevant fields
+     * within the UI based on the provided borrow details.
+     *
+     * @param borrow the borrow object containing information about a book borrow transaction
+     */
     public void setBorrow(Borrow borrow) {
         this.borrow = borrow;
         populateFields();
     }
 
+    /**
+     * Populates various fields in the user interface with data from the current borrow instance.
+     *
+     * This method is used to set the values of date pickers and labels based on the data retrieved
+     * from the current {@code borrow} object. It sets the borrow date, due date, and return date
+     * (if available) in their respective date pickers. It also updates the status label with the
+     * string representation of the borrow status and the fine label with the fine amount.
+     *
+     * The borrow date and due date pickers are always set with the respective dates from the
+     * borrow object. If a return date is available, it is set in the return date picker; otherwise,
+     * the return date picker is cleared. The status label is updated to reflect the borrow status,
+     * and the fine label is updated to show the current fine amount followed by " VNĐ".
+     *
+     * This method assumes that the {@code borrow} field is not null; it performs no action if
+     * {@code borrow} is null. Therefore, it should be ensured that this method is called only
+     * when the {@code borrow} instance has been properly initialized.
+     */
     private void populateFields() {
         if (borrow != null) {
             borrowDatePicker.setValue(borrow.getBorrowDate());
@@ -85,8 +122,30 @@ public class UpdateBorrowController implements Initializable {
         }
     }
 
+    /**
+     * Handles the update process for a borrowing record. This method validates the input
+     * for borrow date, due date, and return date, ensuring correct date format and logical
+     * date relationships. It adjusts book quantities based on the transition between
+     * borrowing statuses and updates the borrowing record in the database.
+     *
+     * Performs the following actions:
+     * - Validates the due date and return date inputs for correct format and logical correctness.
+     * - Adjusts book quantities if there is a transition between BORROWING or OVERDUE and RETURNED or RETURNED_LATE statuses.
+     * - Updates the borrowing record in the database with the provided information and changes the status.
+     *
+     * Does not proceed with database updates if input validation fails, displaying appropriate error messages
+     * for invalid inputs.
+     *
+     * Utilizes the current session's user information to log who performed the update.
+     *
+     * Catches SQLException for any database-related issues and prints stack trace for any unexpected exceptions.
+     */
     @FXML
-    private void updateBorrow() {
+    protected void updateBorrow() {
+        if (borrow == null) {
+            System.err.println("Cannot update borrow: borrow object is not initialized.");
+            return;
+        }
         LocalDate borrowDate = borrowDatePicker.getValue();
         LocalDate dueDate = null;
         LocalDate returnDate = null;
@@ -180,37 +239,36 @@ public class UpdateBorrowController implements Initializable {
     }
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        dueDatePicker.setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        dueDatePicker.getEditor().setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-        returnDatePicker.getEditor().setOnMouseClicked(event -> {
-            hideErrorLabels();
-        });
-
-        setDatePickerFormat(borrowDatePicker);
-        setDatePickerFormat(dueDatePicker);
-        setDatePickerFormat(returnDatePicker);
-
-        borrowDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
-        dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
-        returnDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
-    }
-
-
+    /**
+     * Updates the status and fine labels of a borrow transaction based on the
+     * selected borrow, due, and return dates.
+     *
+     * The method checks for various validation conditions:
+     * 1. Whether the due date is before the borrow date.
+     * 2. Whether the return date is before the borrow date or in the future.
+     * 3. Whether the loan period exceeds 90 days.
+     *
+     * If any of these conditions are met, the method exits without updating
+     * the status or fine.
+     *
+     * If the borrow is still ongoing or overdue without a return:
+     * - If today's date is past the due date, sets status to OVERDUE and
+     *   calculates a fine based on the overdue days, capped at 100,000.
+     * - Otherwise, sets status to BORROWING with no fine.
+     *
+     * If a return date is present:
+     * - If the return date is past the due date, sets status to RETURNED_LATE and
+     *   calculates a fine based on the overdue days, capped at 100,000.
+     * - Otherwise, sets status to RETURNED with no fine.
+     *
+     * The method updates the statusLabel with the new status and the
+     * fineLabel with the calculated fine.
+     */
     private void updateStatus() {
         LocalDate borrowDate = borrowDatePicker.getValue() == null ? borrow.getBorrowDate() : borrowDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue() == null ? borrow.getDueDate() : dueDatePicker.getValue();
         LocalDate returnDate = returnDatePicker.getValue();
-        boolean validation = false;
-
-        if (dueDate == null || dueDate.isBefore(borrowDate)) {
-            validation = true;
-        }
+        boolean validation = dueDate == null || dueDate.isBefore(borrowDate);
 
         if (validation) {
             return;
@@ -264,11 +322,39 @@ public class UpdateBorrowController implements Initializable {
     }
 
 
-
-
+    /**
+     * Clears the text of the error labels associated with borrow date, due date, and return date.
+     * This method is used to hide any existing error messages that may have been displayed
+     * due to invalid input or any other issues related to the date fields.
+     */
     private void hideErrorLabels() {
         borrowDateErrorLabel.setText("");
         dueDateErrorLabel.setText("");
         returnDateErrorLabel.setText("");
+    }
+
+    /**
+     * Initializes and configures the behavior and format of date picker components.
+     * Sets mouse click events on date pickers to hide error labels and applies a specific date format.
+     * Adds listeners to the value properties of the date pickers to update the borrow status.
+     */
+    private void initDatePicker() {
+        dueDatePicker.setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        dueDatePicker.getEditor().setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+        returnDatePicker.getEditor().setOnMouseClicked(event -> {
+            hideErrorLabels();
+        });
+
+        setDatePickerFormat(borrowDatePicker);
+        setDatePickerFormat(dueDatePicker);
+        setDatePickerFormat(returnDatePicker);
+
+        borrowDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
+        dueDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
+        returnDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> updateStatus());
     }
 }

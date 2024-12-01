@@ -252,7 +252,7 @@
                               <AnchorPane prefHeight="85.0" prefWidth="682.0" styleClass="design-Anchor2">
                                  <children>
                                     <Label layoutX="14.0" layoutY="4.0" opacity="0.39" style="-fx-font-weight: 500;" text="Gender" />
-                                              <ComboBox fx:id="genderComboBox" layoutX="10.0" layoutY="28.0" prefHeight="34.0" prefWidth="180.0" promptText="Gender" styleClass="combo-box" />
+                                              <ComboBox fx:id="genderComboBox" layoutX="10.0" layoutY="28.0" prefHeight="34.0" prefWidth="180.0" promptText="Gender" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane prefHeight="70.0" prefWidth="538.0" styleClass="design-Anchor3">

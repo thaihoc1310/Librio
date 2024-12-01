@@ -25,37 +25,81 @@ import static librio.util.DatabaseUtil.*;
 import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.setDatePickerFormat;
 
+/**
+ * The CreateBorrowController class is responsible for managing the borrowing process
+ * of books in a library system. This class is implemented as a JavaFX controller
+ * and handles various user interactions via the UI. The primary responsibilities
+ * include validating user inputs for creating borrow transactions, updating the
+ * system's database accordingly, and managing UI components such as buttons,
+ * text fields, and labels.
+ */
 public class CreateBorrowController implements Initializable {
     @FXML
-    private Button createButton;
+    protected Button createButton;
 
     @FXML
-    private TextField emailTextField, bookIsbnTextField, bookTitleTextField, nameTextField;
+    protected TextField emailTextField;
+    @FXML
+    protected TextField bookIsbnTextField;
+    @FXML
+    protected TextField bookTitleTextField;
+    @FXML
+    protected TextField nameTextField;
 
     @FXML
-    private ImageView bookImageView;
+    protected ImageView bookImageView;
 
     @FXML
-    private Label bookIsbnErrorLabel, emailErrorLabel, dueDateErrorLabel, userAlreadyBorrowErrorLabel;
+    protected Label bookIsbnErrorLabel;
+    @FXML
+    protected Label emailErrorLabel;
+    @FXML
+    protected Label dueDateErrorLabel;
+    @FXML
+    protected Label userAlreadyBorrowErrorLabel;
 
     @FXML
-    private DatePicker borrowDatePicker, dueDatePicker;
+    protected DatePicker borrowDatePicker;
+    @FXML
+    protected DatePicker dueDatePicker;
 
 
+    /**
+     * Initializes the controller class by setting up the date picker, hiding error labels,
+     * and adding listeners to UI components for user interaction.
+     *
+     * @param location The location used to resolve relative paths for the root object, or
+     *                 null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the
+     *                  root object was not localized.
+     */
     public void initialize(URL location, ResourceBundle resources) {
         initDatePicker();
         hideErrorLabels();
         addListeners();
     }
 
+    /**
+     * Initializes the date pickers for borrowing and setting due dates.
+     * The borrowing date picker is set to the current date, and the due
+     * date picker is set to 30 days from the current date. The format
+     * for displaying dates in the due date picker is also set.
+     */
     private void initDatePicker() {
         borrowDatePicker.setValue(LocalDate.now());
         dueDatePicker.setValue(LocalDate.now().plusDays(30));
         setDatePickerFormat(dueDatePicker);
     }
 
+    /**
+     * Handles the creation of a new borrow transaction for a library system.
+     * This method validates user input such as email, book ISBN, and date formats before processing.
+     * If validation fails, appropriate error messages are displayed on the UI.
+     * If all validations pass, the method records the borrow transaction in the database and updates the book's available copies.
+     * Utilizes various helper methods to verify user and book information, and to check constraints related to roles and borrowing periods.
+     */
     @FXML
-    private void createBorrow() {
+    protected void createBorrow() {
         String email = emailTextField.getText();
         String isbn = bookIsbnTextField.getText();
         String dueDateString = dueDatePicker.getEditor().getText();
@@ -161,11 +205,33 @@ public class CreateBorrowController implements Initializable {
     }
 
 
+    /**
+     * Handles the action of navigating back to the previous screen.
+     * This method is triggered by the associated FXML control, typically a back button,
+     * and closes the current stage, effectively returning the user to the previous state.
+     */
     @FXML
     private void back() {
         closeStage();
     }
 
+    /**
+     * Adds event listeners to various UI components to manage user interactions and input validation.
+     *
+     * This method sets mouse click event handlers for several text fields and a date picker to
+     * trigger `hideErrorLabels()`, which hides error labels. It also adds text change listeners
+     * to `emailTextField` and `bookIsbnTextField` to handle logical operations based on user inputs.
+     *
+     * For `emailTextField`, the listener checks if the input is a valid, non-empty email address
+     * and if the email exists in the database. If these conditions are met, it retrieves the user
+     * details and updates `nameTextField` with the user's name. Otherwise, it clears the name field.
+     *
+     * For `bookIsbnTextField`, the listener checks if the input is a valid ISBN (either 10 or 13 digits)
+     * and if the corresponding book exists. If valid, it updates `bookTitleTextField` with the book's title,
+     * retrieves and displays the book's image if available, or loads a default image otherwise.
+     * This ensures that user inputs are validated in real-time and related field values are auto-filled
+     * when a valid input matches existing records.
+     */
     private void addListeners() {
         emailTextField.setOnMouseClicked(event -> {hideErrorLabels();});
         bookIsbnTextField.setOnMouseClicked(event -> {hideErrorLabels();});
@@ -206,11 +272,20 @@ public class CreateBorrowController implements Initializable {
 
     }
 
+    /**
+     * Closes the current window or stage associated with the createButton.
+     * This method is typically used to close the window after an operation is completed,
+     * or to navigate back from the current view.
+     */
     private void closeStage() {
         Stage stage = (Stage) createButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Clears the text of all error labels related to email, book ISBN, due date, and previous borrow conditions.
+     * This method is typically called to reset the UI state by hiding any error messages displayed to the user.
+     */
     private void hideErrorLabels() {
         emailErrorLabel.setText("");
         bookIsbnErrorLabel.setText("");

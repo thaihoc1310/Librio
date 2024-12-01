@@ -44,6 +44,13 @@ import static librio.util.DatabaseUtil.getTotalUserCount;
 import static librio.util.DatabaseUtil.getUserById;
 import static librio.util.DesignUtil.*;
 
+/**
+ * The ManageUserController class is responsible for managing and handling user-related
+ * operations within the application. It serves as the controller for user management,
+ * interacting with the user interface to provide functionalities such as creating,
+ * updating, viewing, and deleting users. Additionally, it facilitates navigation to
+ * other scenes related to the user management lifecycle.
+ */
 public class ManageUserController implements Initializable {
 
     private final int rowsPerPage = 11;
@@ -81,6 +88,16 @@ public class ManageUserController implements Initializable {
     private int currentPage = 0;
     private String keyword;
 
+    /**
+     * Initializes the controller class. This method is automatically called after the FXML file
+     * has been loaded. The initialization includes setting up user avatar and name, configuring table
+     * column bindings, setting up pagination, and adding functionality for searching users.
+     *
+     * @param location The location used to resolve relative paths for the root object, or null if
+     *        the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object
+     *        was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setAvatarAndUserName(avatarUser, userNameUser);
@@ -100,6 +117,18 @@ public class ManageUserController implements Initializable {
         });
     }
 
+    /**
+     * Adds a set of buttons (Detail, Update, Delete) to each row of a TableView's action column.
+     * These buttons are capable of performing specific actions for the user entity represented by each row
+     * in the user table.
+     *
+     * The Detail button is used to open the user detail scene for the selected user.
+     * The Update button is used to open a scene where the selected user's information can be updated.
+     * The Delete button is used to open a scene to confirm the deletion of the selected user.
+     *
+     * Each button is styled with specific width and height settings and is placed together in an HBox
+     * with a spacing of 20 units between them. The buttons are centered within their TableCell.
+     */
     private void addButtonToTable() {
         Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<>() {
             @Override
@@ -160,6 +189,18 @@ public class ManageUserController implements Initializable {
     }
 
 
+    /**
+     * Loads a list of users from the database based on a search keyword and
+     * pagination settings. Users are populated into an observable list which
+     * is then set to a table view, also updating the pagination controls.
+     *
+     * @param keyword the search keyword to filter users by their name, email,
+     *        or phone number. If null or empty, all users are loaded without
+     *        filtering.
+     * @param pageIndex the index of the page to load, used for pagination.
+     *        Determines the offset in the database query to load the appropriate
+     *        subset of users.
+     */
     void loadUsers(String keyword, int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             userList = FXCollections.observableArrayList();
@@ -203,12 +244,34 @@ public class ManageUserController implements Initializable {
     }
 
 
+    /**
+     * Creates a new page for the pagination component by setting the current page index
+     * and loading the corresponding user data.
+     *
+     * @param pageIndex the index of the page to be created
+     * @return a new instance of a BorderPane representing the page
+     */
     private Node createPage(int pageIndex) {
         currentPage = pageIndex;
         loadUsers(searchTextField.getText().trim(), pageIndex);
         return new BorderPane();
     }
 
+    /**
+     * Opens a new scene for creating a user in the application.
+     * This method loads the 'CreateUser.fxml' file using an FXMLLoader,
+     * sets up a new stage with a transparent style, and displays it
+     * as a modal dialog.
+     *
+     * The current window's brightness is temporarily reduced while the
+     * new user creation scene is open. The brightness and UI effect is
+     * restored once the dialog is closed.
+     *
+     * After the scene is closed, it will refresh the user list using the
+     * current search keyword and page index.
+     *
+     * Catches and prints an IOException if loading the FXML file fails.
+     */
     @FXML
     private void openCreateUserScene() {
         try {
@@ -238,6 +301,11 @@ public class ManageUserController implements Initializable {
         }
     }
 
+    /**
+     * Opens the Update User Scene, allowing the user information to be modified.
+     *
+     * @param user The User object containing the information to be updated in the scene.
+     */
     @FXML
     private void openUpdateUserScene(User user) {
         try {
@@ -269,6 +337,12 @@ public class ManageUserController implements Initializable {
         }
     }
 
+    /**
+     * Opens the user detail scene in a modal window, displaying detailed information about the specified user.
+     * This method applies a dimming effect to the main window while the modal window is open.
+     *
+     * @param user the User object containing details to be displayed in the user detail scene
+     */
     @FXML
     private void openUserDetailScene(User user) {
         try {
@@ -299,6 +373,13 @@ public class ManageUserController implements Initializable {
         }
     }
 
+    /**
+     * Opens the "Delete User" scene for the specified user. This method loads a new FXML scene that allows
+     * for the deletion of a user, applying a brightness adjustment to the current stage while the scene is open.
+     *
+     * @param user the User object to be passed to the delete user scene. This user is targeted for deletion,
+     *             allowing the new scene to display relevant information about the user.
+     */
     @FXML
     private void openDeleteUserScene(User user) {
         try {
@@ -331,6 +412,15 @@ public class ManageUserController implements Initializable {
         }
     }
 
+    /**
+     * Opens the logout scene by loading the Logout.fxml file and displaying it in a modal Stage.
+     * The method first sets the opacity of the main stack pane to give a dimmed background effect.
+     * It positions the new stage centered over the current stage with undecorated styling and
+     * ensures the logout scene is modal with respect to the current window. It also clips the
+     * logout window to have rounded corners. Upon closing the modal logout scene, it refreshes
+     * the user list by calling the loadUsers method with the current keyword and page index.
+     * Handles IOException if the FXMLLoader fails to load the resource.
+     */
     @FXML
     private void openLogOutScene() {
         try {
@@ -366,21 +456,42 @@ public class ManageUserController implements Initializable {
     }
 
 
+    /**
+     * Opens the Manage Book scene in the application. This method switches the current scene
+     * to the Manage Book view, using the provided FXML file path to load the new view.
+     * It is triggered by a user action on the related UI component, such as the create user button.
+     */
     @FXML
     private void openManageBookScene() {
         switchScene(createUserButton,"/fxml/admin/ManageBook.fxml");
     }
 
+    /**
+     * Opens the Manage Borrow Scene by switching the current scene to the specified FXML file.
+     * This method is triggered by a UI event and transitions the user to the "Manage Borrow" interface.
+     * It utilizes the switchScene utility method to change the current scene.
+     */
     @FXML
     private void openManageBorrowScene() {
         switchScene(createUserButton,"/fxml/admin/ManageBorrow.fxml");
     }
 
+    /**
+     * Opens the admin dashboard scene by switching the current scene to the AdDashboard.fxml view.
+     * The method leverages the switchScene utility method to handle the transition.
+     * It is triggered through a JavaFX FXML mechanism, typically by a user interaction event.
+     */
     @FXML
     private void openAdDashboardScene() {
         switchScene(createUserButton,"/fxml/admin/AdDashboard.fxml");
     }
 
+    /**
+     * Handles the action of opening the Profile Settings scene.
+     * This method is triggered by an FXML event and performs a scene switch
+     * to the Profile Settings interface, defined in the FXML file
+     * located at '/fxml/admin/ProfileSettings.fxml'.
+     */
     @FXML
     private void openProfileSettingsScene() {
         switchScene(createUserButton,"/fxml/admin/ProfileSettings.fxml");

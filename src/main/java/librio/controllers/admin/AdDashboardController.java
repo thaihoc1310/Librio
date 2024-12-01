@@ -31,6 +31,14 @@ import java.util.*;
 import static librio.util.DesignUtil.setAvatarAndUserName;
 import static librio.util.DesignUtil.switchScene;
 
+/**
+ * The AdDashboardController class serves as the controller for the administrative dashboard
+ * within the application. This class is responsible for initializing the dashboard interface,
+ * updating and displaying statistical data related to books and users, and configuring visual
+ * elements like charts and labels for a comprehensive user experience.
+ *
+ * Implements the Initializable interface to set up UI components and data upon loading.
+ */
 public class AdDashboardController implements Initializable {
     @FXML
     private Button openManageBookButton;
@@ -54,12 +62,30 @@ public class AdDashboardController implements Initializable {
     private BarChart<String, Number> barChart;
 
 
+    /**
+     * Initializes the AdDashboardController by setting up the user's avatar and username,
+     * and populating the dashboard with current data for display in the cards and charts.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setAvatarAndUserName(avatarUser, userNameUser);
         addDataToDashboardCardAndChart();
     }
 
+    /**
+     * Retrieves category data for a pie chart visualization. The method queries
+     * the database to get the sum of book quantities grouped by category.
+     * It calculates the percentage contribution of each category towards the total
+     * quantity and creates a list of PieChart.Data instances representing this
+     * information.
+     *
+     * @return a list of PieChart.Data objects where each object contains the category
+     *         name with its percentage representation and the total quantity for that
+     *         category in the dataset.
+     */
     private List<PieChart.Data> getCategoryData() {
         List<PieChart.Data> categoryData = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -93,6 +119,37 @@ public class AdDashboardController implements Initializable {
         return categoryData;
     }
 
+    /**
+     * Updates the dashboard by adding and displaying current data related
+     * to books and user statistics on cards and charts within the dashboard interface.
+     *
+     * This method performs the following actions:
+     *
+     * 1. Retrieves statistical data related to books and users:
+     *    - Total borrowed books.
+     *    - Available books.
+     *    - Combined total of borrowed and available books.
+     *    - Total books in the database.
+     *    - Total number of users.
+     *
+     * 2. Updates the labels on the dashboard cards with the retrieved data:
+     *    - Updates the total books label.
+     *    - Updates the total book copies label.
+     *    - Updates the total users label.
+     *    - Updates the total borrows label.
+     *
+     * 3. Configures and populates a pie chart:
+     *    - Clears previous data and sets the label line length.
+     *    - Retrieves and adds new category data to the chart.
+     *    - Sets the legend visibility to false.
+     *
+     * 4. Configures and populates a bar chart displaying the number of books
+     *    borrowed over the last 12 months:
+     *    - Configures the X and Y axes with appropriate labels.
+     *    - Sets chart title and legend visibility.
+     *    - Populates the chart with monthly borrow counts from the past 12 months.
+     *    - Adds the data series to the chart.
+     */
     public void addDataToDashboardCardAndChart() {
         int borrowedBooks = DatabaseUtil.getTotalBorrowedBooks();
         int availableBooks = DatabaseUtil.getAvailableBooks();
@@ -144,6 +201,14 @@ public class AdDashboardController implements Initializable {
         barChart.getData().add(series);
     }
 
+    /**
+     * Retrieves a list of month-year strings representing the last 12 months
+     * from the current date. Each entry in the list is formatted as "MM-yyyy".
+     *
+     * @return a list of strings where each string represents a month and year
+     *         in the format "MM-yyyy" for the past 12 months including the
+     *         current month.
+     */
     private List<String> getAllMonthsInLast12Months() {
         List<String> months = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
@@ -155,6 +220,15 @@ public class AdDashboardController implements Initializable {
         return months;
     }
 
+    /**
+     * Retrieves a list of formatted month-year labels for the past 12 months.
+     * This method queries the database to fetch distinct year and month values
+     * from the "borrows" table for entries dated within the last 12 months.
+     * The results are grouped and ordered in descending order from the current date.
+     *
+     * @return a List of strings representing the month-year labels in the format "MM-YYYY",
+     *         ordered from the most recent month to the earliest within the last 12 months.
+     */
     private List<String> getMonthYearLabels() {
         List<String> monthYearLabels = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -179,6 +253,16 @@ public class AdDashboardController implements Initializable {
         return monthYearLabels;
     }
 
+    /**
+     * Retrieves the monthly borrow counts for the past 12 months from the database.
+     * This method calculates the number of books borrowed each month over the last
+     * year and returns a list containing these counts, ordered from the latest month
+     * to the earliest.
+     *
+     * @return a list of integers where each integer represents the count of books
+     *         borrowed for a specific month, ordered from the most recent month to
+     *         the least recent within the last 12 months.
+     */
     private List<Integer> getBorrowCounts() {
         List<Integer> borrowCounts = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -200,26 +284,64 @@ public class AdDashboardController implements Initializable {
         return borrowCounts;
     }
 
+    /**
+     * Opens the Manage Book scene within the admin dashboard.
+     * This method switches the current view to the ManageBook.fxml
+     * UI when the associated button is clicked. It uses the
+     * switchScene method to manage the transition, taking in the
+     * button that initiated the action and the path to the FXML file
+     * for the Manage Book interface.
+     */
     @FXML
     private void openManageBookScene() {
         switchScene(openManageBookButton,"/fxml/admin/ManageBook.fxml");
     }
 
+    /**
+     * Opens the manage user scene for the admin dashboard. This method switches
+     * the current view to the ManageUser.fxml scene when the associated button
+     * is clicked. It utilizes the switchScene method to handle the scene transition,
+     * passing the button that triggered the action and the path to the FXML resource.
+     */
     @FXML
     private void openManageUserScene() {
         switchScene(openManageBookButton,"/fxml/admin/ManageUser.fxml");
     }
 
+    /**
+     * Opens the manage borrow scene within the admin dashboard. This method is
+     * triggered by interacting with the openManageBookButton. It utilizes the
+     * switchScene method to change the current view to the ManageBorrow.fxml file,
+     * ensuring a seamless transition within the application.
+     */
     @FXML
     private void openManageBorrowScene() {
         switchScene(openManageBookButton,"/fxml/admin/ManageBorrow.fxml");
     }
 
+    /**
+     * Opens the profile settings scene for the admin dashboard. This method
+     * switches the current view to the ProfileSettings.fxml scene when the
+     * associated button is clicked. It utilizes the switchScene method to
+     * handle the scene transition, passing the button that triggered the
+     * action and the path to the FXML resource.
+     */
     @FXML
     private void openProfileSettingsScene() {
         switchScene(openManageBookButton,"/fxml/admin/ProfileSettings.fxml");
     }
 
+    /**
+     * Opens the logout scene in a modal window. The method loads the Logout.fxml
+     * file, initializes the LogoutController, and displays the logout window as a
+     * modal dialog centered over the current window. It sets the opacity of the
+     * main application window to 0.45 while the logout window is active.
+     * When the logout window is closed, the main application window regains full
+     * opacity.
+     *
+     * This method catches and prints any IOException that occurs during the
+     * loading of the FXML file.
+     */
     @FXML
     private void openLogOutScene() {
         try {

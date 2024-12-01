@@ -40,6 +40,13 @@ import java.util.ResourceBundle;
 import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.*;
 
+/**
+ * The ProfileSettingsController class manages the user interface for editing
+ * and updating user profile settings. This class allows users to modify
+ * personal information such as their avatar, name, email, phone number, and
+ * other related details. It also provides navigation to other scenes related
+ * to user management and profile settings.
+ */
 public class ProfileSettingsController implements Initializable {
     private final User loggedInUser = Session.getInstance().getLoggedInUser();
 
@@ -61,6 +68,16 @@ public class ProfileSettingsController implements Initializable {
     private AnchorPane namePane, emailPane, phonePane;
     private String avatarFilePath, previousAvatarFilePath;
 
+    /**
+     * Initializes the controller with the given URL and resource bundle.
+     *
+     * This method performs several initialization tasks, including setting the
+     * avatar and user name, initializing field data, and adding necessary listeners
+     * for user interaction within the user interface.
+     *
+     * @param url the location to resolve relative paths for the root object, or null if unknown
+     * @param resourceBundle the resources used to localize the root object, or null if not applicable
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setAvatarAndUserName(avatarUser, userNameLabel);
@@ -68,6 +85,13 @@ public class ProfileSettingsController implements Initializable {
         addListeners();
     }
 
+    /**
+     * Allows the user to change their avatar by selecting an image file from their file system.
+     * Opens a file chooser dialog for selecting an image with supported extensions
+     * (PNG, JPG, JPEG). If a valid file is chosen, it updates the avatar display
+     * to show the new image cropped and clipped to a circle of radius 75.
+     * Updates the internal file path states to reflect the newly selected avatar image.
+     */
     @FXML
     void changeAvatar() {
         FileChooser fileChooser = new FileChooser();
@@ -86,6 +110,22 @@ public class ProfileSettingsController implements Initializable {
         }
     }
 
+    /**
+     * Saves the user profile information by validating input fields and updating details
+     * in the database. Upon successfully updating the user profile, it also updates the
+     * avatar and provides a notification message.
+     *
+     * The method performs the following:
+     * - Validates the inputs for name, email, phone number, and date of birth fields.
+     * - Checks that the email is in the correct format and does not already exist in
+     *   the database unless it belongs to the logged-in user.
+     * - Ensures phone numbers are 10 digits long.
+     * - Validates date of birth format and ensures the date is not in the future.
+     * - If validation passes, updates the user's profile information in the database.
+     * - Copies the new avatar image if provided and deletes the old one.
+     * - Displays appropriate error messages for validation failures.
+     * - Provides a success notification after successful profile update.
+     */
     @FXML
     private void save() {
         String name = nameTextField.getText();
@@ -198,6 +238,22 @@ public class ProfileSettingsController implements Initializable {
         }
     }
 
+    /**
+     * Adds listeners to various UI components to manage UI behavior and interaction.
+     *
+     * Listeners are registered on several TextField components to handle mouse click events,
+     * text property changes, and focus changes. These components include memberIdTextField,
+     * nameTextField, emailTextField, and phoneNumberTextField. Mouse click events hide error
+     * and notification labels, and for non-empty fields, show corresponding delete icons
+     * and apply specific border styles.
+     *
+     * Text property change listeners manage the visibility of delete icons based on whether
+     * the text fields are empty or not. Focus change listeners reset the visibility of delete
+     * icons and clear the applied border styles upon losing focus.
+     *
+     * Additional mouse click listeners are registered on genderComboBox, birthOfDatePicker,
+     * and addressTextField to hide error and notification labels.
+     */
     private void addListeners() {
         memberIdTextField.setOnMouseClicked(event -> hideErrorAndNotificationLabels());
 
@@ -276,11 +332,26 @@ public class ProfileSettingsController implements Initializable {
         });
     }
 
+    /**
+     * Resets the error labels and notification message in the user interface.
+     *
+     * This method invokes hideErrorLabels() to clear all text from error labels,
+     * indicating no errors are present. It also clears the notification label,
+     * setting its text to an empty string, to remove any notification messages
+     * displayed to the user.
+     */
     private void hideErrorAndNotificationLabels() {
         hideErrorLabels();
         notification.setText("");
     }
 
+    /**
+     * Clears the text of error labels related to user input fields and notifications.
+     * This method is typically used to reset the state of the UI by removing any
+     * validation error messages or notifications that may have been previously set.
+     * It targets the labels for name, email, phone number, and date of birth errors,
+     * as well as any general notifications.
+     */
     private void hideErrorLabels() {
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");
@@ -289,26 +360,68 @@ public class ProfileSettingsController implements Initializable {
         notification.setText("");
     }
 
+    /**
+     * Opens the advertisement dashboard scene.
+     * This method switches the current scene to the advertisement dashboard FXML layout.
+     * It is typically triggered by a user action, such as clicking a button associated
+     * with navigating to the advertisement dashboard.
+     */
     @FXML
     private void openAdDashboardScene() {
         switchScene(saveButton, "/fxml/admin/AdDashboard.fxml");
     }
 
+    /**
+     * Handles the event of opening the Manage Borrow scene.
+     * This method is triggered by the UI and switches the current scene
+     * to the ManageBorrow.fxml view. It uses the saveButton as the reference
+     * component to obtain the current window and scene for the switch.
+     */
     @FXML
     private void openManageBorrowScene() {
         switchScene(saveButton, "/fxml/admin/ManageBorrow.fxml");
     }
 
+    /**
+     * Opens the Manage Book scene in the application. This method is triggered
+     * when the corresponding user interface action is invoked, typically a button click.
+     * It utilizes the {@code switchScene} utility method to transition from the current
+     * scene to the Manage Book scene specified by the FXML path.
+     *
+     * The method does not take any parameters directly, but relies on the
+     * {@code saveButton} as a reference for the current stage's {@code Scene}.
+     * As a result, it updates the scene's root to the new layout defined in
+     * "/fxml/admin/ManageBook.fxml".
+     */
     @FXML
     private void openManageBookScene() {
         switchScene(saveButton, "/fxml/admin/ManageBook.fxml");
     }
 
+    /**
+     * Opens the Manage User scene in the application. This method transitions the view
+     * to the Manage User interface by utilizing the {@code switchScene} method.
+     * It uses the {@code saveButton} to obtain the current stage and window context
+     * for the scene switch operation.
+     */
     @FXML
     private void openManageUserScene() {
         switchScene(saveButton, "/fxml/admin/ManageUser.fxml");
     }
 
+    /**
+     * Opens the log out scene in a new modal window. This method loads
+     * the Logout.fxml file and sets up a new stage with specified dimensions
+     * and styles. It then shows the new stage as a modal dialog that blocks
+     * interaction with other windows until it is closed.
+     *
+     * The method also retrieves the current stage, sets it as the owner of
+     * the new stage, and applies certain UI properties such as opacity levels
+     * and window clipping for styling.
+     *
+     * In case of an IOException during the loading of the FXML file, it will
+     * print the stack trace of the exception.
+     */
     @FXML
     private void openLogOutScene() {
         try {
@@ -347,11 +460,31 @@ public class ProfileSettingsController implements Initializable {
         }
     }
 
+    /**
+     * Opens the change password scene by switching the current scene to the
+     * ChangePassword.fxml layout. This method is triggered via a JavaFX FXML
+     * control and makes use of the switchScene utility function to transition
+     * to the specified layout.
+     */
     @FXML
     private void openChangePasswordScene() {
         switchScene(saveButton, "/fxml/admin/ChangePassword.fxml");
     }
 
+    /**
+     * Initializes the profile fields with the current user's data. This method sets the
+     * values for the text fields, combo boxes, date pickers, and loads the user's avatar.
+     * It configures event handlers for delete buttons to clear text fields and formats
+     * the date picker display.
+     *
+     * This method involves setting the various UI components such as:
+     * - Populating a combo box with gender options from an enum.
+     * - Retrieving and setting user details like email, name, phone number, address, gender, and birthdate.
+     * - Loading and displaying the user's avatar image while providing a default image if the specified avatar is not found.
+     * - Applying a circular crop effect to the avatar image for consistent display aesthetics.
+     * - Configuring the date picker to display dates in a specific format.
+     * - Assigning mouse click handlers to delete buttons to clear associated text fields.
+     */
     private void initFieldData() {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
         emailTextField.setText(loggedInUser.getEmail());
@@ -382,6 +515,11 @@ public class ProfileSettingsController implements Initializable {
         deletePhoneNumber.setOnMouseClicked(e -> deleteTextField(phoneNumberTextField));
     }
 
+    /**
+     * Clears the content of the specified TextField.
+     *
+     * @param textField the TextField to be cleared
+     */
     private void deleteTextField(TextField textField) {
         textField.clear();
     }
