@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -348,11 +349,26 @@ public class BookDetailController implements Initializable {
                 borrowerNameText.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
                 StringBuilder stars = new StringBuilder();
+                StringBuilder stars2 = new StringBuilder();
+
                 for (int i = 0; i < rating; i++) {
                     stars.append("★");
                 }
+
+                for (int i = rating; i < 5; i++) {
+                    stars2.append("★");
+                }
+
                 Text ratingText = new Text("Rating: " + stars);
                 ratingText.setStyle("-fx-font-size: 12; -fx-fill: #FFB700;");
+
+                Text ratingTextNotFill = new Text(stars2.toString());
+                ratingTextNotFill.setStyle("-fx-font-size: 12; -fx-fill: #acacac;");
+
+                HBox ratingBox = new HBox();
+                ratingBox.setSpacing(0);
+                ratingBox.getChildren().addAll(ratingText, ratingTextNotFill);
+
 
                 LocalDateTime formattedDate = LocalDateTime.ofInstant(createdAtInstant, ZoneOffset.UTC);
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -362,7 +378,7 @@ public class BookDetailController implements Initializable {
                 Text commentText = new Text(about);
                 commentText.setStyle("-fx-font-size: 13; -fx-fill: #333333;");
 
-                detailsBox.getChildren().addAll(borrowerNameText, ratingText, dateText, commentText);
+                detailsBox.getChildren().addAll(borrowerNameText, ratingBox, dateText, commentText);
                 feedbackBox.getChildren().addAll(avatar, detailsBox);
                 feedbackContainer.getChildren().add(feedbackBox);
             }
