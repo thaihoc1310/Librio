@@ -117,6 +117,8 @@ public class BorrowedController implements Initializable {
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if (newTab != null) {
                 searchTextField.clear();
+                loadBorrowBookFromDatabase("");
+                loadReturnedBookFromDatabase("");
             }
         });
         setAvatarAndUserName();
