@@ -139,14 +139,20 @@ public class NotificationController {
                 authorText.setWrappingWidth(200);
                 authorText.setFont(Font.font(12));
 
-                Label notificationLabel = new Label("This book is due soon. Please return it on time to avoid late fees.");
+                Label notificationLabel = new Label("This book is overdue. Please return it early to avoid heavy fines.");
                 notificationLabel.setPrefSize(277, 52);
                 notificationLabel.setWrapText(true);
                 notificationLabel.setLayoutX(104);
                 notificationLabel.setLayoutY(50);
 
-                bookPane.getChildren().addAll(separator, bookImageView, titleLabel, authorText, notificationLabel);
+                double fine = book.getFine();
+                Label fineLabel = new Label("Fine: " + String.valueOf(fine) + "VND" );
+                fineLabel.setLayoutX(104);
+                fineLabel.setLayoutY(100);
+                fineLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+                bookPane.getChildren().addAll(separator, bookImageView, titleLabel, authorText, notificationLabel, fineLabel);
                 dueBookBox.getChildren().add(bookPane);
+
             }
 
         }
@@ -220,6 +226,7 @@ public class NotificationController {
     public int getTotalOverdueAndUpcomingBooks() {
         return overdueBooks.size() + upcomingDueBooks.size();
     }
+
     private void openBorrowedBooksPage(String borrowId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/member/Borrowed.fxml"));
