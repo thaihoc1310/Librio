@@ -242,8 +242,8 @@ public class BorrowedController implements Initializable {
     }
 
     private void displayBorrowingBooks(List<BorrowedBook> booksToDisplay) {
+
         if (!booksToDisplay.isEmpty()) {
-            bookBorrowVBox.getChildren().clear();
 
             for (BorrowedBook book : booksToDisplay) {
                 AnchorPane anchorPane = new AnchorPane();
@@ -637,17 +637,17 @@ public class BorrowedController implements Initializable {
 
 
             int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                updateQuantityBook(borrowedBook.getId());
-                borrowBookList.remove(borrowedBook);
-                borrowedBook.setStatus(newStatus);
-                borrowedBook.setReturnDate(today);
-                returnedBookList.add(borrowedBook);
-                displayBorrowingBooks(borrowBookList);
-                displayReturnedBooks(returnedBookList);
-            } else {
-                System.out.println("Trả sách thất bại!");
-            }
+
+            updateQuantityBook(borrowedBook.getId());
+            borrowBookList.remove(borrowedBook);
+            borrowedBook.setStatus(newStatus);
+            borrowedBook.setReturnDate(today);
+            returnedBookList.add(borrowedBook);
+            displayBorrowingBooks(borrowBookList);
+            displayReturnedBooks(returnedBookList);
+
+            System.out.println("Trả sách thất bại!");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
