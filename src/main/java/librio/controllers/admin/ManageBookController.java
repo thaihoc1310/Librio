@@ -85,15 +85,15 @@ public class ManageBookController implements Initializable {
 
     private String keyword = null;
 
-    public String getKeyword(){
-        return keyword;
-    }
 
-    public int getCurrentPage(){
-        return currentPage;
-    }
-
-
+    /**
+     * Initializes the ManageBookController by setting up the avatar and username,
+     * configuring table column property factories, setting up pagination, and adding
+     * interactive buttons to the table.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setAvatarAndUserName(avatarUser, userNameUser);
@@ -115,6 +115,18 @@ public class ManageBookController implements Initializable {
     }
 
 
+    /**
+     * Adds a column of buttons to the table for each book entry. The buttons
+     * include "Detail", "Update", and "Delete". Each button is set to perform
+     * an action when clicked:
+     *
+     * - The "Detail" button opens the book detail scene for the selected book.
+     * - The "Update" button opens the update book scene for the selected book.
+     * - The "Delete" button opens the delete book scene for the selected book.
+     *
+     * The buttons are displayed in a horizontal box with a set alignment and spacing.
+     * The method configures the cell factory for the action column to include these buttons.
+     */
     private void addButtonToTable() {
         Callback<TableColumn<Book, Void>, TableCell<Book, Void>> cellFactory = new Callback<TableColumn<Book, Void>, TableCell<Book, Void>>() {
             @Override
@@ -174,6 +186,12 @@ public class ManageBookController implements Initializable {
 
 
 
+    /**
+     * Loads a list of books from the database based on the provided keyword and pagination index.
+     *
+     * @param keyword    The keyword used to filter the books by title, ISBN, or category. If null or empty, all books are retrieved.
+     * @param pageIndex  The index of the page of results to retrieve, used for pagination.
+     */
     public void loadBooks(String keyword, int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             bookList = FXCollections.observableArrayList();
@@ -207,6 +225,12 @@ public class ManageBookController implements Initializable {
                 String averageOfRating = resultSet.getString("average_of_rating");
                 Book book;
                 if (averageOfRating != null) {
+                    Double rating = 0.0;
+                    try {
+                        rating = Double.parseDouble(averageOfRating);  // Cố gắng chuyển thành số
+                    } catch (NumberFormatException e) {
+                        rating = 0.0;
+                    }
                    book = new Book(id, title, isbn, author, category, Double.parseDouble(averageOfRating));
                 }else {
                     book = new Book(id, title, isbn, author, category, 0.0);
@@ -224,12 +248,41 @@ public class ManageBookController implements Initializable {
     }
 
 
+    /**
+     * Creates and returns a new page for the pagination control.
+     *
+     * This method updates the current page index and loads books for that page
+     * based on the current search keyword.
+     *
+     * @param pageIndex the index of the page to be created
+     * @return a new Node representing the page that was created
+     */
     private Node createPage(int pageIndex) {
         currentPage = pageIndex;
         loadBooks(searchTextField.getText().trim(), pageIndex);
         return new BorderPane();
     }
 
+    /**
+     * Opens a new scene for adding a book within the application. The method loads
+     * the FXML layout for the 'CreateBook' scene and displays it in a new transparent
+     * modal window. The brightness of the current window is temporarily adjusted to
+     * indicate modal focus on the new scene. Once the modal is closed, the brightness
+     * is reset, and a method to reload the list of books is called to refresh any changes.
+     *
+     * The method performs the following actions:
+     * 1. Loads the 'CreateBook.fxml' layout using FXMLLoader.
+     * 2. Applies a darkening effect to the current window to highlight the modal window.
+     * 3. Configures and shows a new modal stage that is non-resizable and
+     *    transparent in style, ensuring it remains on top of the current window.
+     * 4. Waits for the modal window to close (blocking the current window).
+     * 5. Resets the brightness effect on the current window upon closure of the modal.
+     * 6. Reloads the book list to reflect any updates that may have occurred.
+     *
+     * Handles IOException during the FXML loading process by printing the stack trace.
+     *
+     * This method is annotated with @FXML to indicate its use with JavaFX scene graphs.
+     */
     @FXML
     private void openAddBookScene() {
         try {
@@ -261,6 +314,13 @@ public class ManageBookController implements Initializable {
     }
 
 
+    /**
+     * Opens the Book Detail scene in a new modal window with the details of the specified book.
+     * Adjusts the brightness of the current stage to highlight the modal window, and resets it
+     * when the modal window is closed.
+     *
+     * @param book the Book object containing the details to be displayed in the Book Detail scene
+     */
     @FXML
     private void openBookDetailScene(Book book) {
         try {
@@ -291,6 +351,12 @@ public class ManageBookController implements Initializable {
         }
     }
 
+    /**
+     * Opens the Update Book scene, allowing the user to edit the details of the selected book.
+     * The current window is dimmed while the update scene is active.
+     *
+     * @param book the Book object containing details to be updated
+     */
     @FXML
     private void openUpdateBookScene(Book book) {
         try {
@@ -325,6 +391,14 @@ public class ManageBookController implements Initializable {
     }
 
 
+    /**
+     * Opens the Delete Book scene in a new modal window. This method is triggered by a
+     * specific user action to initiate the process of deleting a book record. It applies a
+     * semi-transparent effect to the current stage while the Delete Book window is active.
+     *
+     * @param book the Book object to be deleted, which is passed to the DeleteBookController
+     *             for display and reference within the Delete Book scene.
+     */
     @FXML
     private void openDeleteBookScene(Book book) {
         try {
@@ -355,6 +429,17 @@ public class ManageBookController implements Initializable {
     }
 
 
+    /**
+     * Opens a new scene to add a book via an external API.
+     * <ul>
+     *   <li>Loads the 'AddBookApi.fxml' file to display the UI for adding books via an API.</li>
+     *   <li>Adjusts the brightness of the current window to indicate a modal dialog is open.</li>
+     *   <li>Initializes a new stage with transparent styling and sets it as a modal window.</li>
+     *   <li>On closing the modal, resets the brightness effect on the root node of the current scene.</li>
+     *   <li>Reloads the list of books upon closing the modal window to reflect any new additions.</li>
+     * </ul>
+     * Catches and logs an IOException if the FXMLLoader fails to load the FXML file.
+     */
     @FXML
     private void openAddBookApiScene() {
         try {
@@ -384,29 +469,70 @@ public class ManageBookController implements Initializable {
     }
 
 
+    /**
+     * Opens the "Manage User" scene within the application.
+     * This method is triggered by an event associated with the corresponding UI component
+     * and changes the current scene to display the user management interface.
+     * The scene is defined in the FXML file located at "/fxml/admin/ManageUser.fxml".
+     */
     @FXML
     private void openManageUserScene() {
         switchScene(addBookButton,"/fxml/admin/ManageUser.fxml");
     }
 
+    /**
+     * Opens the Manage Borrow scene in the application.
+     * <br>
+     * This method is triggered when the associated UI action occurs, typically when the user clicks
+     * the button associated with managing borrowing tasks in the application UI. It switches the current
+     * scene to the Manage Borrow interface.
+     * <br>
+     * The method utilizes the {@code switchScene} utility function to load and display the FXML layout
+     * defined in the ManageBorrow.fxml file. It updates the current stage with the loaded FXML scene,
+     * ensuring the UI transitions smoothly to the borrowing management interface.
+     */
     @FXML
     private void openManageBorrowScene() {
         switchScene(addBookButton,"/fxml/admin/ManageBorrow.fxml");
     }
 
 
+    /**
+     * Opens the advertisement dashboard scene.
+     *
+     * This method is triggered by a user action in the UI, specifically
+     * when the associated button is clicked. It uses the `switchScene`
+     * method to change the current scene to the advertisement dashboard
+     * by loading the FXML layout defined in "/fxml/admin/AdDashboard.fxml".
+     */
     @FXML
     private void openAdDashboardScene() {
         switchScene(addBookButton,"/fxml/admin/AdDashboard.fxml");
     }
 
 
+    /**
+     * Opens the Profile Settings scene.
+     * This method is triggered by an FXML event and calls the switchScene method
+     * to load and set the ProfileSettings.fxml file as the current scene.
+     * It uses the addBookButton to obtain the current stage and switch the scene.
+     */
     @FXML
     private void openProfileSettingsScene() {
         switchScene(addBookButton,"/fxml/admin/ProfileSettings.fxml");
     }
 
 
+    /**
+     * Opens the logout dialog window with reduced opacity for the main application window.
+     * This method is responsible for loading the 'Logout.fxml' file, setting up the stage,
+     * and displaying it as a modal dialog. The logout dialog is centered relative to the
+     * current application window and is styled with rounded corners.
+     * The method waits for the user interaction before resuming execution, at which point
+     * it reloads the list of books using the current search keyword and page index.
+     *
+     * Handles potential IOExceptions that can occur during the FXMLLoader loading process.
+     */
     @FXML
     private void openLogOutScene() {
         try {
@@ -442,5 +568,12 @@ public class ManageBookController implements Initializable {
         }
     }
 
+    public ObservableList<Book> getBookList() {
+        return bookList;
+    }
+
+    public void setBookList(ObservableList<Book> bookList) {
+        this.bookList = bookList;
+    }
 }
 

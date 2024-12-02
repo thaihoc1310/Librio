@@ -43,6 +43,13 @@ import static librio.util.DatabaseUtil.getBorrowById;
 import static librio.util.DatabaseUtil.getTotalBorrowCount;
 import static librio.util.DesignUtil.*;
 
+/**
+ * The ManageBorrowController class is responsible for handling the user interface
+ * logic for managing borrow records within the application. It provides functionalities
+ * such as viewing, updating, deleting, and creating borrow records. The class
+ * interacts with various components of the JavaFX framework, such as TableView,
+ * Pagination, and TextField, to provide a responsive and interactive experience.
+ */
 public class ManageBorrowController implements Initializable {
 
     @FXML
@@ -87,6 +94,14 @@ public class ManageBorrowController implements Initializable {
 
     private String keyword = null;
 
+    /**
+     * Initializes the controller class. This method is automatically called after the FXML file has been loaded.
+     * It sets up the avatar and user name, configures table columns, adds buttons to the table, sets up pagination,
+     * and attaches a listener for the search text field.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setAvatarAndUserName(avatarUser, userNameUser);
@@ -110,6 +125,21 @@ public class ManageBorrowController implements Initializable {
         });
     }
 
+    /**
+     * Adds action buttons to the "actionColumn" in the table view for each row.
+     * The buttons include:
+     * - Detail: Opens a detailed view of the borrow record.
+     * - Update: Opens an update form for the borrow record.
+     * - Delete: Opens a confirmation dialog to delete the borrow record.
+     *
+     * Each button is set with a fixed width and height and their corresponding actions
+     * retrieve the borrow record associated with the row, then execute a specific method
+     * for further actions based on the button clicked.
+     *
+     * The method uses a callback for the cell factory of the "actionColumn" to generate
+     * custom cells that contain three buttons aligned in a horizontal box (HBox).
+     * The buttons are only added when the cell is not empty.
+     */
     private void addButtonToTable() {
         Callback<TableColumn<Borrow, Void>, TableCell<Borrow, Void>> cellFactory = new Callback<>() {
             @Override
@@ -169,6 +199,14 @@ public class ManageBorrowController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
     }
 
+    /**
+     * Loads a list of borrow records from the database into the borrowList,
+     * filters these records by a keyword if provided, and paginates the results.
+     *
+     * @param keyword a string used to filter borrow records based on status, book ISBN, or user email.
+     *                If null or empty, no filtering is applied.
+     * @param pageIndex the index of the page to load, used to calculate the offset for pagination.
+     */
     void loadBorrows(String keyword, int pageIndex) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             borrowList = FXCollections.observableArrayList();
@@ -219,27 +257,63 @@ public class ManageBorrowController implements Initializable {
     }
 
 
+    /**
+     * Creates a new page with the specified page index and loads borrow data.
+     *
+     * @param pageIndex the index of the page to be created. This index is used to determine the offset for loading borrow data.
+     * @return a new Node representing the page, specifically a BorderPane in this case.
+     */
     private Node createPage(int pageIndex) {
         currentPage = pageIndex;
         loadBorrows(searchTextField.getText().trim(), pageIndex);
         return new BorderPane();
     }
 
+    /**
+     * Opens the "Manage Book" scene within the application.
+     *
+     * This method switches the current scene to the "Manage Book" interface using
+     * the {@code switchScene} utility method. The method is triggered as a JavaFX action
+     * event and is linked to a specific UI control via the {@code @FXML} annotation.
+     * It utilizes the {@code createBorrowButton} as a reference for the current window
+     * before loading the new FXML layout for managing books.
+     */
     @FXML
     private void openManageBookScene() {
         switchScene(createBorrowButton,"/fxml/admin/ManageBook.fxml");
     }
 
+    /**
+     * Opens the Manage User scene by switching the current scene to the
+     * scene defined in the ManageUser.fxml file. This is triggered by the
+     * associated FXML element, typically a button or menu item, within the
+     * JavaFX application.
+     */
     @FXML
     private void openManageUserScene() {
         switchScene(createBorrowButton,"/fxml/admin/ManageUser.fxml");
     }
 
+    /**
+     * Opens the administrative dashboard scene within the application.
+     *
+     * This method is linked to a specific JavaFX UI component via the `@FXML` annotation
+     * and is responsible for navigating to the administrative dashboard by switching
+     * the current scene to the one specified by the resource path "/fxml/admin/AdDashboard.fxml".
+     *
+     * The scene switch is facilitated by the static `switchScene` method, which changes the root node
+     * of the current stage to the one defined in the specified FXML file.
+     */
     @FXML
     private void openAdDashboardScene() {
         switchScene(createBorrowButton,"/fxml/admin/AdDashboard.fxml");
     }
 
+    /**
+     * Opens the Borrow Detail Scene, displaying detailed information about the specified borrow record.
+     *
+     * @param borrow the Borrow object containing details of the borrow record to be displayed
+     */
     @FXML
     private void openBorrowDetailScene(Borrow borrow) {
         try{
@@ -270,6 +344,15 @@ public class ManageBorrowController implements Initializable {
         }
     }
 
+    /**
+     * Opens the Delete Borrow scene to facilitate the deletion of a borrow record.
+     * The method loads the "DeleteBorrow.fxml" user interface, applies visual effects
+     * to the current stage to indicate modal interaction, and ensures that the
+     * current borrow record details are passed to the DeleteBorrowController.
+     * It pauses the execution of the application until the new window is closed.
+     *
+     * @param borrow the Borrow object representing the record to be potentially deleted.
+     */
     @FXML
     private void openDeleteBorrowScene(Borrow borrow) {
         try{
@@ -300,6 +383,12 @@ public class ManageBorrowController implements Initializable {
         }
     }
 
+    /**
+     * Opens the scene to update borrow details for a specified borrow record.
+     * The scene is loaded from an FXML file and displayed in a new stage.
+     *
+     * @param borrow the borrow record that needs to be updated, which is passed to the controller of the new scene
+     */
     @FXML
     private void openUpdateBorrowScene(Borrow borrow) {
         try{
@@ -323,6 +412,17 @@ public class ManageBorrowController implements Initializable {
         }
     }
 
+    /**
+     * Opens a new modal scene for creating a new borrow record.
+     * This method dims the current scene and displays the Create Borrow scene
+     * as a modal dialog. It waits for the dialog to close before restoring the
+     * brightness of the current scene. After the dialog is closed, the list of
+     * borrows is reloaded to reflect any changes made.
+     *
+     * Exception Handling:
+     * Any IOException that occurs during the loading of the FXML resource is
+     * caught and its stack trace is printed.
+     */
     @FXML
     private void openCreateBorrowScene() {
         try {
@@ -352,11 +452,27 @@ public class ManageBorrowController implements Initializable {
         }
     }
 
+    /**
+     * Opens the Profile Settings scene in the application. This method is
+     * triggered by the associated JavaFX button. The scene switch is
+     * facilitated by the switchScene method, which loads the
+     * ProfileSettings.fxml file and sets it as the current root of the scene.
+     */
     @FXML
     private void openProfileSettingsScene() {
         switchScene(createBorrowButton,"/fxml/admin/ProfileSettings.fxml");
     }
 
+    /**
+     * Opens the logout confirmation scene as a modal dialog. Adjusts the opacity of the main interface
+     * to signal modal presence and handles the setup for the LogoutController.
+     *
+     * It sets the current window as the owner of the newly created dialog and positions the dialog in
+     * the center of the current window. The dialog is styled without the usual window decorations.
+     *
+     * Updates the application state by calling the `loadBorrows` method once the dialog is closed.
+     * If an exception occurs while loading the FXML file, it logs the stack trace for debugging purposes.
+     */
     @FXML
     private void openLogOutScene() {
         try {

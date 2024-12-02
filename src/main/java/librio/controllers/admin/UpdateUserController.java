@@ -34,23 +34,47 @@ import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.setDatePickerFormat;
 
 
+/**
+ * The UpdateUserController class is responsible for handling the user interface and logic
+ * associated with updating user information in an application. It provides users with the
+ * ability to update profile information such as their name, email, phone number, address,
+ * gender, role, birth date, and avatar image. This class ensures the data is correctly
+ * validated and updates are propagated to the database.
+ *
+ * Implements Initializable interface to perform the initialization logic after the root
+ * element has been fully processed.
+ */
 public class UpdateUserController implements Initializable {
     @FXML
-    private Button updateUserButton;
+    protected Button updateUserButton;
     @FXML
-    private TextField nameTextField, emailTextField, phoneNumberTextField;
+    protected TextField nameTextField;
     @FXML
-    private ComboBox<Gender> genderComboBox;
+    protected TextField emailTextField;
     @FXML
-    private ComboBox<Role> roleComboBox;
+    protected TextField phoneNumberTextField;
     @FXML
-    private TextArea addressTextArea;
+    protected ComboBox<Gender> genderComboBox;
     @FXML
-    private Label nameErrorLabel, emailErrorLabel, phoneNumberErrorLabel, roleErrorLabel, genderErrorLabel, birthOfDateErrorLabel;
+    protected ComboBox<Role> roleComboBox;
     @FXML
-    private DatePicker birthOfDatePicker;
+    protected TextArea addressTextArea;
     @FXML
-    private ImageView avatarImageView;
+    protected Label nameErrorLabel;
+    @FXML
+    protected Label emailErrorLabel;
+    @FXML
+    protected Label phoneNumberErrorLabel;
+    @FXML
+    protected Label roleErrorLabel;
+    @FXML
+    protected Label genderErrorLabel;
+    @FXML
+    protected Label birthOfDateErrorLabel;
+    @FXML
+    protected DatePicker birthOfDatePicker;
+    @FXML
+    protected ImageView avatarImageView;
 
     private String avatarFilePath;
 
@@ -58,6 +82,17 @@ public class UpdateUserController implements Initializable {
 
     private User user;
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * This method sets up the ComboBoxes for gender and role with their respective values,
+     * hides error labels, adds necessary listeners for UI components, and sets
+     * the date picker format for the birth date.
+     *
+     * @param location The location used to resolve relative paths for the root object,
+     * or null if the location is not known.
+     * @param resources The resources used to localize the root object,
+     * or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
@@ -67,11 +102,29 @@ public class UpdateUserController implements Initializable {
         setDatePickerFormat(birthOfDatePicker);
     }
 
+    /**
+     * Sets the current user to be managed by the controller and populates the UI fields
+     * with the user's data.
+     *
+     * @param user the User object containing the information to be displayed
+     */
     public void setUser(User user) {
         this.user = user;
         populateFields();
     }
 
+    /**
+     * Populates the UI fields with the current user's data. This method updates text fields,
+     * combo boxes, and date pickers with information retrieved from the user object, such as
+     * email, name, phone number, address, gender, role, birthday, and avatar. If the user is
+     * not set, this method has no effect.
+     *
+     * The method also handles the loading and displaying of the user's avatar image. It
+     * constructs the complete file path for the avatar, retrieves the image using an
+     * image cache, and manipulates the image to fit within a circular boundary.
+     *
+     * Note: This method should only be called if the user object is initialized.
+     */
     private void populateFields() {
         if (user != null) {
             emailTextField.setText(user.getEmail());
@@ -91,8 +144,22 @@ public class UpdateUserController implements Initializable {
         }
     }
 
+    /**
+     * Updates the user information in the database based on the current state of the UI form fields.
+     * This method first validates the input fields to ensure they are correctly filled according to
+     * specified rules, such as checking non-empty fields and ensuring correct formats for email,
+     * phone number, and date of birth. If validation fails, corresponding error messages are displayed
+     * on the UI and the update process is halted.
+     *
+     * If the inputs are valid, it attempts to update the user's information in the database.
+     * The method also handles special cases, such as changes in user roles (between MEMBER and LIBRARIAN),
+     * updating their roles in respective tables, and managing avatar file changes by deleting old files
+     * and copying new ones.
+     *
+     * Handles potential SQL exceptions and IO exceptions during database updates and file operations, respectively.
+     */
     @FXML
-    private void updateUser() {
+    protected void updateUser() {
         String name = nameTextField.getText();
         String email = emailTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
@@ -233,6 +300,13 @@ public class UpdateUserController implements Initializable {
         }
     }
 
+    /**
+     * Clears all error labels associated with the user input fields in the UI.
+     *
+     * This method sets the text of each error label to an empty string, effectively
+     * hiding any error messages currently displayed. It is typically used to reset
+     * the UI state before performing validations or updates.
+     */
     private void hideErrorLabels() {
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");
@@ -242,6 +316,13 @@ public class UpdateUserController implements Initializable {
         birthOfDateErrorLabel.setText("");
     }
 
+    /**
+     * Adds mouse click event listeners to various user interface components.
+     * When any of the text fields, date picker, text area, or combo boxes are clicked,
+     * this method is triggered to hide error labels related to user input fields.
+     * This interaction helps ensure that error messages from any invalid inputs
+     * are cleared once the user focuses on these components for correction.
+     */
     private void addListeners() {
         nameTextField.setOnMouseClicked(event -> {
             hideErrorLabels();
@@ -266,6 +347,20 @@ public class UpdateUserController implements Initializable {
         });
     }
 
+    /**
+     * Opens a file chooser dialog to allow the user to select an image file to be used as an avatar.
+     * Supported image formats are PNG, JPG, and JPEG. Once a file is selected, the image is processed
+     * and displayed in a circular format within an ImageView component.
+     *
+     * This method performs the following steps:
+     * 1. Hides any error labels that might be visible on the UI.
+     * 2. Opens a file chooser dialog for the user to select an image file.
+     * 3. If a valid file is selected, constructs a unique file path for the avatar using
+     *    the current system time and the file's original name.
+     * 4. Loads the selected image and applies circular cropping and clipping before displaying it
+     *    in the designated ImageView.
+     * 5. Updates the previous avatar file path with the absolute path of the newly selected image.
+     */
     @FXML
     private void addAvatar() {
         hideErrorLabels();
@@ -285,11 +380,28 @@ public class UpdateUserController implements Initializable {
         }
     }
 
+    /**
+     * Cancels the update user operation and closes the current window.
+     *
+     * This method is typically used to dismiss the update user interface without
+     * saving any changes made by the user. It ensures that any modifications to the
+     * user data are not persisted, returning the system to its prior state.
+     *
+     * The method works by invoking the closeStage() method, which handles the
+     * actual logic of closing the window.
+     */
     @FXML
     private void cancelUpdateUser() {
         closeStage();
     }
 
+    /**
+     * Closes the current stage associated with the update user interface.
+     *
+     * This method retrieves the window (stage) in which the updateUserButton resides
+     * and closes it. It is typically used to terminate the current window after
+     * an update operation has been completed or cancelled.
+     */
     private void closeStage() {
         Stage stage = (Stage) updateUserButton.getScene().getWindow();
         stage.close();

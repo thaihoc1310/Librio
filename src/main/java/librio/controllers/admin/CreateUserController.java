@@ -28,21 +28,48 @@ import static librio.util.DatabaseUtil.isEmailExists;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.setDatePickerFormat;
 
+/**
+ * The CreateUserController class is responsible for managing the user
+ * interface components involved in creating a new user within the application.
+ * It contains methods for handling user input, validating information, and
+ * interacting with the database to register new users. The class implements
+ * the Initializable interface to perform necessary initializations upon loading.
+ */
 public class CreateUserController implements Initializable {
     @FXML
-    private TextField nameTextField, emailTextField, passwordTextField, confirmPasswordTextField,
-            phoneNumberTextField;
+    protected TextField nameTextField;
     @FXML
-    private ComboBox<Gender> genderComboBox;
+    protected TextField emailTextField;
     @FXML
-    private ComboBox<Role> roleComboBox;
+    protected TextField passwordTextField;
     @FXML
-    private TextArea addressTextArea;
+    protected TextField confirmPasswordTextField;
     @FXML
-    private Button createUserButton;
+    protected TextField phoneNumberTextField;
     @FXML
-    private Label nameErrorLabel, emailErrorLabel, passwordErrorLabel, confirmPasswordErrorLabel,
-            phoneNumberErrorLabel, roleErrorLabel, genderErrorLabel, birthOfDateErrorLabel;
+    protected ComboBox<Gender> genderComboBox;
+    @FXML
+    protected ComboBox<Role> roleComboBox;
+    @FXML
+    protected TextArea addressTextArea;
+    @FXML
+    protected Button createUserButton;
+    @FXML
+    protected Label nameErrorLabel;
+    @FXML
+    protected Label emailErrorLabel;
+    @FXML
+    protected Label passwordErrorLabel;
+    @FXML
+    protected Label confirmPasswordErrorLabel;
+    @FXML
+    protected Label phoneNumberErrorLabel;
+    @FXML
+    protected Label roleErrorLabel;
+    @FXML
+    protected Label genderErrorLabel;
+    @FXML
+    private Label birthOfDateErrorLabel;
     @FXML
     private DatePicker birthOfDatePicker;
     @FXML
@@ -52,6 +79,16 @@ public class CreateUserController implements Initializable {
 
     private String previousAvatarFilePath;
 
+    /**
+     * Initializes the CreateUserController by setting up the necessary UI components
+     * and their initial configurations. This includes setting items for combo boxes,
+     * hiding error labels, adding event listeners, and formatting the date picker.
+     *
+     * @param location  The location used to resolve relative paths for the root object,
+     *                  or null if the location is not known.
+     * @param resources The resources used to localize the root object,
+     *                  or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         genderComboBox.setItems(FXCollections.observableArrayList(Gender.values()));
@@ -61,8 +98,37 @@ public class CreateUserController implements Initializable {
         setDatePickerFormat(birthOfDatePicker);
     }
 
+    /**
+     * Handles the creation of a new user account by validating input fields,
+     * checking for existing email entries, and inserting the new user data
+     * into the database. The method also assigns roles and manages additional
+     * database entries based on user roles such as MEMBER or LIBRARIAN. It
+     * displays appropriate error messages if validation fails and handles
+     * any SQL or IO exceptions that may occur during the process.
+     *
+     * Input fields validated include:
+     * - Name
+     * - Email
+     * - Password and Confirm Password
+     * - Phone Number
+     * - Gender
+     * - Role
+     * - Birth Date
+     *
+     * Notes:
+     * - Email must be unique and in a valid format.
+     * - Password must be a minimum of 6 characters and match the confirmation field.
+     * - Date of birth must be in a correct format and not in the future.
+     * - The phone number should be exactly 10 digits.
+     * - Gender and Role must be selected.
+     *
+     * If validation is successful, the user's information is inserted into the 'users'
+     * table. Depending on the role, additional entries are created in the 'Members'
+     * or 'Librarians' tables. If a previous avatar file path is provided, the avatar
+     * is copied to the designated directory.
+     */
     @FXML
-    private void createUser() {
+    protected void createUser() {
         String name = nameTextField.getText();
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
@@ -199,6 +265,24 @@ public class CreateUserController implements Initializable {
         }
     }
 
+    /**
+     * Clears the text of all error labels related to user input fields.
+     *
+     * This method resets the error messages associated with the following
+     * input fields by setting the text of their corresponding error labels
+     * to an empty string:
+     * - Name
+     * - Email
+     * - Password
+     * - Confirm Password
+     * - Phone Number
+     * - Role
+     * - Gender
+     * - Date of Birth
+     *
+     * This is typically used to hide error messages after handling input
+     * validation or when resetting the form.
+     */
     private void hideErrorLabels() {
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");
@@ -210,6 +294,23 @@ public class CreateUserController implements Initializable {
         birthOfDateErrorLabel.setText("");
     }
 
+    /**
+     * Adds mouse click event listeners to various input fields and controls.
+     * Each listener, when triggered, will invoke the `hideErrorLabels` method
+     * to clear any displayed error messages.
+     *
+     * This method targets the following elements:
+     * - nameTextField
+     * - emailTextField
+     * - passwordTextField
+     * - confirmPasswordTextField
+     * - phoneNumberTextField
+     * - addressTextArea
+     * - birthOfDatePicker
+     * - birthOfDatePicker's editor
+     * - genderComboBox
+     * - roleComboBox
+     */
     private void addListeners() {
         // Name validation
         nameTextField.setOnMouseClicked(event -> {
@@ -244,6 +345,21 @@ public class CreateUserController implements Initializable {
         });
     }
 
+    /**
+     * Handles the action of adding an avatar image for the user.
+     * This method opens a file chooser dialog allowing the user to select an image file
+     * with extensions .png, .jpg, or .jpeg. Upon selection, the chosen image is processed
+     * to be displayed as a circular cropped image in the designated avatar image view.
+     * It also updates the file paths for the selected avatar and the previous avatar.
+     *
+     * The method begins by hiding any existing error labels, then initializes the file chooser
+     * with the title "Choose avatar" and sets the appropriate image file extension filters.
+     * If the user selects a file, the method generates a unique file path by appending the
+     * current timestamp to the file name. It then processes the selected image by converting
+     * its URI to an Image object, and calls the cropAndClipToCircle method to crop the image
+     * to a circle with a specified radius before displaying it in the avatarImageView.
+     * The method also stores the absolute path of the selected file to keep track of the previous avatar file.
+     */
     @FXML
     private void addAvatar() {
         hideErrorLabels();
@@ -261,20 +377,40 @@ public class CreateUserController implements Initializable {
             cropAndClipToCircle(avatarImage, avatarImageView, 75);
             previousAvatarFilePath = selectedFile.getAbsolutePath();
         }
-
     }
 
+    /**
+     * Handles the cancellation of the user creation process.
+     * This method clears all input fields to reset the form and closes the stage
+     * associated with the 'Create User' functionality, effectively aborting the
+     * user creation operation.
+     */
     @FXML
     private void cancelCreateUser() {
         clearInputFields();
         closeStage();
     }
 
+    /**
+     * Closes the current stage of the application. This is typically used to close
+     * the window containing the UI elements managed by this controller.
+     */
     private void closeStage() {
         Stage stage = (Stage) createUserButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Clears the input fields in the user creation form.
+     *
+     * This method resets all text fields, combo boxes, and other input
+     * elements to their default state. Specifically, it performs the
+     * following operations:
+     * - Clears the text from the name, email, password, confirm password,
+     *   phone number text fields, and address text area.
+     * - Clears the selection in the gender and role combo boxes.
+     * - Sets the birth date picker value to null.
+     */
     private void clearInputFields() {
         nameTextField.clear();
         emailTextField.clear();

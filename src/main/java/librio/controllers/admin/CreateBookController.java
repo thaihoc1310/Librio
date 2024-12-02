@@ -30,6 +30,25 @@ import java.util.ResourceBundle;
 
 import static librio.util.DatabaseUtil.isIsbnExists;
 
+/**
+ * The CreateBookController class is responsible for managing the user interface
+ * for creating and editing book records. It handles the initialization of UI components,
+ * validation of input fields, and interaction with image files. The controller is
+ * integrated with JavaFX and is initialized automatically when the associated fxml file
+ * is loaded.
+ *
+ * Fields in this class represent various UI components such as text fields, error labels,
+ * and buttons, as well as data storage elements like images and book objects. The fields
+ * manage different aspects of a book, including title, author, ISBN, publisher, and more.
+ *
+ * The class provides methods for setting book details, populating fields with data from
+ * an API, creating new book entries, handling file uploads, and more. Interaction with the
+ * form is enhanced by providing feedback through error labels and managing the state of
+ * the form fields when data is sourced from an API.
+ *
+ * The controller ensures all key functionalities required for managing book data in a UI
+ * context, supporting both manual data entry and API-driven processes.
+ */
 public class CreateBookController implements Initializable {
 
     private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();
@@ -116,7 +135,7 @@ public class CreateBookController implements Initializable {
         CATEGORY_MAP.put("Art", "Art");
         CATEGORY_MAP.put("Crafts & Hobbies", "Art");
         CATEGORY_MAP.put("Architecture", "Art");
-        //CATEGORY_MAP.put("Handicraft", "Art");
+        CATEGORY_MAP.put("Handicraft", "Art");
         CATEGORY_MAP.put("Antiques & Collectibles", "Art");
         CATEGORY_MAP.put("Design", "Art");
         CATEGORY_MAP.put("Travel", "Travel");
@@ -130,39 +149,92 @@ public class CreateBookController implements Initializable {
         CATEGORY_MAP.put("Exercise", "Sports");
         CATEGORY_MAP.put("Law", "Law");
         CATEGORY_MAP.put("Administrative courts", "Law");
-        //CATEGORY_MAP.put("Administrative Law", "Law");
+        CATEGORY_MAP.put("Administrative Law", "Law");
     }
 
     private boolean openedFromApi = false;
     @FXML
-    private Label authorErrorLabel, bookTitleErrorLabel, categoryErrorLabel, isbnErrorLabel,
-            languageErrorLabel, numberOfPagesErrorLabel, publisherErrorLabel,
-            yearPublishedErrorLabel, quantityOfCopyErrorLabel;
+    protected Label authorErrorLabel;
     @FXML
-    private TextField authorTextField, categoryTextField, isbnTextField, languageTextField,
-            numberOfPagesTextField, publisherTextField, quantityOfCopyTextField,
-            yearPublishedTextField;
+    protected Label bookTitleErrorLabel;
     @FXML
-    private TextArea bookTitleTextField, descriptionTextArea;
+    private Label categoryErrorLabel;
     @FXML
-    private Button cancelButton, uploadImageButton;
+    protected Label isbnErrorLabel;
     @FXML
-    private ImageView bookImageView;
+    private Label languageErrorLabel;
+    @FXML
+    private Label numberOfPagesErrorLabel;
+    @FXML
+    protected Label publisherErrorLabel;
+    @FXML
+    private Label yearPublishedErrorLabel;
+    @FXML
+    private Label quantityOfCopyErrorLabel;
+    @FXML
+    protected TextField authorTextField;
+    @FXML
+    private TextField categoryTextField;
+    @FXML
+    protected TextField isbnTextField;
+    @FXML
+    private TextField languageTextField;
+    @FXML
+    private TextField numberOfPagesTextField;
+    @FXML
+    protected TextField publisherTextField;
+    @FXML
+    private TextField quantityOfCopyTextField;
+    @FXML
+    private TextField yearPublishedTextField;
+    @FXML
+    protected TextArea bookTitleTextField;
+    @FXML
+    private TextArea descriptionTextArea;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button uploadImageButton;
+    @FXML
+    protected Button createBookButton;
+    @FXML
+    protected ImageView bookImageView;
     private Book apiBook;
     private String bookImageFilePath;
     private String previousBookFilePath;
 
+    /**
+     * Initializes the controller class. This method is automatically called
+     * after the fxml file has been loaded. It ensures that all error labels
+     * are hidden and sets up listeners for user interaction.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hideErrorLabels();
         addListeners();
     }
 
+    /**
+     * Sets the current Book object and populates the fields accordingly.
+     *
+     * @param book the Book object to be set as the current book.
+     */
     public void setBook(Book book) {
         this.apiBook = book;
         populateFields();
     }
 
+    /**
+     * Downloads an image from the specified URL and saves it to a local directory.
+     * If the download fails, a default image path is returned.
+     *
+     * @param imageUrl the URL of the image to download
+     * @return the name of the saved image file if download is successful,
+     *         or "defaultBook.jpg" if an error occurs
+     */
     private String downloadImage(String imageUrl) {
         String savedImagePath = "defaultBook.jpg";
         try {
@@ -182,6 +254,27 @@ public class CreateBookController implements Initializable {
         return savedImagePath;
     }
 
+    /**
+     * Populates the UI fields with data from the current API book.
+     *
+     * This method sets the text fields and text areas with the corresponding
+     * information from the `apiBook` instance, such as title, ISBN, author, publisher,
+     * category, language, year published, description, and number of pages. It also
+     * sets the image for the book if available. If the information is marked as
+     * unknown or uses specific default values, it adjusts accordingly to display a
+     * user-friendly message.
+     *
+     * Additionally, this method makes the populated fields non-editable to prevent
+     * changes to the details brought from the API.
+     *
+     * Preconditions:
+     * - The `apiBook` instance must not be null.
+     *
+     * Side effects:
+     * - Updates the state of `openedFromApi` to true.
+     * - Sets the contents of various UI components.
+     * - Handles the image view update and its associated file path.
+     */
     public void populateFields() {
         if (apiBook != null) {
             bookTitleTextField.setText(apiBook.getTitle());
@@ -219,8 +312,29 @@ public class CreateBookController implements Initializable {
         }
     }
 
+    /**
+     * Handles the creation of a new book entry in the database.
+     * This method is triggered by a UI event and performs validation
+     * on input fields before attempting to insert a new book record into the database.
+     *
+     * Input fields are fetched directly from the associated UI components such as TextFields and TextArea.
+     * If the image of the book is provided through an API and is not the default image,
+     * this image is downloaded and saved locally.
+     * Performs a series of validation checks on mandatory fields (title, isbn, author, etc.),
+     * and sets relevant error messages if any validation fails.
+     *
+     * If validation passes, constructs an SQL INSERT query to save the book details, including:
+     * - Title, Author, ISBN, Publisher, Category
+     * - Quantity of Copies (total and available), Average Rating (default is 0.0)
+     * - Year Published, Language, Number of Pages, Description, Book Image
+     *
+     * The image is saved locally and relevant paths are updated if needed. Finally, it clears the input fields
+     * and closes the current stage upon successful insertion of a new book record.
+     *
+     * In case of any SQL or general exception, stack trace is printed for debugging purposes.
+     */
     @FXML
-    private void createBook() {
+    protected void createBook() {
         String bookTitle = bookTitleTextField.getText();
         String isbn = isbnTextField.getText();
         String author = authorTextField.getText();
@@ -348,6 +462,11 @@ public class CreateBookController implements Initializable {
         }
     }
 
+    /**
+     * Resets the text of all form error labels to empty strings, effectively hiding them.
+     * This method is used to clear any previous error messages displayed to the user
+     * as they interact with the input fields in the form.
+     */
     private void hideErrorLabels() {
         bookTitleErrorLabel.setText("");
         isbnErrorLabel.setText("");
@@ -360,6 +479,14 @@ public class CreateBookController implements Initializable {
         yearPublishedErrorLabel.setText("");
     }
 
+    /**
+     * Adds event listeners to various text fields and text area within the form.
+     * These listeners are triggered when a mouse click event occurs on the
+     * respective fields, leading to the invocation of the hideErrorLabels()
+     * method. This effectively clears any error messages associated with the
+     * input fields, improving user experience by ensuring error indicators are
+     * removed when the user interacts with the form elements.
+     */
     private void addListeners() {
         bookTitleTextField.setOnMouseClicked(event -> hideErrorLabels());
         isbnTextField.setOnMouseClicked(event -> hideErrorLabels());
@@ -373,6 +500,18 @@ public class CreateBookController implements Initializable {
         yearPublishedTextField.setOnMouseClicked(event -> hideErrorLabels());
     }
 
+    /**
+     * Handles the action of uploading an image for the book. This method is triggered when the
+     * user initiates the process to select an image file to associate with the book being created
+     * or edited. The allowed file types for selection are PNG, JPG, and JPEG.
+     *
+     * The method uses a FileChooser dialog to allow the user to select an image. Upon selecting
+     * a valid file, it updates the image view with the selected image and sets the file path
+     * properties accordingly.
+     *
+     * Note: This method also invokes {@code hideErrorLabels()} to clear any visible error labels
+     * before opening the file chooser dialog.
+     */
     @FXML
     private void uploadImage() {
         hideErrorLabels();
@@ -391,18 +530,36 @@ public class CreateBookController implements Initializable {
         }
     }
 
+    /**
+     * Closes the current stage window associated with the cancel button.
+     * This method is typically used to terminate or exit the current user interface window.
+     */
     private void closeStage() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
 
+    /**
+     * Cancels the current book creation or editing process.
+     * This method clears all input fields and closes the stage associated with the cancel button.
+     * It is typically invoked when the user decides not to proceed with the creation or modification of a book record.
+     */
     @FXML
     private void cancel() {
         clearInputFields();
         closeStage();
     }
 
+    /**
+     * Clears all text input fields and text areas in the form.
+     *
+     * This method resets the input fields for book title, ISBN, author,
+     * publisher, category, number of pages, quantity of copy, language,
+     * year published, and the description text area to their default state.
+     * It is typically used to reset the form after a book is successfully
+     * created or when the cancel action is invoked.
+     */
     private void clearInputFields() {
         bookTitleTextField.clear();
         isbnTextField.clear();
@@ -416,10 +573,24 @@ public class CreateBookController implements Initializable {
         descriptionTextArea.clear();
     }
 
+    /**
+     * Retrieves the full name of a language based on its ISO code.
+     *
+     * @param isoCode the ISO code of the language.
+     * @return the full name of the language corresponding to the given ISO code,
+     * or "Others" if the ISO code is not found in the LANGUAGE_MAP.
+     */
     private String getFullLanguageName(String isoCode) {
         return LANGUAGE_MAP.getOrDefault(isoCode, "Others");
     }
 
+    /**
+     * Maps a specific category to a broader category based on predefined mappings.
+     * If the given category is not found in the mapping, returns the default value "Others".
+     *
+     * @param category the specific category to be mapped
+     * @return the corresponding broad category or "Others" if no mapping is found
+     */
     private String mapCategoryToBroadCategory(String category) {
         return CATEGORY_MAP.getOrDefault(category, "Others");
     }

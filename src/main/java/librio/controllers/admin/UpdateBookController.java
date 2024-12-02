@@ -28,21 +28,56 @@ import static librio.util.DatabaseUtil.getBookByIsbn;
 import static librio.util.DatabaseUtil.isBookTitleExists;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
+/**
+ * Populates the form fields with data from the current book instance.
+ *
+ * This method uses the attributes of the current Book object to
+ * populate corresponding UI components, such as text fields and
+ * labels, allowing users to see and edit existing book data.
+ * It fills in fields like title, author, ISBN, and more with
+ * the book's stored data.
+ */
 public class UpdateBookController implements Initializable {
     @FXML
-    private Label authorErrorLabel, bookTitleErrorLabel, categoryErrorLabel, isbnErrorLabel,
-            languageErrorLabel, numberOfPagesErrorLabel, publisherErrorLabel,
-            quantityOfCopyErrorLabel;
+    protected Label authorErrorLabel;
     @FXML
-    private TextField authorTextField, categoryTextField, isbnTextField, languageTextField,
-            numberOfPagesTextField, publisherTextField, quantityOfCopyTextField,
-            yearPublishedTextField;
+    protected Label bookTitleErrorLabel;
     @FXML
-    private TextArea bookTitleTextField, descriptionTextArea;
+    protected Label categoryErrorLabel;
     @FXML
-    private Button cancelButton;
+    protected Label isbnErrorLabel;
     @FXML
-    private ImageView bookImageView;
+    protected Label languageErrorLabel;
+    @FXML
+    protected Label numberOfPagesErrorLabel;
+    @FXML
+    protected Label publisherErrorLabel;
+    @FXML
+    protected Label quantityOfCopyErrorLabel;
+    @FXML
+    protected TextField authorTextField;
+    @FXML
+    protected TextField categoryTextField;
+    @FXML
+    protected TextField isbnTextField;
+    @FXML
+    protected TextField languageTextField;
+    @FXML
+    protected TextField numberOfPagesTextField;
+    @FXML
+    protected TextField publisherTextField;
+    @FXML
+    protected TextField quantityOfCopyTextField;
+    @FXML
+    protected TextField yearPublishedTextField;
+    @FXML
+    protected TextArea bookTitleTextField;
+    @FXML
+    protected TextArea descriptionTextArea;
+    @FXML
+    protected Button cancelButton;
+    @FXML
+    protected ImageView bookImageView;
 
     private Book book;
 
@@ -50,19 +85,47 @@ public class UpdateBookController implements Initializable {
 
     private String previousBookFilePath;
 
+    /**
+     * Initializes the UpdateBookController by hiding all error labels and adding necessary input field listeners.
+     *
+     * @param location The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hideErrorLabels();
         addListeners();
     }
 
+    /**
+     * Sets the current book instance to the given book and populates the fields with its data.
+     *
+     * @param book the Book object containing the information to be set and displayed
+     */
     public void setBook(Book book) {
         this.book = book;
         populateFields();
     }
 
+    /**
+     * Updates the details of an existing book in the database. It retrieves input values
+     * from text fields to update the book's attributes such as title, ISBN, author,
+     * publisher, category, number of pages, quantity of copies, language, year published,
+     * and description. This method checks for the validity of input data and ensures
+     * they adhere to specific constraints (e.g., non-empty fields, valid ISBN format).
+     *
+     * If the input data is valid, the method constructs an SQL update query to modify
+     * the book record in the database. Additionally, it handles the updating of the
+     * book's image file if a new image upload is detected, ensuring the old image is
+     * removed from the directory if replaced.
+     *
+     * The method includes error handling for SQL and other exceptions, and manages UI
+     * updates such as clearing input fields and closing the window if the update is
+     * successful. Validation errors are displayed by setting appropriate error messages
+     * on designated labels.
+     */
     @FXML
-    private void updateBook() {
+    protected void updateBook() {
         String bookTitle = bookTitleTextField.getText();
         String isbn = isbnTextField.getText();
         String author = authorTextField.getText();
@@ -194,6 +257,24 @@ public class UpdateBookController implements Initializable {
         }
     }
 
+    /**
+     * Clears all error labels related to the book details form.
+     *
+     * This method sets the text of various error labels used in the
+     * UpdateBookController to an empty string, effectively hiding
+     * them from the user interface. It is typically invoked to reset
+     * the error state of the form fields.
+     *
+     * This method affects the following labels:
+     * - Book Title Error
+     * - ISBN Error
+     * - Author Error
+     * - Publisher Error
+     * - Category Error
+     * - Number of Pages Error
+     * - Quantity of Copies Error
+     * - Language Error
+     */
     private void hideErrorLabels() {
         bookTitleErrorLabel.setText("");
         isbnErrorLabel.setText("");
@@ -205,6 +286,19 @@ public class UpdateBookController implements Initializable {
         languageErrorLabel.setText("");
     }
 
+    /**
+     * Populates the text fields and image view with the information from the current book object.
+     * This method is used to display the details of a book in the appropriate UI components
+     * such as text fields and an image view when a book is selected or edited.
+     *
+     * If the book object is not null, this method sets the text fields for the title, ISBN,
+     * author, category, publisher, year of publication, language, number of pages, description,
+     * and quantity of copies with their respective values from the book object.
+     *
+     * The method also handles the display of the book image. If a valid image path is provided
+     * in the book object, it attempts to retrieve and display the image using an image cache
+     * mechanism. If the image path is null or empty, a default book image is loaded and displayed.
+     */
     private void populateFields() {
         if (book != null) {
             bookTitleTextField.setText(book.getTitle());
@@ -232,6 +326,26 @@ public class UpdateBookController implements Initializable {
         }
     }
 
+    /**
+     * Adds event listeners to various text fields and text areas to handle
+     * mouse click events. When a mouse click event occurs on any of these UI
+     * components, the error labels associated with the book details form are
+     * hidden by invoking the {@code hideErrorLabels()} method. This is typically
+     * used to clear any error messages displayed after a user interacts with
+     * the text fields or text areas.
+     *
+     * Components with listeners include:
+     * - bookTitleTextField
+     * - isbnTextField
+     * - authorTextField
+     * - publisherTextField
+     * - categoryTextField
+     * - numberOfPagesTextField
+     * - quantityOfCopyTextField
+     * - languageTextField
+     * - descriptionTextArea
+     * - yearPublishedTextField
+     */
     private void addListeners() {
         bookTitleTextField.setOnMouseClicked(event -> hideErrorLabels());
         isbnTextField.setOnMouseClicked(event -> hideErrorLabels());
@@ -245,6 +359,13 @@ public class UpdateBookController implements Initializable {
         yearPublishedTextField.setOnMouseClicked(event -> hideErrorLabels());
     }
 
+    /**
+     * Handles the action of uploading an image file to set as the book's image.
+     * This method opens a file chooser dialog allowing the user to select an image file.
+     * Supported image formats are PNG, JPG, and JPEG. Upon successful selection, the image
+     * is displayed in the designated image view, and the file path is stored.
+     * It also resets any displayed error labels related to previous operations.
+     */
     @FXML
     private void uploadImage() {
         hideErrorLabels();
@@ -263,17 +384,31 @@ public class UpdateBookController implements Initializable {
         }
     }
 
+    /**
+     * Closes the current stage (window) associated with the cancelButton.
+     * This method is intended to be called to terminate the display of the current
+     * JavaFX window or dialog, effectively hiding it from the user.
+     */
     private void closeStage() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Cancels the current operation by clearing all input fields and closing the current stage.
+     * This method is typically called when the cancel button is activated by the user.
+     */
     @FXML
     private void cancel() {
         clearInputFields();
         closeStage();
     }
 
+    /**
+     * Clears the text from all input fields and text areas associated with book details.
+     * This method is typically used to reset the input fields to their default
+     * empty state after an action such as updating or canceling an update operation.
+     */
     private void clearInputFields() {
         bookTitleTextField.clear();
         isbnTextField.clear();

@@ -37,28 +37,94 @@ import static librio.util.DatabaseUtil.isEmailExists;
 public class LoginController {
 
     @FXML
-    private Button loginButton, nextButton, submitButton, signUpButton;
+    private Button loginButton;
     @FXML
-    private PasswordField passwordField, signUpPasswordField, signUpConfirmPasswordField,
-            newPasswordField, confirmNewPasswordField;
+    private Button nextButton;
     @FXML
-    private TextField usernameField, passwordTextVisible, resetCode, signUpPasswordTextVisible,
-            signUpConfirmPasswordTextVisible;
+    private Button submitButton;
     @FXML
-    private TextField emailTextField, emailTextField1, userNameTextField, phoneNumberTextField,
-            newPasswordFieldVisible, confirmNewPasswordFieldVisible;
+    private Button signUpButton;
+    @FXML
+    protected PasswordField passwordField;
+    @FXML
+    private PasswordField signUpPasswordField;
+    @FXML
+    private PasswordField signUpConfirmPasswordField;
+    @FXML
+    private PasswordField newPasswordField;
+    @FXML
+    private PasswordField confirmNewPasswordField;
+    @FXML
+    protected TextField usernameField;
+    @FXML
+    private TextField passwordTextVisible;
+    @FXML
+    private TextField resetCode;
+    @FXML
+    private TextField signUpPasswordTextVisible;
+    @FXML
+    private TextField signUpConfirmPasswordTextVisible;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextField emailTextField1;
+    @FXML
+    private TextField userNameTextField;
+    @FXML
+    private TextField phoneNumberTextField;
+    @FXML
+    private TextField newPasswordFieldVisible;
+    @FXML
+    private TextField confirmNewPasswordFieldVisible;
     @FXML
     private ImageView closeEyeImage1, openEyeImage1, closeEyeImage2, openEyeImage2, openEyeImage21,
             closeEyeImage21, openEyeImage11, closeEyeImage11;
     @FXML
     private ImageView openEyeImage, closeEyeImage;
     @FXML
-    private Label incorrectLoginInformation, switchSignUp, switchSignIn, forgotPassword,
-            switchSignIn1, switchSignIn2, sentCodeButton, emailErrorLabel, resetCodeErrorLabel,
-            confirmPasswordErrorLabel, passwordErrorLabel, nameErrorLabel, emailErrorLabel1,
-            genderAndbirthDateErrorLabel, phoneNumberErrorLabel, confirmPasswordErrorLabel1, passwordErrorLabel1;
+    protected Label incorrectLoginInformation;
     @FXML
-    private AnchorPane leftPane, rightPane, centerPane, sendCodePane, changePassWordPane;
+    private Label switchSignUp;
+    @FXML
+    private Label switchSignIn;
+    @FXML
+    private Label forgotPassword;
+    @FXML
+    private Label switchSignIn1;
+    @FXML
+    private Label switchSignIn2;
+    @FXML
+    private Label sentCodeButton;
+    @FXML
+    private Label emailErrorLabel;
+    @FXML
+    private Label resetCodeErrorLabel;
+    @FXML
+    private Label confirmPasswordErrorLabel;
+    @FXML
+    private Label passwordErrorLabel;
+    @FXML
+    private Label nameErrorLabel;
+    @FXML
+    private Label emailErrorLabel1;
+    @FXML
+    private Label genderAndbirthDateErrorLabel;
+    @FXML
+    private Label phoneNumberErrorLabel;
+    @FXML
+    private Label confirmPasswordErrorLabel1;
+    @FXML
+    private Label passwordErrorLabel1;
+    @FXML
+    protected AnchorPane leftPane;
+    @FXML
+    protected AnchorPane rightPane;
+    @FXML
+    protected AnchorPane centerPane;
+    @FXML
+    protected AnchorPane sendCodePane;
+    @FXML
+    protected AnchorPane changePassWordPane;
     @FXML
     private ComboBox<Gender> genderComboBox;
     @FXML
@@ -81,7 +147,7 @@ public class LoginController {
     }
 
     @FXML
-    private void switchToSignUpAndForgotPassword(AnchorPane pane) {
+    protected void switchToSignUpAndForgotPassword(AnchorPane pane) {
         TranslateTransition leftPaneTranslate = new TranslateTransition(Duration.seconds(0.3), leftPane);
         leftPaneTranslate.setByX(-300);
 
@@ -105,7 +171,7 @@ public class LoginController {
     }
 
     @FXML
-    private void switchToSignIn(AnchorPane pane) {
+    protected void switchToSignIn(AnchorPane pane) {
         TranslateTransition leftPaneTranslate = new TranslateTransition(Duration.seconds(0.3), leftPane);
         leftPaneTranslate.setByX(300);
 
@@ -137,7 +203,7 @@ public class LoginController {
     }
 
     @FXML
-    private void handleLogin() throws IOException {
+    protected void handleLogin() throws IOException {
         String email = usernameField.getText();
         String password = passwordField.isVisible() ? passwordField.getText() : passwordTextVisible.getText();
         User loginUser = authenticate(email.trim(), password);
@@ -152,7 +218,7 @@ public class LoginController {
     }
 
     @FXML
-    private void handleSignUp() throws IOException {
+    protected void handleSignUp() throws IOException {
         String name = userNameTextField.getText();
         String email = emailTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();

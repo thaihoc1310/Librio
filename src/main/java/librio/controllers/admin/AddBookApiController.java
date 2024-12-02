@@ -35,6 +35,14 @@ import java.util.concurrent.Executors;
 
 import static java.lang.Character.isDigit;
 
+/**
+ * The AddBookApiController class is responsible for managing the interactions
+ * between the user interface and the Google Books API. It handles the logic for
+ * searching books, displaying them in the UI, and enabling user actions such as
+ * adding a book to a collection. The controller is initialized with interactive
+ * elements such as a search button, filter options, and text fields to facilitate
+ * dynamic user input.
+ */
 public class AddBookApiController implements Initializable {
     @FXML
     private ImageView searchButton;
@@ -57,6 +65,16 @@ public class AddBookApiController implements Initializable {
 
     private final VBox contentPane = new VBox(10);
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * This method sets up the initial state of the filter options, initializes the
+     * executor for handling asynchronous tasks, and initiates the loading of books.
+     *
+     * @param location The location used to resolve relative paths for the root object, or
+     *                 null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if
+     *                  the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Year published", "ISBN");
@@ -66,6 +84,13 @@ public class AddBookApiController implements Initializable {
         loadBooksAsync("");
     }
 
+    /**
+     * Asynchronously loads books based on the provided search keyword.
+     * Initiates a background task to fetch books from the Google API using the search keyword,
+     * updates the UI with the fetched books, and handles any task failures.
+     *
+     * @param searchKeyWord the keyword used to search for books through the Google API
+     */
     private void loadBooksAsync(String searchKeyWord) {
         Platform.runLater(() -> loadingIndicator.setVisible(true));
         Task<List<Book>> loadTask = new Task<>() {
@@ -94,6 +119,12 @@ public class AddBookApiController implements Initializable {
         executor.submit(loadTask);
     }
 
+    /**
+     * Fetches a list of books from the Google Books API based on the provided search keyword.
+     *
+     * @param searchKeyWord the search keyword used to query the Google Books API.
+     * @return a list of books that match the search criteria.
+     */
     private List<Book> loadBooksFromGoogleAPI(String searchKeyWord) {
         List<Book> fetchedBooks = new ArrayList<>();
         try {
@@ -129,6 +160,15 @@ public class AddBookApiController implements Initializable {
         return fetchedBooks;
     }
 
+    /**
+     * Fetches a JSONObject from the constructed API URL based on the given filter, encoded keyword, and API key.
+     *
+     * @param filter the filter parameter used to customize the API query
+     * @param encodeKeyword the keyword part of the query, URL-encoded
+     * @param apiKey the API key required to authenticate and access the service
+     * @return a JSONObject containing the response from the API
+     * @throws IOException if an I/O error occurs during the API request
+     */
     private JSONObject getJsonObject(String filter, String encodeKeyword, String apiKey) throws IOException {
         String apiUrl = getApiUrl(filter, encodeKeyword, apiKey);
 
@@ -145,6 +185,19 @@ public class AddBookApiController implements Initializable {
         return new JSONObject(content.toString());
     }
 
+    /**
+     * Constructs the API URL for accessing the Google Books API based on the specified
+     * filter, encoded keyword, and API key. The constructed URL is used to retrieve
+     * a list of books according to the given search criteria.
+     *
+     * @param filter Specifies the type of filter to apply to the search query.
+     *               Valid options include "Title", "Author", "Category", "Year published",
+     *               "ISBN", or "Language".
+     * @param encodeKeyword The keyword to be encoded and appended to the search query in the API URL.
+     * @param apiKey The API key required for authenticating the request to the Google Books API.
+     *
+     * @return A string representing the constructed API URL containing the search query parameters.
+     */
     private String getApiUrl(String filter, String encodeKeyword, String apiKey) {
         String apiUrl;
         if (filter.equals("Language")) {
@@ -161,6 +214,14 @@ public class AddBookApiController implements Initializable {
         return apiUrl;
     }
 
+    /**
+     * Handles the search functionality triggered by the user. This method sets up the
+     * environment for performing a new search by resetting necessary fields and states.
+     * If there is an existing executor for asynchronous tasks, it is shut down before
+     * initiating a new one. The search keyword is fetched from the user input, and the
+     * current list of books is cleared to accommodate new search results. It also resets
+     * the scroll position of the book list display.
+     */
     @FXML
     private void handleSearch() {
         if (executor != null && !executor.isShutdown()) {
@@ -175,6 +236,14 @@ public class AddBookApiController implements Initializable {
         bookListScrollPane.setVvalue(0);
     }
 
+    /**
+     * Maps a given filter name to its corresponding query prefix for the Google Books API.
+     *
+     * @param filter The filter name to be mapped. Valid values include "Title", "Author",
+     *               "Category", "Year published", and "ISBN".
+     * @return A string representing the query prefix associated with the filter name.
+     *         Returns an empty string if the filter is not recognized.
+     */
     private String getFilter(String filter) {
         return switch (filter) {
             case "Title" -> "intitle:";
@@ -186,6 +255,13 @@ public class AddBookApiController implements Initializable {
         };
     }
 
+    /**
+     * Displays a list of books in the user interface, updating the content pane
+     * to reflect the current set of books and providing a button to load more
+     * if applicable.
+     *
+     * @param booksToDisplay the list of Book objects to be displayed in the UI.
+     */
     private void displayBooks(List<Book> booksToDisplay) {
         Platform.runLater(() -> {
             if (startIndex == 0) {
@@ -215,6 +291,14 @@ public class AddBookApiController implements Initializable {
         });
     }
 
+    /**
+     * Creates and returns a "More" button configured with specific styling and behavior.
+     * The button is styled to match the application's visual design and includes event handlers
+     * for mouse hover to change its appearance and a click action that loads more book entries
+     * asynchronously from the Google Books API starting from an incremented index.
+     *
+     * @return a Button instance labeled "More" that fetches additional book entries when clicked
+     */
     private Button getMoreButton() {
         Button moreButton = new Button("More");
         moreButton.setPrefHeight(32.0);
@@ -229,6 +313,14 @@ public class AddBookApiController implements Initializable {
         return moreButton;
     }
 
+    /**
+     * Constructs and returns an AnchorPane representing the UI layout for a specific book.
+     * This method sets up the visual components such as image, title, author, and ISBN for the book,
+     * and includes an "Add" button for user interaction.
+     *
+     * @param book the Book object containing information about the book to display.
+     * @return an AnchorPane configured with book details and an interactive "Add" button.
+     */
     private AnchorPane createBookPane(Book book) {
         AnchorPane bookPane = new AnchorPane();
         bookPane.setPrefHeight(155.0);
@@ -289,6 +381,14 @@ public class AddBookApiController implements Initializable {
         return bookPane;
     }
 
+    /**
+     * Creates and returns a styled "Add" button with specific behavior and appearance for adding a book.
+     * The button includes mouse event handlers to change its style when hovered over, and triggers an action
+     * to open a scene for creating a book entry when clicked.
+     *
+     * @param book the book object to be potentially added, which the button action will utilize.
+     * @return a Button instance labeled "+ Add" configured with styling and event handling for interaction.
+     */
     private Button getAddButton(Book book) {
         Button addButton = new Button("+ Add");
         addButton.setLayoutX(526.0);
@@ -302,12 +402,27 @@ public class AddBookApiController implements Initializable {
         return addButton;
     }
 
+    /**
+     * Closes the current window of the application.
+     * This method retrieves the window associated with the 'searchButton'
+     * and calls the close method on its stage to terminate the window.
+     */
     @FXML
     private void closeWindow() {
         Stage stage = (Stage) searchButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Opens the scene for creating or editing a book. This method prepares
+     * and displays a new stage containing the CreateBook view, initialized
+     * with the given book's data. If the book's ISBN is not available,
+     * it invokes an alternative method to handle that case.
+     *
+     * @param book The Book object which contains information to be displayed
+     *             or edited in the CreateBook scene. The book must have a valid
+     *             ISBN; otherwise, an alternative scene is triggered.
+     */
     @FXML
     private void openCreateBookScene(Book book) {
         try {
@@ -336,6 +451,15 @@ public class AddBookApiController implements Initializable {
         }
     }
 
+    /**
+     * Opens the "ISBN Not Available" dialog window to inform the user when a book's ISBN
+     * cannot be used. This method loads the appropriate FXML layout, applies a brightness
+     * effect to darken the current window, and displays the dialog in a modal stage.
+     * The dialog is displayed transparently and non-resizable, and upon closing, it
+     * removes any visual effects applied to the underlying window.
+     * Handles IOException internally by printing the stack trace, in case of any loading
+     * errors with the FXML file.
+     */
     @FXML
     private void openIsbnNotAvailable() {
         try {

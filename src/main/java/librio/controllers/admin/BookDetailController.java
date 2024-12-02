@@ -23,6 +23,11 @@ import java.util.ResourceBundle;
 import static librio.util.DesignUtil.generateAndDisplayQRCode;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
+/**
+ * The BookDetailController class provides a detailed view of a book's information in a UI.
+ * It implements the Initializable interface to handle the initialization of various UI components
+ * associated with displaying detailed information about a book.
+ */
 public class BookDetailController implements Initializable {
     private static final int DESCRIPTION_LIMIT = 500;
 
@@ -66,6 +71,12 @@ public class BookDetailController implements Initializable {
 
     private String fullDescription;
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     *
+     * @param location The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the resources are not specified.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         moreLessLabel.setText("more");
@@ -74,11 +85,38 @@ public class BookDetailController implements Initializable {
 
     }
 
+    /**
+     * Sets the book for the BookDetailController and populates the fields
+     * related to the book details.
+     *
+     * @param book the Book object to be set and displayed in the controller
+     */
     public void setBook(Book book) {
         this.book = book;
         populateFields();
     }
 
+    /**
+     * Populates various UI components with the details of a book.
+     *
+     * This method updates the text and visibility of labels, text fields,
+     * and image views in the UI to reflect the properties of the book instance
+     * associated with this controller.
+     *
+     * The method performs the following actions:
+     * - Sets the text of labels with the book's title, author, ISBN, ID, category,
+     *   available copy quantity, average rating, publisher, year published, language,
+     *   and number of pages.
+     * - Conditionally truncates and displays the book's description if it
+     *   exceeds a predefined character limit, showing either the full text or
+     *   a shortened version with an ellipsis.
+     * - Determines and sets the book's image by loading it from the file system.
+     *   If no image is available, a default image is used.
+     * - Generates and displays a QR code representing a URL related to the book.
+     *
+     * This method assumes the 'book' field is not null and that various UI
+     * components have been initialized. It does not return any value.
+     */
     private void populateFields() {
         if (book != null) {
             bookTitleLabel.setText(book.getTitle());
@@ -118,6 +156,14 @@ public class BookDetailController implements Initializable {
         }
     }
 
+    /**
+     * Toggles the display of the book description between a truncated version and the full text.
+     *
+     * If the description is currently expanded, it truncates the description to a predefined limit
+     * and appends ellipsis, while changing the label text to indicate more details can be shown.
+     * Otherwise, it displays the full description and changes the label text to indicate less details
+     * can be shown. The expanded state is then toggled.
+     */
     private void toggleDescription() {
         if (isExpanded) {
             descriptionText.setText(fullDescription.substring(0, DESCRIPTION_LIMIT) + "...");
@@ -129,16 +175,30 @@ public class BookDetailController implements Initializable {
         isExpanded = !isExpanded;
     }
 
+    /**
+     * Handles the action of navigating back from the current view.
+     * This method will close the current window when triggered.
+     */
     @FXML
     private void back() {
         closeWindow();
     }
 
+    /**
+     * Closes the current window associated with the scene containing the isbnLabel.
+     * This method retrieves the window from the current scene and closes it,
+     * effectively terminating any user interactions with that particular window.
+     */
     private void closeWindow() {
         Stage stage = (Stage) isbnLabel.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Initializes scroll behavior for the scrollPane by adding a scrolling effect to the thumb node.
+     * When the scroll event occurs, a "scrolling" style class is temporarily added to the scroll
+     * thumb, which is removed after a delay of 2000 milliseconds.
+     */
     private void initScroll() {
         scrollPane.setOnScroll(event -> {
             Node thumb = scrollPane.lookup(".thumb");

@@ -19,6 +19,15 @@ import static librio.util.DatabaseUtil.getBookByIsbn;
 import static librio.util.DatabaseUtil.getUserById;
 import static librio.util.DesignUtil.loadDefaultBookImage;
 
+/**
+ * The BorrowDetailController is responsible for managing the user interface for displaying
+ * the details of a borrowing transaction in a library system. It implements the Initializable
+ * interface to perform any necessary setup once its associated FXML file has been loaded.
+ *
+ * The controller interacts with the UI elements, including labels and buttons, and displays
+ * information about a specific Borrow object such as the book's title and ISBN, the member's
+ * name and email, and dates related to the borrowing transaction.
+ */
 public class BorrowDetailController implements Initializable {
     @FXML
     private Label bookIsbnLabel, bookTitleLabel, borrowDateLabel, borrowIdLabel, dueDateLabel,
@@ -30,15 +39,40 @@ public class BorrowDetailController implements Initializable {
 
     private Borrow borrow;
 
+    /**
+     * Initializes the controller class. This method is automatically called after the
+     * fxml file has been loaded. This is where any logic related to initialization should be placed.
+     *
+     * @param location The location used to resolve relative paths for the root object, or null if
+     *        the location is not known.
+     * @param resources The resources used to localize the root object, or null if resources were not
+     *        specified.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
+    /**
+     * Sets the current Borrow object and updates the corresponding fields in the UI.
+     *
+     * @param borrow the Borrow object containing details of the borrowing instance
+     */
     public void setBorrow(Borrow borrow) {
         this.borrow = borrow;
         populateFields();
     }
 
+    /**
+     * Populates the UI fields with data from the current borrow instance. This method retrieves
+     * information about the borrowed book and the user, displaying details such as the borrow ID,
+     * member email, member name, book ISBN, book title, borrow date, due date, return date, status,
+     * and any associated fine in the respective labels.
+     * <p>
+     * If the book has an associated image, it sets that image in the bookImageView; otherwise, it
+     * loads a default image.
+     * <p>
+     * This method is called only if the borrow instance is not null.
+     */
     private void populateFields() {
         if (borrow != null) {
             Book borrowedBook = getBookByIsbn(borrow.getBookIsbn());
@@ -72,11 +106,20 @@ public class BorrowDetailController implements Initializable {
         }
     }
 
+    /**
+     * Handles the action of the back button in the UI by closing the current window.
+     * This method is typically mapped to a button in the user interface via FXML.
+     */
     @FXML
     void back() {
         closeWindow();
     }
 
+    /**
+     * Closes the current window associated with the back button event.
+     * This method retrieves the Stage object from the back button's current scene
+     * and invokes the close operation to terminate the window.
+     */
     private void closeWindow() {
         Stage stage = (Stage) backButton.getScene().getWindow();
         stage.close();
