@@ -291,7 +291,7 @@ public class CreateBookController implements Initializable {
             numberOfPagesTextField.setText(apiBook.getNumberOfPages());
             openedFromApi = true;
 
-            if (apiBook.getImagePath().equals("defaultBook.jpg")) {
+            if (apiBook.getImagePath() == null) {
                 bookImageView.setImage(new Image(getClass().getResource("/images/book/defaultBook.jpg").toExternalForm()));
                 bookImageFilePath = null;
             } else {
@@ -347,7 +347,7 @@ public class CreateBookController implements Initializable {
         String description = descriptionTextArea.getText();
         String averageOfRating = "0.0";
 
-        if (apiBook != null && apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty() && !apiBook.getImagePath().equals("defaultBook.jpg")) {
+        if (apiBook != null && apiBook.getImagePath() != null && !apiBook.getImagePath().isEmpty()) {
             bookImageFilePath = downloadImage(apiBook.getImagePath());
         }
 

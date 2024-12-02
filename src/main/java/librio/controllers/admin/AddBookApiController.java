@@ -147,7 +147,7 @@ public class AddBookApiController implements Initializable {
                     String yearPublished = volumeInfo.optString("publishedDate", "Unknown Year");
                     String language = volumeInfo.optString("language", "Unknown Language");
                     String description = volumeInfo.optString("description", "No Description");
-                    String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail") : "defaultBook.jpg";
+                    String imageBook = volumeInfo.has("imageLinks") ? volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail") : null;
                     Integer numberOfPages = volumeInfo.optInt("pageCount", 0);
                     if (isDigit(isbn.charAt(0))) isbn = "ISBN : " + isbn;
                     Book book = new Book(0, title, author, isbn, category, publisher, 0, 0, 0.0, yearPublished, language, String.valueOf(numberOfPages), description, imageBook);
@@ -331,7 +331,7 @@ public class AddBookApiController implements Initializable {
         bookImage.setFitWidth(119.0);
         bookImage.setLayoutX(24.0);
         bookImage.setLayoutY(7.0);
-        if (!book.getImagePath().equals("defaultBook.jpg")) {
+        if (book.getImagePath() != null) {
             Task<Image> imageLoadTask = new Task<>() {
                 @Override
                 protected Image call() {

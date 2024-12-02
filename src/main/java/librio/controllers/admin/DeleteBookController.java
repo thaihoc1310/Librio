@@ -71,7 +71,7 @@ public class DeleteBookController implements Initializable {
         DatabaseUtil.deleteBook(book);
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/book/";
-        if (book.getImagePath() != null && !book.getImagePath().isEmpty() && !book.getImagePath().equals("defaultBook.jpg")) {
+        if (book.getImagePath() != null && !book.getImagePath().isEmpty() ) {
             File oldFile = new File(avatarsDir + book.getImagePath());
             if (oldFile.exists()) {
                 boolean deleted = oldFile.delete();
