@@ -119,9 +119,9 @@
                            <children>
                               <DatePicker fx:id="birthOfDatePicker" prefWidth="137.0" promptText="mm/dd/yyyy" />
                               <Label fx:id="birthOfDateErrorLabel" prefHeight="17.0" prefWidth="188.0" textFill="#ff0f0f" />
-                              <ComboBox fx:id="genderComboBox" prefHeight="26.0" prefWidth="137.0" />
+                              <ComboBox fx:id="genderComboBox" prefHeight="26.0" prefWidth="137.0" styleClass="combo-box-1" />
                               <Label fx:id="genderErrorLabel" prefHeight="17.0" prefWidth="159.0" textFill="#ff0f0f" />
-                              <ComboBox fx:id="roleComboBox" prefHeight="25.0" prefWidth="137.0" />
+                              <ComboBox fx:id="roleComboBox" prefHeight="25.0" prefWidth="137.0" styleClass="combo-box-1" />
                               <Label fx:id="roleErrorLabel" prefHeight="17.0" prefWidth="203.0" textFill="#ff0f0f" />
                            </children>
                         </VBox>

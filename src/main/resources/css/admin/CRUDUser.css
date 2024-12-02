@@ -17,7 +17,7 @@
 .background_pane{
     -fx-background-color: #f8edd9;
     -fx-background-radius: 10px;
-    -fx-border-radius:10px;
+    -fx-border-radius: 10px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5,0,0,0);
 }
 

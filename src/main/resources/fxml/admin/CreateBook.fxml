@@ -87,7 +87,7 @@
                            </font>
                         </Label>
                         <TextArea fx:id="descriptionTextArea" layoutX="164.0" layoutY="437.0" prefHeight="114.0" prefWidth="415.0" wrapText="true" />
-                        <Button fx:id="uploadImageButton" layoutX="485.0" layoutY="267.0" mnemonicParsing="false" onAction="#uploadImage" text="Upload Image" />
+                        <Button fx:id="uploadImageButton" layoutX="483.0" layoutY="267.0" mnemonicParsing="false" onAction="#uploadImage" styleClass="setAvatar-btn" text="Upload Image" />
                         <ImageView fx:id="bookImageView" fitHeight="182.0" fitWidth="125.0" layoutX="468.0" layoutY="72.0" pickOnBounds="true">
                            <image>
                               <Image url="@../../images/book/defaultBook.jpg" />
