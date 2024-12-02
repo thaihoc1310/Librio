@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
@@ -21,13 +20,13 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="stackPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BorrowedController">
+<StackPane fx:id="stackPaneRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="1400.0" stylesheets="@../../css/member/DesignUI.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="librio.controllers.member.BorrowedController">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>
                 <AnchorPane fx:id="mainAnchorPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <AnchorPane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="369.0" styleClass="Pane-avatar" stylesheets="@../../css/member/DesignUI.css" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
+                        <AnchorPane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="369.0" styleClass="Pane-avatar" stylesheets="@../../css/member/DesignUI.css" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
                             <children>
                                 <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="128.0" prefWidth="342.0" styleClass="Pane-avatar">
                                     <children>
@@ -53,22 +52,13 @@
                                         </Button>
                                     </children>
                                 </AnchorPane>
-                                <VBox layoutX="7.0" layoutY="174.0" prefHeight="174.0" prefWidth="355.0" spacing="5.0">
+                                <VBox layoutX="7.0" layoutY="174.0" prefHeight="113.0" prefWidth="355.0" spacing="5.0">
                                     <children>
                                         <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="358.0" styleClass="button-ctrl" text="Brrowed books">
                                             <graphic>
                                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../../icons/MemberIcon/borrow_book.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
-                                        </Button>
-                                        <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="376.0" styleClass="button-ctrl" text="Borrowing Dashboard">
-                                            <graphic>
-                                                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../../icons/MemberIcon/dashboard.png" />
                                                     </image>
                                                 </ImageView>
                                             </graphic>
@@ -93,13 +83,12 @@
                                     <top>
                                         <AnchorPane onMouseClicked="#cancelMenuButton" prefHeight="94.0" prefWidth="1400.0" style="-fx-background-color: f1debc;" BorderPane.alignment="CENTER">
                                             <children>
-                                                <TextField fx:id="searchTextField" layoutX="437.0" layoutY="22.0" prefHeight="38.0" prefWidth="648.0">
+                                                <TextField fx:id="searchTextField" layoutX="390.0" layoutY="23.0" prefHeight="38.0" prefWidth="648.0" promptText="Book title">
                                                     <font>
                                                         <Font size="14.0" />
                                                     </font>
                                                 </TextField>
-                                                <ComboBox fx:id="filterBox" layoutX="317.0" layoutY="22.0" prefHeight="37.0" prefWidth="120.0" promptText="Title" />
-                                                <ImageView fx:id="searchButton" fitHeight="27.0" fitWidth="27.0" layoutX="1040.0" layoutY="27.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fx:id="searchButton" fitHeight="27.0" fitWidth="27.0" layoutX="993.0" layoutY="28.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../../icons/AdminDashBoardIcon/Search.png" />
                                                     </image>

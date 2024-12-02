@@ -497,7 +497,7 @@
                         <VBox fx:id="searchSuggestionContainer" prefHeight="38.0" prefWidth="647.0" styleClass="white-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="370.0" styleClass="Pane-avatar" stylesheets="@../../css/member/DesignUI.css" visible="false" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
+                  <AnchorPane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="370.0" styleClass="Pane-avatar" stylesheets="@../../css/member/DesignUI.css" visible="false" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
                      <children>
                         <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="128.0" prefWidth="342.0" styleClass="Pane-avatar">
                            <children>
@@ -523,22 +523,13 @@
                               </Button>
                            </children>
                         </AnchorPane>
-                        <VBox layoutX="6.0" layoutY="158.0" prefHeight="171.0" prefWidth="355.0" spacing="5.0">
+                        <VBox layoutX="6.0" layoutY="158.0" prefHeight="113.0" prefWidth="355.0" spacing="5.0">
                            <children>
                               <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" onAction="#openBorrowed" prefHeight="46.0" prefWidth="355.0" styleClass="button-ctrl" text="Borrowed books">
                                  <graphic>
                                     <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../icons/MemberIcon/borrow_book.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button alignment="BASELINE_LEFT" graphicTextGap="13.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="376.0" styleClass="button-ctrl" text="Borrowing Dashboard">
-                                 <graphic>
-                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../icons/MemberIcon/dashboard.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
