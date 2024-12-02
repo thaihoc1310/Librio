@@ -49,6 +49,7 @@ import java.util.concurrent.Executors;
 
 import static librio.enums.Status.*;
 import static librio.util.DatabaseUtil.checkIfUserRatedBook;
+import static librio.util.DatabaseUtil.updateQuantityBook;
 import static librio.util.DesignUtil.cropAndClipToCircle;
 import static librio.util.DesignUtil.cropToAspectRatio;
 

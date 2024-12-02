@@ -177,7 +177,7 @@
                            </graphic></Button>
                                 <Button layoutX="49.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="172.0" styleClass="button-inSettings2" text="Personal Information" />
                                 <Button layoutX="235.0" mnemonicParsing="false" onAction="#openChangePasswordScene" prefHeight="38.0" prefWidth="158.0" style="-fx-background-color: f1debc;" styleClass="button-inSettings" text="Change password" />
-                        <Label fx:id="notification" alignment="CENTER" contentDisplay="CENTER" layoutX="122.0" layoutY="560.0" prefHeight="20.0" prefWidth="200.0" textFill="#12cf25" />
+                        <Label fx:id="notification" alignment="CENTER" contentDisplay="CENTER" layoutX="122.0" layoutY="560.0" prefHeight="20.0" prefWidth="200.0" textAlignment="CENTER" textFill="#12cf25" />
                         <VBox layoutX="435.0" layoutY="45.0" prefHeight="533.0" prefWidth="682.0">
                            <children>
                               <AnchorPane prefHeight="70.0" prefWidth="682.0" styleClass="design-Anchor">
