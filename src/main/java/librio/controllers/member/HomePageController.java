@@ -108,7 +108,6 @@ public class HomePageController implements Initializable {
         loadAllBooksAsync();
         filterBox.getItems().addAll("Title", "Author", "Category", "Language", "Publisher", "Year published", "ISBN");
         filterBox.getSelectionModel().selectFirst();
-        startAutoScroll();
         initScrollNavigation();
         initCategoryLabelClick();
         setupSearchSuggestions();
@@ -151,7 +150,6 @@ public class HomePageController implements Initializable {
      *                  scrolling to the left, while a value of 1 indicates scrolling to the right.
      */
     private void scrollMainBanner(int direction) {
-        stopAutoScroll();
         double currentHValue = mainBannerScroll.getHvalue();
         final double targetHValue = getTargetHValue(direction, currentHValue);
 
@@ -173,7 +171,6 @@ public class HomePageController implements Initializable {
 
             fadeOut.play();
         }
-        startAutoScroll();
     }
 
     /**
@@ -209,31 +206,6 @@ public class HomePageController implements Initializable {
             return mainBannerContainer.getChildren().get(index);
         }
         return null;
-    }
-
-    /**
-     * Initiates an auto-scrolling mechanism for the main banner.
-     * This method sets up a timeline that repeatedly executes a scrolling action
-     * every 5 seconds, navigating the banners to the right. It first stops any ongoing
-     * auto-scrolling to ensure no multiple timelines are active simultaneously.
-     * The auto-scrolling timeline is set to an indefinite cycle count and started.
-     */
-    private void startAutoScroll() {
-        stopAutoScroll();
-        autoScrollTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> scrollMainBanner(1)));
-        autoScrollTimeline.setCycleCount(Timeline.INDEFINITE);
-        autoScrollTimeline.play();
-    }
-
-    /**
-     * Stops the auto-scrolling mechanism for the main banner.
-     * This method checks if an auto-scrolling timeline is active and stops it
-     * to prevent any ongoing or unintended automated scrolling behavior.
-     */
-    private void stopAutoScroll() {
-        if (autoScrollTimeline != null) {
-            autoScrollTimeline.stop();
-        }
     }
 
     /**
@@ -353,6 +325,7 @@ public class HomePageController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return fetchedBooks;
     }
 
@@ -376,6 +349,7 @@ public class HomePageController implements Initializable {
             searchController.setSearchParameters(keyword, selectedFilter, null, "Top rated");
             Stage currentStage = (Stage) mainScroll.getScene().getWindow();
             Scene currentScene = currentStage.getScene();
+            executor.shutdownNow();
             currentScene.setRoot(searchPageRoot);
         } catch (IOException e) {
             e.printStackTrace();
@@ -504,27 +478,12 @@ public class HomePageController implements Initializable {
             quickBorrowButton.setOnAction(e -> openBorrowConfirmationPane(book, quickBorrowButton));
         }
 
-        Task<HBox> ratingTask = new Task<>() {
-            @Override
-            protected HBox call() {
-                return getStarBox(book);
-            }
 
-            @Override
-            protected void succeeded() {
-                HBox starBox = getValue();
-                starBox.setLayoutX(42);
-                starBox.setLayoutY(80);
-                infoPane.getChildren().add(starBox);
-            }
+        HBox starBox = getStarBox(book);
+        starBox.setLayoutX(42);
+        starBox.setLayoutY(80);
 
-            @Override
-            protected void failed() {
-                Platform.runLater(() -> {
-                });
-            }
-        };
-        executor.execute(ratingTask);
+        infoPane.getChildren().add(starBox);
         return bookPane;
     }
 

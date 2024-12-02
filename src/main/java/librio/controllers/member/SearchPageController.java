@@ -544,6 +544,7 @@ public class SearchPageController implements Initializable {
                 currentScene.setRoot(homepageRoot);
                 loadingIndicator.setVisible(false);
                 flowPane.getChildren().clear();
+
             }
 
             @Override
@@ -554,6 +555,7 @@ public class SearchPageController implements Initializable {
         };
 
         executor.submit(loadHomePageTask);
+        executor.shutdownNow();
     }
 
     /**

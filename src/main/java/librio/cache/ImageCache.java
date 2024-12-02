@@ -3,9 +3,9 @@ package librio.cache;
 import javafx.scene.image.Image;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 
 /**
  * The ImageCache class is a singleton that provides a caching mechanism for images.
@@ -13,7 +13,8 @@ import java.util.Map;
  */
 public class ImageCache {
     private static ImageCache instance;
-    private final Map<String, Image> cache;
+    private final Map<String, WeakReference<Image>> cache;
+    private final Image defaultImage;
 
     /**
      * Private constructor to initialize the image cache as a least-recently-used (LRU) cache.
@@ -21,9 +22,12 @@ public class ImageCache {
      * When the cache size exceeds 1000, the eldest entry is removed automatically.
      */
     private ImageCache() {
+        // Load default image once during initialization
+        this.defaultImage = new Image(new File("path/to/default/image").toURI().toString());
+
         this.cache = new LinkedHashMap<>(1000, 0.75f, true) {
             @Override
-            protected boolean removeEldestEntry(Map.Entry<String, Image> eldest) {
+            protected boolean removeEldestEntry(Map.Entry<String, WeakReference<Image>> eldest) {
                 return size() > 1000;
             }
         };
@@ -50,19 +54,21 @@ public class ImageCache {
      * @return the image object corresponding to the specified path or the default image if the specified path is not available
      */
     public Image getImage(String path, String defaultImagePath) {
-        if (cache.containsKey(path)) {
-            return cache.get(path);
+        // Check if image is available in cache
+        WeakReference<Image> imageRef = cache.get(path);
+        if (imageRef != null && imageRef.get() != null) {
+            return imageRef.get();
         }
 
+        // Try loading image from file system
         File file = new File(path);
         if (file.exists()) {
             Image image = new Image(file.toURI().toString());
-            cache.put(path, image);
+            cache.put(path, new WeakReference<>(image));  // Store weak reference to the image
             return image;
         }
 
-        Image defaultImage = new Image(new File(defaultImagePath).toURI().toString());
-        cache.put(path, defaultImage);
+        // Return default image if not found
         return defaultImage;
     }
 
@@ -86,4 +92,3 @@ public class ImageCache {
         return cache.size();
     }
 }
-
