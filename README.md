@@ -2,8 +2,6 @@
 
 # Librio
 
-***
-
 ## Overview
 
 Librio is a library management application that helps librarians manage books, users, and borrowing transactions, as
@@ -82,8 +80,6 @@ git clone https://github.com/thaihoc1310/Librio.git
 ## References
 
 [barnesandnoble.com](https://www.barnesandnoble.com)
-
-***
 
 > #### Our first Java project in our second year of university, with many new things to discover and our inexperience, was challenging. We had to finish it in two months, but we made it a success with clean, readable code and lots of features. We're proud of it.
 
