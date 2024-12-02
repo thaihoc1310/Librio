@@ -394,19 +394,27 @@ public class ManageBorrowController implements Initializable {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/UpdateBorrow.fxml"));
             Parent root  = loader.load();
+            Stage currentStage = (Stage) borrowTableView.getScene().getWindow();
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25);
+            currentStage.getScene().getRoot().setEffect(colorAdjust);
             UpdateBorrowController updateBorrowController = loader.getController();
             updateBorrowController.setBorrow(borrow);
-
             Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
 
-            stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.initOwner(borrowTableView.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-            // Hiển thị scene
+            stage.setOnHidden(event -> {
+                colorAdjust.setBrightness(0);
+                currentStage.getScene().getRoot().setEffect(null);
+            });
             stage.showAndWait();
-            loadBorrows(keyword,currentPage);
+            loadBorrows(keyword, currentPage);
         }catch(IOException e){
             e.printStackTrace();
         }

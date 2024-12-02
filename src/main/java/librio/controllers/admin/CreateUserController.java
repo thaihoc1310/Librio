@@ -184,7 +184,7 @@ public class CreateUserController implements Initializable {
             passwordErrorLabel.setText("Password cannot be empty!");
             validation = true;
         } else if (password.length() < 6) {
-            passwordErrorLabel.setText("Password must be at least 6 characters!");
+            passwordErrorLabel.setText("Password must be at least 6 chars!");
             validation = true;
         }
 

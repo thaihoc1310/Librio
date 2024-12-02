@@ -86,9 +86,10 @@ public class CreateBorrowController implements Initializable {
      * for displaying dates in the due date picker is also set.
      */
     private void initDatePicker() {
+        setDatePickerFormat(dueDatePicker);
+        setDatePickerFormat(borrowDatePicker);
         borrowDatePicker.setValue(LocalDate.now());
         dueDatePicker.setValue(LocalDate.now().plusDays(30));
-        setDatePickerFormat(dueDatePicker);
     }
 
     /**
