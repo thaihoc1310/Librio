@@ -37,7 +37,9 @@ import librio.session.Session;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -244,7 +246,7 @@ public class BorrowedController implements Initializable {
     private void displayBorrowingBooks(List<BorrowedBook> booksToDisplay) {
 
         if (!booksToDisplay.isEmpty()) {
-
+            bookBorrowVBox.getChildren().clear();
             for (BorrowedBook book : booksToDisplay) {
                 AnchorPane anchorPane = new AnchorPane();
                 anchorPane.setMinHeight(405);
@@ -637,17 +639,30 @@ public class BorrowedController implements Initializable {
 
 
             int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected >= 0) {
+                updateQuantityBook(borrowedBook.getId());
+                borrowBookList.remove(borrowedBook);
+                borrowedBook.setStatus(newStatus);
+                borrowedBook.setReturnDate(today);
+                returnedBookList.add(borrowedBook);
+                if (borrowBookList.isEmpty()) {
+                    bookBorrowVBox.getChildren().clear();
+                    Label label = new Label("No Books Available");
+                    label.setPrefWidth(1260);
+                    label.setStyle("-fx-font-size:36;" +
+                            "-fx-font-weight: bold;");
+                    label.setPadding(new Insets(100, 0, 0, 0));
+                    label.setOpacity(0.41);
+                    label.setAlignment(Pos.CENTER);
+                    bookBorrowVBox.getChildren().add(label);
 
-            updateQuantityBook(borrowedBook.getId());
-            borrowBookList.remove(borrowedBook);
-            borrowedBook.setStatus(newStatus);
-            borrowedBook.setReturnDate(today);
-            returnedBookList.add(borrowedBook);
-            displayBorrowingBooks(borrowBookList);
-            displayReturnedBooks(returnedBookList);
-
-            System.out.println("Trả sách thất bại!");
-
+                } else {
+                    displayBorrowingBooks(borrowBookList);
+                }
+                displayReturnedBooks(returnedBookList);
+            } else {
+                System.out.println("Trả sách thất bại!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
