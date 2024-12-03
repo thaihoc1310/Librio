@@ -31,6 +31,7 @@ import librio.models.User;
 import librio.session.Session;
 import librio.util.DatabaseUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -212,7 +213,11 @@ public class BookDetailController implements Initializable {
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
 
-        Image image = ImageCache.getInstance().getImage(path, projectDir + "defaultBook.jpg");
+        File file = new File(path);
+        if(!file.exists()){
+            path = booksDir + "defaultBook.jpg";
+        }
+        Image image = ImageCache.getInstance().getImage(path, path);
         cropToAspectRatio(image, bookCoverImage, 217, 315);
         generateAndDisplayQRCode(qrCodeImageView,book);
         setConfirmButton();
@@ -338,7 +343,11 @@ public class BookDetailController implements Initializable {
                 avatar.setFitWidth(50);
                 avatar.setFitHeight(50);
 
-                Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
+                File file = new File(path);
+                if(!file.exists()){
+                    path = avatarsDir + "Male User.png";
+                }
+                Image image = ImageCache.getInstance().getImage(path, path);
                 cropAndClipToCircle(image, avatar, 25);
 
 

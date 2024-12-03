@@ -306,7 +306,11 @@ public class EditProfileController implements Initializable {
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + loggedInUser.getAvatar();
-        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
+        File file = new File(path);
+        if(!file.exists()){
+            path = avatarsDir + "Male User.png";
+        }
+        Image image = ImageCache.getInstance().getImage(path, path);
         cropAndClipToCircle(image, avatar, 50);
         nameTextField.setText(loggedInUser.getName());
         emailTextField.setText(loggedInUser.getEmail());

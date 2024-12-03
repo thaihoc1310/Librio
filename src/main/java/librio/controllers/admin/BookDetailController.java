@@ -16,7 +16,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import librio.cache.ImageCache;
 import librio.models.Book;
+import librio.session.Session;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -145,8 +147,11 @@ public class BookDetailController implements Initializable {
                 String projectDir = System.getProperty("user.dir");
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + book.getImagePath();
-
-                Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
+                File file = new File(path);
+                if(!file.exists()){
+                    path = booksDir + "defaultBook.jpg";
+                }
+                Image image = ImageCache.getInstance().getImage(path, path);
                 bookImageView.setImage(image);
 
             } else {

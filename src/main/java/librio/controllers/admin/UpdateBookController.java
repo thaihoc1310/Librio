@@ -318,7 +318,11 @@ public class UpdateBookController implements Initializable {
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + book.getImagePath();
 
-                Image image = ImageCache.getInstance().getImage(path, projectDir + "defaultBook.jpg");
+                File file = new File(path);
+                if(!file.exists()){
+                    path = booksDir + "defaultBook.jpg";
+                }
+                Image image = ImageCache.getInstance().getImage(path, path);
                 bookImageView.setImage(image);
             } else {
                 loadDefaultBookImage(bookImageView);
