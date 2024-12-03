@@ -314,6 +314,7 @@ public class HomePageController implements Initializable {
                 Integer availableCopy = resultSet.getInt("available_copy");
                 Integer quantityCopy = resultSet.getInt("quantity_copy");
                 Double averageOfRating = resultSet.getDouble("average_of_rating");
+                System.out.println(averageOfRating);
                 String yearPublished = resultSet.getString("year_published");
                 String language = resultSet.getString("language");
                 String numberOfPages = resultSet.getString("number_of_pages");
