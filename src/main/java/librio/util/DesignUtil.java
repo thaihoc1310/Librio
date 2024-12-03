@@ -237,8 +237,6 @@ public class DesignUtil {
         File file = new File(path);
         if(!file.exists()){
             path = avatarsDir + "Male User.png";
-        }else{
-            path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
         }
         Image image = ImageCache.getInstance().getImage(path,path);
         cropAndClipToCircle(image, avatarUser, 38.5);

@@ -11,7 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import librio.cache.ImageCache;
 import librio.models.User;
+import librio.session.Session;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -75,8 +77,12 @@ public class UserDetailsController implements Initializable {
             String projectDir = System.getProperty("user.dir");
             String avatarsDir = projectDir + "/src/main/resources/images/user/";
             String path = avatarsDir + user.getAvatar();
+            File file = new File(path);
+            if(!file.exists()){
+                path = avatarsDir + "Male User.png";
+            }
 
-            Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
+            Image image = ImageCache.getInstance().getImage(path, path);
             cropAndClipToCircle(image, avatarImageView, 55);
         }
     }

@@ -15,6 +15,7 @@ import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.session.Session;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -195,7 +196,12 @@ public class RatingPageController {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
-        Image image = ImageCache.getInstance().getImage(path, booksDir + "Male User.png");
+
+        File file = new File(path);
+        if(!file.exists()){
+            path = booksDir + "defaultBook.jpg";
+        }
+        Image image = ImageCache.getInstance().getImage(path, path);
         bookImage.setImage(image);
     }
 }
