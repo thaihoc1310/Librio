@@ -31,6 +31,7 @@ import librio.database.DatabaseConnection;
 import librio.models.Book;
 import librio.session.Session;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -285,7 +286,13 @@ public class SearchPageController implements Initializable {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "img.png");
+        File file = new File(path);
+        if(!file.exists()){
+            path = avatarsDir + "Male User.png";
+        }else{
+            path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+        }
+        Image image = ImageCache.getInstance().getImage(path,path);
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, clickAvatar, 23);
 

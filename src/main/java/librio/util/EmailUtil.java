@@ -8,8 +8,8 @@ import java.util.Properties;
 public class EmailUtil {
 
     public static void sendResetCode(String toEmail, String resetCode) {
-        final String fromEmail = "thaihoc131005@gmail.com";
-        final String password = "yagz qsyk ugfm wdlh";
+        final String fromEmail = "huyd761@gmail.com";
+        final String password = "nkhx apif uxat cmpf";
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");

@@ -572,7 +572,13 @@ public class BorrowedController implements Initializable {
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
 
-        Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
+        File file = new File(path);
+        if(!file.exists()){
+            path = avatarsDir + "Male User.png";
+        }else{
+            path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+        }
+        Image image = ImageCache.getInstance().getImage(path,path);
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, ClickAvatar, 23);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
