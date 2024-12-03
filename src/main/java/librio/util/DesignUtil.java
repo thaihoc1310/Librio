@@ -235,7 +235,13 @@ public class DesignUtil {
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
 
-        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
+        File file = new File(path);
+        if(!file.exists()){
+            path = avatarsDir + "Male User.png";
+        }else{
+            path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
+        }
+        Image image = ImageCache.getInstance().getImage(path,path);
         cropAndClipToCircle(image, avatarUser, 38.5);
         userNameUser.setText(Session.getInstance().getLoggedInUser().getName());
     }

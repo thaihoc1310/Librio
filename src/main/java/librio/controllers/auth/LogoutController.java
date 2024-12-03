@@ -45,7 +45,6 @@ public class LogoutController {
         stage.setScene(new Scene(loginRoot));
         stage.show();
         Session.getInstance().logout();
-        DatabaseUtil.stopAutoUpdate();
         if (ownerStage != null) {
             ownerStage.close();
         }

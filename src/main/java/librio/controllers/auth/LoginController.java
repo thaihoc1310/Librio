@@ -211,7 +211,6 @@ public class LoginController {
             Session session = Session.getInstance();
             session.setLoggedInUser(loginUser);
             checkAuthorization(loginUser);
-            DatabaseUtil.startAutoUpdate();
         } else {
             incorrectLoginInformation.setText("Incorrect login information!");
         }

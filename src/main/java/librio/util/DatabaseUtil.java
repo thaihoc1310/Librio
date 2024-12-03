@@ -502,62 +502,6 @@ public class DatabaseUtil {
         return false;
     }
 
-    public static void startAutoUpdate() {
-        if (scheduler.isShutdown() || scheduler.isTerminated()) {
-            scheduler = Executors.newScheduledThreadPool(1);
-        }
-        updateBookBorrowedStatus();
-        scheduler.scheduleAtFixedRate(DatabaseUtil::updateBookBorrowedStatus, 1, 1, TimeUnit.HOURS);
-    }
-
-
-    public static void stopAutoUpdate() {
-        scheduler.shutdown();
-    }
-
-    public static void updateBookBorrowedStatus() {
-        try {
-            String query = "SELECT id, due_date, return_date FROM borrows WHERE status in ('BORROWING', 'OVERDUE')";
-            try (Connection connection = DatabaseConnection.getConnection();
-                 PreparedStatement statement = connection.prepareStatement(query)) {
-                ResultSet resultSet = statement.executeQuery();
-
-                while (resultSet.next()) {
-                    int borrowId = resultSet.getInt("id");
-                    LocalDate dueDate = resultSet.getDate("due_date").toLocalDate();
-                    Date returnDateSql = resultSet.getDate("return_date");
-                    LocalDate returnDate = (returnDateSql != null) ? ((java.sql.Date) returnDateSql).toLocalDate() : null;
-                    String status = "BORROWING";
-
-                    long overDueDays = 0;
-
-                    if (returnDate == null && LocalDate.now().isAfter(dueDate)) {
-                        status = "OVERDUE";
-                        overDueDays = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
-                    } else if (returnDate != null) {
-                        status = returnDate.isAfter(dueDate) ? "RETURNED_LATED" : "RETURNED";
-                        if (status.equals("RETURNED_LATED")) {
-                            overDueDays = ChronoUnit.DAYS.between(dueDate, returnDate);
-                        }
-                    }
-
-                    double fine = (overDueDays * 5000 < 100000) ? overDueDays * 5000 : 100000;
-
-                    String updateQuery = "UPDATE borrows SET status = ?, fine = ? WHERE id = ?";
-                    PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                    updateStatement.setString(1, status);
-                    updateStatement.setDouble(2, fine);
-                    updateStatement.setInt(3, borrowId);
-                    updateStatement.executeUpdate();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static void updateBookAverageRating(String bookIsbn) {
         String updateAverageRatingQuery = "UPDATE Books " +
                 "SET average_of_rating = ( " +

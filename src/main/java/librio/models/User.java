@@ -11,13 +11,13 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 public class User {
-    private StringProperty id;
-    private StringProperty name;
-    private StringProperty email;
+    private final StringProperty id;
+    private final StringProperty name;
+    private final StringProperty email;
     private StringProperty password;
-    private StringProperty phoneNumber;
+    private final StringProperty phoneNumber;
     private StringProperty address;
-    private ObjectProperty<Gender> gender;
+    private final ObjectProperty<Gender> gender;
     private ObjectProperty<Role> role;
     private StringProperty avatar;
     private ObjectProperty<LocalDate> birthOfDate;
