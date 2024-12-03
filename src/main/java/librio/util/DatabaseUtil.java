@@ -185,6 +185,7 @@ public class DatabaseUtil {
 
 
     public static void deleteUser(User user) {
+        List<String> bookIsbn = new ArrayList<>();
         Connection connection = null;
         try {
             connection = DatabaseConnection.getConnection();
@@ -196,6 +197,18 @@ public class DatabaseUtil {
                 ResultSet memberResult = checkMemberStmt.executeQuery();
 
                 if (memberResult.next()) {
+
+                    String getIsbnQuery = "SELECT b.isbn FROM books b " +
+                            "JOIN borrows br ON b.isbn = br.book_isbn " +
+                            "WHERE br.member_id = ?";
+                    try (PreparedStatement getIsbnStmt = connection.prepareStatement(getIsbnQuery)) {
+                        getIsbnStmt.setString(1, user.getId());
+                        ResultSet isbnResult = getIsbnStmt.executeQuery();
+
+                        while (isbnResult.next()) {
+                            bookIsbn.add(isbnResult.getString("isbn"));
+                        }
+                    }
 
                     String deleteFeedbackQuery = "DELETE FROM Feedbacks WHERE borrow_id IN (SELECT id FROM Borrows WHERE member_id = ?)";
                     try (PreparedStatement deleteFeedbackStmt = connection.prepareStatement(deleteFeedbackQuery)) {
@@ -245,6 +258,11 @@ public class DatabaseUtil {
             }
 
             connection.commit();
+            for (String isbn : bookIsbn) {
+                System.out.println(isbn);
+                updateBookAverageRating(isbn);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
             try {
