@@ -161,9 +161,6 @@ public class CreateUserController implements Initializable {
             }
         }
 
-        System.out.println(dateString);
-        System.out.println(birthOfDate);
-
         if (name.isEmpty()) {
             nameErrorLabel.setText("Name cannot be empty!");
             validation = true;

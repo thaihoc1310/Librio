@@ -309,7 +309,6 @@ public class HomePageController implements Initializable {
                 Integer availableCopy = resultSet.getInt("available_copy");
                 Integer quantityCopy = resultSet.getInt("quantity_copy");
                 Double averageOfRating = resultSet.getDouble("average_of_rating");
-                System.out.println(averageOfRating);
                 String yearPublished = resultSet.getString("year_published");
                 String language = resultSet.getString("language");
                 String numberOfPages = resultSet.getString("number_of_pages");
@@ -480,11 +479,26 @@ public class HomePageController implements Initializable {
         }
 
 
-        HBox starBox = getStarBox(book);
-        starBox.setLayoutX(42);
-        starBox.setLayoutY(80);
+        Task<HBox> ratingTask = new Task<>() {
+            @Override
+            protected HBox call() {
+                return getStarBox(book);
+            }
 
-        infoPane.getChildren().add(starBox);
+            @Override
+            protected void succeeded() {
+                HBox starBox = getValue();
+                starBox.setLayoutX(42);
+                starBox.setLayoutY(80);
+                infoPane.getChildren().add(starBox);
+            }
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> {
+                });
+            }
+        };
+        executor.execute(ratingTask);
         return bookPane;
     }
 

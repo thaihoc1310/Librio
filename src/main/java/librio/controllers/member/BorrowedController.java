@@ -731,10 +731,7 @@ public class BorrowedController implements Initializable {
                         double viewportHeight = scrollBorrowPane.getViewportBounds().getHeight();
 
                         double position = (paneBounds.getMinY() - vboxBounds.getMinY()) / (contentHeight - viewportHeight);
-                        position = Math.max(0, Math.min(1, position)); // Đảm bảo giá trị trong khoảng [0, 1]
-
-                        System.out.println("Calculated Position: " + position);
-                        System.out.println("ScrollPane Vmax: " + scrollBorrowPane.getVmax());
+                        position = Math.max(0, Math.min(1, position));
 
                         scrollBorrowPane.setVvalue(position);
                         pane.setStyle(" -fx-effect: dropshadow(gaussian, rgba(148, 63, 32, 0.5), 28, 0.5, 0, 0);");

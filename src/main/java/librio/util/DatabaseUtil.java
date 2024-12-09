@@ -251,7 +251,6 @@ public class DatabaseUtil {
                 deleteUserStmt.setString(1, user.getId());
                 int rowsAffected = deleteUserStmt.executeUpdate();
                 if (rowsAffected > 0) {
-                    System.out.println("Đã xóa người dùng có ID: " + user.getId());
                 } else {
                     System.out.println("Không thể xóa người dùng có ID: " + user.getId());
                 }
@@ -259,7 +258,6 @@ public class DatabaseUtil {
 
             connection.commit();
             for (String isbn : bookIsbn) {
-                System.out.println(isbn);
                 updateBookAverageRating(isbn);
             }
 
