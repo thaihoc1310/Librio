@@ -99,11 +99,7 @@ public class BorrowDetailController implements Initializable {
                 String projectDir = System.getProperty("user.dir");
                 String booksDir = projectDir + "/src/main/resources/images/book/";
                 String path = booksDir + borrowedBook.getImagePath();
-                File file = new File(path);
-                if(!file.exists()){
-                    path = booksDir + "defaultBook.jpg";
-                }
-                Image image = ImageCache.getInstance().getImage(path, path);
+                Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
                 bookImageView.setImage(image);
             } else {
                 loadDefaultBookImage(bookImageView);

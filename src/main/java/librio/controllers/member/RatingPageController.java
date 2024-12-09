@@ -197,11 +197,7 @@ public class RatingPageController {
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
 
-        File file = new File(path);
-        if(!file.exists()){
-            path = booksDir + "defaultBook.jpg";
-        }
-        Image image = ImageCache.getInstance().getImage(path, path);
+        Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
         bookImage.setImage(image);
     }
 }

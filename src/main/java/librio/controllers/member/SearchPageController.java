@@ -285,12 +285,7 @@ public class SearchPageController implements Initializable {
         String projectDir = System.getProperty("user.dir");
         String avatarsDir = projectDir + "/src/main/resources/images/user/";
         String path = avatarsDir + Session.getInstance().getLoggedInUser().getAvatar();
-
-        File file = new File(path);
-        if(!file.exists()){
-            path = avatarsDir + "Male User.png";
-        }
-        Image image = ImageCache.getInstance().getImage(path,path);
+        Image image = ImageCache.getInstance().getImage(path,avatarsDir + "Male User.png");
         cropAndClipToCircle(image, avatarUser, 23);
         cropAndClipToCircle(image, clickAvatar, 23);
 

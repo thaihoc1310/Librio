@@ -212,12 +212,7 @@ public class BookDetailController implements Initializable {
         String projectDir = System.getProperty("user.dir");
         String booksDir = projectDir + "/src/main/resources/images/book/";
         String path = booksDir + book.getImagePath();
-
-        File file = new File(path);
-        if(!file.exists()){
-            path = booksDir + "defaultBook.jpg";
-        }
-        Image image = ImageCache.getInstance().getImage(path, path);
+        Image image = ImageCache.getInstance().getImage(path, booksDir + "defaultBook.jpg");
         cropToAspectRatio(image, bookCoverImage, 217, 315);
         generateAndDisplayQRCode(qrCodeImageView,book);
         setConfirmButton();
@@ -342,12 +337,7 @@ public class BookDetailController implements Initializable {
                 ImageView avatar = new ImageView();
                 avatar.setFitWidth(50);
                 avatar.setFitHeight(50);
-
-                File file = new File(path);
-                if(!file.exists()){
-                    path = avatarsDir + "Male User.png";
-                }
-                Image image = ImageCache.getInstance().getImage(path, path);
+                Image image = ImageCache.getInstance().getImage(path, avatarsDir + "Male User.png");
                 cropAndClipToCircle(image, avatar, 25);
 
 
